@@ -1,5 +1,5 @@
 
-1. ��pom.xml������cache�����������������ݣ�
+1. 在pom.xml中引入cache依赖，添加如下内容：
 
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
@@ -10,9 +10,9 @@
 		<artifactId>ehcache</artifactId>
 	</dependency>
 
-2. ��Spring Boot����������@EnableCachingע�⿪�����湦��
+2. 在Spring Boot主类中增加@EnableCaching注解开启缓存功能
 
-3. �����ݷ��ʽӿ��У����ӻ�������ע�⣬�磺
+3. 在数据访问接口中，增加缓存配置注解，如：
 
 	@CacheConfig(cacheNames = "CacheNameForThisObject")
 	public class ApiController {
@@ -22,7 +22,7 @@
 		}
 	}
 
-4. ��src/main/resourcesĿ¼�´�����ehcache.xml
+4. 在src/main/resources目录下创建：ehcache.xml
 
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="ehcache.xsd">
@@ -34,14 +34,14 @@
 		timeToLiveSeconds="300" />
 </ehcache>
 
-5. �����Ҫ���ԣ��������·����м���ϵ㣬ֻ�е�һ�βŻ���뷽��
+5. 如果需要测试，则在以下方法中加入断点，只有第一次才会进入方法
 ApiController.selectBookById(String id)
 
 
-########################## �����ָ� ############################
+########################## 华丽分隔 ############################
 
-�����Ҫ�鿴@CacheConfig��@Cacheable�����Ľ��ͣ����Բ鿴��������
+如果需要查看@CacheConfig和@Cacheable参数的解释，可以查看以下文章
 
-Spring Boot�еĻ���֧�֣�һ��ע��������EhCacheʹ��
+Spring Boot中的缓存支持（一）注解配置与EhCache使用
 http://www.jianshu.com/p/64f684bd0ce9
 http://www.cnblogs.com/lic309/p/4072848.html

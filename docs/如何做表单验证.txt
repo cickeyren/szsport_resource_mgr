@@ -1,17 +1,17 @@
-¡°ÕâÊÇÒ»¸ö¿ª·Å»°Ìâ£¬ÏÂÃæµÄÁ½ÖÖ·½·¨ÊÓÏîÄ¿¾ßÌåÇé¿ö×ÔĞĞÑ¡Ôñ¡±
+â€œè¿™æ˜¯ä¸€ä¸ªå¼€æ”¾è¯é¢˜ï¼Œä¸‹é¢çš„ä¸¤ç§æ–¹æ³•è§†é¡¹ç›®å…·ä½“æƒ…å†µè‡ªè¡Œé€‰æ‹©â€
 
-############## ·½·¨Ò»£ºÊ¹ÓÃSpring Validation £¨²»ÍÆ¼ö£©################
-Õâ¸ö·½·¨ÊÇÊ¹ÓÃHibernate ValidationÀ´×öµÄ¡£
-ÔÚÊ¹ÓÃÊ±£¬ĞèÒª½«¶ÔÏó×Ö¶ÎÓë±íµ¥×Ö¶Î¶ÔÓ¦ÆğÀ´£¬²¢ÔÚ¶ÔÏóÖĞ¼ÓÈëvalidationµÄ×¢½â¡£
-ËùÒÔ£¬Èç¹ûÊ¹ÓÃÕâ¸övalidation·½·¨£¬½¨Òé½«¡¾Êı¾İ¿â±í¶ÔÓ¦µÄ¶ÔÏó¡¿ºÍ¡¾±íµ¥¶ÔÓ¦µÄ¶ÔÏó¡¿·Ö¿ªÀ´£¬²»ÒªÈÃ±íµ¥ÑéÖ¤µÄ´úÂëÎÛÈ¾ÁËÊı¾İ¿â±í¶ÔÓ¦µÄ¶ÔÏó¡£
+############## æ–¹æ³•ä¸€ï¼šä½¿ç”¨Spring Validation ï¼ˆä¸æ¨èï¼‰################
+è¿™ä¸ªæ–¹æ³•æ˜¯ä½¿ç”¨Hibernate Validationæ¥åšçš„ã€‚
+åœ¨ä½¿ç”¨æ—¶ï¼Œéœ€è¦å°†å¯¹è±¡å­—æ®µä¸è¡¨å•å­—æ®µå¯¹åº”èµ·æ¥ï¼Œå¹¶åœ¨å¯¹è±¡ä¸­åŠ å…¥validationçš„æ³¨è§£ã€‚
+æ‰€ä»¥ï¼Œå¦‚æœä½¿ç”¨è¿™ä¸ªvalidationæ–¹æ³•ï¼Œå»ºè®®å°†ã€æ•°æ®åº“è¡¨å¯¹åº”çš„å¯¹è±¡ã€‘å’Œã€è¡¨å•å¯¹åº”çš„å¯¹è±¡ã€‘åˆ†å¼€æ¥ï¼Œä¸è¦è®©è¡¨å•éªŒè¯çš„ä»£ç æ±¡æŸ“äº†æ•°æ®åº“è¡¨å¯¹åº”çš„å¯¹è±¡ã€‚
 
-±¾·½·¨µÄÏêÇé¿É²Î¿¼ÒÔÏÂ×ÊÁÏ
+æœ¬æ–¹æ³•çš„è¯¦æƒ…å¯å‚è€ƒä»¥ä¸‹èµ„æ–™
 http://www.iteye.com/topic/1144595
 
-############## ·½·¨¶ş£ºÊ¹ÓÃJQuery validate·½·¨ ################
-ĞŞ¸Ä/templates/book/add.html
-1. È·±£inputÖĞ¼ÓÈëÁËnameÊôĞÔ£¬ÀıÈç<input type="text" name="title" id="title"/>
-2. ÔÚÒ³ÃæÉÏ¼ÓÉÏÒÔÏÂJavascript
+############## æ–¹æ³•äºŒï¼šä½¿ç”¨JQuery validateæ–¹æ³• ################
+ä¿®æ”¹/templates/book/add.html
+1. ç¡®ä¿inputä¸­åŠ å…¥äº†nameå±æ€§ï¼Œä¾‹å¦‚<input type="text" name="title" id="title"/>
+2. åœ¨é¡µé¢ä¸ŠåŠ ä¸Šä»¥ä¸‹Javascript
 	<script>
 		var valConfig = {
 			rules: {
@@ -23,15 +23,15 @@ http://www.iteye.com/topic/1144595
 		};
 		$('#addBookForm').validate(valConfig);
 	</script>
-3. ÔÚmain.htmlÖĞÒıÈëjavascript
+3. åœ¨main.htmlä¸­å¼•å…¥javascript
 	<script src="http://mscxupms.eastdc.cn:82/scripts/jquery.validate.js" ></script>
 
-ÏêÏ¸ËµÃ÷Çë²é¿´
+è¯¦ç»†è¯´æ˜è¯·æŸ¥çœ‹
 http://www.runoob.com/jquery/jquery-plugin-validate.html
 
-############## ·½·¨Èı£ººó¶ËÑéÖ¤£¬Ê¹ÓÃ×Ô¶¨ÒåµÄvalidate·½·¨ ################
+############## æ–¹æ³•ä¸‰ï¼šåç«¯éªŒè¯ï¼Œä½¿ç”¨è‡ªå®šä¹‰çš„validateæ–¹æ³• ################
 
-1. ÔÚController·½·¨ÖĞ¼ÓÈëÑéÖ¤´úÂë
+1. åœ¨Controlleræ–¹æ³•ä¸­åŠ å…¥éªŒè¯ä»£ç 
 
     public String add(Book book, Model model){
     	List<ErrorMessage> errors = FormValidationUtil.createEmptyErrors();
@@ -45,10 +45,10 @@ http://www.runoob.com/jquery/jquery-plugin-validate.html
     	}
     	
         bookService.insertBook(book);
-        return "redirect:/list"; //Ìø×ªµ½/list£¬»ñÈ¡Êéµ¥
+        return "redirect:/list"; //è·³è½¬åˆ°/listï¼Œè·å–ä¹¦å•
     }
 	
-2. ÔÚThymeleafÖĞÏÔÊ¾´íÎó
+2. åœ¨Thymeleafä¸­æ˜¾ç¤ºé”™è¯¯
 
 	<ul class="list-unstyled alert clearfix mid_center">
 		<li th:each="e : ${errors}" class="red">
@@ -57,4 +57,4 @@ http://www.runoob.com/jquery/jquery-plugin-validate.html
 		</li>
 	</ul>
 	
-3. TODO ½«´íÎóÏÔÊ¾ÔÚ×Ö¶ÎÊäÈë¿òÅÔ±ß
+3. TODO å°†é”™è¯¯æ˜¾ç¤ºåœ¨å­—æ®µè¾“å…¥æ¡†æ—è¾¹

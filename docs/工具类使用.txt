@@ -1,18 +1,18 @@
-demoÖĞÌá¹©ËÄ¸ö¹¤¾ßÀà:DateUtil,HttpClientUtil,NumberUtil,StringUtil
-1, DateUtil.javaÖĞÌá¹©ÒÔÏÂ¹¦ÄÜ
-¸÷ÖÖÈÕÆÚµÄformatĞÎÊ½
-¶ÔÊ±¼ä¡¢ÈÕÆÚ¡¢ÈÕÆÚ+Ê±¼äµÄ×ª»»
-ÈÕÆÚ±È½Ï
-»ñÈ¡×òÌì£¬ÉÏĞÇÆÚ£¬ÉÏ¸öÔÂ·½·¨
-2£¬HttpClientUtil.javaÖĞÌá¹©Ò»ÏÂ·½·¨
-http postÇëÇó£ºdoPost
-http getÇëÇó£ºdoGet
-3£¬NumberUtil.javaÌá¹©ÒÔÏÂ·½·¨£º
-StringÀàĞÍ×ª»»³ÉÆäËüNummberÀàĞÍ£¬Èçinteger£¬float£¬double
-´Ó¸÷ÖÖNumberÊı×éÖĞÑ¡Ôñ×îĞ¡Öµ
-4£¬StringUtil.java
-¿Õ×Ö·û´®ºÍ·Ç¿Õ×Ö·û´®µÄÅĞ¶Ï
-×Ö·ûÌæ»»
-rightPadºÍleftPad
-×Ö·û´®Ìî³ä
-»ñÈ¡Ëæ»ú×Ö·û´®
+demoä¸­æä¾›å››ä¸ªå·¥å…·ç±»:DateUtil,HttpClientUtil,NumberUtil,StringUtil
+1, DateUtil.javaä¸­æä¾›ä»¥ä¸‹åŠŸèƒ½
+å„ç§æ—¥æœŸçš„formatå½¢å¼
+å¯¹æ—¶é—´ã€æ—¥æœŸã€æ—¥æœŸ+æ—¶é—´çš„è½¬æ¢
+æ—¥æœŸæ¯”è¾ƒ
+è·å–æ˜¨å¤©ï¼Œä¸Šæ˜ŸæœŸï¼Œä¸Šä¸ªæœˆæ–¹æ³•
+2ï¼ŒHttpClientUtil.javaä¸­æä¾›ä¸€ä¸‹æ–¹æ³•
+http postè¯·æ±‚ï¼šdoPost
+http getè¯·æ±‚ï¼šdoGet
+3ï¼ŒNumberUtil.javaæä¾›ä»¥ä¸‹æ–¹æ³•ï¼š
+Stringç±»å‹è½¬æ¢æˆå…¶å®ƒNummberç±»å‹ï¼Œå¦‚integerï¼Œfloatï¼Œdouble
+ä»å„ç§Numberæ•°ç»„ä¸­é€‰æ‹©æœ€å°å€¼
+4ï¼ŒStringUtil.java
+ç©ºå­—ç¬¦ä¸²å’Œéç©ºå­—ç¬¦ä¸²çš„åˆ¤æ–­
+å­—ç¬¦æ›¿æ¢
+rightPadå’ŒleftPad
+å­—ç¬¦ä¸²å¡«å……
+è·å–éšæœºå­—ç¬¦ä¸²
