@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * User: 胡本强
  * Date: 2016-11-28:14:36
  */
-@ConfigurationProperties(prefix = "cas")
+@ConfigurationProperties(prefix = "cas", locations = "classpath:secure.properties")
 public class CasProperties extends com.digitalchina.platform.security.properties.CasProperties {
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.digitalchina.mgr.dao.BookDao" >
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.BookDao" >
     <select id="findAll" parameterType="java.util.HashMap" resultType="Book">
         select a.id, a.title, a.author, b.desc as category, a.description from book a
         left join category b on a.category = b.code

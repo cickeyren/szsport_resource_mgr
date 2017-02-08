@@ -1,8 +1,7 @@
-.idea/
-target/
+# Created by .ignore support plugin (hsz.mobi)
+*/.idea/**
+*/target/**
+**/target/**
 *.iml
-/.settings
-/catalina.base_IS_UNDEFINED
-/.classpath
-/.project
-/bin
+.idea/**
+**/.idea/**

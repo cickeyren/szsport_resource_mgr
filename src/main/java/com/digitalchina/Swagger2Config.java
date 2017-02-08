@@ -19,15 +19,15 @@ public class Swagger2Config {
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.digitalchina.mgr.api"))
+				.apis(RequestHandlerSelectors.basePackage("com.digitalchina.sport.mgr.resource.controller"))
 				.paths(PathSelectors.any())
 				.build()
 		        .pathMapping("/");
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("Spring Boot中使用Swagger2构建RESTful APIs")
-				.description("在Spring Boot中使用Swagger2构建RESTful APIs").termsOfServiceUrl("http://www.fuyunwang.com/")
+		return new ApiInfoBuilder().title("资源管理模块API接口")
+				.description("资源管理模块API接口").termsOfServiceUrl("http://www.fuyunwang.com/")
 				.contact("Hai Rong").version("1.0").build();
 	}
 

@@ -1,12 +1,9 @@
 --- # webserver
 server:
-
   port: 8080
   context-path: /
   session:
     timeout: 1800
-  tomcat:
-   basedir: D:/apache-tomcat-8.5.11
 
 --- # logging
 logging:
@@ -21,12 +18,9 @@ logging:
 --- # datasource
 spring:
   datasource:
-    #url: jdbc:mysql://221.178.232.9:3307/szsport_order_mgr?useSSL=false
-    #username: szsport_res
-    #password: 12345678
-    url: jdbc:mysql://127.0.0.1:3306/szsport_order_mgr?useSSL=false
-    username: root
-    password: mysql
+    url: @jdbc.url@
+    username: @jdbc.username@
+    password: @jdbc.password@
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.jdbc.Driver
     initial-size: 1
@@ -42,85 +36,8 @@ spring:
 --- # mybatis
 mybatis:
   config-location: classpath:mybatis-config.xml #增加mybatis xml风格的支持
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.digitalchina.mgr.model
 
---- # eureka
-spring:
-  application:
-    name: spring-boot-demo
-    groupName: mscx
-  cloud:
-    config:
-      failFast: true
-      retry:
-        initialInterval: 10000
-        maxInterval: 10000
-        maxAttempts: 6    #客户端启动时，如果服务端不可用，重试
-       
-eureka:
-  client:
-    registerWithEureka: false
-    fetchRegistry: true
-    registry-fetch-interval-seconds: 10   #生产环境上，这个值得设为30
-    initial-instance-info-replication-interval-seconds: 5  #生产环境上，这个值得设为10
-    serviceUrl:
-      defaultZone: http://mscx-eureka-server-mgr.eastdc.cn:82/eureka/,http://mscx-eureka-server-mgr-2.eastdc.cn:82/eureka/
-    healthcheck:
-      enabled: true
-  instance:
-    prefer-ip-address: true
-    lease-renewal-interval-in-seconds: 10  #生产环境上，这个值得设为30
-    lease-expiration-duration-in-seconds: 10   #生产环境上，这个值得设为30
-  server:
-    waitTimeInMsWhenSyncEmpty: 0
-    registrySyncRetries: 0
-
-spring-boot-demo:    
-  ribbon:
-    serverListRefreshInterval: 5000   #生产环境上，这个值得设为30000
-
-platform:
-  invokeTrace:
-    enabled: false
-    url: http://invoke-trace.eastdc.cn:82/invoke.do
-  ribbon:
-    httpClient:
-      timeToLiveInSeconds: 30
-      maxConnectionsTotal: 100
-      maxConcurrentPerRoute: 30
-      maxConnectionTimeoutInSeconds: 1
-      maxReadTimeoutInSeconds: 5
-      maxRetryAttempts: 4
-  httpClient:
-    timeToLiveInSeconds: 30
-    maxConnectionsTotal: 100
-    maxConcurrentPerRoute: 30
-    maxConnectionTimeoutInSeconds: 5
-    maxReadTimeoutInSeconds: 10
-    
-cas:
-  loginSccessBackUrl: http://localhost:8080/login/cas
-  loginUrl: http://mscxsso.eastdc.cn:82
-  loginSuccessBackUrl: http://localhost:8080/login/cas
-  providerKey: key4CasAuthenticationProvider
-  ignoreAuthUrls: /lib/**,/,/favicon.ico
-  rejectPublicInvocations: false
-  authPomptType: true
-  filterProcessesUrl: /login/cas
-  alwaysTarget: true
-  targetUrl: http://localhost:8080
-  redirectCurrentUrl: false
-
-sc:
-  pCode: demo
-  apiKey: 543df6e9aed348dc85e05593b1c9c24d
-  allApplicationUrl: http://mscxupms.eastdc.cn:82/api/allApplication.json
-  userInfoUrl: http://mscxupms.eastdc.cn:82/api/userInfo.json
-  authApplicationUrl: http://mscxupms.eastdc.cn:82/api/authApplication.json
-  httpConnectionTimeout: 60
-  
 upms:
-  url: http://mscxupms.eastdc.cn:82
+  url: @upms.url@
   interceptor:
     patterns: /**/*.do,/

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.digitalchina.mgr.service.BookService;
+import com.digitalchina.sport.mgr.resource.service.BookService;
 
 @RunWith(SpringRunner.class) //spring junit支持
 @SpringBootTest

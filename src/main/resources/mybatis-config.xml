@@ -21,13 +21,11 @@
         <setting name="autoMappingBehavior" value="FULL"/>
     </settings>
 
-   <!-- <typeAliases>
-        &lt;!&ndash;实体类&ndash;&gt;
-        <package name="com.digitalchina.appname.api.model"/>
+    <typeAliases>
+        <package name="com.digitalchina.sport.mgr.resource.model"/>
     </typeAliases>
 
     <mappers>
-        &lt;!&ndash;mapper文件配置&ndash;&gt;
         <mapper resource="mapper/BookDao.xml"/>
-    </mappers>-->
+    </mappers>
 </configuration>
