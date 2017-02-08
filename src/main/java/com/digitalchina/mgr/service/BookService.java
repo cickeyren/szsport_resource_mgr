@@ -1,8 +1,8 @@
-package com.digitalchina.appname.api.service;
+package com.digitalchina.mgr.service;
 
-import com.digitalchina.appname.api.dao.BookDao;
-import com.digitalchina.appname.api.model.Book;
-import com.digitalchina.appname.api.model.Category;
+import com.digitalchina.mgr.dao.BookDao;
+import com.digitalchina.mgr.model.Book;
+import com.digitalchina.mgr.model.Category;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

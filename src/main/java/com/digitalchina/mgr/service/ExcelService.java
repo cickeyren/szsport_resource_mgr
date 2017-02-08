@@ -1,7 +1,7 @@
-package com.digitalchina.appname.api.service;
+package com.digitalchina.mgr.service;
 
 
-import com.digitalchina.appname.api.model.Book;
+import com.digitalchina.mgr.model.Book;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;

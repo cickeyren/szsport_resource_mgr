@@ -1,9 +1,9 @@
-package com.digitalchina.appname.api.controller;
+package com.digitalchina.mgr.api;
 
 import java.util.Map;
 
-import com.digitalchina.appname.api.model.Book;
-import com.digitalchina.appname.api.service.BookService;
+import com.digitalchina.mgr.model.Book;
+import com.digitalchina.mgr.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;

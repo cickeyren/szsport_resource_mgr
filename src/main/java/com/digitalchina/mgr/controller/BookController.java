@@ -1,8 +1,8 @@
-package com.digitalchina.appname.api.controller;
+package com.digitalchina.mgr.controller;
 
-import com.digitalchina.appname.api.model.Book;
-import com.digitalchina.appname.api.model.Category;
-import com.digitalchina.appname.api.service.BookService;
+import com.digitalchina.mgr.model.Book;
+import com.digitalchina.mgr.model.Category;
+import com.digitalchina.mgr.service.BookService;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;

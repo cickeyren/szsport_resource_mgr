@@ -1,8 +1,8 @@
-package com.digitalchina.appname.api.dao;
+package com.digitalchina.mgr.dao;
 
 
-import com.digitalchina.appname.api.model.Book;
-import com.digitalchina.appname.api.model.Category;
+import com.digitalchina.mgr.model.Book;
+import com.digitalchina.mgr.model.Category;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

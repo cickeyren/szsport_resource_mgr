@@ -19,7 +19,7 @@ public class Swagger2Config {
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.digitalchina.appname.api.controller"))
+				.apis(RequestHandlerSelectors.basePackage("com.digitalchina.mgr.api"))
 				.paths(PathSelectors.any())
 				.build()
 		        .pathMapping("/");

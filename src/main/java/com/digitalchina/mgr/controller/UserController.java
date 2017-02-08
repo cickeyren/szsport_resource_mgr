@@ -1,8 +1,7 @@
-package com.digitalchina.appname.api.controller;
+package com.digitalchina.mgr.controller;
 
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.platform.security.auth.CustomUser;
-import com.digitalchina.platform.security.context.UserProxy;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package com.digitalchina.appname.api.model;
+package com.digitalchina.mgr.model;
 
 import java.util.Date;
 

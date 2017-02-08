@@ -17,7 +17,7 @@ cas.filterProcessesUrl=/login/cas
 cas.alwaysTarget=true
 #默认页地址
 cas.targetUrl=http://localhost:8080
-#是否访问上次一request请求
+#是否访问上次一request请求springboot-demo
 cas.redirectCurrentUrl=false
 
 

@@ -1,4 +1,4 @@
-package com.digitalchina.appname.api.controller;
+package com.digitalchina.mgr.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

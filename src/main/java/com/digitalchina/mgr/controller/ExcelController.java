@@ -1,6 +1,6 @@
-package com.digitalchina.appname.api.controller;
+package com.digitalchina.mgr.controller;
 
-import com.digitalchina.appname.api.service.ExcelService;
+import com.digitalchina.mgr.service.ExcelService;
 import com.digitalchina.common.data.RtnData;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;

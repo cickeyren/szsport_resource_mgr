@@ -1,4 +1,4 @@
-package com.digitalchina.appname.api.controller;
+package com.digitalchina.mgr.api;
 
 import java.util.HashMap;
 import java.util.Map;
