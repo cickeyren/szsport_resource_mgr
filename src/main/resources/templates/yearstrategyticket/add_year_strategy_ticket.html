@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>添加散票/年票策略</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+    </style>
+</head>
+<body>
+
+<section>
+    <div class="container-fluid" style="margin-top: 30px">
+        <p class="title">新增年卡/散卡生成策略</p>
+        <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+            <tr class="controls">
+                <th colspan="2">基本信息</th>
+            </tr>
+            <tr class="controls">
+                <td class="alignright" width="10%"><span class="red">*</span>套票类型</td>
+                <td class="alignleft">
+                    <select id="ticketType">
+                        <option value="0">单票</option>
+                        <option value="1">场地票</option>
+                    </select>
+                </td>
+            </tr>
+            <tr class="controls">
+                <td class="alignright" width="10%"><span class="red">*</span>可用子场馆</td>
+                <td class="alignleft">
+                    <select id="subStadium">
+                        <option value="0">单票</option>
+                        <option value="1">场地票</option>
+                    </select>
+                </td>
+            </tr>
+            <tr class="controls">
+                <td class="alignright"><span class="red">*</span>门票名称</td>
+                <td class="alignleft"><input type="text" name="ticketName"/></td>
+            </tr>
+            <tr class="controls">
+                <td width="10%" class="alignright"><span class="red">*</span>合作商</td>
+                <td class="alignleft">
+                    <select>
+                        <option value="0">单票</option>
+                        <option value="1">场地票</option>
+                    </select>
+                </td>
+            </tr>
+            <tr class="controls">
+                <td class="alignright"><span class="red">*</span>售卖渠道</td>
+                <td class="alignleft">
+                    <input type="checkbox" checked value="0" name="sellWay">线上售卖<input type="checkbox" value="1" name="sellWay">窗口售卖
+                </td>
+            </tr>
+            <tr class="controls">
+              <th colspan="2">预订规则</th>
+            </tr>
+            <tr class="controls">
+                <td class="alignright" width="15%">使用有效期</td>
+                <td class="alignleft">
+                    <div style="border:1px red dashed;">
+                    <p><input type="radio" checked name="orderEffectiveType">预订之后<input style="width:35px;" type="text" id="fixDay">天有效</p>
+                    <p><input type="radio" name="orderEffectiveType">固定有效期
+                        <!--指定 date标记-->
+                        <input type='text' id="orderEffectiveStartTime" name="orderEffectiveStartTime" class="inputw100 form-control" onClick="WdatePicker()"/>至
+                        <input type='text' id="orderEffectiveEndTime" name="orderEffectiveEndTime" class="inputw100 form-control" onClick="WdatePicker()"/>
+                    </p>
+                    </div>
+                </td>
+            </tr>
+            <tr class="controls">
+                <td class="alignright"><span class="red">*</span>退票规则</td>
+                <td class="alignleft">
+                    <input  type="radio" checked name="orderRefundRule" id="orderR0" value="0"><label style="display:inline" for="orderR0">不可退</label>
+                    <input type="radio" name="orderRefundRule" id="orderR1" value="1"><label style="display:inline" for="orderR1">随时退</label>
+                    <input type="radio" name="orderRefundRule" id="orderR2" value="2"><label style="display:inline" for="orderR2">条件退</label>
+                </td>
+            </tr>
+            <tr class="controls">
+                <th colspan="2">验票规则</th>
+            </tr>
+            <tr class="controls">
+                <td class="alignright"><span class="red">*</span>验票凭证</td>
+                <td class="alignleft">
+                    <input value="0" type="checkbox" checked name="checkTicketType">验证码
+                    <input value="1" type="checkbox" name="checkTicketType">身份证
+                    <input value="2" type="checkbox" name="checkTicketType">市民卡
+                </td>
+            </tr>
+            <tr class="controls">
+                <td class="alignright"><span class="red">*</span>验票渠道</td>
+                <td class="alignleft">
+                    <input value="0" checked type="checkbox" name="checkTicketWay">支持闸机验票
+                    <input value="1" type="checkbox" name="checkTicketWay">支持窗口验票
+                    <input value="2" type="checkbox" name="checkTicketWay">支持手持终端验票
+                </td>
+            </tr>
+            <tr class="controls">
+                <td class="alignright"><span class="red">*</span>限制次数</td>
+                <td class="alignleft">
+                    <input type="radio" checked name="checkTicketAvailableTimes" id="checkTicketAvailableTimes0" value="0"><label style="display:inline" for="checkTicketAvailableTimes0">不限</label>
+                    <input type="radio" name="checkTicketAvailableTimes" id="checkTicketAvailableTimes1" value="1"><label style="display:inline" for="checkTicketAvailableTimes1">限次</label><input style="width:35px;" type="text" id="fixAvailableTimes">
+                </td>
+            </tr>
+            <tr class="controls">
+                <td class="alignright">每日次数</td>
+                <td class="alignleft">
+                   <input style="width:35px;" type="text" id="checkDailyLimitedTimes">
+                </td>
+            </tr>
+            <tr class="controls">
+                <td class="alignright" width="15%"><span class="red">*</span>时间限制</td>
+                <td class="alignleft">
+                    <div style="border:1px red dashed;">
+                        <p><input type="radio" checked name="checkLimitedDateType" id="checkLimitedDateType0"><label style="display:inline" for="checkLimitedDateType0">每日</label>
+                            <input type="radio" name="checkLimitedDateType" id="checkLimitedDateType1"><label style="display:inline" for="checkLimitedDateType1">每周</label>
+                            <div id="weekChooseDiv">
+                            <input value="1" type="checkbox" name="checkLimitedWeekDetails">星期一
+                            <input value="2" type="checkbox" name="checkLimitedWeekDetails">星期二
+                            <input value="3" type="checkbox" name="checkLimitedWeekDetails">星期三
+                            <input value="4" type="checkbox" name="checkLimitedWeekDetails">星期四
+                            <input value="5" type="checkbox" name="checkLimitedWeekDetails">星期五
+                            <input value="6" type="checkbox" name="checkLimitedWeekDetails">星期六
+                            <input value="7" type="checkbox" name="checkLimitedWeekDetails">星期日
+                            </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="controls">
+                <td class="alignright">使用时段</td>
+                <td class="alignleft">
+                    <input style="width:65px;" type="text" id="checkLimitedStartTime" onClick="WdatePicker({dateFmt:'HH:mm',maxDate:'#F{$dp.$D(\'checkLimitedEndTime\')}'})" class="Wdate">
+                    <input style="width:65px;" type="text" id="checkLimitedEndTime" onClick="WdatePicker({dateFmt:'HH:mm',minDate:'#F{$dp.$D(\'checkLimitedStartTime\')}'})"  class="Wdate">
+                </td>
+            </tr>
+            <tr class="controls">
+                <td class="alignright"><span class="red">*</span>是否限时</td>
+                <td class="alignleft">
+                    <input type="radio" checked name="checkLimitedHoursR" id="checkLimitedHours0" value="0"><label style="display:inline" for="checkTicketAvailableTimes0">不限</label>
+                    <input type="radio" name="checkLimitedHoursR" id="checkLimitedHours1" value="1"><label style="display:inline" for="checkTicketAvailableTimes1">限次</label><input style="width:35px;" type="text" id="checkLimitedHours">
+                </td>
+            </tr>
+            <tr class="controls">
+                <th colspan="2">门票须知</th>
+            </tr>
+            <tr class="controls">
+                <td class="alignright"><span class="red">*</span>预订说明</td>
+                <td class="alignleft">
+                    <textarea id="orderDescription" style="width:500px;height:200px;">
+
+                    </textarea>
+                </td>
+            </tr><tr class="controls">
+                <td class="alignright"><span class="red">*</span>退票说明</td>
+                <td class="alignleft">
+                    <textarea id="refundDescription" style="width:500px;height:200px;">
+
+                    </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="button" class="btn btn-success" id="addYearTicket">增加</button></td>
+            </tr>
+        </table>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+<!--<script src="../../static/js/book.js" th:src="@{/lib/js/book.js}"></script>-->
+<script>
+    $(function () {
+//
+    });
+</script>
+</body>
+</html>

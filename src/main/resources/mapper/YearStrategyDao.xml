@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.YearStrategyDao" >
+    <insert id="insertYearStrategyTicket" parameterType="YearStrategyTicketModel">
+        INSERT INTO `szsport_order_mgr`.`year_strategy_ticket_basic_info`
+        (
+            `id`,
+            `ticket_type`,
+            `ticket_name`,
+            `merchant_id`,
+            `sell_way`,
+            `order_effective_type`,
+            `order_effective_start_time`,
+            `order_effective_end_time`,
+            `order_refund_rule`,
+            `check_ticket_type`,
+            `check_ticket_way`,
+            `check_ticket_available_times`,
+            `check_daily_limited_times`,
+            `check_limited_date_type`,
+            `check_limited_week_details`,
+            `check_limited_start_time`,
+            `check_limited_end_time`,
+            `check_limited_hours`,
+            `order_description`,
+            `refund_description`
+        )
+        VALUES (
+                #{id},
+                #{ticketType},
+                #{ticketName},
+                #{merchantId},
+                #{sellWay},
+                #{orderEffectiveType},
+                #{orderEffectiveStartTime},
+                #{orderEffectiveEndTime},
+                #{orderRefundRule},
+                #{checkTicketType},
+                #{checkTicketWay},
+                #{checkTicketAvailableTimes},
+                #{checkDailyLimitedTimes},
+                #{checkLimitedDateType},
+                #{checkLimitedWeekDetails},
+                #{checkLimitedStartTime},
+                #{checkLimitedEndTime},
+                #{checkLimitedHours},
+                #{orderDescription},
+                #{refundDescription}
+            );
+    </insert>
+</mapper>
