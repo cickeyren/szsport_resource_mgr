@@ -67,17 +67,12 @@ public class YearStrategyTicketModel {
      *如果时间限制为每周那么显示具体的限制星期几 用;隔开
      */
     private String checkLimitedWeekDetails;
-    /**
-     * 验票限制起始时间
-     */
-    private String checkLimitedStartTime;
-     /** 验票限制结束时间
-     */
-    private String checkLimitedEndTime;
+
     /**
 //     * 是否限时 0：不限 1：限时
 //     */
-//    private String checkLimitedTimeType;
+//    private String checkLimitedTimeType
+// ;
     /**
      *是否限时 0：不限 其他：限时小时数
      */
@@ -215,14 +210,6 @@ public class YearStrategyTicketModel {
         this.checkLimitedWeekDetails = checkLimitedWeekDetails;
     }
 
-    public String getCheckLimitedStartTime() {
-        return checkLimitedStartTime;
-    }
-
-    public void setCheckLimitedStartTime(String checkLimitedStartTime) {
-        this.checkLimitedStartTime = checkLimitedStartTime;
-    }
-
     public String getCheckLimitedHours() {
         return checkLimitedHours;
     }
@@ -253,13 +240,5 @@ public class YearStrategyTicketModel {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
-    }
-
-    public String getCheckLimitedEndTime() {
-        return checkLimitedEndTime;
-    }
-
-    public void setCheckLimitedEndTime(String checkLimitedEndTime) {
-        this.checkLimitedEndTime = checkLimitedEndTime;
     }
 }

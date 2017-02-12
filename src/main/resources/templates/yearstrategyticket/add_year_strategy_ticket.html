@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
     <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
     <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
@@ -142,10 +143,16 @@
                 </td>
             </tr>
             <tr class="controls">
-                <td class="alignright">使用时段</td>
+                <td class="alignright">可用时段</td>
                 <td class="alignleft">
-                    <input style="width:65px;" type="text" id="checkLimitedStartTime" onClick="WdatePicker({dateFmt:'HH:mm',maxDate:'#F{$dp.$D(\'checkLimitedEndTime\')}'})" class="Wdate">
-                    <input style="width:65px;" type="text" id="checkLimitedEndTime" onClick="WdatePicker({dateFmt:'HH:mm',minDate:'#F{$dp.$D(\'checkLimitedStartTime\')}'})"  class="Wdate">
+                    <input style="width:105px;float: none" type="text" id="checkLimitedStartTime" onClick="WdatePicker({dateFmt:'HH:mm',startDate:'07:00',alwaysUseStartDate:true,maxDate:'#F{$dp.$D(\'checkLimitedEndTime\',{m:-30})}'})" class="Wdate">
+                    <span>至</span>
+                    <input style="width:105px;float: none;" type="text" id="checkLimitedEndTime" onClick="WdatePicker({dateFmt:'HH:mm',minDate:'#F{$dp.$D(\'checkLimitedStartTime\',{m:30})}'})"  class="Wdate">
+                    <input type="button" class="btn" value="添加" id="addLimitedStartAndEndBtn">
+                    <span>
+                        <select id="limitedStartAndEndTimeSelects" multiple="multiple" style="width:150px;">
+                        </select>
+                    </span>
                 </td>
             </tr>
             <tr class="controls">
@@ -153,6 +160,19 @@
                 <td class="alignleft">
                     <input type="radio" checked name="checkLimitedHoursR" id="checkLimitedHours0" value="0"><label style="display:inline" for="checkTicketAvailableTimes0">不限</label>
                     <input type="radio" name="checkLimitedHoursR" id="checkLimitedHours1" value="1"><label style="display:inline" for="checkTicketAvailableTimes1">限次</label><input style="width:35px;" type="text" id="checkLimitedHours">
+                </td>
+            </tr>
+            <tr class="controls">
+                <td class="alignright">不可用日期</td>
+                <td class="alignleft">
+                    <input style="width:105px;float: none" type="text" id="shieldStartTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'shieldEndTime\',{d:-1})}'})" class="Wdate">
+                    <span>至</span>
+                    <input style="width:105px;float: none;" type="text" id="shieldEndTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'shieldStartTime\',{d:1})}'})"  class="Wdate">
+                    <input type="button" class="btn" value="添加" id="addShieldStartAndEndBtn">
+                    <span>
+                        <select id="shieldStartTimeAndEndTimeSelects" multiple="multiple" style="width:250px;">
+                        </select>
+                    </span>
                 </td>
             </tr>
             <tr class="controls">
@@ -184,7 +204,62 @@
 <!--<script src="../../static/js/book.js" th:src="@{/lib/js/book.js}"></script>-->
 <script>
     $(function () {
-//
+        /*********可用时间段效果功能开始*********/
+        var checkUseableTimeArray = [];//验票有效时间数组
+        //点击可用时间段中的添加按钮
+        $("#addLimitedStartAndEndBtn").click(function(){
+           var checkLimitedStartTime = $.trim($("#checkLimitedStartTime").val());
+           var checkLimitedEndTime = $.trim($("#checkLimitedEndTime").val());
+            if(undefined == checkLimitedStartTime || "" == checkLimitedStartTime) {
+                alert("请填写限制起始时间");
+                return;
+            }
+            if(undefined == checkLimitedEndTime || "" == checkLimitedEndTime) {
+                alert("请填写限制结束时间");
+                return;
+            }
+            var startAndEndTimeKey = checkLimitedStartTime+"$"+checkLimitedEndTime;
+            var startAndEndTimeValue = checkLimitedStartTime+"至"+checkLimitedEndTime;
+            if(checkUseableTimeArray.contains(startAndEndTimeKey)) {
+                alert("该时间的日期已经添加，请重新选择~");
+                return;
+            }
+            checkUseableTimeArray.push(startAndEndTimeKey);
+            $("#limitedStartAndEndTimeSelects").prepend('<option value="'+startAndEndTimeKey+'">'+startAndEndTimeValue+"</option>");
+
+        });
+        //
+        $("#limitedStartAndEndTimeSelects").dblclick(function(){
+           var startAndEndTimeKey =  $("option:selected",this).attr("value");
+           //alert(startAndEndTimeKey);
+            $("option:selected",this).remove();
+            checkUseableTimeArray.remove(startAndEndTimeKey);
+            //console.log(checkUseableTimeArray);
+        })
+        /*********不可用日期功能结束*********/
+        var shieldDataArray = [];//验票不可用日期数组
+        //点击不可用日期中的添加按钮
+        $("#addShieldStartAndEndBtn").click(function(){
+            var shieldStartTime = $.trim($("#shieldStartTime").val());
+            var shieldEndTime = $.trim($("#shieldEndTime").val());
+            if(undefined == shieldStartTime || "" == shieldStartTime) {
+                alert("请填写起始不可用日期");
+                return;
+            }
+            if(undefined == shieldEndTime || "" == shieldEndTime) {
+                alert("请填写结束不可用时间");
+                return;
+            }
+            var shieldStartTimeKey = shieldStartTime+"$"+shieldEndTime;
+            var shieldStartTimeValue = shieldStartTime+"至"+shieldStartTime;
+            if(shieldDataArray.contains(shieldStartTimeKey)) {
+                alert("该不可用日期已经添加，请重新选择~");
+                return;
+            }
+            shieldDataArray.push(shieldStartTimeKey);
+            $("#shieldStartTimeAndEndTimeSelects").prepend('<option value="'+shieldStartTimeKey+'">'+shieldStartTimeValue+"</option>");
+
+        });
     });
 </script>
 </body>

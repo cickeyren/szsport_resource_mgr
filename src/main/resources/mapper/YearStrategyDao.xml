@@ -19,8 +19,6 @@
             `check_daily_limited_times`,
             `check_limited_date_type`,
             `check_limited_week_details`,
-            `check_limited_start_time`,
-            `check_limited_end_time`,
             `check_limited_hours`,
             `order_description`,
             `refund_description`
@@ -41,8 +39,6 @@
                 #{checkDailyLimitedTimes},
                 #{checkLimitedDateType},
                 #{checkLimitedWeekDetails},
-                #{checkLimitedStartTime},
-                #{checkLimitedEndTime},
                 #{checkLimitedHours},
                 #{orderDescription},
                 #{refundDescription}
