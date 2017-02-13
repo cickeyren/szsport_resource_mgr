@@ -5,7 +5,9 @@ import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
 import com.digitalchina.sport.mgr.resource.model.Book;
 import com.digitalchina.sport.mgr.resource.model.Category;
+import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketModel;
 import com.digitalchina.sport.mgr.resource.service.BookService;
+import com.digitalchina.sport.mgr.resource.service.YearStrategyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class YearStrategyTicketController {
     public static final Logger logger = LoggerFactory.getLogger(YearStrategyTicketController.class);
 
     @Autowired
-    private BookService bookService;
+    private YearStrategyService yearStrategyService;
 
 
     /**
@@ -47,4 +49,27 @@ public class YearStrategyTicketController {
 //        map.put("categorys", categorys);
         return "yearstrategyticket/add_year_strategy_ticket";
     }
+
+    /**
+     * 新增
+     *
+     * @param book
+     * @param map
+     * @return
+     */
+    @RequestMapping(value = "/addYearStrategyTicket.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData add(YearStrategyTicketModel yearStrategyTicket,HttpServletRequest request) {
+        boolean result = false;
+        try {
+            if(yearStrategyService.doInserYearStrategyTicketAndRelateInfo(yearStrategyTicket,request)) {
+                return RtnData.ok("新增年卡成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("========新增年卡策略失败=========",e);
+        }
+        return RtnData.fail("新增年卡策略失败");
+    }
+
 }

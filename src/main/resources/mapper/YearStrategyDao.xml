@@ -44,4 +44,45 @@
                 #{refundDescription}
             );
     </insert>
+    <!--批量添加年票生成策略与子场馆对应关系-->
+    <insert id="insertYearStrategyStadiumRelationsList" parameterType="List">
+        INSERT INTO `szsport_order_mgr`.`year_strategy_stadium_relations` (
+        `id`,
+        `ticket_strategy_id`,
+        `sub_stadium_id`
+        )
+        VALUES
+        <foreach collection="list" index="index" item="item" open="" separator="," close="">
+            (#{item.id}, #{item.ticketStrategyId}, #{item.subStadiumId})
+        </foreach>
+    </insert>
+
+    <!--批量添加年票策略可用时间段-->
+    <insert id="insertYearStrategyTicketCheckUseableTimeList" parameterType="List">
+        INSERT INTO `szsport_order_mgr`.`year_strategy_ticket_check_useable_time` (
+        `id`,
+        `ticket_strategy_id`,
+        `check_limited_date_type`,
+        `useable_start_time`,
+        `useable_end_time`
+        )
+        VALUES
+        <foreach collection="list" index="index" item="item" open="" separator="," close="">
+            (#{item.id},#{item.ticketStrategyId},#{item.checkLimitedDateType}, #{item.useableStartTime},#{item.useableEndTime})
+        </foreach>
+    </insert>
+    <!--批量添加年票策略可用时间段-->
+    <insert id="insertTicketStrategyCommonCheckShieldTimeModel" parameterType="List">
+        INSERT INTO `szsport_order_mgr`.`ticket_strategy_common_check_shield_time` (
+        `id`,
+        `ticket_type`,
+        `ticket_strategy_id`,
+        `shield_start_time`,
+        `shield_end_time`
+        )
+        VALUES
+        <foreach collection="list" index="index" item="item" open="" separator="," close="">
+            (#{item.id},#{item.ticketType}, #{item.ticketStrategyId}, #{item.shieldStartTime}, #{item.shieldEndTime})
+        </foreach>
+    </insert>
 </mapper>

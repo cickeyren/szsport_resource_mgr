@@ -259,19 +259,20 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println("now() = [" + now() + "]");
-        System.out.println("today() = [" + today() + "]");
-        System.out.println("format(Date,String) = [" + format(new Date(),NORM_DATE_PATTERN) + "]");
-        System.out.println("formatDateTime(Date) = [" + formatDateTime(new Date()) + "]");
-        System.out.println("formatHttpDate(Date) = [" + formatHttpDate(new Date()) + "]");
-        System.out.println("formatDate(Date) = [" + formatDate(new Date()) + "]");
-        System.out.println("parse(String,String) = [" + parse("2016-11-30",NORM_DATE_PATTERN) + "]");
-        System.out.println("parseDateTime(String) = [" + parseDateTime("2016-11-30 14:41:41") + "]");
-        System.out.println("parseDate(String) = [" + parseDate("2016-11-30") + "]");
-        System.out.println("parseTime(String) = [" + parseTime("14:41:41") + "]");
-        System.out.println("parse(String) = [" + parse("2016-11-30 14:41:41") + "]");
-        System.out.println("yesterday() = [" + yesterday() + "]");
-        System.out.println("lastWeek() = [" + lastWeek() + "]");
-        System.out.println("lastMonth() = [" + lastMonth() + "]");
+//        System.out.println("now() = [" + now() + "]");
+//        System.out.println("today() = [" + today() + "]");
+//        System.out.println("format(Date,String) = [" + format(new Date(),NORM_DATE_PATTERN) + "]");
+//        System.out.println("formatDateTime(Date) = [" + formatDateTime(new Date()) + "]");
+//        System.out.println("formatHttpDate(Date) = [" + formatHttpDate(new Date()) + "]");
+//        System.out.println("formatDate(Date) = [" + formatDate(new Date()) + "]");
+//        System.out.println("parse(String,String) = [" + parse("2016-11-30",NORM_DATE_PATTERN) + "]");
+//        System.out.println("parseDateTime(String) = [" + parseDateTime("2016-11-30 14:41:41") + "]");
+//        System.out.println("parseDate(String) = [" + parseDate("2016-11-30") + "]");
+//        System.out.println("parseTime(String) = [" + parseTime("14:41:41") + "]");
+//        System.out.println("parse(String) = [" + parse("2016-11-30 14:41:41") + "]");
+//        System.out.println("yesterday() = [" + yesterday() + "]");
+//        System.out.println("lastWeek() = [" + lastWeek() + "]");
+//        System.out.println("lastMonth() = [" + lastMonth() + "]");
+        System.out.println(formatDate(offsiteDate(new Date(System.currentTimeMillis()),Calendar.DAY_OF_MONTH,1)));
     }
 }

@@ -10,7 +10,7 @@ public class YearStrategyTicketModel {
     /**
      * 表ID
      */
-    private long id;
+    private String id;
     /**
      * 套票类型 0：单票 1：场地票
      */
@@ -36,7 +36,7 @@ public class YearStrategyTicketModel {
      */
     private String orderEffectiveStartTime;
     /**
-     *有效期终止时间有效期起始时间(无论是有效天数还是固定时间都生成该时间)
+     *有效期终止时间有效期结束时间(无论是有效天数还是固定时间都生成该时间)
      */
     private String orderEffectiveEndTime;
     /**
@@ -64,7 +64,7 @@ public class YearStrategyTicketModel {
      */
     private String checkLimitedDateType;
     /**
-     *如果时间限制为每周那么显示具体的限制星期几 用;隔开
+     *如果时间限制为每周那么显示具体的限制星期几 用;隔checkTicketAvailableTimes开
      */
     private String checkLimitedWeekDetails;
 
@@ -72,9 +72,9 @@ public class YearStrategyTicketModel {
 //     * 是否限时 0：不限 1：限时
 //     */
 //    private String checkLimitedTimeType
-// ;
+//
     /**
-     *是否限时 0：不限 其他：限时小时数
+     *是否限时 -1：不限 其他：限时小时数
      */
     private String checkLimitedHours;
     /**
@@ -90,11 +90,11 @@ public class YearStrategyTicketModel {
      */
     private String createTime;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

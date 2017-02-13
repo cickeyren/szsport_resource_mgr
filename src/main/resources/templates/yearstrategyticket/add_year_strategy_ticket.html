@@ -20,6 +20,8 @@
         .inputw100{width:100px;}
         #contentTable td.alignleft{text-align: left;}
         #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
     </style>
 </head>
 <body>
@@ -27,6 +29,7 @@
 <section>
     <div class="container-fluid" style="margin-top: 30px">
         <p class="title">新增年卡/散卡生成策略</p>
+        <form onsubmit="return false;" class="form-horizontal" action="#" id="addForm">
         <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
             <tr class="controls">
                 <th colspan="2">基本信息</th>
@@ -41,9 +44,17 @@
                 </td>
             </tr>
             <tr class="controls">
+                <td class="alignright" width="10%"><span class="red">*</span>主场馆</td>
+                <td class="alignleft">
+                    <select id="mainStadiumID">
+                        <option value="0">单票</option>
+                        <option value="1">场地票</option>
+                    </select>
+                </td>
+            </tr> <tr class="controls">
                 <td class="alignright" width="10%"><span class="red">*</span>可用子场馆</td>
                 <td class="alignleft">
-                    <select id="subStadium">
+                    <select id="subStadiumID">
                         <option value="0">单票</option>
                         <option value="1">场地票</option>
                     </select>
@@ -51,12 +62,12 @@
             </tr>
             <tr class="controls">
                 <td class="alignright"><span class="red">*</span>门票名称</td>
-                <td class="alignleft"><input type="text" name="ticketName"/></td>
+                <td class="alignleft"><input type="text" id="ticketName" name="ticketName"/></td>
             </tr>
             <tr class="controls">
                 <td width="10%" class="alignright"><span class="red">*</span>合作商</td>
                 <td class="alignleft">
-                    <select>
+                    <select id="merchantId">
                         <option value="0">单票</option>
                         <option value="1">场地票</option>
                     </select>
@@ -65,7 +76,7 @@
             <tr class="controls">
                 <td class="alignright"><span class="red">*</span>售卖渠道</td>
                 <td class="alignleft">
-                    <input type="checkbox" checked value="0" name="sellWay">线上售卖<input type="checkbox" value="1" name="sellWay">窗口售卖
+                    <input type="checkbox" checked="checked" value="0" name="sellWay">线上售卖<input type="checkbox" value="1" name="sellWay">窗口售卖
                 </td>
             </tr>
             <tr class="controls">
@@ -75,11 +86,11 @@
                 <td class="alignright" width="15%">使用有效期</td>
                 <td class="alignleft">
                     <div style="border:1px red dashed;">
-                    <p><input type="radio" checked name="orderEffectiveType">预订之后<input style="width:35px;" type="text" id="fixDay">天有效</p>
-                    <p><input type="radio" name="orderEffectiveType">固定有效期
+                    <p><input type="radio" checked name="orderEffectiveType" value="0">预订之后<input style="width:35px;" type="text" id="fixDay">天有效</p>
+                    <p><input type="radio" name="orderEffectiveType" value="1">固定有效期
                         <!--指定 date标记-->
-                        <input type='text' id="orderEffectiveStartTime" name="orderEffectiveStartTime" class="inputw100 form-control" onClick="WdatePicker()"/>至
-                        <input type='text' id="orderEffectiveEndTime" name="orderEffectiveEndTime" class="inputw100 form-control" onClick="WdatePicker()"/>
+                        <input type='text' style="float:none" id="orderEffectiveStartTime" name="orderEffectiveStartTime" class="inputw100 form-control" onClick="WdatePicker()"/>至
+                        <input type='text' style="float:none" id="orderEffectiveEndTime" name="orderEffectiveEndTime" class="inputw100 form-control" onClick="WdatePicker()"/>
                     </p>
                     </div>
                 </td>
@@ -121,15 +132,15 @@
             <tr class="controls">
                 <td class="alignright">每日次数</td>
                 <td class="alignleft">
-                   <input style="width:35px;" type="text" id="checkDailyLimitedTimes">
+                   <input style="width:35px;" type="text" id="checkDailyLimitedTimes" name="checkDailyLimitedTimes">
                 </td>
             </tr>
             <tr class="controls">
                 <td class="alignright" width="15%"><span class="red">*</span>时间限制</td>
                 <td class="alignleft">
                     <div style="border:1px red dashed;">
-                        <p><input type="radio" checked name="checkLimitedDateType" id="checkLimitedDateType0"><label style="display:inline" for="checkLimitedDateType0">每日</label>
-                            <input type="radio" name="checkLimitedDateType" id="checkLimitedDateType1"><label style="display:inline" for="checkLimitedDateType1">每周</label>
+                        <p><input type="radio" checked name="checkLimitedDateType" id="checkLimitedDateType0" value="0"><label style="display:inline" for="checkLimitedDateType0">每日</label>
+                            <input type="radio" name="checkLimitedDateType" id="checkLimitedDateType1" value="1"><label style="display:inline" for="checkLimitedDateType1">每周</label>
                             <div id="weekChooseDiv">
                             <input value="1" type="checkbox" name="checkLimitedWeekDetails">星期一
                             <input value="2" type="checkbox" name="checkLimitedWeekDetails">星期二
@@ -159,7 +170,7 @@
                 <td class="alignright"><span class="red">*</span>是否限时</td>
                 <td class="alignleft">
                     <input type="radio" checked name="checkLimitedHoursR" id="checkLimitedHours0" value="0"><label style="display:inline" for="checkTicketAvailableTimes0">不限</label>
-                    <input type="radio" name="checkLimitedHoursR" id="checkLimitedHours1" value="1"><label style="display:inline" for="checkTicketAvailableTimes1">限次</label><input style="width:35px;" type="text" id="checkLimitedHours">
+                    <input type="radio" name="checkLimitedHoursR" id="checkLimitedHours1" value="1"><label style="display:inline" for="checkTicketAvailableTimes1">限次</label><input style="width:35px;" type="text" id="checkLimitedHours">(小时)
                 </td>
             </tr>
             <tr class="controls">
@@ -181,22 +192,19 @@
             <tr class="controls">
                 <td class="alignright"><span class="red">*</span>预订说明</td>
                 <td class="alignleft">
-                    <textarea id="orderDescription" style="width:500px;height:200px;">
-
-                    </textarea>
+                    <textarea id="orderDescription" name="orderDescription" style="width:500px;height:200px;"></textarea>
                 </td>
             </tr><tr class="controls">
                 <td class="alignright"><span class="red">*</span>退票说明</td>
                 <td class="alignleft">
-                    <textarea id="refundDescription" style="width:500px;height:200px;">
-
-                    </textarea>
+                    <textarea id="refundDescription" name="refundDescription" style="width:500px;height:200px;"></textarea>
                 </td>
             </tr>
             <tr>
-                <td colspan="2"><button type="button" class="btn btn-success" id="addYearTicket">增加</button></td>
+                <td colspan="2"><button type="submit" class="btn btn-success" id="addYearTicket">增加</button></td>
             </tr>
         </table>
+        </form>
     </div>
 </section>
 <div id="addDialogs">
@@ -205,7 +213,7 @@
 <script>
     $(function () {
         /*********可用时间段效果功能开始*********/
-        var checkUseableTimeArray = [];//验票有效时间数组
+        var checkUseableTimeArray = [];//验票可用时间段数组
         //点击可用时间段中的添加按钮
         $("#addLimitedStartAndEndBtn").click(function(){
            var checkLimitedStartTime = $.trim($("#checkLimitedStartTime").val());
@@ -228,16 +236,16 @@
             $("#limitedStartAndEndTimeSelects").prepend('<option value="'+startAndEndTimeKey+'">'+startAndEndTimeValue+"</option>");
 
         });
-        //
+        //可用段时间条目双击删除
         $("#limitedStartAndEndTimeSelects").dblclick(function(){
            var startAndEndTimeKey =  $("option:selected",this).attr("value");
            //alert(startAndEndTimeKey);
             $("option:selected",this).remove();
             checkUseableTimeArray.remove(startAndEndTimeKey);
             //console.log(checkUseableTimeArray);
-        })
+        });
         /*********不可用日期功能结束*********/
-        var shieldDataArray = [];//验票不可用日期数组
+        var shieldDateArray = [];//验票不可用日期数组
         //点击不可用日期中的添加按钮
         $("#addShieldStartAndEndBtn").click(function(){
             var shieldStartTime = $.trim($("#shieldStartTime").val());
@@ -251,15 +259,196 @@
                 return;
             }
             var shieldStartTimeKey = shieldStartTime+"$"+shieldEndTime;
-            var shieldStartTimeValue = shieldStartTime+"至"+shieldStartTime;
-            if(shieldDataArray.contains(shieldStartTimeKey)) {
+            var shieldStartTimeValue = shieldStartTime+"至"+shieldEndTime;
+            if(shieldDateArray.contains(shieldStartTimeKey)) {
                 alert("该不可用日期已经添加，请重新选择~");
                 return;
             }
-            shieldDataArray.push(shieldStartTimeKey);
+            shieldDateArray.push(shieldStartTimeKey);
             $("#shieldStartTimeAndEndTimeSelects").prepend('<option value="'+shieldStartTimeKey+'">'+shieldStartTimeValue+"</option>");
-
         });
+        //不可用日期段条目双击删除
+        $("#shieldStartTimeAndEndTimeSelects").dblclick(function(){
+            var shieldStartTimeKey =  $("option:selected",this).attr("value");
+            $("option:selected",this).remove();
+            shieldDateArray.remove(shieldStartTimeKey);
+            //console.log(checkUseableTimeArray);
+        });
+
+        //表单配置
+        var valConfig = {
+            rules: {
+                ticketName: {
+                    required: true,
+                    maxlength: 20
+                },
+                sellWay: {
+                    required: true
+                },
+                checkTicketType: {
+                    required: true
+                },
+                checkTicketWay: {
+                    required: true
+                },
+                fixAvailableTimes:{
+                    number:true
+                },
+                checkDailyLimitedTimes:{
+                    number:true
+                },
+                orderDescription: {
+                    required: true
+                },
+                refundDescription: {
+                    required: true
+                }
+            },
+            messages: {
+                ticketName: {
+                    required: "请填写门票名称"
+                },
+                fixAvailableTimes: {
+                    number: "请输入有效的数字"
+                },
+                checkDailyLimitedTimes: {
+                    number: "请输入有效的数字"
+                },
+                orderDescription: {
+                    required: "请填写预订说明"
+                },
+                refundDescription: {
+                    required: "请填写退票说明"
+                }
+            },
+                submitHandler: function () {
+                var ticketType = $.trim($("#ticketType").val());//套票类型
+                var mainStadiumID = $("#mainStadiumID").val();//主场馆ID
+                var subStadiumID = $("#subStadiumID").val();//子场馆ID
+                var ticketName = $.trim($("#ticketName").val());//门票名称
+                var merchantId = $.trim($("#merchantId").val());//合作商
+                var sellWayArray = [];//售卖渠道
+                $('input[name="sellWay"]:checkbox').each(function(){
+                    if ($(this).prop("checked")) {
+                        sellWayArray.push($(this).prop('value'));
+                    }
+                });
+                var sellWay = sellWayArray.toString();//售卖渠道
+                var orderEffectiveType = $('input:radio[name="orderEffectiveType"]:checked').val();//使用有效期类型 0：预订后x天有效 1：固定有效期
+                var fixDay = "";//多少天后有效
+                var orderEffectiveStartTime = $.trim($("#orderEffectiveStartTime").val());//有效期起始时间(无论是有效天数还是固定时间都生成该时间)
+                var orderEffectiveEndTime = $.trim($("#orderEffectiveEndTime").val());//售卖渠道
+                if(orderEffectiveType == "0") {
+                       fixDay = $.trim($("#fixDay").val());
+                       if(!isDigital(fixDay)) {
+                           $("#fixDay").focus();
+                           alert("请填写正确有效天数~");
+                           return;
+                       }
+                   } else if(orderEffectiveType == "1") {
+                    if("" == orderEffectiveStartTime || "" == orderEffectiveEndTime) {
+                        alert("固定有效期填写不合法");
+                        return;
+                    }
+                }
+                var orderRefundRule = $('input:radio[name="orderRefundRule"]:checked').val();//退款规则 0：不可退 1：随时退 2：条件退
+                var checkTicketTypeArray = [];
+                $('input[name="checkTicketType"]:checkbox').each(function(){
+                    if ($(this).prop("checked")) {
+                        checkTicketTypeArray.push($(this).prop('value'));
+                    }
+                });
+                var checkTicketType = checkTicketTypeArray.toString();//验票凭证
+                var checkTicketWayArray = [];
+                $('input[name="checkTicketWay"]:checkbox').each(function(){
+                    if ($(this).prop("checked")) {
+                        checkTicketWayArray.push($(this).prop('value'));
+                    }
+                });
+                var checkTicketWay = checkTicketWayArray.toString();//验票渠道
+                var checkTicketAvailableTimes = $('input:radio[name="checkTicketAvailableTimes"]:checked').val();//限制次数类型选择
+                var fixAvailableTimes = "";
+                if(checkTicketAvailableTimes == "0"){
+                    fixAvailableTimes = "-1";
+                } else if (checkTicketAvailableTimes == "1"){
+                    fixAvailableTimes = $.trim($("#fixAvailableTimes").val());
+                    if(!isDigital(fixAvailableTimes)) {
+                       alert("请填写正确限票次数~");
+                        return;
+                    }
+                }
+                var checkDailyLimitedTimes = $.trim($("#checkDailyLimitedTimes").val());//每日限次
+                var checkLimitedDateType = $('input:radio[name="checkLimitedDateType"]:checked').val();//时间限制 0：每日 1：每周
+                var checkLimitedWeekDetailsArray = [];//
+                if(checkLimitedDateType == "0"){
+                    checkLimitedDateType = "0";
+                } else if (checkLimitedDateType == "1"){
+                    $('input[name="checkLimitedWeekDetails"]:checkbox').each(function(){
+                        if ($(this).prop("checked")) {
+                            checkLimitedWeekDetailsArray.push($(this).prop('value'));
+                        }
+                    });
+                    if(checkLimitedWeekDetailsArray.length == 0) {
+                        alert("请选择具体的星期几~");
+                        return;
+                    }
+                }
+                var checkLimitedWeekDetails = checkLimitedWeekDetailsArray.toString();//如果时间限制为每周那么显示具体的限制星期几 用;隔开
+                var checkUseableTime = checkUseableTimeArray.toString();//可用时段
+                var checkLimitedHoursR = $('input:radio[name="checkLimitedHoursR"]:checked').val();
+                var checkLimitedHours = "";//该票设置可用总次数 -1表示不限 其他：限次
+                    if(checkLimitedHoursR == "0"){
+                    checkLimitedHours = "-1";
+                } else if (checkLimitedHoursR == "1"){
+                    checkLimitedHours = $.trim($("#checkLimitedHours").val());
+                }
+
+                var shieldDate = shieldDateArray.toString(); //不可用日期
+                var orderDescription = $.trim($("#orderDescription").val());
+                var refundDescription = $.trim($("#refundDescription").val());
+                var reqParam = {
+                                "ticketType":ticketType,
+                                mainStadiumID:mainStadiumID,
+                                subStadiumID:subStadiumID,
+                                ticketName:ticketName,
+                                merchantId:merchantId,
+                                sellWay:sellWay,
+                                orderEffectiveType:orderEffectiveType,
+                                fixDay:fixDay,
+                                orderEffectiveStartTime:orderEffectiveStartTime,
+                                orderEffectiveEndTime:orderEffectiveEndTime,
+                                orderRefundRule:orderRefundRule,
+                                checkTicketType:checkTicketType,
+                                checkTicketWay:checkTicketWay,
+                                checkTicketAvailableTimes:fixAvailableTimes,
+                                checkDailyLimitedTimes:checkDailyLimitedTimes,
+                                checkLimitedDateType:checkLimitedDateType,
+                                checkLimitedWeekDetails:checkLimitedWeekDetails,
+                                checkUseableTime:checkUseableTime,
+                                checkLimitedHours:checkLimitedHours,
+                                shieldDate:shieldDate,
+                                orderDescription:orderDescription,
+                                refundDescription:refundDescription
+                                }
+                    $.ajax({
+                        url:'/yearstrategyticket/addYearStrategyTicket.json',
+                        type:'POST', //GET
+                        data:reqParam,
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        success:function(result){
+                            if("000000" == result.code) {
+                                alert("添加成功~");
+                            }
+                            //console.log(result);
+                        },
+                        error:function(result){
+                            alert("添加失败~");
+                        }
+                    })
+                }
+            }
+        $('#addForm').validate(valConfig);
+
     });
 </script>
 </body>

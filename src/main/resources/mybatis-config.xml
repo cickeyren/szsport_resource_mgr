@@ -25,7 +25,5 @@
         <package name="com.digitalchina.sport.mgr.resource.model"/>
     </typeAliases>
 
-    <mappers>
-        <mapper resource="mapper/BookDao.xml"/>
-    </mappers>
+
 </configuration>
