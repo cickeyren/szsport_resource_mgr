@@ -47,8 +47,7 @@
                 <td class="alignright" width="10%"><span class="red">*</span>主场馆</td>
                 <td class="alignleft">
                     <select id="mainStadiumID">
-                        <option value="0">单票</option>
-                        <option value="1">场地票</option>
+                            <option th:each="mainStadium,eStat:${mainStadiumList}" th:value="${mainStadium.id}" th:text="${mainStadium.name}"></option>
                     </select>
                 </td>
             </tr> <tr class="controls">
@@ -325,6 +324,11 @@
                 var ticketType = $.trim($("#ticketType").val());//套票类型
                 var mainStadiumID = $("#mainStadiumID").val();//主场馆ID
                 var subStadiumID = $("#subStadiumID").val();//子场馆ID
+                    if(undefined == subStadiumID || "" == subStadiumID) {
+                        alert("请选择正确的子场馆内容~");
+                        return;
+                    }
+
                 var ticketName = $.trim($("#ticketName").val());//门票名称
                 var merchantId = $.trim($("#merchantId").val());//合作商
                 var sellWayArray = [];//售卖渠道
@@ -444,12 +448,46 @@
                         error:function(result){
                             alert("添加失败~");
                         }
-                    })
+                    });
                 }
             }
         $('#addForm').validate(valConfig);
-
+        //初始化子场馆下拉
+//        if($("#mainStadiumID option").length > 0) {
+//            updateSubStadiumList($("#mainStadiumID option").eq(0).val());
+//        }
+        //updateSubStadiumList("1001");
+        //给主场馆菜单绑定选择改变时同时改变子菜单的内容
+        $("#mainStadiumID").change(function(){
+            updateSubStadiumList($("#mainStadiumID").val());
+        });
+        $('#mainStadiumID').trigger('change')
     });
+    /**
+     * 更新子场馆列表
+     */
+    function updateSubStadiumList(mainStadiumId) {
+        $.ajax({
+            url:'/yearstrategyticket/getSubStadiumListByMainId.json',
+            type:'POST', //GET
+            data:{"mainStadiumId":mainStadiumId},
+            dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+            success:function(result){
+                if("000000" == result.code) {
+                    var items = result.result.subStadiumList;
+                    $("#subStadiumID").empty();
+                    $.each(items,function(i,n){
+                        $("#subStadiumID").append("<option value=\""+n.id+"\">"+n.name+"</option>");
+                    });
+                    //alert("添加成功~");
+                }
+                //console.log(result);
+            },
+            error:function(result){
+                alert("添加失败~");
+            }
+        })
+    }
 </script>
 </body>
 </html>

@@ -1,11 +1,18 @@
 package com.digitalchina.sport.mgr.resource.service;
 
+import com.digitalchina.common.data.Constants;
+import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.utils.DateUtil;
+import com.digitalchina.common.utils.HttpClientUtil;
 import com.digitalchina.common.utils.UUIDUtil;
+import com.digitalchina.config.PropertyConfig;
 import com.digitalchina.sport.mgr.resource.dao.BookDao;
 import com.digitalchina.sport.mgr.resource.dao.YearStrategyDao;
 import com.digitalchina.sport.mgr.resource.model.*;
+import com.google.gson.Gson;
 import com.mysql.jdbc.StringUtils;
+import com.sun.deploy.config.Config;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +27,10 @@ import java.util.*;
 @Service
 public class YearStrategyService {
     @Autowired
+    private PropertyConfig proConfig;
+    @Autowired
     private YearStrategyDao yearStrategyDao;
+    private static Logger logger = Logger.getLogger(YearStrategyService.class);
 
     /**
      * 添加年卡策略票务
@@ -131,5 +141,65 @@ public class YearStrategyService {
         insertYearStrategyStadiumRelationsList(yearStdaiumList);
         //3、添加年票策略可用时间段
 ;        return true;
+    }
+
+    /**
+     * 获取所有主场馆
+     * @return
+     */
+    public List<Map<String,Object>> getAllMainStadium() {
+//        List<Map<String,Object>> resultList = null;
+//        String result = null;
+//        try {
+//            result = HttpClientUtil.doGet(proConfig.SPORT_RESOURCE_URL + "/api/stadium/getAllMainStadium.json", 2000, null, null);
+//            Gson gson = new Gson();
+//            Map<String,Object> gsonMap =  gson.fromJson(result,Map.class);
+//            if(null != gsonMap && gsonMap.containsKey("code")) {
+//                if(Constants.RTN_CODE_SUCCESS.equals((String)gsonMap.get("code"))) {
+//                    Map<String,Object> resultMap = (Map<String,Object>)gsonMap.get("result");
+//                    resultList = (List<Map<String, Object>>) resultMap.get("getAllMerchantList");
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            logger.error("=========调用远程接口时发生错误===========",e);
+//        }
+//        return resultList != null? resultList:new ArrayList<Map<String,Object>>();
+        return HttpClientUtil.getListResultByURLAndKey(proConfig.SPORT_RESOURCE_URL + "/api/stadium/getAllMainStadium.json","获取所有主场馆列表","getAllMainStadiumList");
+
+    }
+
+    /**
+     * 根据主场场馆获取子场馆list
+     * @param mainStadiumId
+     * @return
+     */
+    public List<Map<String,Object>> getSubStadiumListByMainId(String mainStadiumId) {
+        return HttpClientUtil.getListResultByURLAndKey(proConfig.SPORT_RESOURCE_URL + "/api/stadium/getSubStadiumByMainId.json?mainStadiumId="+mainStadiumId,"根据主场馆ID获取子场馆列表","subStadiumList");
+    }
+
+    /**
+     * 调用接口获取所有商户的信息
+     * @return
+     */
+    public List<Map<String,Object>> getAllMerchant() {
+        return HttpClientUtil.getListResultByURLAndKey(proConfig.SPORT_RESOURCE_URL + "/api/stadium/getAllMerchant.json","获取所有接口列表","getAllMerchantList");
+//        List<Map<String,Object>> resultList = null;
+//        String result = null;
+//        try {
+//            result = HttpClientUtil.doGet(proConfig.SPORT_RESOURCE_URL + "/api/stadium/getAllMerchant.json", 2000, null, null);
+//            Gson gson = new Gson();
+//            Map<String,Object> gsonMap =  gson.fromJson(result,Map.class);
+//            if(null != gsonMap && gsonMap.containsKey("code")) {
+//                if(Constants.RTN_CODE_SUCCESS.equals((String)gsonMap.get("code"))) {
+//                    Map<String,Object> resultMap = (Map<String,Object>)gsonMap.get("result");
+//                    resultList = (List<Map<String, Object>>) resultMap.get("getAllMerchantList");
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            logger.error("=========调用远程接口时发生错误===========",e);
+//        }
+//        return resultList != null? resultList:new ArrayList<Map<String,Object>>();
     }
 }

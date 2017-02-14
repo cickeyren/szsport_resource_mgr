@@ -46,7 +46,7 @@ public class YearStrategyTicketController {
     @RequestMapping(value = "/add.html")
     public String add(ModelMap map) {
 //        List<Category> categorys = bookService.findCategorys();
-//        map.put("categorys", categorys);
+        map.put("mainStadiumList", yearStrategyService.getAllMainStadium());
         return "yearstrategyticket/add_year_strategy_ticket";
     }
 
@@ -70,6 +70,20 @@ public class YearStrategyTicketController {
             logger.error("========新增年卡策略失败=========",e);
         }
         return RtnData.fail("新增年卡策略失败");
+    }
+
+    @RequestMapping(value = "/getSubStadiumListByMainId.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData getSubStadiumListByMainId(@RequestParam(required = true) String mainStadiumId) {
+        try {
+            Map<String,Object> resultMap = new HashMap<String,Object>();
+            resultMap.put("subStadiumList",yearStrategyService.getSubStadiumListByMainId(mainStadiumId));
+            return RtnData.ok(resultMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("========根据主场馆ID获取子场馆列表失败=========",e);
+        }
+        return RtnData.fail("根据主场馆ID获取子场馆列表失败");
     }
 
 }
