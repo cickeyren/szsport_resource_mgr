@@ -7,6 +7,7 @@ import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketModel;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author:yangyt
@@ -42,4 +43,19 @@ public interface YearStrategyDao {
      */
     public int insertTicketStrategyCommonCheckShieldTimeModel(List<TicketStrategyCommonCheckShieldTimeModel> list) throws Exception;
 
+    /**
+     * 根据年票策略ID查询年票策略
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public YearStrategyTicketModel getYearStrategyTicketModelById(String id) throws  Exception;
+
+    /**
+     * 根据年票策略ID去获取年票中关联的子场馆信息
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String,Object>> getYearStrategyStadiumRelationsModelByYearStrategyId(String id) throws  Exception;
 }

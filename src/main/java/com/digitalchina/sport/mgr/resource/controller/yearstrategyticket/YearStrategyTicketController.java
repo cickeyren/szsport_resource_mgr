@@ -3,6 +3,7 @@ package com.digitalchina.sport.mgr.resource.controller.yearstrategyticket;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
+import com.digitalchina.sport.mgr.resource.dao.YearStrategyDao;
 import com.digitalchina.sport.mgr.resource.model.Book;
 import com.digitalchina.sport.mgr.resource.model.Category;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketModel;
@@ -35,6 +36,8 @@ public class YearStrategyTicketController {
 
     @Autowired
     private YearStrategyService yearStrategyService;
+    @Autowired
+    private YearStrategyDao yearStrategyDao;
 
 
     /**
@@ -85,5 +88,26 @@ public class YearStrategyTicketController {
         }
         return RtnData.fail("根据主场馆ID获取子场馆列表失败");
     }
+
+    /**
+     * 根据
+     * @param yearStrategyId
+     * @return
+     */
+    @RequestMapping(value = "/getYearStrategyTicketModelInfo.json")
+    @ResponseBody
+    public RtnData getYearStrategyTicketModelInfo(@RequestParam(required = true) String yearStrategyId) {
+        try {
+            Map<String,Object> resultMap = new HashMap<String,Object>();
+            resultMap.put("yearStrategyDetail",yearStrategyDao.getYearStrategyTicketModelById(yearStrategyId));
+            resultMap.put("studStadiumList",yearStrategyDao.getYearStrategyStadiumRelationsModelByYearStrategyId(yearStrategyId));
+            return RtnData.ok(resultMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("========根据票策略ID获取票策略详情及子场馆列表失败=========",e);
+        }
+        return RtnData.fail("根据票策略ID获取票策略详情及子场馆列表失败");
+    }
+
 
 }

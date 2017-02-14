@@ -184,22 +184,5 @@ public class YearStrategyService {
      */
     public List<Map<String,Object>> getAllMerchant() {
         return HttpClientUtil.getListResultByURLAndKey(proConfig.SPORT_RESOURCE_URL + "/api/stadium/getAllMerchant.json","获取所有接口列表","getAllMerchantList");
-//        List<Map<String,Object>> resultList = null;
-//        String result = null;
-//        try {
-//            result = HttpClientUtil.doGet(proConfig.SPORT_RESOURCE_URL + "/api/stadium/getAllMerchant.json", 2000, null, null);
-//            Gson gson = new Gson();
-//            Map<String,Object> gsonMap =  gson.fromJson(result,Map.class);
-//            if(null != gsonMap && gsonMap.containsKey("code")) {
-//                if(Constants.RTN_CODE_SUCCESS.equals((String)gsonMap.get("code"))) {
-//                    Map<String,Object> resultMap = (Map<String,Object>)gsonMap.get("result");
-//                    resultList = (List<Map<String, Object>>) resultMap.get("getAllMerchantList");
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            logger.error("=========调用远程接口时发生错误===========",e);
-//        }
-//        return resultList != null? resultList:new ArrayList<Map<String,Object>>();
     }
 }
