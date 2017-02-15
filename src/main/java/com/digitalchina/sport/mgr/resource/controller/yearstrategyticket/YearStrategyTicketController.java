@@ -50,6 +50,7 @@ public class YearStrategyTicketController {
     public String add(ModelMap map) {
 //        List<Category> categorys = bookService.findCategorys();
         map.put("mainStadiumList", yearStrategyService.getAllMainStadium());
+        map.put("merchantList", yearStrategyService.getAllMerchant());
         return "yearstrategyticket/add_year_strategy_ticket";
     }
 

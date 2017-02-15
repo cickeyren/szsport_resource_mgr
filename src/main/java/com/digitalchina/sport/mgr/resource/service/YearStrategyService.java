@@ -76,8 +76,7 @@ public class YearStrategyService {
         //1、添加年卡策略票务
         String strategyId = UUIDUtil.generateUUID();
         yearStrategyTicketModel.setId(strategyId);
-        String mainStadiumID = request.getParameter("mainStadiumID");//主场馆列表
-        String subStadiumID = request.getParameter("subStadiumID");//主场馆列表
+
         String checkUseableTime = request.getParameter("checkUseableTime");//可用时间段
         String checkLimitedDateType =  yearStrategyTicketModel.getCheckLimitedDateType();
         if(!StringUtils.isNullOrEmpty(checkUseableTime)) {
@@ -130,9 +129,12 @@ public class YearStrategyService {
         insertYearStrategyTicket(yearStrategyTicketModel);
         //2、添加策略与子场馆对应关系
         List<YearStrategyStadiumRelationsModel> yearStdaiumList = new ArrayList<YearStrategyStadiumRelationsModel>();
+        String mainStadiumID = request.getParameter("mainStadiumID");//主场馆列表
+        String subStadiumID = request.getParameter("subStadiumID");//主场馆列表
         //添加年票与子场馆关联
         YearStrategyStadiumRelationsModel stadiumModel = new YearStrategyStadiumRelationsModel();
         stadiumModel.setId(UUIDUtil.generateUUID());
+        stadiumModel.setMainStadiumId(mainStadiumID);
         stadiumModel.setSubStadiumId(subStadiumID);
         stadiumModel.setTicketStrategyId(yearStrategyTicketModel.getId());
         yearStdaiumList.add(stadiumModel);
