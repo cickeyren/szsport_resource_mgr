@@ -1,6 +1,7 @@
 package com.digitalchina.sport.mgr.resource.controller;
 
 import com.digitalchina.common.data.RtnData;
+import com.digitalchina.platform.security.auth.CustomUser;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
