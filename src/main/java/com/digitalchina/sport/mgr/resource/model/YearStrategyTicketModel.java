@@ -78,6 +78,18 @@ public class YearStrategyTicketModel {
      */
     private String checkLimitedHours;
     /**
+     * 销售价
+     */
+    private String sellPrice;
+    /**
+     *成本价
+     */
+    private String costPrice;
+    /**
+     * 门市价
+     */
+    private String storePrice;
+    /**
      * 预订说明
      */
     private String orderDescription;
@@ -216,6 +228,30 @@ public class YearStrategyTicketModel {
 
     public void setCheckLimitedHours(String checkLimitedHours) {
         this.checkLimitedHours = checkLimitedHours;
+    }
+
+    public String getSellPrice() {
+        return sellPrice;
+    }
+
+    public void setSellPrice(String sellPrice) {
+        this.sellPrice = sellPrice;
+    }
+
+    public String getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(String costPrice) {
+        this.costPrice = costPrice;
+    }
+
+    public String getStorePrice() {
+        return storePrice;
+    }
+
+    public void setStorePrice(String storePrice) {
+        this.storePrice = storePrice;
     }
 
     public String getOrderDescription() {
