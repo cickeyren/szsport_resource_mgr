@@ -59,7 +59,7 @@ public class ApiYearStrategyTicketController {
 
     @RequestMapping(value = "/getYearStrategyTicketModelInfoList.json")
     @ResponseBody
-    public RtnData getYearStrategyTicketModelInfoList(@RequestParam(required = false) String pageIndex,@RequestParam(required =  false)  String pageSize) {
+    public RtnData getYearStrategyTicketModelInfoList(@RequestParam(required = false) String pageIndex,@RequestParam(required =  false)  String pageSize,@RequestParam(required =  true)  String mainStadiumId) {
         try {
             Map<String,Object> paramMap = new HashMap<String,Object>();
             if (StringUtils.isEmpty(pageIndex)) {
@@ -71,6 +71,7 @@ public class ApiYearStrategyTicketController {
             }
             paramMap.put("pageIndex",Integer.valueOf(pageIndex) * Integer.valueOf(pageSize));
             paramMap.put("pageSize",Integer.valueOf(pageSize));
+            paramMap.put("mainStadiumId",mainStadiumId);
             Map<String,Object> resultMap = new HashMap<String,Object>();
             resultMap.put("yearStrategyList",yearStrategyDao.getYearStrategyTicketModelInfoList(paramMap));
             return RtnData.ok(resultMap);

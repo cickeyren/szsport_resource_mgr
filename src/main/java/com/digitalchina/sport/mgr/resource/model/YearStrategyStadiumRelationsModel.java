@@ -16,6 +16,10 @@ public class YearStrategyStadiumRelationsModel {
      */
     private String ticketStrategyId;
     /**
+     * 主场馆ID
+     */
+    private String mainStadiumId;
+    /**
      * 子场馆ID
      */
     private String subStadiumId;
@@ -38,6 +42,14 @@ public class YearStrategyStadiumRelationsModel {
 
     public void setTicketStrategyId(String ticketStrategyId) {
         this.ticketStrategyId = ticketStrategyId;
+    }
+
+    public String getMainStadiumId() {
+        return mainStadiumId;
+    }
+
+    public void setMainStadiumId(String mainStadiumId) {
+        this.mainStadiumId = mainStadiumId;
     }
 
     public String getSubStadiumId() {

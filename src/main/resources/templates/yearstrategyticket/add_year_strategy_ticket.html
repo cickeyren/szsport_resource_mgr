@@ -11,6 +11,11 @@
     <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
     <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+    <script src="../../static/js/yearstrategy/yearstrategy_add.js" th:src="@{/js/yearstrategy/yearstrategy_add.js}"></script>
+
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
@@ -50,7 +55,8 @@
                             <option th:each="mainStadium,eStat:${mainStadiumList}" th:value="${mainStadium.id}" th:text="${mainStadium.name}"></option>
                     </select>
                 </td>
-            </tr> <tr class="controls">
+            </tr>
+            <tr class="controls">
                 <td class="alignright" width="10%"><span class="red">*</span>可用子场馆</td>
                 <td class="alignleft">
                     <select id="subStadiumID">
@@ -65,8 +71,7 @@
                 <td width="10%" class="alignright"><span class="red">*</span>合作商</td>
                 <td class="alignleft">
                     <select id="merchantId">
-                        <option value="0">单票</option>
-                        <option value="1">场地票</option>
+                        <option th:each="merchant,eStat:${merchantList}" th:value="${merchant.id}" th:text="${merchant.merchant_name}"></option>
                     </select>
                 </td>
             </tr>
@@ -167,21 +172,24 @@
                 <td class="alignright"><span class="red">*</span>是否限时</td>
                 <td class="alignleft">
                     <input type="radio" checked name="checkLimitedHoursR" id="checkLimitedHours0" value="0"><label style="display:inline" for="checkTicketAvailableTimes0">不限</label>
-                    <input type="radio" name="checkLimitedHoursR" id="checkLimitedHours1" value="1"><label style="display:inline" for="checkTicketAvailableTimes1">限次</label><input style="width:35px;" type="text" id="checkLimitedHours">(小时)
+                    <input type="radio" name="checkLimitedHoursR" id="checkLimitedHours1" value="1"><label style="display:inline" for="checkTicketAvailableTimes1">限时</label><input style="width:35px;" type="text" id="checkLimitedHours">(小时)
                 </td>
             </tr>
             <tr class="controls">
                 <td class="alignright">不可用日期</td>
                 <td class="alignleft">
-                    <input style="width:105px;float: none" type="text" id="shieldStartTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'shieldEndTime\',{d:-1})}'})" class="Wdate">
+                    <input style="width:105px;float: none" type="text" id="shieldStartTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'shieldEndTime\')}'})" class="Wdate">
                     <span>至</span>
-                    <input style="width:105px;float: none;" type="text" id="shieldEndTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'shieldStartTime\',{d:1})}'})"  class="Wdate">
+                    <input style="width:105px;float: none;" type="text" id="shieldEndTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'shieldStartTime\')}'})"  class="Wdate">
                     <input type="button" class="btn" value="添加" id="addShieldStartAndEndBtn">
                     <span>
                         <select id="shieldStartTimeAndEndTimeSelects" multiple="multiple" style="width:250px;">
                         </select>
                     </span>
                 </td>
+            </tr>
+            <tr class="controls">
+                <th colspan="2">售价</th>
             </tr>
             <tr>
                 <td class="alignright"><span class="red">*</span>销售价:</td>
@@ -218,9 +226,7 @@
             <tr>
                 <td colspan="2"><button type="submit" class="btn btn-success" id="addYearTicket">增加</button></td>
             </tr>
-            <tr class="controls">
-                <th colspan="2">售价</th>
-            </tr>
+
 
         </table>
         </form>
@@ -228,325 +234,5 @@
 </section>
 <div id="addDialogs">
 </div>
-<!--<script src="../../static/js/book.js" th:src="@{/lib/js/book.js}"></script>-->
-<script>
-    $(function () {
-        /*********可用时间段效果功能开始*********/
-        var checkUseableTimeArray = [];//验票可用时间段数组
-        //点击可用时间段中的添加按钮
-        $("#addLimitedStartAndEndBtn").click(function(){
-           var checkLimitedStartTime = $.trim($("#checkLimitedStartTime").val());
-           var checkLimitedEndTime = $.trim($("#checkLimitedEndTime").val());
-            if(undefined == checkLimitedStartTime || "" == checkLimitedStartTime) {
-                alert("请填写限制起始时间");
-                return;
-            }
-            if(undefined == checkLimitedEndTime || "" == checkLimitedEndTime) {
-                alert("请填写限制结束时间");
-                return;
-            }
-            var startAndEndTimeKey = checkLimitedStartTime+"$"+checkLimitedEndTime;
-            var startAndEndTimeValue = checkLimitedStartTime+"至"+checkLimitedEndTime;
-            if(checkUseableTimeArray.contains(startAndEndTimeKey)) {
-                alert("该时间的日期已经添加，请重新选择~");
-                return;
-            }
-            checkUseableTimeArray.push(startAndEndTimeKey);
-            $("#limitedStartAndEndTimeSelects").prepend('<option value="'+startAndEndTimeKey+'">'+startAndEndTimeValue+"</option>");
-
-        });
-        //可用段时间条目双击删除
-        $("#limitedStartAndEndTimeSelects").dblclick(function(){
-           var startAndEndTimeKey =  $("option:selected",this).attr("value");
-           //alert(startAndEndTimeKey);
-            $("option:selected",this).remove();
-            checkUseableTimeArray.remove(startAndEndTimeKey);
-            //console.log(checkUseableTimeArray);
-        });
-        /*********不可用日期功能结束*********/
-        var shieldDateArray = [];//验票不可用日期数组
-        //点击不可用日期中的添加按钮
-        $("#addShieldStartAndEndBtn").click(function(){
-            var shieldStartTime = $.trim($("#shieldStartTime").val());
-            var shieldEndTime = $.trim($("#shieldEndTime").val());
-            if(undefined == shieldStartTime || "" == shieldStartTime) {
-                alert("请填写起始不可用日期");
-                return;
-            }
-            if(undefined == shieldEndTime || "" == shieldEndTime) {
-                alert("请填写结束不可用时间");
-                return;
-            }
-            var shieldStartTimeKey = shieldStartTime+"$"+shieldEndTime;
-            var shieldStartTimeValue = shieldStartTime+"至"+shieldEndTime;
-            if(shieldDateArray.contains(shieldStartTimeKey)) {
-                alert("该不可用日期已经添加，请重新选择~");
-                return;
-            }
-            shieldDateArray.push(shieldStartTimeKey);
-            $("#shieldStartTimeAndEndTimeSelects").prepend('<option value="'+shieldStartTimeKey+'">'+shieldStartTimeValue+"</option>");
-        });
-        //不可用日期段条目双击删除
-        $("#shieldStartTimeAndEndTimeSelects").dblclick(function(){
-            var shieldStartTimeKey =  $("option:selected",this).attr("value");
-            $("option:selected",this).remove();
-            shieldDateArray.remove(shieldStartTimeKey);
-            //console.log(checkUseableTimeArray);
-        });
-
-        //表单配置
-        var valConfig = {
-            rules: {
-                ticketName: {
-                    required: true,
-                    maxlength: 20
-                },
-                sellWay: {
-                    required: true
-                },
-                checkTicketType: {
-                    required: true
-                },
-                checkTicketWay: {
-                    required: true
-                },
-                fixAvailableTimes:{
-                    number:true
-                },
-                checkDailyLimitedTimes:{
-                    number:true
-                },
-                orderDescription: {
-                    required: true
-                },
-                refundDescription: {
-                    required: true
-                },
-                sellPrice:{
-                    required: true,
-                    number:true,
-                    min:1
-                },
-                costPrice:{
-                    required: true,
-                    number:true,
-                    min:1
-                },
-                storePrice:{
-                    required: true,
-                    number:true,
-                    min:1
-                },
-            },
-            messages: {
-                ticketName: {
-                    required: "请填写门票名称"
-                },
-                fixAvailableTimes: {
-                    number: "请输入有效的数字"
-                },
-                checkDailyLimitedTimes: {
-                    number: "请输入有效的数字"
-                },
-                orderDescription: {
-                    required: "请填写预订说明"
-                },
-                refundDescription: {
-                    required: "请填写退票说明"
-                },
-                sellPrice:{
-                    required: "请填写销售价",
-                    number: "请输入有效的数字",
-                    min:"必须输入大于1的整数"
-                },
-                costPrice:{
-                    required: "请填写成本价",
-                    number: "请输入有效的数字",
-                    min:"必须输入大于1的整数"
-                },
-                storePrice:{
-                    required:  "请填写门市价",
-                    number: "请输入有效的数字",
-                    min:"必须输入大于1的整数"
-                }
-            },
-                submitHandler: function () {
-                var ticketType = $.trim($("#ticketType").val());//套票类型
-                var mainStadiumID = $("#mainStadiumID").val();//主场馆ID
-                var subStadiumID = $("#subStadiumID").val();//子场馆ID
-                    if(undefined == subStadiumID || "" == subStadiumID) {
-                        alert("请选择正确的子场馆内容~");
-                        return;
-                    }
-
-                var ticketName = $.trim($("#ticketName").val());//门票名称
-                var merchantId = $.trim($("#merchantId").val());//合作商
-                var sellWayArray = [];//售卖渠道
-                $('input[name="sellWay"]:checkbox').each(function(){
-                    if ($(this).prop("checked")) {
-                        sellWayArray.push($(this).prop('value'));
-                    }
-                });
-                var sellWay = sellWayArray.toString();//售卖渠道
-                var orderEffectiveType = $('input:radio[name="orderEffectiveType"]:checked').val();//使用有效期类型 0：预订后x天有效 1：固定有效期
-                var fixDay = "";//多少天后有效
-                var orderEffectiveStartTime = $.trim($("#orderEffectiveStartTime").val());//有效期起始时间(无论是有效天数还是固定时间都生成该时间)
-                var orderEffectiveEndTime = $.trim($("#orderEffectiveEndTime").val());//售卖渠道
-                if(orderEffectiveType == "0") {
-                       fixDay = $.trim($("#fixDay").val());
-                       if(!isDigital(fixDay)) {
-                           $("#fixDay").focus();
-                           alert("请填写正确有效天数~");
-                           return;
-                       }
-                   } else if(orderEffectiveType == "1") {
-                    if("" == orderEffectiveStartTime || "" == orderEffectiveEndTime) {
-                        alert("固定有效期填写不合法");
-                        return;
-                    }
-                }
-                var orderRefundRule = $('input:radio[name="orderRefundRule"]:checked').val();//退款规则 0：不可退 1：随时退 2：条件退
-                var checkTicketTypeArray = [];
-                $('input[name="checkTicketType"]:checkbox').each(function(){
-                    if ($(this).prop("checked")) {
-                        checkTicketTypeArray.push($(this).prop('value'));
-                    }
-                });
-                var checkTicketType = checkTicketTypeArray.toString();//验票凭证
-                var checkTicketWayArray = [];
-                $('input[name="checkTicketWay"]:checkbox').each(function(){
-                    if ($(this).prop("checked")) {
-                        checkTicketWayArray.push($(this).prop('value'));
-                    }
-                });
-                var checkTicketWay = checkTicketWayArray.toString();//验票渠道
-                var checkTicketAvailableTimes = $('input:radio[name="checkTicketAvailableTimes"]:checked').val();//限制次数类型选择
-                var fixAvailableTimes = "";
-                if(checkTicketAvailableTimes == "0"){
-                    fixAvailableTimes = "-1";
-                } else if (checkTicketAvailableTimes == "1"){
-                    fixAvailableTimes = $.trim($("#fixAvailableTimes").val());
-                    if(!isDigital(fixAvailableTimes)) {
-                        $("#fixAvailableTimes").focus();
-                       alert("请填写正确限票次数~");
-                        return;
-                    }
-                }
-                var checkDailyLimitedTimes = $.trim($("#checkDailyLimitedTimes").val());//每日限次
-                var checkLimitedDateType = $('input:radio[name="checkLimitedDateType"]:checked').val();//时间限制 0：每日 1：每周
-                var checkLimitedWeekDetailsArray = [];//
-                if(checkLimitedDateType == "0"){
-                    checkLimitedDateType = "0";
-                } else if (checkLimitedDateType == "1"){
-                    $('input[name="checkLimitedWeekDetails"]:checkbox').each(function(){
-                        if ($(this).prop("checked")) {
-                            checkLimitedWeekDetailsArray.push($(this).prop('value'));
-                        }
-                    });
-                    if(checkLimitedWeekDetailsArray.length == 0) {
-                        alert("请选择具体的星期几~");
-                        return;
-                    }
-                }
-                var checkLimitedWeekDetails = checkLimitedWeekDetailsArray.toString();//如果时间限制为每周那么显示具体的限制星期几 用;隔开
-                var checkUseableTime = checkUseableTimeArray.toString();//可用时段
-                var checkLimitedHoursR = $('input:radio[name="checkLimitedHoursR"]:checked').val();
-                var checkLimitedHours = "";//该票设置可用总次数 -1表示不限 其他：限次
-                    if(checkLimitedHoursR == "0"){
-                    checkLimitedHours = "-1";
-                } else if (checkLimitedHoursR == "1"){
-                    checkLimitedHours = $.trim($("#checkLimitedHours").val());
-                }
-
-                var shieldDate = shieldDateArray.toString(); //不可用日期
-                var orderDescription = $.trim($("#orderDescription").val());
-                var refundDescription = $.trim($("#refundDescription").val());
-                var sellPrice = $.trim($("#sellPrice").val());
-                var costPrice = $.trim($("#costPrice").val());
-                var storePrice = $.trim($("#storePrice").val());
-                var reqParam = {
-                                "ticketType":ticketType,
-                                mainStadiumID:mainStadiumID,
-                                subStadiumID:subStadiumID,
-                                ticketName:ticketName,
-                                merchantId:merchantId,
-                                sellWay:sellWay,
-                                orderEffectiveType:orderEffectiveType,
-                                fixDay:fixDay,
-                                orderEffectiveStartTime:orderEffectiveStartTime,
-                                orderEffectiveEndTime:orderEffectiveEndTime,
-                                orderRefundRule:orderRefundRule,
-                                checkTicketType:checkTicketType,
-                                checkTicketWay:checkTicketWay,
-                                checkTicketAvailableTimes:fixAvailableTimes,
-                                checkDailyLimitedTimes:checkDailyLimitedTimes,
-                                checkLimitedDateType:checkLimitedDateType,
-                                checkLimitedWeekDetails:checkLimitedWeekDetails,
-                                checkUseableTime:checkUseableTime,
-                                checkLimitedHours:checkLimitedHours,
-                                shieldDate:shieldDate,
-                                orderDescription:orderDescription,
-                                refundDescription:refundDescription,
-                                sellPrice:sellPrice,
-                                costPrice:costPrice,
-                                storePrice:storePrice
-                                }
-                    $.ajax({
-                        url:'/yearstrategyticket/addYearStrategyTicket.json',
-                        type:'POST', //GET
-                        data:reqParam,
-                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-                        success:function(result){
-                            if("000000" == result.code) {
-                                alert("添加成功~");
-                            }
-                            //console.log(result);
-                        },
-                        error:function(result){
-                            alert("添加失败~");
-                        }
-                    });
-                }
-            }
-        $('#addForm').validate(valConfig);
-        $("#ticketName").focus(function(){
-           $(this).val($("#subStadiumID").find("option:selected").text());
-        });
-        //给主场馆菜单绑定选择改变时同时改变子菜单的内容
-        $("#mainStadiumID").change(function(){
-            updateSubStadiumList($("#mainStadiumID").val());
-        });
-        $('#mainStadiumID').trigger('change');
-
-//        $("#subStadiumID").change(function(){
-//            $("ticketName").val($("#subStadiumID option").prop("value").text());
-//        });
-    });
-    /**
-     * 更新子场馆列表
-     */
-    function updateSubStadiumList(mainStadiumId) {
-        $.ajax({
-            url:'/yearstrategyticket/getSubStadiumListByMainId.json',
-            type:'POST', //GET
-            data:{"mainStadiumId":mainStadiumId},
-            dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-            success:function(result){
-                if("000000" == result.code) {
-                    var items = result.result.subStadiumList;
-                    $("#subStadiumID").empty();
-                    $.each(items,function(i,n){
-                        $("#subStadiumID").append("<option value=\""+n.id+"\">"+n.name+"</option>");
-                    });
-                    //alert("添加成功~");
-                }
-                //console.log(result);
-            },
-            error:function(result){
-                alert("添加失败~");
-            }
-        })
-    }
-</script>
 </body>
 </html>
