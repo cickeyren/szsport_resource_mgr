@@ -20,6 +20,9 @@
             `check_limited_date_type`,
             `check_limited_week_details`,
             `check_limited_hours`,
+            `sell_price`,
+            `cost_price`,
+            `store_price`,
             `order_description`,
             `refund_description`
         )
@@ -40,6 +43,9 @@
                 #{checkLimitedDateType},
                 #{checkLimitedWeekDetails},
                 #{checkLimitedHours},
+                #{sellPrice},
+                #{costPrice},
+                #{storePrice},
                 #{orderDescription},
                 #{refundDescription}
             );
@@ -105,10 +111,14 @@
         `check_limited_date_type` AS checkLimitedDateType,
         `check_limited_week_details` AS checkLimitedWeekDetails,
         `check_limited_hours` AS checkLimitedHours,
+        `sell_price` AS sellPrice,
+        `cost_price` AS costPrice,
+        `store_price` AS storePrice,
         `order_description` AS orderDescription,
         `refund_description` AS refundDescription,
          DATE_FORMAT(`create_time`, '%Y-%m-%d %T') AS createTime
-         FROM `year_strategy_ticket_basic_info`;
+         FROM `year_strategy_ticket_basic_info`
+         WHERE id = #{id}
     </select>
 
     <!--根据年票策略ID查询年票策略-->
@@ -118,8 +128,31 @@
         `ticket_strategy_id` AS ticketStrategyId,
         `sub_stadium_id` as subStadiumId,
         B.`name` AS subStdiumName,
+        C.id AS mainStadiumId,
         C.`name` AS mainStdiumName
         FROM `year_strategy_stadium_relations` A  LEFT JOIN sub_stadium B ON A.sub_stadium_id = B.id LEFT JOIN main_stadium C ON B.parent_id = C.id
         WHERE ticket_strategy_id = #{id}
+    </select>
+
+    <!--根据分页参数查询策略列表-->
+    <select id="getYearStrategyTicketModelInfoList" parameterType="HashMap" resultType="HashMap">
+    SELECT
+	A.id AS yearStrategyId,
+	A.ticket_name AS ticketName,
+	A.sell_price AS sellPrice,
+	A.sell_price AS sellPrice,
+	A.store_price AS storePrice,
+	A.refund_description as refundDescription,
+	A.order_description as orderDescription,
+	A.order_refund_rule as orderRefundRule,
+	C.`name` AS subStadiumName,
+	C.id AS subStadiumId,
+	D.id AS mainStadiumId,
+	D.`name` AS mainStadiumName
+    FROM `year_strategy_ticket_basic_info` A
+    LEFT JOIN year_strategy_stadium_relations B ON A.id = B.ticket_strategy_id
+    LEFT JOIN sub_stadium C ON B.sub_stadium_id = C.id
+    LEFT JOIN main_stadium D ON c.parent_id = D.id
+    ORDER BY A.create_time DESC  LIMIT #{pageIndex},#{pageSize}
     </select>
 </mapper>

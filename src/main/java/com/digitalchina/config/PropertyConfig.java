@@ -13,5 +13,7 @@ public class PropertyConfig {
      */
     @Value("${sportresource.url}")
     public  String SPORT_RESOURCE_URL;
+    @Value("${pageSize}")
+    public  String pageSize;
 
 }

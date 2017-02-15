@@ -8,20 +8,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.digitalchina.sport.mgr.resource.service.BookService;
 
-@RunWith(SpringRunner.class) //spring junit支持
-@SpringBootTest
+//@RunWith(SpringRunner.class) //spring junit支持
+//@SpringBootTest
 public class BootApplicationTests {
 
-	@Autowired
-	private BookService bookService;
-
-	@Test
-	public void contextLoads() {
-	}
-
-	@Test
-	public void processWithTransaction(){
-//		bookService.processWithTransaction();
-	}
+//	@Autowired
+//	private BookService bookService;
+//
+//	@Test
+//	public void contextLoads() {
+//	}
+//
+//	@Test
+//	public void processWithTransaction(){
+////		bookService.processWithTransaction();
+//	}
 
 }

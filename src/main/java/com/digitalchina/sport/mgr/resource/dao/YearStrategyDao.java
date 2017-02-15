@@ -58,4 +58,12 @@ public interface YearStrategyDao {
      * @throws Exception
      */
     public List<Map<String,Object>> getYearStrategyStadiumRelationsModelByYearStrategyId(String id) throws  Exception;
+
+    /**
+     * 根据分页参数查询策略列表
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String,Object>> getYearStrategyTicketModelInfoList(Map<String,Object> map) throws  Exception;
 }

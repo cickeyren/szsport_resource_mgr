@@ -54,8 +54,6 @@
                 <td class="alignright" width="10%"><span class="red">*</span>可用子场馆</td>
                 <td class="alignleft">
                     <select id="subStadiumID">
-                        <option value="0">单票</option>
-                        <option value="1">场地票</option>
                     </select>
                 </td>
             </tr>
@@ -185,6 +183,24 @@
                     </span>
                 </td>
             </tr>
+            <tr>
+                <td class="alignright"><span class="red">*</span>销售价:</td>
+                <td class="alignleft">
+                    <input style="width:35px;" type="text" id="sellPrice" name="sellPrice">
+                </td>
+            </tr>
+            <tr>
+                <td class="alignright"><span class="red">*</span>成本价:</td>
+                <td class="alignleft">
+                    <input style="width:35px;" type="text" id="costPrice" name="costPrice">
+                </td>
+            </tr>
+            <tr>
+                <td class="alignright"><span class="red">*</span>门市价:</td>
+                <td class="alignleft">
+                    <input style="width:35px;" type="text" id="storePrice" name="storePrice">
+                </td>
+            </tr>
             <tr class="controls">
                 <th colspan="2">门票须知</th>
             </tr>
@@ -202,6 +218,10 @@
             <tr>
                 <td colspan="2"><button type="submit" class="btn btn-success" id="addYearTicket">增加</button></td>
             </tr>
+            <tr class="controls">
+                <th colspan="2">售价</th>
+            </tr>
+
         </table>
         </form>
     </div>
@@ -301,7 +321,22 @@
                 },
                 refundDescription: {
                     required: true
-                }
+                },
+                sellPrice:{
+                    required: true,
+                    number:true,
+                    min:1
+                },
+                costPrice:{
+                    required: true,
+                    number:true,
+                    min:1
+                },
+                storePrice:{
+                    required: true,
+                    number:true,
+                    min:1
+                },
             },
             messages: {
                 ticketName: {
@@ -318,6 +353,21 @@
                 },
                 refundDescription: {
                     required: "请填写退票说明"
+                },
+                sellPrice:{
+                    required: "请填写销售价",
+                    number: "请输入有效的数字",
+                    min:"必须输入大于1的整数"
+                },
+                costPrice:{
+                    required: "请填写成本价",
+                    number: "请输入有效的数字",
+                    min:"必须输入大于1的整数"
+                },
+                storePrice:{
+                    required:  "请填写门市价",
+                    number: "请输入有效的数字",
+                    min:"必须输入大于1的整数"
                 }
             },
                 submitHandler: function () {
@@ -377,6 +427,7 @@
                 } else if (checkTicketAvailableTimes == "1"){
                     fixAvailableTimes = $.trim($("#fixAvailableTimes").val());
                     if(!isDigital(fixAvailableTimes)) {
+                        $("#fixAvailableTimes").focus();
                        alert("请填写正确限票次数~");
                         return;
                     }
@@ -410,6 +461,9 @@
                 var shieldDate = shieldDateArray.toString(); //不可用日期
                 var orderDescription = $.trim($("#orderDescription").val());
                 var refundDescription = $.trim($("#refundDescription").val());
+                var sellPrice = $.trim($("#sellPrice").val());
+                var costPrice = $.trim($("#costPrice").val());
+                var storePrice = $.trim($("#storePrice").val());
                 var reqParam = {
                                 "ticketType":ticketType,
                                 mainStadiumID:mainStadiumID,
@@ -432,7 +486,10 @@
                                 checkLimitedHours:checkLimitedHours,
                                 shieldDate:shieldDate,
                                 orderDescription:orderDescription,
-                                refundDescription:refundDescription
+                                refundDescription:refundDescription,
+                                sellPrice:sellPrice,
+                                costPrice:costPrice,
+                                storePrice:storePrice
                                 }
                     $.ajax({
                         url:'/yearstrategyticket/addYearStrategyTicket.json',
@@ -452,16 +509,18 @@
                 }
             }
         $('#addForm').validate(valConfig);
-        //初始化子场馆下拉
-//        if($("#mainStadiumID option").length > 0) {
-//            updateSubStadiumList($("#mainStadiumID option").eq(0).val());
-//        }
-        //updateSubStadiumList("1001");
+        $("#ticketName").focus(function(){
+           $(this).val($("#subStadiumID").find("option:selected").text());
+        });
         //给主场馆菜单绑定选择改变时同时改变子菜单的内容
         $("#mainStadiumID").change(function(){
             updateSubStadiumList($("#mainStadiumID").val());
         });
-        $('#mainStadiumID').trigger('change')
+        $('#mainStadiumID').trigger('change');
+
+//        $("#subStadiumID").change(function(){
+//            $("ticketName").val($("#subStadiumID option").prop("value").text());
+//        });
     });
     /**
      * 更新子场馆列表
