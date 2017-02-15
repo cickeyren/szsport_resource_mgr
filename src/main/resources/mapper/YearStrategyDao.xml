@@ -55,12 +55,13 @@
         INSERT INTO `szsport_order_mgr`.`year_strategy_stadium_relations` (
         `id`,
         `ticket_strategy_id`,
+        `classify`,
         `main_stadium_id`,
         `sub_stadium_id`
         )
         VALUES
         <foreach collection="list" index="index" item="item" open="" separator="," close="">
-            (#{item.id}, #{item.ticketStrategyId},#{item.mainStadiumId}, #{item.subStadiumId})
+            (#{item.id}, #{item.ticketStrategyId},#{item.classify},#{item.mainStadiumId}, #{item.subStadiumId})
         </foreach>
     </insert>
 
@@ -154,11 +155,16 @@
                 SELECT
                     A.main_stadium_id,
                     A.sub_stadium_id,
-                    A.ticket_strategy_id
+                    A.ticket_strategy_id,
+                    A.classify
                 FROM
                     `year_strategy_stadium_relations` A
                 WHERE
                     A.main_stadium_id = #{mainStadiumId}
+                    <if test="classify !=null and classify != ''">
+                        AND A.classify = #{classify}
+                    </if>
+
             ) E
         LEFT JOIN `year_strategy_ticket_basic_info` B ON E.ticket_strategy_id = B.id
         LEFT JOIN `sub_stadium` C ON E.sub_stadium_id = C.id

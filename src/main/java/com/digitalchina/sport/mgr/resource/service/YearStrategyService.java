@@ -131,9 +131,11 @@ public class YearStrategyService {
         List<YearStrategyStadiumRelationsModel> yearStdaiumList = new ArrayList<YearStrategyStadiumRelationsModel>();
         String mainStadiumID = request.getParameter("mainStadiumID");//主场馆列表
         String subStadiumID = request.getParameter("subStadiumID");//主场馆列表
+        String classify = request.getParameter("classify");//主场馆列表
         //添加年票与子场馆关联
         YearStrategyStadiumRelationsModel stadiumModel = new YearStrategyStadiumRelationsModel();
         stadiumModel.setId(UUIDUtil.generateUUID());
+        stadiumModel.setClassify(classify);
         stadiumModel.setMainStadiumId(mainStadiumID);
         stadiumModel.setSubStadiumId(subStadiumID);
         stadiumModel.setTicketStrategyId(yearStrategyTicketModel.getId());

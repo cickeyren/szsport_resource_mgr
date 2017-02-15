@@ -93,7 +93,7 @@ $(function () {
         rules: {
             ticketName: {
                 required: true,
-                maxlength: 20
+                maxlength: 200
             },
             sellWay: {
                 required: true
@@ -176,7 +176,13 @@ $(function () {
                 alert("请选择正确的子场馆内容~");
                 return;
             }
-
+            var classify = "";
+            $('#subStadiumID option').each(function(){
+                if ($(this).prop("selected")) {
+                    classify = $(this).attr('classify');
+                    //console.log(classify);
+                }
+            });
             var ticketName = $.trim($("#ticketName").val());//门票名称
             var merchantId = $.trim($("#merchantId").val());//合作商
             var sellWayArray = [];//售卖渠道
@@ -298,8 +304,9 @@ $(function () {
                 refundDescription:refundDescription,
                 sellPrice:sellPrice,
                 costPrice:costPrice,
-                storePrice:storePrice
-            }
+                storePrice:storePrice,
+                classify:classify
+            };
             $.ajax({
                 url:'/yearstrategyticket/addYearStrategyTicket.json',
                 type:'POST', //GET
@@ -308,7 +315,7 @@ $(function () {
                 success:function(result){
                     if("000000" == result.code) {
                         alert("添加成功~");
-                        window.location.reload(true);
+                       window.location.reload(true);
                     }
                     //console.log(result);
                 },
@@ -327,10 +334,6 @@ $(function () {
         updateSubStadiumList($("#mainStadiumID").val());
     });
     $('#mainStadiumID').trigger('change');
-
-//        $("#subStadiumID").change(function(){
-//            $("ticketName").val($("#subStadiumID option").prop("value").text());
-//        });
 });
 /**
  * 更新子场馆列表
@@ -346,7 +349,7 @@ function updateSubStadiumList(mainStadiumId) {
                 var items = result.result.subStadiumList;
                 $("#subStadiumID").empty();
                 $.each(items,function(i,n){
-                    $("#subStadiumID").append("<option value=\""+n.id+"\">"+n.name+"</option>");
+                    $("#subStadiumID").append("<option value=\"" + n.id + "\" classify=\""+ n.classify+"\">"+n.name+"</option>");
                 });
                 //alert("添加成功~");
             } else {
