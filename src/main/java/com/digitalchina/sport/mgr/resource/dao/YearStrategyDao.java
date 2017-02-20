@@ -1,6 +1,8 @@
 package com.digitalchina.sport.mgr.resource.dao;
 
+import com.digitalchina.sport.mgr.resource.model.TicketStrategyCommonCheckShieldTimeModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyStadiumRelationsModel;
+import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketCheckUseableTimeModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketModel;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -59,7 +61,7 @@ public interface YearStrategyDao {
 
     /**
      * 根据分页参数查询策略列表
-     * @param id
+     * @param map
      * @return
      * @throws Exception
      */
@@ -71,10 +73,11 @@ public interface YearStrategyDao {
 
     /**
      * 根据策略ID获取可用时间列表
-     * @param map
+     * @param yearStrategyId
      * @return
      * @throws Exception
      */
+
     public List<YearStrategyTicketCheckUseableTimeModel> getYearStrategyTicketCheckUseableTimeModelList(String yearStrategyId) throws  Exception;
 
 
