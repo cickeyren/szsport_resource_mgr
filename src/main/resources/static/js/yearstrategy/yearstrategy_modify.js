@@ -1,7 +1,10 @@
 /**
- * Created by win7 on 2017/2/15.
+ * Created by yangy on 2017/2/15.
  */
+var orderDescriptionEditor;
+var refundDescriptionEditor;
 $(function () {
+    //alert([[${model.orderDescription}]]);
     /*********可用时间段效果功能开始*********/
     var checkUseableTimeArray = [];//验票可用时间段数组
     //点击可用时间段中的添加按钮
@@ -71,7 +74,6 @@ $(function () {
             resizeType : 1,
             allowPreviewEmoticons : false,
             filterMode : false
-
         });
     });
     //初始化富文本

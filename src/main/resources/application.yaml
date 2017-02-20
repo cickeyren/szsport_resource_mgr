@@ -8,12 +8,12 @@ server:
 --- # logging
 logging:
   level:
-    root: DEBUG
+    root: INFO
     com: 
       digitalchina: DEBUG
       
-#    org.springframework.web.servlet.mvc: debug
-#    org.mybatis: debug
+    org.springframework.web.servlet.mvc: debug
+    org.mybatis: debug
 
 --- # datasource
 spring:
