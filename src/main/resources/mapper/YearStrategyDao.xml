@@ -171,4 +171,32 @@
         LEFT JOIN `main_stadium` D ON C.parent_id = D.id
         ORDER BY B.create_time DESC  LIMIT #{pageIndex},#{pageSize}
     </select>
+
+    <!--根据策略ID获取屏蔽时间列表-->
+    <select id="getTicketStrategyCommonCheckShieldTimeModelList" parameterType="String" resultType="TicketStrategyCommonCheckShieldTimeModel">
+        SELECT
+        `id`,
+        `ticket_type` AS ticketType,
+        `ticket_strategy_id` AS ticketStrategyId,
+        `shield_start_time` AS shieldStartTime,
+        `shield_end_time` AS shieldEndTime,
+        `create_time` AS createTime
+         FROM `ticket_strategy_common_check_shield_time`
+        WHERE ticket_strategy_id = #{yearStrategyId}
+         ORDER BY shield_start_time ASC;
+    </select>
+
+    <!--根据策略ID获取可用时间列表-->
+    <select id="getYearStrategyTicketCheckUseableTimeModelList" parameterType="String" resultType="YearStrategyTicketCheckUseableTimeModel">
+       SELECT
+        `id`,
+        `ticket_strategy_id` AS ticketStrategyId,
+        `check_limited_date_type` AS checkLimitedDateType,
+        `useable_start_time` AS useableStartTime,
+        `useable_end_time` AS useableEndTime,
+        `create_time` AS createTime
+        FROM `year_strategy_ticket_check_useable_time`
+        WHERE ticket_strategy_id = #{yearStrategyId}
+        order BY useable_start_time ASC;
+    </select>
 </mapper>

@@ -69,7 +69,7 @@ public interface YearStrategyDao {
     /*
     *根据策略ID获取屏蔽时间列表
      */
-    public List<Map<String,Object>> getTicketStrategyCommonCheckShieldTimeModelList(Map<String,Object> map) throws  Exception;
+    public List<TicketStrategyCommonCheckShieldTimeModel> getTicketStrategyCommonCheckShieldTimeModelList(String yearStrategyId) throws  Exception;
 
     /**
      * 根据策略ID获取可用时间列表
@@ -77,7 +77,7 @@ public interface YearStrategyDao {
      * @return
      * @throws Exception
      */
-    public List<Map<String,Object>> getYearStrategyTicketCheckUseableTimeModelList(Map<String,Object> map) throws  Exception;
+    public List<YearStrategyTicketCheckUseableTimeModel> getYearStrategyTicketCheckUseableTimeModelList(String yearStrategyId) throws  Exception;
 
 
 }

@@ -150,7 +150,11 @@
 		</dependency>
 
 		<!-- for @ConfigurationProperties @add by 胡本强 for upms -->
-
+		<dependency>
+			<groupId>com.digitalchina.platform.boot</groupId>
+			<artifactId>platform-security</artifactId>
+			<version>1.3</version>
+		</dependency>
 
 	</dependencies>
 

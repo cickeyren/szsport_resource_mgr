@@ -3,20 +3,16 @@ package com.digitalchina.sport.mgr.resource.controller.exposeapi;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.config.PropertyConfig;
 import com.digitalchina.sport.mgr.resource.dao.YearStrategyDao;
-import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketModel;
 import com.digitalchina.sport.mgr.resource.service.YearStrategyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +34,7 @@ public class ApiYearStrategyTicketController {
     private YearStrategyDao yearStrategyDao;
 
     /**
-     * 根据根据票策略ID获取票策略详情及子场馆列表
+     * 根据根据票策略ID获取票策略详情及子场馆列表及相关验票规则
      * @param yearStrategyId
      * @return
      */
@@ -49,6 +45,8 @@ public class ApiYearStrategyTicketController {
             Map<String,Object> resultMap = new HashMap<String,Object>();
             resultMap.put("yearStrategyDetail",yearStrategyDao.getYearStrategyTicketModelById(yearStrategyId));
             resultMap.put("studStadiumList",yearStrategyDao.getYearStrategyStadiumRelationsModelByYearStrategyId(yearStrategyId));
+            resultMap.put("checkShieldTimeList",yearStrategyDao.getTicketStrategyCommonCheckShieldTimeModelList(yearStrategyId));
+            resultMap.put("checkUseableTimeList",yearStrategyDao.getYearStrategyTicketCheckUseableTimeModelList(yearStrategyId));
             return RtnData.ok(resultMap);
         } catch (Exception e) {
             e.printStackTrace();
