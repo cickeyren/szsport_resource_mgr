@@ -8,9 +8,9 @@ server:
 --- # logging
 logging:
   level:
-    root: INFO
+    root: DEBUG
     com: 
-      digitalchina: INFO
+      digitalchina: DEBUG
       
 #    org.springframework.web.servlet.mvc: debug
 #    org.mybatis: debug

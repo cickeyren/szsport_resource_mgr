@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
     <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
     <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
-    <script src="../../static/js/yearstrategy/yearstrategy_add.js" th:src="@{/js/yearstrategy/yearstrategy_add.js}"></script>
+    <script src="../../static/js/yearstrategy/yearstrategy_modify.js" th:src="@{/js/yearstrategy/yearstrategy_modify.js}"></script>
 
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
@@ -65,7 +65,7 @@
             </tr>
             <tr class="controls">
                 <td class="alignright"><span class="red">*</span>门票名称</td>
-                <td class="alignleft"><input type="text" id="ticketName" name="ticketName"/></td>
+                <td class="alignleft"><input type="text" id="ticketName" name="ticketName" th:value="${model.ticketName}"/></td>
             </tr>
             <tr class="controls">
                 <td width="10%" class="alignright"><span class="red">*</span>合作商</td>
@@ -134,7 +134,7 @@
             <tr class="controls">
                 <td class="alignright">每日次数</td>
                 <td class="alignleft">
-                   <input style="width:35px;" type="text" id="checkDailyLimitedTimes" name="checkDailyLimitedTimes">
+                   <input style="width:35px;" type="text" id="checkDailyLimitedTimes" name="checkDailyLimitedTimes" th:value="${model.checkDailyLimitedTimes}">
                 </td>
             </tr>
             <tr class="controls">
@@ -194,19 +194,19 @@
             <tr>
                 <td class="alignright"><span class="red">*</span>销售价:</td>
                 <td class="alignleft">
-                    <input style="width:35px;" type="text" id="sellPrice" name="sellPrice">
+                    <input style="width:35px;" type="text" id="sellPrice" name="sellPrice" th:value="${model.sellPrice}">
                 </td>
             </tr>
             <tr>
                 <td class="alignright"><span class="red">*</span>成本价:</td>
                 <td class="alignleft">
-                    <input style="width:35px;" type="text" id="costPrice" name="costPrice">
+                    <input style="width:35px;" type="text" id="costPrice" name="costPrice" th:value="${model.costPrice}">
                 </td>
             </tr>
             <tr>
                 <td class="alignright"><span class="red">*</span>门市价:</td>
                 <td class="alignleft">
-                    <input style="width:35px;" type="text" id="storePrice" name="storePrice">
+                    <input style="width:35px;" type="text" id="storePrice" name="storePrice" th:value="${model.costPrice}">
                 </td>
             </tr>
             <tr class="controls">
@@ -215,12 +215,12 @@
             <tr class="controls">
                 <td class="alignright"><span class="red">*</span>预订说明</td>
                 <td class="alignleft">
-                    <textarea id="orderDescription" name="orderDescription" style="width:500px;height:200px;"></textarea>
+                    <textarea id="orderDescription" name="orderDescription" style="width:500px;height:200px;" th:value="${model.orderDescription}"></textarea>
                 </td>
             </tr><tr class="controls">
                 <td class="alignright"><span class="red">*</span>退票说明</td>
                 <td class="alignleft">
-                    <textarea id="refundDescription" name="refundDescription" style="width:500px;height:200px;"></textarea>
+                    <textarea id="refundDescription" name="refundDescription" style="width:500px;height:200px;" th:value="${model.refundDescription}"></textarea>
                 </td>
             </tr>
             <tr>
@@ -232,7 +232,9 @@
         </form>
     </div>
 </section>
-<div id="addDialogs">
-</div>
+    <script  th:inline="javascript">
+        orderDescriptionEditor.html([[${model.orderDescription}]]);
+        //alert(99)
+    </script>
 </body>
 </html>
