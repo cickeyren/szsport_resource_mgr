@@ -1,7 +1,5 @@
 package com.digitalchina.sport.mgr.resource.model;
 
-import java.util.Date;
-
 /**
  * yangyt
  * 年卡策略票务模型
@@ -277,4 +275,5 @@ public class YearStrategyTicketModel {
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
+
 }

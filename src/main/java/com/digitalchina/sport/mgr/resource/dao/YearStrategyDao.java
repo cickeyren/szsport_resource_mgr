@@ -1,8 +1,6 @@
 package com.digitalchina.sport.mgr.resource.dao;
 
-import com.digitalchina.sport.mgr.resource.model.TicketStrategyCommonCheckShieldTimeModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyStadiumRelationsModel;
-import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketCheckUseableTimeModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketModel;
 import org.apache.ibatis.annotations.Mapper;
 
