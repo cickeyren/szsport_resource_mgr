@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>设备编辑</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <script src="../../static/js/equipment/equipment.js" th:src="@{/js/equipment/equipment.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container-fluid" style="margin-top: 30px;height:120px;">
+            <p class="title">编辑设备</p>
+            <form onsubmit="return false;" class="form-horizontal" id="\
+" method="post">
+                <div>
+                    <table class="table">
+                        <tr>
+                            <td>设备编号：</td>
+                            <td colspan="2">
+                                <input id="equipmentId" name="equipmentId" th:value="${equipment.equipment_id}"/>
+                                <input type="hidden" id="id" name="id", th:value="${equipment.id}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>设备类型：</td>
+                            <td colspan="2">
+                                <select id="equipmentType" name="equipmentType">
+                                    <option value="自助终端"th:selected="${equipment.equipment_name eq '自助终端'}">自助终端</option>
+                                    <option value="手持终端"th:selected="${equipment.equipment_name eq '手持终端'}">手持终端</option>
+                                    <option value="闸机" th:selected="${equipment.equipment_name eq '闸机'}">闸机</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>主场馆：</td>
+                            <td colspan="2">
+                                <select id="mainStadium" name="mainStadium">
+                                    <option >请选择</option>
+                                    <option value="1001" th:selected="${equipment.parent_id eq '1001'}">苏州市市民健身中心</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>子场馆：</td>
+                            <td colspan="2">
+                                <select id="subStadium">
+                                    <option >请选择</option>
+                                    <option value="11001" th:selected="${equipment.stadium_id eq '11001'}">篮球馆</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>状态：</td>
+                            <td>
+                                <input type="radio" name="status" value="1" th:checked="${equipment.status eq '1'}">启用
+                            </td>
+                            <td>
+                                <input type="radio" name="status" value="2"th:checked="${equipment.status eq '2'}">停用
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <span class="col-lg-4">
+                        <button type="submit" class="btn btn-success" id="editEquipmentBtn">保存</button>
+                    </span>
+                    <span>
+                        <button type="submit" class="btn btn-success" id="cancelEditBtn">取消</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </section>
+    <div id="addDialogs">
+    </div>
+</body>
+</html>

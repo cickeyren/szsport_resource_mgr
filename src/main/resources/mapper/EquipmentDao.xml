@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.EquipmentDao" >
+    <!-- 根据参数查询设备列表 -->
+    <select id="getEquipmentList" resultType="HashMap" parameterType="HashMap">
+        select e.id, e.equipment_id as equipmentId, e.equipment_name as equipmentType, m.name as mainStadium, s.name as subStadium, e.status
+        from equipment e
+        left join main_stadium m on e.parent_id = m.id
+        left join sub_stadium s on e.stadium_id = s.id
+        <where>
+            <if test="equipmentId != null and equipmentId != ''">
+                e.equipment_id like CONCAT('%',#{equipmentId},'%')
+            </if>
+            <if test="equipmentType != null and equipmentType != ''">
+                and e.equipment_name = #{equipmentType}
+            </if>
+            <if test="mainStadium != null and mainStadium != ''">
+                and m.name like CONCAT('%',#{mainStadium},'%')
+            </if>
+            <if test="subStadium != null and subStadium != ''">
+                and s.name like CONCAT('%',#{subStadium},'%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 添加设备信息 -->
+    <insert id="addEquipment" parameterType="EquipmentModel">
+        INSERT INTO equipment (
+            id,
+            equipment_id,
+            equipment_name,
+            stadium_id,
+            parent_id,
+            STATUS
+        )
+        VALUES
+	    (
+            #{id},
+            #{equipment_id},
+            #{equipment_name},
+            #{stadium_id},
+            #{parent_id},
+            #{status}
+        )
+    </insert>
+
+    <!-- 查询设备信息 -->
+    <select id="getEquipmentInfo" parameterType="HashMap" resultType="EquipmentModel">
+        SELECT e.id, e.equipment_id, e.equipment_name, e.parent_id, e.stadium_id, e.status
+        FROM equipment e
+        <where>
+            <if test="id != null and id != ''">
+                e.id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <!-- 编辑设备信息 -->
+    <update id="updateEquipment" parameterType="EquipmentModel">
+        UPDATE equipment
+        SET equipment_id = #{equipment_id}, equipment_name = #{equipment_name}, stadium_id = #{stadium_id}, parent_id = #{parent_id}, status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除设备信息 -->
+    <delete id="delEquipment" parameterType="HashMap">
+        DELETE from equipment
+        <where>
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
+        </where>
+    </delete>
+</mapper>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>设备列表</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <script src="../../static/js/equipment/equipment.js" th:src="@{/js/equipment/equipment.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container-fluid" style="margin-top: 30px;height:120px;">
+            <p class="title">设备信息</p>
+            <form class="form-horizontal" action="/equipment/equipmentList.html" id="searchForm" method ="POST">
+                <div>
+                    <span class="col-lg-4">
+                        设备编号：<input id="equipmentId" name="equipmentId" th:value="${equipmentId}"/>
+                    </span>
+                    <span class="col-lg-4">
+                        设备类型：
+                        <select id="equipmentType" name="equipmentType" >
+                            <option value="自助终端" th:selected="${equipmentType eq '自助终端'}">自助终端</option>
+                            <option value="手持终端" th:selected="${equipmentType eq '手持终端'}">手持终端</option>
+                            <option value="闸机" th:selected="${equipmentType eq '闸机'}">闸机</option>
+                        </select>
+                    </span>
+                    <span class="col-lg-4">
+                        主场馆：<input id="mainStadium" name="mainStadium" th:value="${mainStadium}"/>
+                    </span>
+                    <span class="col-lg-4">
+                        子场馆：<input id="subStadium" name="subStadium" th:value="${subStadium}"/>
+                    </span>
+                </div>
+                <div>
+                    <span class="col-lg-4">
+                        <button type="submit" class="btn btn-success" id="searchEquipmentBtn">查询</button>
+                    </span>
+                </div>
+            </form>
+            <div>
+                <button type="submit" class="btn btn-success" id="addEquipmentBtn">新增</button>
+            </div>
+            <div>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>设备编号</th>
+                        <th>设备类型</th>
+                        <th>分配主场馆</th>
+                        <th>所属子场馆</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    <tbody id="equipmentListBody">
+                    <tr th:each="equipment:${equipmentList}">
+                        <td  th:text="${equipment.equipmentId}"></td>
+                        <td  th:text="${equipment.equipmentType}"></td>
+                        <td  th:text="${equipment.mainStadium}"></td>
+                        <td  th:text="${equipment.subStadium}"></td>
+                        <td  th:text="${equipment.status eq '1'}?'启用':'停用'"></td>
+                        <td>
+                            <a href="editEquipment.html" th:href="@{/equipment/editEquipment.html(id=${equipment.id})}">编辑</a>
+                            <a href="#" th:onclick="'javascript:delEquipment(\'' + ${equipment.id} + '\');'">删除</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <div id="addDialogs">
+    </div>
+</body>
+</html>
