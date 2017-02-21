@@ -30,7 +30,7 @@
     </style>
 </head>
 <body>
-
+    <input type="hidden" id="id" th:value="${model.id}">
 <section>
     <div class="container-fluid" style="margin-top: 30px">
         <p class="title">新增年卡/散卡生成策略</p>
@@ -78,7 +78,7 @@
             <tr class="controls">
                 <td class="alignright"><span class="red">*</span>售卖渠道</td>
                 <td class="alignleft">
-                    <input type="checkbox" checked="checked" value="0" name="sellWay">线上售卖<input type="checkbox" value="1" name="sellWay">窗口售卖
+                    <input type="checkbox" value="0" name="sellWay">线上售卖<input type="checkbox" value="1" name="sellWay">窗口售卖
                 </td>
             </tr>
             <tr class="controls">
@@ -232,10 +232,118 @@
         </form>
     </div>
 </section>
-    <script  th:inline="javascript">
-        //init();
+    <script th:inline="javascript">
+
+        init();
+        //初始化下拉框，checkbox,radio等组件
         function init() {
-            //orderDescriptionEditor.html([[${model.orderDescription}]]);
+            var shieldTimeArrayStr = [[${shieldTimeArrayStr}]];
+            shieldDateArray = shieldTimeArrayStr.split(",");//验票可用时间段数组
+            for(var i=0; i < shieldDateArray.length;i++) {
+                    var startAndEnd = shieldDateArray[i].split("$");
+                    var start = startAndEnd[0];
+                    var end = startAndEnd[1];
+                var startAndEndTimeValue = start+"至"+end;
+                $("#shieldStartTimeAndEndTimeSelects").prepend('<option value="'+startAndEnd+'">'+startAndEndTimeValue+"</option>");
+            }
+
+            var useableTimeArrayStr = [[${useableTimeArrayStr}]];
+            checkUseableTimeArray = useableTimeArrayStr.split(",");//验票不可用日期数组
+            for(var i=0; i < checkUseableTimeArray.length;i++) {
+                var startAndEnd = checkUseableTimeArray[i].split("$");
+                var start = startAndEnd[0].slice(0, -3);
+                var end = startAndEnd[1].slice(0, -3);
+                var startAndEndTimeValue = start+"至"+end;
+                $("#limitedStartAndEndTimeSelects").prepend('<option value="'+startAndEnd+'">'+startAndEndTimeValue+"</option>");
+            }
+
+            //套票类型下拉框列表初始化
+            var ticketType = [[${model.ticketType}]];
+            $("#ticketType option[value='"+ticketType+"']").attr("selected", "selected");
+            //设置主场馆
+            var mainStadiumID = [[${mainStadiumSelected}]];
+            $("#mainStadiumID option[value='"+mainStadiumID+"']").attr("selected", "selected");
+
+//            //设置子场馆
+            var subStadiumID = [[${subStadiumSelected}]];
+            updateSubStadiumList(mainStadiumID,subStadiumID);
+//            $("#subStadiumID option[value='"+subStadiumID+"']").attr("selected", "selected");
+            //合作商
+            var merchantId = [[${model.merchantId}]];
+            $("#merchantId option[value='"+merchantId+"']").attr("selected", "selected");
+            //获取到销售渠道并设置checkbox
+            var sellWay =  [[${model.sellWay}]];
+            var sellWayArray = sellWay.split(",");
+            $('input[name="sellWay"]:checkbox').each(function(){
+                if (sellWayArray.contains($(this).val())) {
+                    $(this).attr("checked","checked");
+                }
+            });
+         //设置使用有效期
+         var orderEffectiveType = [[${model.orderEffectiveType}]];
+            if("0" == orderEffectiveType) {
+                $("input[name=orderEffectiveType][value=\'0\']").attr("checked", true);
+                $("#fixDay").val([[${model.orderFixDay}]])
+            } else if("1" == orderEffectiveType) {
+                $("input[name=orderEffectiveType][value=\'1\']").attr("checked", true);
+                var startDate = new Date([[${model.orderEffectiveStartTime}]]);
+                $("#orderEffectiveStartTime").val(startDate.format("yyyy-MM-dd"));
+                var endDate = new Date([[${model.orderEffectiveEndTime}]]);
+                $("#orderEffectiveEndTime").val(endDate.format("yyyy-MM-dd"));
+            }
+
+         //设置退票规则radio
+            $("input[name=orderRefundRule][value=" + [[${model.orderRefundRule}]] + "]").attr("checked", true);
+         //验票凭证
+            var checkTicketType =  [[${model.checkTicketType}]];
+            var checkTicketTypeArray = checkTicketType.split(",");
+            $('input[name="checkTicketType"]:checkbox').each(function(){
+                if (checkTicketTypeArray.contains($(this).val())) {
+                    $(this).attr("checked","checked");
+                }
+            });
+           //验票渠道
+            var checkTicketWay =  [[${model.checkTicketType}]];
+            var checkTicketWayArray = checkTicketWay.split(",");
+            $('input[name="checkTicketWay"]:checkbox').each(function(){
+                if (checkTicketWayArray.contains($(this).val())) {
+                    $(this).attr("checked","checked");
+                }
+            });
+            //限制次数
+            var checkTicketAvailableTimes = [[${model.checkTicketAvailableTimes}]];
+                if("-1" == checkTicketAvailableTimes) {
+                    $("input[name=checkTicketAvailableTimes][value=\'0\']").attr("checked", true);
+                } else {
+                    $("input[name=checkTicketAvailableTimes][value=\'1\']").attr("checked", true);
+                    $("#fixAvailableTimes").val([[${model.checkTicketAvailableTimes}]]);
+                }
+            //每日限次
+            var checkDailyLimitedTimes = [[${model.checkDailyLimitedTimes}]];
+            if("" != checkDailyLimitedTimes) {
+                $("#checkDailyLimitedTimes").val(checkDailyLimitedTimes);
+            }
+            //时间限制
+            var checkLimitedDateType = [[${model.checkLimitedDateType}]];
+            if("0" == checkLimitedDateType) {
+                $("input[name=checkLimitedDateType][value=\'0\']").attr("checked", true);
+            } else if("1" == checkLimitedDateType) {
+                var checkLimitedWeekDetails = [[${model.checkLimitedWeekDetails}]];
+                $("input[name=checkLimitedDateType][value=\'1\']").attr("checked", true);
+                var checkLimitedWeekDetailsArray = checkLimitedWeekDetails.split(",");
+
+                $('input[name="checkLimitedWeekDetails"]:checkbox').each(function(){
+                    if (checkLimitedWeekDetailsArray.contains($(this).val())) {
+                        $(this).attr("checked","checked");
+                    }
+                });
+            }
+            //是否限时
+            var checkLimitedHours = [[${model.checkLimitedHours}]];
+            if("-1" != checkLimitedHours) {
+                $("input[name=checkLimitedHoursR][value=\'1\']").attr("checked", true);
+                $("#checkLimitedHours").val([[${model.checkLimitedHours}]])
+            }
         }
     </script>
 </body>

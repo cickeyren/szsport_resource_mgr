@@ -30,6 +30,10 @@ public class YearStrategyTicketModel {
      */
     private String orderEffectiveType;
     /**
+     * order_effective_type=0时预订之后固定日期有效
+     */
+    private String orderFixDay;
+    /**
      *有效期起始时间(无论是有效天数还是固定时间都生成该时间)
      */
     private String orderEffectiveStartTime;
@@ -62,7 +66,7 @@ public class YearStrategyTicketModel {
      */
     private String checkLimitedDateType;
     /**
-     *如果时间限制为每周那么显示具体的限制星期几 用;隔checkTicketAvailableTimes开
+     *如果时间限制为每周那么显示具体的限制星期几 用;隔checkLimitedWeekDetails开
      */
     private String checkLimitedWeekDetails;
 
@@ -99,6 +103,10 @@ public class YearStrategyTicketModel {
      * 创建时间
      */
     private String createTime;
+    /**
+     * 0：下线 1：上线
+     */
+    private String strategyState;
 
     public String getId() {
         return id;
@@ -276,4 +284,19 @@ public class YearStrategyTicketModel {
         this.createTime = createTime;
     }
 
+    public String getOrderFixDay() {
+        return orderFixDay;
+    }
+
+    public void setOrderFixDay(String orderFixDay) {
+        this.orderFixDay = orderFixDay;
+    }
+
+    public String getStrategyState() {
+        return strategyState;
+    }
+
+    public void setStrategyState(String strategyState) {
+        this.strategyState = strategyState;
+    }
 }

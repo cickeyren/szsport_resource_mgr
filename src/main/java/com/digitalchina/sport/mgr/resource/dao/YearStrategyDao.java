@@ -22,6 +22,12 @@ public interface YearStrategyDao {
      * @return
      */
     public int insertYearStrategyTicket(YearStrategyTicketModel yearStrategyTicketModel) throws Exception;
+    /*
+    * 更新年卡策略
+    * */
+    public int updateYearStrategyTicket(YearStrategyTicketModel yearStrategyTicketModel) throws Exception;
+
+
 
     /**
      * 批量添加年票生成策略与子场馆对应关系
@@ -80,5 +86,25 @@ public interface YearStrategyDao {
 
     public List<YearStrategyTicketCheckUseableTimeModel> getYearStrategyTicketCheckUseableTimeModelList(String yearStrategyId) throws  Exception;
 
+    /**
+     * 根据策略ID删除子场馆对应关系
+     * @param yearStrategyId
+     * @return
+     * @throws Exception
+     */
+    public int deleteYearStrategyStadiumRelationsListByYearStrategyId(String yearStrategyId) throws Exception;
+    /**
+     * 根据策略ID删除屏蔽时间列表
+     * @param yearStrategyId
+     * @return
+     */
+    public int deleteTicketStrategyCommonCheckShieldTimeModelByYearStrategyId(String yearStrategyId) throws Exception;
 
+    /**
+     * 根据策略ID删除可用时间列表
+     * @param yearStrategyId
+     * @return
+     * @throws Exception
+     */
+    public int deleteYearStrategyTicketCheckUseableTimeListByYearStrategyId(String yearStrategyId) throws Exception;
 }
