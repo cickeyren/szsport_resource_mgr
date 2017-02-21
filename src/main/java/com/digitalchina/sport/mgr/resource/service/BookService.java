@@ -51,11 +51,11 @@ public class BookService {
     }
 
     /**
-     * 1. 加入事务管理, 框架会自动默认注入DataSourceTransactionManager
-     * 2. 默认的隔离级别是DEFAULT，表示使用底层数据库的默认隔离级别。通常为 READ_COMMITTED 。
-     * 3. 默认的传播行为是REQUIRED，如果当前存在事务，则加入该事务；如果当前没有事务，则创建一个新的事务。
-     * 4. 方法中第一次成功的插入会回滚
-     */
+    * 1. 加入事务管理, 框架会自动默认注入DataSourceTransactionManager
+    * 2. 默认的隔离级别是DEFAULT，表示使用底层数据库的默认隔离级别。通常为 READ_COMMITTED 。
+            * 3. 默认的传播行为是REQUIRED，如果当前存在事务，则加入该事务；如果当前没有事务，则创建一个新的事务。
+            * 4. 方法中第一次成功的插入会回滚
+    */
     @Transactional
     public void processWithTransaction(){
         //演示代码，实际开发中如果需要事务管理，加上Transactional注解

@@ -47,7 +47,7 @@ public class YearStrategyTicketController {
      * @return
      */
     @RequestMapping(value = "/add.html")
-    public String add(ModelMap map) {
+    public String addIndex(ModelMap map) {
 //        List<Category> categorys = bookService.findCategorys();
         map.put("mainStadiumList", yearStrategyService.getAllMainStadium());
         map.put("merchantList", yearStrategyService.getAllMerchant());
@@ -76,6 +76,11 @@ public class YearStrategyTicketController {
         return RtnData.fail("新增年卡策略失败");
     }
 
+    /**
+     * 根据主场馆ID获取主场馆列表
+     * @param mainStadiumId
+     * @return
+     */
     @RequestMapping(value = "/getSubStadiumListByMainId.json", method = RequestMethod.POST)
     @ResponseBody
     public RtnData getSubStadiumListByMainId(@RequestParam(required = true) String mainStadiumId) {
@@ -90,25 +95,24 @@ public class YearStrategyTicketController {
         return RtnData.fail("根据主场馆ID获取子场馆列表失败");
     }
 
-//    /**
-//     * 根据
-//     * @param yearStrategyId
-//     * @return
-//     */
-//    @RequestMapping(value = "/getYearStrategyTicketModelInfo.json")
-//    @ResponseBody
-//    public RtnData getYearStrategyTicketModelInfo(@RequestParam(required = true) String yearStrategyId) {
-//        try {
-//            Map<String,Object> resultMap = new HashMap<String,Object>();
-//            resultMap.put("yearStrategyDetail",yearStrategyDao.getYearStrategyTicketModelById(yearStrategyId));
-//            resultMap.put("studStadiumList",yearStrategyDao.getYearStrategyStadiumRelationsModelByYearStrategyId(yearStrategyId));
-//            return RtnData.ok(resultMap);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            logger.error("========根据票策略ID获取票策略详情及子场馆列表失败=========",e);
-//        }
-//        return RtnData.fail("根据票策略ID获取票策略详情及子场馆列表失败");
-//    }
-
-
+    /**
+     * 进入修改页面
+     *
+     * @param map
+     * @return
+     */
+    @RequestMapping(value = "/modify.html")
+    public String modifyIndex(ModelMap map,@RequestParam(required = true) String yearStrategyId) {
+        YearStrategyTicketModel yearStrategyTicketModel = null;
+        try {
+            yearStrategyTicketModel = yearStrategyDao.getYearStrategyTicketModelById(yearStrategyId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("========根据主场馆ID获取主场馆信息失败=========",e);
+        }
+        map.put("model",yearStrategyTicketModel);
+        map.put("mainStadiumList", yearStrategyService.getAllMainStadium());
+        map.put("merchantList", yearStrategyService.getAllMerchant());
+        return "yearstrategyticket/modify_year_strategy_ticket";
+    }
 }

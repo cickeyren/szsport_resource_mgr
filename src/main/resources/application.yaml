@@ -10,10 +10,10 @@ logging:
   level:
     root: INFO
     com: 
-      digitalchina: INFO
+      digitalchina: DEBUG
       
-#    org.springframework.web.servlet.mvc: debug
-#    org.mybatis: debug
+    org.springframework.web.servlet.mvc: debug
+    org.mybatis: debug
 
 --- # datasource
 spring:
