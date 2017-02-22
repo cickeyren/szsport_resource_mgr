@@ -3,11 +3,12 @@
 <mapper namespace="com.digitalchina.sport.mgr.resource.dao.OrderDao">
     <!-- 订单列表 -->
     <select id="getOrderListByMap" resultType="java.util.HashMap" parameterType="java.util.Map">
+        <![CDATA[
         SELECT
         id,
         ob.order_number AS orderNumber,
         c.categoryName,
-        (case ob.ticket_type  when '0' then '年卡' WHEN '1' THEN '场地预定' WHEN '2' THEN '散客预定' ELSE '其他' END) as ticketType,
+        (case ob.ticket_type  when '0' then '散票/年卡' WHEN '1' THEN '场地预定' WHEN '2' THEN '散客预定' ELSE '其他' END) as ticketType,
         ob.ticket_name AS ticketName,
         ob.stadium_name AS stadiumName,
         ob.sub_stadium_name AS subStadiumName,
@@ -38,12 +39,24 @@
             AND
             ob.order_time >=#{orderStartDate}
             AND
-            ob.order_time <=#{orderEndDate}
+            ob.order_time <= cdata#{orderEndDate}
         </if>
-
+        <if test="ticketType != null and ticketType != ''">
+            AND
+            ob.ticket_type =#{ticketType}
+        </if>
+        <if test="orderChannel != null and orderChannel != ''">
+            AND
+            ob.order_channel =#{orderChannel}
+        </if>
+        <if test="status != null and status != ''">
+            AND
+            ob.`status` IN(status)
+        </if>
         ORDER BY
         order_time DESC
         LIMIT #{startIndex},#{endIndex}
+        ]]>
     </select>
     <!-- 订单个数 -->
     <select id="getCountByMap" resultType="java.lang.Integer" parameterType="java.util.Map">
@@ -64,7 +77,7 @@
             ob.person_kind AS personKind,
             ob.ticket_id AS ticketId,
             ob.ticket_name AS ticketName,
-            (case ob.ticket_type  when '0' then '年卡' WHEN '1' THEN '场地预定' WHEN '2' THEN '散客预定' ELSE '其他' END) as ticketType,
+            (case ob.ticket_type  when '0' then '散票/年卡' WHEN '1' THEN '场地预定' WHEN '2' THEN '散客预定' ELSE '其他' END) as ticketType,
             ob.order_time AS orderTime,
             ob.order_channel AS orderChannel,
             (
@@ -185,7 +198,7 @@
         WHERE
             oc.id = #{orderContentId}
     </select>
-    <!-- 年卡散客才有的使用记录表 -->
+    <!-- 散票/年卡散客才有的使用记录表 -->
     <select id="getUsedRecordsByOrderContentId" parameterType="java.util.Map" resultType="java.util.HashMap">
         SELECT
             u.used_time AS usedTime,

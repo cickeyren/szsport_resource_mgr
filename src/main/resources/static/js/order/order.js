@@ -23,7 +23,11 @@ orderPageObj.prototype = {
 
     //带条件查找
     doSearch:function() {
-        var sTitle = $.trim($('#ticketName').val());//获取查询条件
+        //获取查询条件
+        var orderStartDate = $.trim($('#orderStartDate').val());
+        var orderEndDate = $.trim($('#orderEndDate').val());
+        var userTel = $.trim($('#userTel').val());
+        var ticketName = $.trim($('#ticketName').val());
         orderPage.searchObj.title= sTitle || '';
         orderPage.searchObj.pageNum = 1;  //reset
         orderPage.renderPages(true);
