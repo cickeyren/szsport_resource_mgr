@@ -1,6 +1,11 @@
 package com.digitalchina.sport.mgr.resource.controller.yearstrategyticket;
 
 import com.digitalchina.common.data.RtnData;
+import com.digitalchina.common.pagination.Page;
+import com.digitalchina.common.pagination.PaginationUtils;
+import com.digitalchina.config.PropertyConfig;
+import com.digitalchina.sport.mgr.resource.dao.ClassifyMapper;
+import com.digitalchina.sport.mgr.resource.dao.SubStadiumMapper;
 import com.digitalchina.sport.mgr.resource.dao.YearStrategyDao;
 import com.digitalchina.sport.mgr.resource.model.TicketStrategyCommonCheckShieldTimeModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketCheckUseableTimeModel;
@@ -36,8 +41,12 @@ public class YearStrategyTicketController {
     private YearStrategyService yearStrategyService;
     @Autowired
     private YearStrategyDao yearStrategyDao;
-
-
+    @Autowired
+    private SubStadiumMapper subStadiumMapper;
+    @Autowired
+    private ClassifyMapper classifyMapper;
+    @Autowired
+    private PropertyConfig config;
     /**
      * 进入新增页面
      *
@@ -185,5 +194,70 @@ public class YearStrategyTicketController {
             logger.error("========新增年卡策略失败=========",e);
         }
         return RtnData.fail("新增年卡策略失败");
+    }
+    /**
+     * 进入主页面
+     *
+     * @param map
+     * @return
+     */
+    @RequestMapping(value = "/home.html")
+    public String home(ModelMap map) {
+        return "yearstrategyticket/main_strategy";
+    }
+
+    @RequestMapping(value = "/list.html")
+    public String list(@RequestParam(required = false, defaultValue = "10") long pageSize,
+                      @RequestParam(required = false, defaultValue = "1") long page,
+                       @RequestParam(required = true) String mainStadiumId,
+                       @RequestParam(required = false) String classify,
+                       @RequestParam(required = true) String strategyType,
+                       @RequestParam(required = false) String ticketName,
+                       @RequestParam(required = false) String strategyState,
+                       @RequestParam(required = false) String subStadiumId,
+                       ModelMap resultMap, HttpServletRequest req) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("mainStadiumId", mainStadiumId);
+        params.put("classify", classify);
+        params.put("strategyType", strategyType);
+        params.put("ticketName", ticketName);
+        params.put("strategyState", strategyState);
+        params.put("subStadiumId", subStadiumId);
+        params.put("parent_id",mainStadiumId);
+
+        resultMap.put("subStadiumList",subStadiumMapper.getAllSubStadiumByParentId(params));
+//        resultMap.put("classifyList",classifyMapper.selectAll());
+        try {
+            int totalSize = yearStrategyDao.getYearStrategyTicketModelInfoTotalCount(params);
+            Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
+            pagination.setUrl(req.getRequestURI());
+            params.put("pageIndex", pagination.getStartIndex());
+            params.put("pageSize", pageSize);
+            List<Map<String, Object>> strategyList = yearStrategyDao.getYearStrategyTicketModelInfoList4Mgr(params);
+
+            resultMap.put("pageModel", pagination);
+            resultMap.put("mainStadiumId", mainStadiumId);//回到页面,保留搜索关键字
+            resultMap.put("classify", classify);//回到页面,保留搜索关键字
+            resultMap.put("strategyType", strategyType);//回到页面,保留搜索关键字
+            resultMap.put("ticketName", ticketName);//回到页面,保留搜索关键字
+            resultMap.put("strategyState", strategyState);//回到页面,保留搜索关键字
+            resultMap.put("subStadiumId", subStadiumId);//回到页面,保留搜索关键字
+            resultMap.put("strategyList", strategyList);//回到页面,保留搜索关键字
+            resultMap.put("pageSize",String.valueOf(pageSize));
+            resultMap.put("page",String.valueOf(page));
+            if("0".equals(strategyType)) {
+                resultMap.put("type", "散客/年卡");
+            return "yearstrategyticket/main_strategy";
+            } else {
+                //TODO场地票做好了后要改
+            return "yearstrategyticket/main_strategy";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("========查询年卡策略列表失败=========",e);
+            resultMap.put("url",req.getRequestURL());
+            resultMap.put("exception",e);
+            return "error";
+        }
     }
 }

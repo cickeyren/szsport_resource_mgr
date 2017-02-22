@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>场馆票列表</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <!--  <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>-->
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <!--<script src="../../static/js/mainstadium/mainstadium.js"-->
+            <!--th:src="@{/js/mainstadium/mainstadium.js}"></script>-->
+    <script src="../../static/lib/js/common.js"
+            th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 内容区域 -->
+<div>
+    <div class="container-fluid pt20">
+        <div>
+            <form action="/yearstrategyticket/list.html" id="getForm" method="get">
+                <input type="hidden" id="mainStadiumId" name="mainStadiumId" th:value="${mainStadiumId}">
+                <input type="hidden" id="myPage" name="page" th:value="${page}">
+                <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+                <table class="table">
+                    <tr class="controls">
+                        <td>
+                            预订类型:
+                            <select id="strategyType" name="strategyType">
+                            <option value="0">散客/年卡</option>
+                            <option value="1">场地票</option>
+                            </select>
+                        </td>
+                        <td>门票名称<input type="text" id="ticketName" name="ticketName"/></td>
+                        <td>状态：
+                            <select id="strategyState" name="strategyState">
+                                <option value="">全部</option>
+                                <option value="1">上线</option>
+                                <option value="0">下线</option>
+                            </select>
+                        </td>
+                        <td>子场馆:
+                            <select id="subStadiumId" name="subStadiumId">
+                                <option value="">全部</option>
+                                <option th:each="subStadium,eStat:${subStadiumList}" th:value="${subStadium.id}" th:text="${subStadium.name}"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-success" id="findStadiumname">查询</button>
+                            <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div>
+            <button type="button" class="btn btn-success" id="addNew">新增</button>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-content no-padding" id="c">
+                    </div>
+                    <div id="div2">
+
+                        <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
+                            <table id="dataTable" class="table table-bordered" th:unless="${#lists.isEmpty(strategyList)}">
+
+                                <thead>
+                                <tr>
+                                    <th>门票名称</th>
+                                    <th>预订类型</th>
+                                    <th>项目类型</th>
+                                    <th>子场馆</th>
+                                    <th>排序</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody th:remove="all-but-first">
+                                <tr th:each="obj, objStat: ${strategyList}">
+                                    <input type="hidden" th:value="${obj.ticket_strategy_id}"/>
+                                    <td th:text="${obj.ticket_name}"></td>
+                                    <td th:text="${type}"></td>
+                                    <td th:text="${obj.categoryName}"></td>
+                                    <td th:text="${obj.subStadiumName}"></td>
+                                    <td th:text="0"></td>
+                                    <td th:text="${obj.strategy_state eq '1'?'上线':'下线'}"></td>
+                                    <td>
+                                        <a class="edit" th:data="${obj.ticket_strategy_id}">编辑</a>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <a id="delete" th:data="${obj.ticket_strategy_id}">删除</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+
+
+                                <tbody th:if="${#lists.isEmpty(strategyList)}">
+                                <tr>
+                                    <td colspan="12">没有符合查询条件的记录！</td>
+                                </tr>
+                                </tbody>
+
+                                <!--<input id="pageAllCount" type="hidden" th:value="${pageModel.totalSize}"/>-->
+                            </table>
+
+                        </div>
+                    </div>
+
+                    <div id="page" class="page" align="right" style="margin-right: 10px;">
+                    </div>
+                </div>
+            </div>
+
+            <div id="div3"></div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    //好像很实用的样子，后端的同学再也不用写分页逻辑了。
+    $(function(){
+        laypage({
+            cont: 'page',
+            pages: [[${pageModel.totalPage}]], //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+            curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
+                var page = location.search.match(/page=(\d+)/);
+                return page ? page[1] : 1;
+            }(),
+            jump: function(e, first){ //触发分页后的回调
+                if(!first){ //一定要加此判断，否则初始时会无限刷新
+                    //console.log(location.href);
+                    $("#myPage").val(e.curr);
+                    $("#getForm").submit();
+                }
+            }
+        });
+    })
+
+</script>
+</body>
+</html>

@@ -297,4 +297,87 @@
         </set>
         WHERE id = #{id};
     </update>
+
+    <!--根据分页状态、分类，子场馆等信息参数获取年票策略list(后台用)-->
+    <select id="getYearStrategyTicketModelInfoList4Mgr" parameterType="HashMap" resultType="HashMap">
+        SELECT
+        E.*, B.id AS yearStrategyId,
+        B.ticket_name,
+        B.sell_price AS sellPrice,
+        B.store_price AS storePrice,
+        B.refund_description AS refundDescription,
+        B.order_description AS orderDescription,
+        B.order_refund_rule AS orderRefundRule,
+        C.id AS subStadiumId,
+        C.`name` AS subStadiumName,
+        D.id AS mainStadiumId,
+        D.`name` AS mainStadiumName,
+        B.create_time AS createTime,
+        B.strategy_state
+        FROM
+        (
+        SELECT
+        A.main_stadium_id,
+        A.sub_stadium_id,
+        A.ticket_strategy_id,
+        A.classify,
+				F.cid,
+				F.categoryName
+        FROM
+        `year_strategy_stadium_relations` A,`classify` F
+        WHERE A.classify = F.cid AND  A.main_stadium_id = #{mainStadiumId}
+                <if test="classify !=null and classify != ''">
+                    AND A.classify = #{classify}
+                </if>
+                <if test="subStadiumId !=null and subStadiumId != ''">
+                    AND A.subStadiumId = #{subStadiumId}
+                </if>
+        ) E
+        LEFT JOIN `year_strategy_ticket_basic_info` B ON E.ticket_strategy_id = B.id
+        LEFT JOIN `sub_stadium` C ON E.sub_stadium_id = C.id
+        LEFT JOIN `main_stadium` D ON C.parent_id = D.id
+        WHERE 1=1
+        <if test="strategyState !=null and strategyState != ''">
+            AND  B.strategy_state = #{strategyState}
+        </if>
+        <if test="ticketName !=null and ticketName != ''">
+            AND B.ticket_name LIKE concat('%', #{ticketName}, '%')
+        </if>
+        ORDER BY B.create_time DESC  LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!--根据分页状态、分类，子场馆等信息参数获取年票策略list(后台用)-->
+    <select id="getYearStrategyTicketModelInfoTotalCount" parameterType="HashMap" resultType="Integer">
+        SELECT count(*)
+        FROM
+        (
+        SELECT
+        A.main_stadium_id,
+        A.sub_stadium_id,
+        A.ticket_strategy_id,
+        A.classify,
+        F.cid,
+        F.categoryName
+        FROM
+        `year_strategy_stadium_relations` A,`classify` F
+        WHERE A.classify = F.cid AND  A.main_stadium_id = #{mainStadiumId}
+        <if test="classify !=null and classify != ''">
+            AND A.classify = #{classify}
+        </if>
+        <if test="subStadiumId !=null and subStadiumId != ''">
+            AND A.subStadiumId = #{subStadiumId}
+        </if>
+        ) E
+        LEFT JOIN `year_strategy_ticket_basic_info` B ON E.ticket_strategy_id = B.id
+        LEFT JOIN `sub_stadium` C ON E.sub_stadium_id = C.id
+        LEFT JOIN `main_stadium` D ON C.parent_id = D.id
+        WHERE 1=1
+        <if test="strategyState !=null and strategyState != ''">
+            AND  B.strategy_state = #{strategyState}
+        </if>
+        <if test="ticketName !=null and ticketName != ''">
+            AND B.ticket_name LIKE concat('%', #{ticketName}, '%')
+        </if>
+    </select>
+
 </mapper>

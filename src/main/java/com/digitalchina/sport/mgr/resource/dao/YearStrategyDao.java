@@ -107,4 +107,20 @@ public interface YearStrategyDao {
      * @throws Exception
      */
     public int deleteYearStrategyTicketCheckUseableTimeListByYearStrategyId(String yearStrategyId) throws Exception;
+
+    /**
+     * 根据分页状态、分类，子场馆等信息参数获取年票策略list(后台用)
+     * @param map
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String,Object>> getYearStrategyTicketModelInfoList4Mgr(Map<String,Object> map) throws  Exception;
+
+    /**
+     * 根据分页状态、分类，子场馆等信息参数获取年票策略总数量(后台用)
+     * @param map
+     * @return
+     * @throws Exception
+     */
+    public Integer getYearStrategyTicketModelInfoTotalCount(Map<String,Object> map) throws  Exception;
 }

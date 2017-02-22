@@ -16,6 +16,7 @@ public class Page {
     private String url;
     private boolean firstPage;
     private boolean lastPage;
+    private PageData pd = new PageData();
 
 
     public long getStartIndex() {

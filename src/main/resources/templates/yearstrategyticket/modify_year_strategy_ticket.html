@@ -235,28 +235,38 @@
     <script th:inline="javascript">
 
         init();
+        shieldDateArray = [];
+        checkUseableTimeArray = [];
         //初始化下拉框，checkbox,radio等组件
         function init() {
             var shieldTimeArrayStr = [[${shieldTimeArrayStr}]];
-            shieldDateArray = shieldTimeArrayStr.split(",");//验票可用时间段数组
-            for(var i=0; i < shieldDateArray.length;i++) {
-                    var startAndEnd = shieldDateArray[i].split("$");
-                    var start = startAndEnd[0];
-                    var end = startAndEnd[1];
-                var startAndEndTimeValue = start+"至"+end;
-                $("#shieldStartTimeAndEndTimeSelects").prepend('<option value="'+startAndEnd+'">'+startAndEndTimeValue+"</option>");
+            if("" != shieldTimeArrayStr) {
+                shieldDateArray = shieldTimeArrayStr.split(",");//验票可用时间段数组
+                if(shieldDateArray.length > 0) {
+                    for(var i=0; i < shieldDateArray.length;i++) {
+                        var startAndEnd = shieldDateArray[i].split("$");
+                        var start = startAndEnd[0];
+                        var end = startAndEnd[1];
+                        var startAndEndTimeValue = start+"至"+end;
+                        $("#shieldStartTimeAndEndTimeSelects").prepend('<option value="'+startAndEnd+'">'+startAndEndTimeValue+"</option>");
+                    }
+
+                }
             }
 
             var useableTimeArrayStr = [[${useableTimeArrayStr}]];
-            checkUseableTimeArray = useableTimeArrayStr.split(",");//验票不可用日期数组
-            for(var i=0; i < checkUseableTimeArray.length;i++) {
-                var startAndEnd = checkUseableTimeArray[i].split("$");
-                var start = startAndEnd[0].slice(0, -3);
-                var end = startAndEnd[1].slice(0, -3);
-                var startAndEndTimeValue = start+"至"+end;
-                $("#limitedStartAndEndTimeSelects").prepend('<option value="'+startAndEnd+'">'+startAndEndTimeValue+"</option>");
+            if("" != useableTimeArrayStr) {
+                checkUseableTimeArray = useableTimeArrayStr.split(",");//验票不可用日期数组
+                if(checkUseableTimeArray.length > 0) {
+                    for(var i=0; i < checkUseableTimeArray.length;i++) {
+                        var startAndEnd = checkUseableTimeArray[i].split("$");
+                        var start = startAndEnd[0].slice(0, -3);
+                        var end = startAndEnd[1].slice(0, -3);
+                        var startAndEndTimeValue = start+"至"+end;
+                        $("#limitedStartAndEndTimeSelects").prepend('<option value="'+startAndEnd+'">'+startAndEndTimeValue+"</option>");
+                    }
+                }
             }
-
             //套票类型下拉框列表初始化
             var ticketType = [[${model.ticketType}]];
             $("#ticketType option[value='"+ticketType+"']").attr("selected", "selected");
