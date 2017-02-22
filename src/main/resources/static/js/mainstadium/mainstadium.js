@@ -1,9 +1,9 @@
 var mainstadium;
-$('#distpicker1').distpicker({
+/*$('#distpicker1').distpicker({
     province: '---- 所在省 ----',
     city: '---- 所在市 ----',
     district: '---- 所在区 ----'
-});
+});*/
 $(function () {
     mainstadium = new MainstadiumObj();
     mainstadium.init();
