@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>订单详情</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .inputw100 {
+            width: 100px;
+        }
+        .table_style{width: 100%;height: auto;}
+        .table_style tr td{text-align: center;height: 30px;line-height: 30px;}
+        .table_style td.alignleft {
+            text-align: left;
+        }
+        .table_style td.alignright {
+            text-align: right;
+        }
+        .table_style td.aligncenter {
+            text-align: center;
+        }
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <p class="title ml10 mt10">订单基本信息</p>
+    <div th:unless="${orderDetails==null}">
+        <div class="ml20">订单流水号：</div><div class="ml20" th:text="${orderDetails.orderNumber}"></div>
+    </div>
+</div>
+<hr />
+<div>
+    <div th:if="${orderDetails==null}">
+        <p class="ml20">订单不存在</p>
+    </div>
+    <div th:if="${orderDetails!=null}">
+        <table class="table table-bordered table-hover definewidth m10">
+            <thead>
+            <tr>
+                <th>场馆名</th>
+                <th>项目类型</th>
+                <th>子馆</th>
+                <th>产品名称</th>
+                <th>票型</th>
+                <th>下单时间</th>
+                <th>下单方式</th>
+                <th>订单状态</th>
+                <th>订单成本</th>
+                <th>订单售价</th>
+                <th>用户昵称</th>
+                <th>用户手机</th>
+                <th>支付方式</th>
+                <th>支付账户</th>
+                <th>支付时间</th>
+                <th>支付金额</th>
+                <th>商户名</th>
+            </tr>
+            </thead>
+            <tbody th:remove="all-but-first">
+            <tr th:object="${orderDetails}">
+                <td th:text="*{stadiumName}"></td>
+                <td th:text="*{categoryName}"></td>
+                <td th:text="*{subStadiumName}"></td>
+                <td th:text="*{ticketName}"></td>
+                <td th:text="*{ticketType}"></td>
+                <td th:text="*{orderTime}"></td>
+                <td th:text="*{orderChannel}"></td>
+                <td th:text="*{status}"></td>
+                <td th:text="*{costPrice}"></td>
+                <td th:text="*{sellPrice}"></td>
+                <td th:text="*{userName}"></td>
+                <td th:text="*{userTel}"></td>
+                <td th:text="*{payType}"></td>
+                <td th:text="${payAccount!=null?payAccount:'暂无'}"></td>
+                <td th:text="${payTime!=null?payTime:'暂无'}"></td>
+                <td th:text="${payPrice!=null?payPrice:'暂无'}"></td>
+                <td th:text="*{merchantName}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <hr />
+    <div>
+        <p class="title ml10 mt10">订单内容（子单）</p>
+    </div>
+    <hr />
+    <div>
+        <div th:unless="${#lists.isEmpty(orderContentList)}">
+            <table class="table table-bordered table-hover definewidth m10">
+                <thead>
+                <tr>
+                    <th>确认码</th>
+                    <th>有效开始日期</th>
+                    <th>有效截止日期</th>
+                    <th>剩余次数</th>
+                    <th>每日限次</th>
+                    <th>成本价</th>
+                    <th>售价</th>
+                    <th>取票状态</th>
+                    <th>验码状态</th>
+                    <!-- <th>退款状态</th>-->
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody th:remove="all-but-first">
+                <tr th:each="obj, objStat: ${orderContentList}">
+                    <input type="hidden" th:value="${obj.id}"/>
+                    <td th:text="${obj.orderCode}"></td>
+                    <td th:text="${obj.startTime}"></td>
+                    <td th:text="${obj.endTime}"></td>
+                    <td th:text="${obj.remainNumber== null?'不限次数':obj.remainNumber}"></td>
+                    <td th:text="${obj.everydayNumber==null?'不限次数':obj.everydayNumber}"></td>
+                    <td th:text="${obj.costPrice}"></td>
+                    <td th:text="${obj.sellPrice}"></td>
+                    <td th:text="${obj.takeStatus}"></td>
+                    <td th:text="${obj.checkStatus}"></td>
+                    <!--<td th:text="${obj.status}"></td>-->
+                    <td><a th:href="'/order/orderContent.html?orderContentId='+${obj.id}">查看</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${#lists.isEmpty(orderContentList)}">
+            <p class="ml20">暂无数据</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

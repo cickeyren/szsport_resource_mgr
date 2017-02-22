@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>订单</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <script src="../../static/js/order/order.js" th:src="@{/js/order/order.js}"></script>
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+        .table_style{width: 100%;height: auto;}
+        .table_style tr td{text-align: center;height: 30px;line-height: 30px;}
+        .table_style td.alignleft {
+            text-align: left;
+        }
+        .table_style td.alignright {
+            text-align: right;
+        }
+        .table_style td.aligncenter {
+            text-align: center;
+        }
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<body>
+<!-- 内容区域 -->
+<div>
+    <div class="container-fluid pt20">
+        <div>
+            <form action="" id="getForm" method="post">
+                <table class="table_style">
+                    <tr class="controls">
+                        <td>下单时间:</td>
+                        <td class="alignleft">
+                            <input type='text' style="float:none" id="orderStartDate" name="orderStartDate" class="inputw100 form-control" onClick="WdatePicker()"/>至
+                            <input type='text' style="float:none" id="orderEndDate" name="orderEndDate" class="inputw100 form-control" onClick="WdatePicker()"/>
+                        </td>
+                        <td>预定手机:</td>
+                        <td class="alignleft">
+                            <input type="text" id="userTel" name="userTel"/>
+                        </td>
+                        <td>产品名称:</td>
+                        <td class="alignleft">
+                            <input type="text" id="ticketName" name="ticketName"/>
+                        </td>
+                        <td>产品类型:</td>
+                        <td class="alignleft">
+                            <select id="ticketType" style="width:150px;">
+                                <option value="0">散票/年卡</option>
+                                <option value="1">场地预定</option>
+                                <option value="2">散客预定</option>
+                            </select>
+                        </td>
+                        <td>订单来源:</td>
+                        <td class="alignleft">
+                            <select id="orderChannel" style="width:150px;">
+                                <option value="APP">APP</option>
+                                <option value="1">售票机</option>
+                                <option value="2">微信</option>
+                                <option value="3">PC端网页</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td>订单状态:</td>
+                        <td colspan="8" class="alignleft">
+                            <div id="status">
+                                <input value="0" type="checkbox" name="status" class="checkbox">
+                                <font class="mt25 mr20">待支付</font>
+                                <input value="1" type="checkbox" name="status" class="checkbox">
+                                <font class="mt25 mr20">待使用</font>
+                                <input value="2" type="checkbox" name="status" class="checkbox">
+                                <font class="mt25 mr20">已使用</font>
+                                <input value="3" type="checkbox" name="status" class="checkbox">
+                                <font class="mt25 mr20">支付失败</font>
+                                <input value="4" type="checkbox" name="status" class="checkbox">
+                                <font class="mt25 mr20">全部退款</font>
+                                <input value="5" type="checkbox" name="status" class="checkbox">
+                                <font class="mt25 mr10">失效订单</font>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-success" id="findStadiumname">查询</button>
+                            <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-content no-padding" id="c">
+                    </div>
+                    <div id="div2"></div>
+
+                    <div id="page" class="page" align="right" style="margin-right: 10px;">
+                    </div>
+                </div>
+            </div>
+            <div id="div3"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
