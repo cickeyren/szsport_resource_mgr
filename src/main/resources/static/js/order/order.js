@@ -46,7 +46,7 @@ orderPageObj.prototype = {
                 orderStatus.push($(this).prop('value'));
             }
         });
-        alert(orderStatus);
+        //alert(orderStatus);
         orderPage.searchObj.pageNum = 1;  //reset
         orderPage.searchObj.params = "orderStartDate="+orderStartDate+"&orderEndDate="+orderEndDate
             +"&userTel="+userTel +"&ticketName="+ticketName +"&ticketType="+ticketType
