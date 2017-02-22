@@ -29,7 +29,7 @@ public class Classify {
     /**
      * 分类排序
      */
-    private String sort;
+    private Integer sort;
 
     /**
      * 分类图片
@@ -118,17 +118,17 @@ public class Classify {
      *
      * @return sort - 分类排序
      */
-    public String getSort() {
+    public Integer getSort() {
         return sort;
     }
 
     /**
      * 设置分类排序
      *
-     * @param sort 分类排序
+     * @param
      */
-    public void setSort(String sort) {
-        this.sort = sort == null ? null : sort.trim();
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     /**

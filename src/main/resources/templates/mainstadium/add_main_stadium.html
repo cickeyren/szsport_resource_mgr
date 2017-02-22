@@ -4,24 +4,14 @@
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>名称</td>
-                    <td class="alignleft"><input type="text" id="mainstudiumname" name="mainstudiumname"/></td>
+                    <td class="alignleft"><input type="text" id="name" name="name"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright" width="10%"><span class="red">*</span>区域</td>
-                    <td class="alignleft">
-                        <!--<select id="mainStadiumID1">-->
-                            <!--<option th:each="mainStadium,eStat:${mainStadiumList}" th:value="${mainStadium.id}" th:text="${mainStadium.name}"></option>-->
-                        <!--</select>-->
-                    </td>
-                    <td class="alignleft">
-                        <!--<select id="mainStadiumID2">-->
-                            <!--<option th:each="mainStadium,eStat:${mainStadiumList}" th:value="${mainStadium.id}" th:text="${mainStadium.name}"></option>-->
-                        <!--</select>-->
-                    </td>
-                    <td class="alignleft">
-                        <!--<select id="mainStadiumID3">-->
-                            <!--<option th:each="mainStadium,eStat:${mainStadiumList}" th:value="${mainStadium.id}" th:text="${mainStadium.name}"></option>-->
-                        <!--</select>-->
+                    <td class="alignleft" id="distpicker1" data-toggle="distpicker">
+                        <select data-province="---- 选择省 ----"></select>
+                        <select data-city="---- 选择市 ----"></select>
+                        <select data-district="---- 选择区 ----"></select>
                     </td>
                 </tr>
                 <tr class="controls">
@@ -34,25 +24,24 @@
                 </tr>
                 <tr class="controls">
                     <td width="10%" class="alignright"><span class="red">*</span>开放时间</td>
-                    <td><input style="width:105px;float: none" type="text" id="checkLimitedStartTime" onClick="WdatePicker({dateFmt:'HH:mm',startDate:'07:00',alwaysUseStartDate:true,maxDate:'#F{$dp.$D(\'checkLimitedEndTime\',{m:-30})}'})" class="Wdate"></td>
+                    <td class="alignleft"><input type='text' style="float:none" id="open_time" name="open_time" class="inputw100 form-control" onClick="WdatePicker()"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>简介</td>
-                    <!--<td class="alignleft">-->
-                        <!--<textarea id="refundDescription" name="refundDescription" style="width:500px;height:200px;"  th:text="${model.refundDescription}"></textarea>-->
-                    <!--</td>-->
+                    <td class="alignleft">
+                        <textarea id="introduction" name="introduction" style="width:500px;height:200px;" ></textarea>
+                    </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>地理位置</td>
-                    <td><input type="text" id="lag" name="lag" value="精度"/></td>
-                    <td><input type="text" id="lat" name="lat" value="纬度"/></td>
+                    <td class="alignleft"><input type="text" id="lag" name="lag" /><input type="text" id="lat" name="lat"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>状态</td>
                     <td class="alignleft">
-                        <input value="0" type="checkbox" checked name="checkTicketType">正常
-                        <input value="1" type="checkbox" name="checkTicketType">闭馆
-                        <input value="2" type="checkbox" name="checkTicketType">下线
+                        <input value="1" type="checkbox" checked name="status">正常
+                        <input value="0" type="checkbox" name="status">闭馆
+                        <input value="2" type="checkbox" name="status">下线
                     </td>
                 </tr>
                 <tr>
