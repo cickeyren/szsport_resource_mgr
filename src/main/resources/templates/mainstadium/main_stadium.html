@@ -7,21 +7,21 @@
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
-    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <!--  <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>-->
     <script src="../../static/lib/My97DatePicker/WdatePicker.js"
             th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
     <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
-    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
-          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
-    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
-            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
-    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
-            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
-    <script src="../../static/js/mainstadium/mainstadium_add.js"
-            th:src="@{/js/mainstadium/mainstadium_add.js}"></script>
-
-    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <!--    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+              th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>-->
+    <!--    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+                th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>-->
+    <!--    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+                th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>-->
+    <script src="../../static/js/mainstadium/mainstadium.js"
+            th:src="@{/js/mainstadium/mainstadium.js}"></script>
+    <script src="../../static/lib/js/common.js"
+            th:src="@{/lib/js/common.js}"></script>
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
     <script th:src="@{/lib/js/jquery.validate.js}"></script>
@@ -53,47 +53,43 @@
     </style>
 </head>
 <body>
+
+<!-- 内容区域 -->
 <div>
-    <tr class="controls">
-        <td >场馆名称:</td>
-        <td ><input type="text" id="stadiumname" name="stadiumname"/></td>
-        <td><button type="submit" class="btn btn-success" id="findStadiumname">查询</button></td>
-    </tr>
-</div>
-<hr /><!--添加一条直线-->
-<div>
-    <p><button type="submit" class="btn btn-success" id="addStadiumname">新增</button></p>
-    <div th:unless="${#lists.isEmpty(mainstadiumlist)}">
-        <table class="table table-bordered table-hover definewidth m10">
-            <thead>
-            <tr>
-                <th>场馆名称</th>
-                <th>区域</th>
-                <th>地址</th>
-                <th>状态</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody th:remove="all-but-first">
-            <tr th:each="obj, objStat: ${mainstadiumlist}">
-                <input type="hidden" th:value="${obj.id}"/>
-                <td th:text="${obj.name}"></td>
-                <td th:text="${obj.provincial_level}+${obj.city_level}+${obj.district_level}"></td>
-                <td th:text="${obj.address}"></td>
-                <td th:text="${obj.status}"></td>
-                <td>
-                    <a href="edit_main_stadium.html">编辑</a>
-                    &nbsp;&nbsp;&nbsp;<a href="/order/details?id=${obj.id}">设为精选</a></td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="container-fluid pt20">
+        <div>
+            <form action="" id="getForm" method="post">
+                <table class="table">
+                    <tr class="controls">
+                        <td>场馆名称:</td>
+                        <td><input type="text" id="stadiumnametext" name="name"/></td>
+                        <td>
+                            <button type="submit" class="btn btn-success" id="findStadiumname">查询</button>
+                            <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div>
+            <button type="button" class="btn btn-success" id="addNew">新增</button>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-content no-padding" id="c">
+                    </div>
+                    <div id="div2"></div>
+
+                    <div id="page" class="page" align="right" style="margin-right: 10px;">
+                    </div>
+                </div>
+            </div>
+
+            <div id="div3"></div>
+        </div>
     </div>
 </div>
-<div th:if="${#lists.isEmpty(mainstadiumlist)}">
-    <p>暂无数据</p>
-</div>
-<input id="pageAllCount" type="hidden" th:value="${page.totalSize}" />
-<div id="addDialogs">
-</div>
+
 </body>
 </html>
