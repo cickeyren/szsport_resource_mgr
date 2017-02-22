@@ -55,7 +55,7 @@ public interface YearStrategyDao {
      * @return
      * @throws Exception
      */
-    public YearStrategyTicketModel getYearStrategyTicketModelById(String id) throws  Exception;
+    public YearStrategyTicketModel getYearStrategyTicketModelById(Map<String,Object> map) throws  Exception;
 
     /**
      * 根据年票策略ID去获取年票中关联的子场馆信息

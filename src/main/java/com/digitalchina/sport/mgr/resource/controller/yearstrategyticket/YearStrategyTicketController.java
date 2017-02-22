@@ -107,7 +107,10 @@ public class YearStrategyTicketController {
         List<Map<String,Object>> relateStadiumList = null;
 
         try {
-            yearStrategyTicketModel = yearStrategyDao.getYearStrategyTicketModelById(yearStrategyId);
+            Map<String,Object> paramMap = new HashMap<String,Object>();
+            paramMap.put("id",yearStrategyId);
+            paramMap.put("strategyState","1");
+            yearStrategyTicketModel = yearStrategyDao.getYearStrategyTicketModelById(paramMap);
             stadiumList = yearStrategyDao.getYearStrategyStadiumRelationsModelByYearStrategyId(yearStrategyId);
             shieldTimeList = yearStrategyDao.getTicketStrategyCommonCheckShieldTimeModelList(yearStrategyId);
             useableTimeList = yearStrategyDao.getYearStrategyTicketCheckUseableTimeModelList(yearStrategyId);
