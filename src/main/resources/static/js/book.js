@@ -115,8 +115,8 @@ BookPageObj.prototype = {
             .delegate('a[name=bookDelete]','click',bookPage.doDelete)
             .delegate('#btn','click',bookPage.doSearch)
             .delegate('#addbook','click',bookPage.renderAddPage)
-            // .delegate('#showDiv','click',bookPage.sumit2)
-            // .delegate('#saveBook','click',doAdd)
+            .delegate('#showDiv','click',bookPage.sumit2)
+            .delegate('#saveBook','click',doAdd)
             .delegate('#updateBtn','click',bookPage.doUpdate);
     },
     renderPages:function(isFirst) {

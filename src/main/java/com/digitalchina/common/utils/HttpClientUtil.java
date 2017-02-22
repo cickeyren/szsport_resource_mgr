@@ -1,21 +1,14 @@
 package com.digitalchina.common.utils;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import com.digitalchina.common.data.Constants;
+import com.digitalchina.common.data.ServiceRuntimeException;
 import com.google.gson.Gson;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -23,8 +16,11 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
-import com.digitalchina.common.data.Constants;
-import com.digitalchina.common.data.ServiceRuntimeException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -194,7 +190,7 @@ public class HttpClientUtil {
         List<Map<String,Object>> resultList = null;
         String result = null;
         try {
-            result = HttpClientUtil.doGet(url, 2000, null, null);
+            result = HttpClientUtil.doGet(url, 30000, null, null);
             Gson gson = new Gson();
             Map<String,Object> gsonMap =  gson.fromJson(result,Map.class);
             if(null != gsonMap && gsonMap.containsKey("code")) {

@@ -118,19 +118,16 @@ $(function () {
             },
             sellPrice:{
                 required: true,
-                number:true,
-                min:1
+                myDouble:true
             },
             costPrice:{
                 required: true,
-                number:true,
-                min:1
+                myDouble:true
             },
             storePrice:{
                 required: true,
-                number:true,
-                min:1
-            },
+                myDouble:true
+            }
         },
         messages: {
             ticketName: {
@@ -149,19 +146,17 @@ $(function () {
                 required: "请填写退票说明"
             },
             sellPrice:{
-                required: "请填写销售价",
-                number: "请输入有效的数字",
-                min:"必须输入大于1的整数"
+                required: "请填写销售价"//,myDouble: "请输入有效的数字"
             },
             costPrice:{
-                required: "请填写成本价",
-                number: "请输入有效的数字",
-                min:"必须输入大于1的整数"
+                required: "请填写成本价"//,
+                //number: "请输入有效的数字",
+                //min:"必须输入大于1的整数"
             },
             storePrice:{
-                required:  "请填写门市价",
-                number: "请输入有效的数字",
-                min:"必须输入大于1的整数"
+                required:  "请填写门市价"//,
+                //number: "请输入有效的数字",
+                //min:"必须输入大于1的整数"
             }
         },
         submitHandler: function () {
@@ -193,12 +188,12 @@ $(function () {
             });
             var sellWay = sellWayArray.toString();//售卖渠道
             var orderEffectiveType = $('input:radio[name="orderEffectiveType"]:checked').val();//使用有效期类型 0：预订后x天有效 1：固定有效期
-            var fixDay = "";//多少天后有效
+            var orderFixDay = "";//多少天后有效
             var orderEffectiveStartTime = $.trim($("#orderEffectiveStartTime").val());//有效期起始时间(无论是有效天数还是固定时间都生成该时间)
             var orderEffectiveEndTime = $.trim($("#orderEffectiveEndTime").val());//售卖渠道
             if(orderEffectiveType == "0") {
-                fixDay = $.trim($("#fixDay").val());
-                if(!isDigital(fixDay)) {
+                orderFixDay = $.trim($("#fixDay").val());
+                if(!isDigital(orderFixDay)) {
                     $("#fixDay").focus();
                     alert("请填写正确有效天数~");
                     return;
@@ -287,7 +282,7 @@ $(function () {
                 merchantId:merchantId,
                 sellWay:sellWay,
                 orderEffectiveType:orderEffectiveType,
-                fixDay:fixDay,
+                orderFixDay:orderFixDay,
                 orderEffectiveStartTime:orderEffectiveStartTime,
                 orderEffectiveEndTime:orderEffectiveEndTime,
                 orderRefundRule:orderRefundRule,

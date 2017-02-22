@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>子订单详情</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .inputw100 {
+            width: 100px;
+        }
+        .table_style{width: 100%;height: auto;}
+        .table_style tr td{text-align: center;height: 30px;line-height: 30px;}
+        .table_style td.alignleft {
+            text-align: left;
+        }
+        .table_style td.alignright {
+            text-align: right;
+        }
+        .table_style td.aligncenter {
+            text-align: center;
+        }
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <p class="title ml10 mt10">取票状态</p>
+    <div>
+        <div class="ml20" th:text="${orderContent.takeStatus}"></div>
+    </div>
+    <table th:if="${#strings.equals(orderContent.takeStatus,'1')}">
+        <tr>
+            <th>取票方式</th>
+            <th>取票时间</th>
+        </tr>
+        <tr th:object="${orderContent}">
+            <td th:text="*{takeType}"></td>
+            <td th:text="*{takeTime}"></td>
+        </tr>
+    </table>
+</div>
+<div>
+    <p class="title ml10 mt10">验票状态</p>
+    <div>
+        <div class="ml20" th:text="${orderContent.checkStatus}"></div>
+    </div>
+    <table th:if="${#strings.equals(orderContent.checkStatus,'1')}">
+        <tr>
+            <th>验票方式</th>
+            <th>验票时间</th>
+        </tr>
+        <tr th:object="${orderContent}">
+            <td th:text="*{equipmentName}"></td>
+            <td th:text="*{checkTime}"></td>
+        </tr>
+    </table>
+</div>
+<div th:unless="${#lists.isEmpty(usedRecordsList)}">
+    <div>
+        <p class="title ml10 mt10">使用记录</p>
+    </div>
+    <div>
+        <div>
+            <table class="table table-bordered table-hover definewidth m10">
+                <thead>
+                <tr>
+                    <th>使用时间</th>
+                    <th>使用次数</th>
+                    <th>总剩余</th>
+                    <th>当日剩余</th>
+                    <th>备注</th>
+                </tr>
+                </thead>
+                <tbody th:remove="all-but-first">
+                <tr th:each="obj, objStat: ${usedRecordsList}">
+                    <td th:text="${obj.usedTime}"></td>
+                    <td th:text="${obj.usedNumber}"></td>
+                    <td th:text="${obj.remianNumber}"></td>
+                    <td th:text="${obj.everydayRemianNumber}"></td>
+                    <td th:text="${obj.remarks}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

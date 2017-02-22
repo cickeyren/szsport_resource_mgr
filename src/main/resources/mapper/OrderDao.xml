@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.OrderDao">
+    <!-- 订单列表 -->
+    <select id="getOrderListByMap" resultType="java.util.HashMap" parameterType="java.util.Map">
+        <![CDATA[
+        SELECT
+        id,
+        ob.order_number AS orderNumber,
+        c.categoryName,
+        (case ob.ticket_type  when '0' then '散票/年卡' WHEN '1' THEN '场地预定' WHEN '2' THEN '散客预定' ELSE '其他' END) as ticketType,
+        ob.ticket_name AS ticketName,
+        ob.stadium_name AS stadiumName,
+        ob.sub_stadium_name AS subStadiumName,
+        ob.order_time AS orderTime,
+        ob.sell_price AS sellPrice,
+        ob.cost_price AS costPrice,
+        ob.order_channel AS orderChannel,
+        ob.user_id AS userId,
+        ob.user_name AS userName,
+        ob.user_tel AS userTel,
+        (case ob.status  when '0' then '待支付' WHEN '1' THEN '待使用' WHEN '2' THEN '已使用'
+         WHEN '3' THEN '支付失败' WHEN '5' THEN '失效订单' ELSE '其他' END) AS status
+        FROM
+        order_base_info ob
+        LEFT JOIN classify c ON ob.classify = c.cid
+        WHERE
+        user_id = #{userId}
+        <if test="ticketName != null and ticketName != ''">
+            AND ob.ticket_name like #{ticketName}
+        </if>
+        <if test="userTel != null and userTel != ''">
+            AND ob.user_tel = #{userTel}
+        </if>
+        <if test="ticketName != null and ticketName != ''">
+            AND ob.ticket_name like #{ticketName}
+        </if>
+        <if test="orderStartDate != null and orderStartDate != '' and orderEndDate != null and orderEndDate != ''">
+            AND
+            ob.order_time >=#{orderStartDate}
+            AND
+            ob.order_time <= cdata#{orderEndDate}
+        </if>
+        <if test="ticketType != null and ticketType != ''">
+            AND
+            ob.ticket_type =#{ticketType}
+        </if>
+        <if test="orderChannel != null and orderChannel != ''">
+            AND
+            ob.order_channel =#{orderChannel}
+        </if>
+        <if test="status != null and status != ''">
+            AND
+            ob.`status` IN(status)
+        </if>
+        ORDER BY
+        order_time DESC
+        LIMIT #{startIndex},#{endIndex}
+        ]]>
+    </select>
+    <!-- 订单个数 -->
+    <select id="getCountByMap" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+          COUNT(0)
+        FROM
+          order_base_info ob
+        WHERE
+          user_id = #{userId}
+    </select>
+    <!-- 订单详情 -->
+    <select id="getOrderDetailsByOrderId" resultType="java.util.HashMap" parameterType="java.util.Map">
+        SELECT
+            ob.order_number AS orderNumber,
+            ob.stadium_name AS stadiumName,
+            ob.sub_stadium_name AS subStadiumName,
+            c.categoryName,
+            ob.person_kind AS personKind,
+            ob.ticket_id AS ticketId,
+            ob.ticket_name AS ticketName,
+            (case ob.ticket_type  when '0' then '散票/年卡' WHEN '1' THEN '场地预定' WHEN '2' THEN '散客预定' ELSE '其他' END) as ticketType,
+            ob.order_time AS orderTime,
+            ob.order_channel AS orderChannel,
+            (
+                CASE ob.status
+                WHEN '0' THEN
+                    '待支付'
+                WHEN '1' THEN
+                    '待使用'
+                WHEN '2' THEN
+                    '已使用'
+                WHEN '3' THEN
+                    '支付失败'
+                WHEN '5' THEN
+                    '失效订单'
+                ELSE
+                    '其他'
+                END
+            ) AS status,
+            ob.sell_price AS sellPrice,
+            ob.cost_price AS costPrice,
+            ob.user_id AS userId,
+            ob.user_name AS userName,
+            ob.user_tel AS userTel,
+            (case ob.pay_type  when '1' then '支付宝' WHEN '2' THEN '微信' ELSE '无' END) AS payType,
+            ob.pay_acount AS payAcount,
+            ob.pay_time AS payTime,
+            ob.pay_price AS payPrice,
+            m.merchant_name AS merchantName
+        FROM
+            order_base_info ob
+        LEFT JOIN classify c ON c.cid = ob.classify
+        LEFT JOIN merchant m ON m.id = ob.merchant_id
+        WHERE
+            ob.id = #{orderId}
+    </select>
+    <!-- 一个订单下的所有子订单 -->
+    <select id="getAllOrderContentByOrderId" parameterType="java.util.Map" resultType="java.util.HashMap">
+        SELECT
+            oc.id,
+            oc.order_code AS orderCode,
+            oc.start_time AS startTime,
+            oc.end_time AS endTime,
+            (
+                CASE
+                WHEN oc.remain_number = '-1' THEN
+                    '不限次数'
+                WHEN oc.remain_number = '' THEN
+                    '不限次数'
+                WHEN oc.remain_number IS NULL THEN
+                    '不限次数'
+                ELSE
+                    oc.remain_number
+                END
+            ) AS remainNumber,
+            (
+                CASE
+                WHEN oc.everyday_number = '-1' THEN
+                    '不限次数'
+                WHEN oc.everyday_number = '' THEN
+                    '不限次数'
+                WHEN oc.everyday_number IS NULL THEN
+                    '不限次数'
+                ELSE
+                    oc.everyday_number
+                END
+            ) AS everydayNumber,
+            oc.cost_price AS costPrice,
+            oc.sell_price AS sellPrice,
+            (
+                CASE oc.take_status
+                WHEN '1' THEN
+                    '已取票'
+                ELSE
+                    '未取票'
+                END
+            ) AS takeStatus,
+            (
+                CASE oc.check_status
+                WHEN '1' THEN
+                    '已验票'
+                ELSE
+                    '未验票'
+                END
+            ) AS checkStatus,
+            oc.remarks
+        FROM
+            order_content_detail oc
+        WHERE
+            oc.order_base_id = #{orderId}
+    </select>
+    <!-- 子订单详情 -->
+    <select id="getOrderContentById" parameterType="java.util.Map" resultType="java.util.HashMap">
+        SELECT
+            oc.id,
+            (
+                CASE
+                WHEN oc.take_status='1' THEN
+                    '已取票'
+                ELSE
+                    '未取票'
+                END
+            ) AS takeStatus,
+            oc.take_time AS takeTime,
+            oc.take_type AS takeType,
+            (
+                CASE
+                WHEN oc.check_status='1' THEN
+                    '已验票'
+                ELSE
+                    '未验票'
+                END
+            ) AS checkStatus,
+            oc.check_time AS checkTime,
+            e.equipment_name AS equipmentName
+        FROM
+            order_content_detail oc
+        LEFT JOIN equipment e ON e.equipment_id = oc.check_type
+        WHERE
+            oc.id = #{orderContentId}
+    </select>
+    <!-- 散票/年卡散客才有的使用记录表 -->
+    <select id="getUsedRecordsByOrderContentId" parameterType="java.util.Map" resultType="java.util.HashMap">
+        SELECT
+            u.used_time AS usedTime,
+            (
+                CASE
+                WHEN u.remian_number = '-1' THEN
+                    '不限次数'
+                WHEN u.remian_number = '' THEN
+                    '不限次数'
+                WHEN u.remian_number IS NULL THEN
+                    '不限次数'
+                ELSE
+                    u.remian_number
+                END
+            ) AS remianNumber,
+            (
+                CASE
+                WHEN u.everyday_remian_number = '-1' THEN
+                    '不限次数'
+                WHEN u.everyday_remian_number = '' THEN
+                    '不限次数'
+                WHEN u.everyday_remian_number IS NULL THEN
+                    '不限次数'
+                ELSE
+                    u.everyday_remian_number
+                END
+            ) AS everydayRemianNumber,
+            u.used_number AS usedNumber,
+            (
+                CASE
+                WHEN u.remarks = '' THEN
+                    '无'
+                WHEN u.remarks IS NULL THEN
+                    '无'
+                ELSE
+                    u.remarks
+                END
+            ) AS remarks
+        FROM
+            used_records u
+        WHERE
+            u.order_content_id = #{orderContentId}
+    </select>
+    <!-- 判断子单是否存在，以及子单类型 -->
+    <select id="getOrderContentCountAndType" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            COUNT(0) AS count,
+            ob.ticket_type AS ticketType
+        FROM
+            order_content_detail oc
+        LEFT JOIN order_base_info ob ON oc.order_base_id = ob.id
+        WHERE
+            oc.id = #{orderContentId}
+    </select>
+</mapper>

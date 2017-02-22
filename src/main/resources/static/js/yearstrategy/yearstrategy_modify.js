@@ -1,12 +1,10 @@
 /**
- * Created by yangy on 2017/2/15.
+ * Created by win7 on 2017/2/15.
  */
-var orderDescriptionEditor;
-var refundDescriptionEditor;
 $(function () {
-    //alert([[${model.orderDescription}]]);
+   // alert('[[${model.ticketType}]]')
     /*********可用时间段效果功能开始*********/
-    var checkUseableTimeArray = [];//验票可用时间段数组
+   //checkUseableTimeArray = [];//验票可用时间段数组
     //点击可用时间段中的添加按钮
     $("#addLimitedStartAndEndBtn").click(function(){
         var checkLimitedStartTime = $.trim($("#checkLimitedStartTime").val());
@@ -38,7 +36,7 @@ $(function () {
         //console.log(checkUseableTimeArray);
     });
     /*********不可用日期功能结束*********/
-    var shieldDateArray = [];//验票不可用日期数组
+    //shieldDateArray = [];//验票不可用日期数组
     //点击不可用日期中的添加按钮
     $("#addShieldStartAndEndBtn").click(function(){
         var shieldStartTime = $.trim($("#shieldStartTime").val());
@@ -69,14 +67,17 @@ $(function () {
     });
     // 关闭过滤模式，保留所有标签
     KindEditor.options.filterMode = false;
+    var orderDescriptionEditor;
     KindEditor.ready(function(K) {
         orderDescriptionEditor = K.create('textarea[name="orderDescription"]', {
             resizeType : 1,
             allowPreviewEmoticons : false,
             filterMode : false
+
         });
     });
     //初始化富文本
+    var refundDescriptionEditor;
     KindEditor.ready(function(K) {
         refundDescriptionEditor = K.create('textarea[name="refundDescription"]', {
             resizeType : 1,
@@ -118,19 +119,16 @@ $(function () {
             },
             sellPrice:{
                 required: true,
-                number:true,
-                min:1
+                myDouble:true
             },
             costPrice:{
                 required: true,
-                number:true,
-                min:1
+                myDouble:true
             },
             storePrice:{
                 required: true,
-                number:true,
-                min:1
-            },
+                myDouble:true
+            }
         },
         messages: {
             ticketName: {
@@ -149,19 +147,17 @@ $(function () {
                 required: "请填写退票说明"
             },
             sellPrice:{
-                required: "请填写销售价",
-                number: "请输入有效的数字",
-                min:"必须输入大于1的整数"
+                required: "请填写销售价"//,myDouble: "请输入有效的数字"
             },
             costPrice:{
-                required: "请填写成本价",
-                number: "请输入有效的数字",
-                min:"必须输入大于1的整数"
+                required: "请填写成本价"//,
+                //number: "请输入有效的数字",
+                //min:"必须输入大于1的整数"
             },
             storePrice:{
-                required:  "请填写门市价",
-                number: "请输入有效的数字",
-                min:"必须输入大于1的整数"
+                required:  "请填写门市价"//,
+                //number: "请输入有效的数字",
+                //min:"必须输入大于1的整数"
             }
         },
         submitHandler: function () {
@@ -193,12 +189,12 @@ $(function () {
             });
             var sellWay = sellWayArray.toString();//售卖渠道
             var orderEffectiveType = $('input:radio[name="orderEffectiveType"]:checked').val();//使用有效期类型 0：预订后x天有效 1：固定有效期
-            var fixDay = "";//多少天后有效
+            var orderFixDay = "";//多少天后有效
             var orderEffectiveStartTime = $.trim($("#orderEffectiveStartTime").val());//有效期起始时间(无论是有效天数还是固定时间都生成该时间)
             var orderEffectiveEndTime = $.trim($("#orderEffectiveEndTime").val());//售卖渠道
             if(orderEffectiveType == "0") {
-                fixDay = $.trim($("#fixDay").val());
-                if(!isDigital(fixDay)) {
+                orderFixDay = $.trim($("#fixDay").val());
+                if(!isDigital(orderFixDay)) {
                     $("#fixDay").focus();
                     alert("请填写正确有效天数~");
                     return;
@@ -280,6 +276,7 @@ $(function () {
             var costPrice = $.trim($("#costPrice").val());
             var storePrice = $.trim($("#storePrice").val());
             var reqParam = {
+                "id":$("#id").val(),
                 "ticketType":ticketType,
                 mainStadiumID:mainStadiumID,
                 subStadiumID:subStadiumID,
@@ -287,7 +284,7 @@ $(function () {
                 merchantId:merchantId,
                 sellWay:sellWay,
                 orderEffectiveType:orderEffectiveType,
-                fixDay:fixDay,
+                orderFixDay:orderFixDay,
                 orderEffectiveStartTime:orderEffectiveStartTime,
                 orderEffectiveEndTime:orderEffectiveEndTime,
                 orderRefundRule:orderRefundRule,
@@ -308,19 +305,18 @@ $(function () {
                 classify:classify
             };
             $.ajax({
-                url:'/yearstrategyticket/addYearStrategyTicket.json',
+                url:'/yearstrategyticket/modifyYearStrategyTicket.json',
                 type:'POST', //GET
                 data:reqParam,
                 dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
                 success:function(result){
                     if("000000" == result.code) {
-                        alert("添加成功~");
-                       window.location.reload(true);
+                        alert("更新成功~");
+                        window.location.reload(true);
                     }
-                    //console.log(result);
                 },
                 error:function(result){
-                    alert("添加失败~");
+                    alert("更新失败~");
                 }
             });
         }
@@ -333,12 +329,12 @@ $(function () {
     $("#mainStadiumID").change(function(){
         updateSubStadiumList($("#mainStadiumID").val());
     });
-    $('#mainStadiumID').trigger('change');
+   // $('#mainStadiumID').trigger('change');
 });
 /**
  * 更新子场馆列表
  */
-function updateSubStadiumList(mainStadiumId) {
+function updateSubStadiumList(mainStadiumId,subStadiumSelectedId) {
     $.ajax({
         url:'/yearstrategyticket/getSubStadiumListByMainId.json',
         type:'POST', //GET
@@ -349,7 +345,12 @@ function updateSubStadiumList(mainStadiumId) {
                 var items = result.result.subStadiumList;
                 $("#subStadiumID").empty();
                 $.each(items,function(i,n){
-                    $("#subStadiumID").append("<option value=\"" + n.id + "\" classify=\""+ n.classify+"\">"+n.name+"</option>");
+                    if(undefined != subStadiumSelectedId && n.id == subStadiumSelectedId) {
+                        $("#subStadiumID").append("<option selected=\"selected\" value=\"" + n.id + "\" classify=\""+ n.classify+"\">"+n.name+"</option>");
+                    } else {
+                        $("#subStadiumID").append("<option value=\"" + n.id + "\" classify=\""+ n.classify+"\">"+n.name+"</option>");
+                    }
+
                 });
                 //alert("添加成功~");
             } else {

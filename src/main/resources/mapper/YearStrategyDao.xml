@@ -24,7 +24,8 @@
             `cost_price`,
             `store_price`,
             `order_description`,
-            `refund_description`
+            `refund_description`,
+              `order_fix_day`
         )
         VALUES (
                 #{id},
@@ -47,7 +48,8 @@
                 #{costPrice},
                 #{storePrice},
                 #{orderDescription},
-                #{refundDescription}
+                #{refundDescription},
+                #{orderFixDay}
             );
     </insert>
     <!--批量添加年票生成策略与子场馆对应关系-->
@@ -118,6 +120,7 @@
         `store_price` AS storePrice,
         `order_description` AS orderDescription,
         `refund_description` AS refundDescription,
+        `order_fix_day` AS orderFixDay,
          DATE_FORMAT(`create_time`, '%Y-%m-%d %T') AS createTime
          FROM `year_strategy_ticket_basic_info`
          WHERE id = #{id}
@@ -169,6 +172,7 @@
         LEFT JOIN `year_strategy_ticket_basic_info` B ON E.ticket_strategy_id = B.id
         LEFT JOIN `sub_stadium` C ON E.sub_stadium_id = C.id
         LEFT JOIN `main_stadium` D ON C.parent_id = D.id
+        WHERE B.strategy_state = #{strategyState}
         ORDER BY B.create_time DESC  LIMIT #{pageIndex},#{pageSize}
     </select>
 
@@ -199,4 +203,98 @@
         WHERE ticket_strategy_id = #{yearStrategyId}
         order BY useable_start_time ASC;
     </select>
+
+    <!--根据策略ID删除子场馆对应关系-->
+    <delete id="deleteYearStrategyStadiumRelationsListByYearStrategyId" parameterType="String">
+        DELETE FROM year_strategy_stadium_relations
+        WHERE ticket_strategy_id = #{yearStrategyId};
+    </delete>
+
+    <!--根据策略ID删除屏蔽时间列表-->
+    <delete id="deleteTicketStrategyCommonCheckShieldTimeModelByYearStrategyId" parameterType="String">
+        DELETE FROM ticket_strategy_common_check_shield_time
+        WHERE ticket_strategy_id = #{yearStrategyId};
+    </delete>
+
+    <!--根据策略ID删除可用时间列表-->
+    <delete id="deleteYearStrategyTicketCheckUseableTimeListByYearStrategyId" parameterType="String">
+        DELETE FROM year_strategy_ticket_check_useable_time
+        WHERE ticket_strategy_id = #{yearStrategyId};
+    </delete>
+
+
+    <!--更新年卡策略 -->
+    <update id="updateYearStrategyTicket" parameterType="YearStrategyTicketModel">
+        UPDATE year_strategy_ticket_basic_info
+        <set>
+            <if test="ticketType!=null">
+                `ticket_type` = #{ticketType},
+            </if>
+            <if test="ticketName!=null">
+                `ticket_name` = #{ticketName},
+            </if>
+            <if test="merchantId!=null">
+                `merchant_id` = #{merchantId},
+            </if>
+            <if test="sellWay!=null">
+                `sell_way` = #{sellWay},
+            </if>
+            <if test="orderEffectiveType!=null">
+                `order_effective_type` = #{orderEffectiveType},
+            </if>
+            <if test="orderEffectiveStartTime!=null">
+                `order_effective_start_time` = #{orderEffectiveStartTime},
+            </if>
+            <if test="orderEffectiveEndTime!=null">
+                `order_effective_end_time` = #{orderEffectiveEndTime},
+            </if>
+            <if test="orderRefundRule!=null">
+                `order_refund_rule` = #{orderRefundRule},
+            </if>
+            <if test="checkTicketType!=null">
+                `check_ticket_type` = #{checkTicketType},
+            </if>
+            <if test="checkTicketWay!=null">
+                `check_ticket_way` = #{checkTicketWay},
+            </if>
+            <if test="checkTicketAvailableTimes!=null">
+                `check_ticket_available_times` = #{checkTicketAvailableTimes},
+            </if>
+            <if test="checkDailyLimitedTimes!=null">
+                `check_daily_limited_times` = #{checkDailyLimitedTimes},
+            </if>
+            <if test="checkLimitedDateType!=null">
+                `check_limited_date_type` = #{checkLimitedDateType},
+            </if>
+            <if test="checkLimitedWeekDetails!=null">
+                `check_limited_week_details` = #{checkLimitedWeekDetails},
+            </if>
+            <if test="checkLimitedHours!=null">
+                `check_limited_hours` = #{checkLimitedHours},
+            </if>
+            <if test="sellPrice!=null">
+                `sell_price` = #{sellPrice},
+            </if>
+            <if test="costPrice!=null">
+                `cost_price` = #{costPrice},
+            </if>
+            <if test="storePrice!=null">
+                `store_price` = #{storePrice},
+            </if>
+            <if test="orderDescription!=null">
+                `order_description` = #{orderDescription},
+            </if>
+            <if test="refundDescription!=null">
+                `refund_description` = #{refundDescription},
+            </if>
+            <if test="orderFixDay!=null">
+                `order_fix_day` = #{orderFixDay},
+            </if>
+             <if test="strategyState!=null">
+                `strategy_state` = #{strategyState}
+            </if>
+
+        </set>
+        WHERE id = #{id};
+    </update>
 </mapper>

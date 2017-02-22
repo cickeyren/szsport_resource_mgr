@@ -3,6 +3,7 @@ package com.digitalchina.sport.mgr.resource.controller.exposeapi;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.config.PropertyConfig;
 import com.digitalchina.sport.mgr.resource.dao.YearStrategyDao;
+import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketModel;
 import com.digitalchina.sport.mgr.resource.service.YearStrategyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,10 +44,16 @@ public class ApiYearStrategyTicketController {
     public RtnData getYearStrategyTicketModelInfo(@RequestParam(required = true) String yearStrategyId) {
         try {
             Map<String,Object> resultMap = new HashMap<String,Object>();
-            resultMap.put("yearStrategyDetail",yearStrategyDao.getYearStrategyTicketModelById(yearStrategyId));
+            Map<String,Object> paramMap = new HashMap<String,Object>();
+            paramMap.put("id",yearStrategyId);
+            paramMap.put("strategyState","1");
+            YearStrategyTicketModel ticketModel = yearStrategyDao.getYearStrategyTicketModelById(paramMap);
+            resultMap.put("yearStrategyDetail",ticketModel);
+            if(null !=ticketModel) {
             resultMap.put("studStadiumList",yearStrategyDao.getYearStrategyStadiumRelationsModelByYearStrategyId(yearStrategyId));
             resultMap.put("checkShieldTimeList",yearStrategyDao.getTicketStrategyCommonCheckShieldTimeModelList(yearStrategyId));
             resultMap.put("checkUseableTimeList",yearStrategyDao.getYearStrategyTicketCheckUseableTimeModelList(yearStrategyId));
+            }
             return RtnData.ok(resultMap);
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,6 +62,14 @@ public class ApiYearStrategyTicketController {
         return RtnData.fail("根据票策略ID获取票策略详情及子场馆列表失败");
     }
 
+    /**
+     * 根据体育馆主主场馆ID，及分类获取年卡列表
+     * @param pageIndex
+     * @param pageSize
+     * @param classify
+     * @param mainStadiumId
+     * @return
+     */
     @RequestMapping(value = "/getYearStrategyTicketModelInfoList.json")
     @ResponseBody
     public RtnData getYearStrategyTicketModelInfoList(@RequestParam(required = false) String pageIndex,
@@ -74,6 +89,7 @@ public class ApiYearStrategyTicketController {
             paramMap.put("pageSize",Integer.valueOf(pageSize));
             paramMap.put("mainStadiumId",mainStadiumId);
             paramMap.put("classify",classify);
+            paramMap.put("strategyState","1");
             Map<String,Object> resultMap = new HashMap<String,Object>();
             resultMap.put("yearStrategyList",yearStrategyDao.getYearStrategyTicketModelInfoList(paramMap));
             return RtnData.ok(resultMap);

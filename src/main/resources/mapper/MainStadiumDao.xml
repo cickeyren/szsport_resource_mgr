@@ -7,7 +7,7 @@
         ms.district_level,ms.trading_area,ms.address,ms.telephone,
         ms.open_time,ms.introduction,ms.lng,ms.lat,ms.classify,ms.is_special,
         ms.create_time,
-        (case ms.status  when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '下线' ELSE '其他' END) as status
+        (case ms.status when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '下线' ELSE '其他' END) as status
         FROM main_stadium ms
         <where>
             <choose>
@@ -35,4 +35,37 @@
             </choose>
         </where>
     </select>
+    <select id="findStadiumModel" resultType="java.util.Map">
+        SELECT
+        ms.id,ms.name,ms.provincial_level,ms.city_level,
+        ms.district_level,ms.trading_area,ms.address,ms.telephone,
+        ms.open_time,ms.introduction,ms.lng,ms.lat,ms.classify,ms.is_special,
+        ms.create_time,
+        (case ms.status  when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '下线' ELSE '其他' END) as status
+        FROM main_stadium ms
+    </select>
+    <insert id="insertmainStadium" parameterType="MainStadiumModel" keyProperty="id" useGeneratedKeys="true">
+       INSERT INTO main_stadium(id, name, provincial_level, city_level, district_level, trading_area, address, telephone, open_time, introduction, lng, lat, status, classify, is_special, create_time)
+                       VALUES (#{id},#{name},#{provincial_level},#{city_level},#{district_level},#{trading_area},#{address},#{telephone},#{open_time},#{introduction},#{lng},#{lat},#{status},#{classify},#{is_special},#{create_time})
+    </insert>
+    <select id="selectmainStadiumId" resultType="MainStadiumModel" parameterType="java.lang.String">
+                SELECT
+        ms.id,ms.name,ms.provincial_level,ms.city_level,
+        ms.district_level,ms.trading_area,ms.address,ms.telephone,
+        ms.open_time,ms.introduction,ms.lng,ms.lat,ms.classify,ms.is_special,
+        ms.create_time,
+        (case ms.status  when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '下线' ELSE '其他' END) as status
+        FROM main_stadium ms
+        WHERE  id = #{id}
+    </select>
+
+    <update id="updateMainStadium" parameterType="MainStadiumModel">
+        update main_stadium
+        set name = #{name}, provincial_level = #{provincial_level}, city_level = #{city_level}, district_level = #{district_level}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMainStadium" parameterType="Long">
+        delete from main_stadium where id = #{id}
+    </delete>
 </mapper>

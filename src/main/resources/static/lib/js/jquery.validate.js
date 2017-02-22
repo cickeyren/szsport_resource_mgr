@@ -1540,4 +1540,15 @@
         };
     }
 
+jQuery.validator.addMethod("myDouble",function(value, element){
+    var reg = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
+    var result = reg.test(value);
+    if(result) {
+        var d = parseFloat(value);
+        if(d>0) {
+            return true;
+        }
+    }
+    return false;
+},"请输入大于0的数字或最多2位小数");
 
