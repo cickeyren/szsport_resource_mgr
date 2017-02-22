@@ -3,8 +3,6 @@ package com.digitalchina.sport.mgr.resource.controller.mainstadium;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
-import com.digitalchina.sport.mgr.resource.model.Book;
-import com.digitalchina.sport.mgr.resource.model.Category;
 import com.digitalchina.sport.mgr.resource.model.MainStadiumModel;
 import com.digitalchina.sport.mgr.resource.service.MainStadiumService;
 import org.slf4j.Logger;
@@ -87,7 +85,7 @@ public class MainStadiumController {
     public String add(ModelMap map) {
         List<Map<String, Object>> mainStadiumModels = mainStadiumService.findStadiumModel();
         map.put("mainStadiumModels", mainStadiumModels);
-        return "mainstadium/addInfo";
+        return "mainstadium/add_main_stadium";//进入对应的页面
     }
 
     /**
