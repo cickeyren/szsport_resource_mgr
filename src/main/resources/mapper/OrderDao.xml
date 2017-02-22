@@ -50,7 +50,7 @@
         </if>
         <if test="status != null and status != ''">
             AND
-            ob.`status` IN(status)
+            ob.status IN (#{status})
         </if>
         ORDER BY
         order_time DESC
@@ -88,7 +88,7 @@
         </if>
         <if test="status != null and status != ''">
             AND
-            ob.`status` IN(status)
+            ob.status IN (#{status})
         </if>
     </select>
     <!-- 订单详情 -->

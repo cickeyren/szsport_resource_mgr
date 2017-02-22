@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>订单</title>
+    <title>订单列表</title>
     <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
@@ -10,7 +10,6 @@
     <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
     <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
-    <script src="../../static/js/order/order.js" th:src="@{/js/order/order.js}"></script>
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
@@ -20,7 +19,6 @@
             font-size: 18px;
             font-weight: bold;
         }
-
         .inputw100 {
             width: 100px;
         }
@@ -44,11 +42,14 @@
     </style>
 </head>
 <body>
+
 <!-- 内容区域 -->
 <div>
     <div class="container-fluid pt20">
         <div>
-            <form action="" id="getForm" method="post">
+            <form action="/order/orderList.html" id="getForm" method="get">
+                <input type="hidden" id="myPage" name="page" th:value="${page}">
+                <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
                 <table class="table_style">
                     <tr class="controls">
                         <td>下单时间:</td>
@@ -66,7 +67,8 @@
                         </td>
                         <td>产品类型:</td>
                         <td class="alignleft">
-                            <select id="ticketType" style="width:150px;">
+                            <input type="hidden" id="ticketType" name="ticketType" th:value="${ticketType}"/>
+                            <select id="ticket_type" style="width:150px;" from="getForm" onchange="change(this)">
                                 <option value="0" th:selected="${ticketType eq '0'}">散票/年卡</option>
                                 <option value="1" th:selected="${ticketType eq '1'}">场地预定</option>
                                 <option value="2" th:selected="${ticketType eq '2'}">散客预定</option>
@@ -74,7 +76,8 @@
                         </td>
                         <td>订单来源:</td>
                         <td class="alignleft">
-                            <select id="orderChannel" style="width:150px;">
+                            <input type="hidden" id="orderChannel" name="orderChannel" th:value="${orderChannel}"/>
+                            <select id="order_channel" style="width:150px;" from="getForm" onchange="change(this)">
                                 <option value="APP" th:selected="${orderChannel eq 'APP'}">APP</option>
                                 <option value="1" th:selected="${orderChannel eq '1'}">售票机</option>
                                 <option value="2" th:selected="${orderChannel eq '2'}">微信</option>
@@ -86,17 +89,19 @@
                         <td>订单状态:</td>
                         <td colspan="8" class="alignleft">
                             <div id="status">
-                                <input value="0" type="checkbox" name="status" class="checkbox">
+                                <input type="checkbox" name="checkAll" onclick="check_all(this,'status');"/>
+                                <font class="mt25 mr20">全选</font>
+                                <input value="0" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'0')}">
                                 <font class="mt25 mr20">待支付</font>
-                                <input value="1" type="checkbox" name="status" class="checkbox">
+                                <input value="1" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'1')}">
                                 <font class="mt25 mr20">待使用</font>
-                                <input value="2" type="checkbox" name="status" class="checkbox">
+                                <input value="2" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'2')}">
                                 <font class="mt25 mr20">已使用</font>
-                                <input value="3" type="checkbox" name="status" class="checkbox">
+                                <input value="3" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'3')}">
                                 <font class="mt25 mr20">支付失败</font>
-                                <input value="4" type="checkbox" name="status" class="checkbox">
+                                <input value="4" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'4')}">
                                 <font class="mt25 mr20">全部退款</font>
-                                <input value="5" type="checkbox" name="status" class="checkbox">
+                                <input value="5" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'5')}">
                                 <font class="mt25 mr10">失效订单</font>
                             </div>
                         </td>
@@ -113,7 +118,49 @@
                 <div class="widget-box">
                     <div class="widget-content no-padding" id="c">
                     </div>
-                    <div id="div2"></div>
+                    <div id="div2">
+                        <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
+                            <table id="dataTable" class="table table-bordered" th:unless="${#lists.isEmpty(orderList)}">
+                                <thead>
+                                <tr>
+                                    <th>订单编号</th>
+                                    <th>项目类型</th>
+                                    <th>产品类型</th>
+                                    <th>场馆</th>
+                                    <th>产品名称</th>
+                                    <th>下单时间</th>
+                                    <th>订单金额</th>
+                                    <th>订单来源</th>
+                                    <th>手机</th>
+                                    <th>订单状态</th>
+                                    <!-- <th>退款状态</th>-->
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody th:remove="all-but-first">
+                                <tr th:each="obj, objStat: ${orderList}">
+                                    <input type="hidden" th:value="${obj.id}"/>
+                                    <td th:text="${obj.orderNumber}"></td>
+                                    <td th:text="${obj.categoryName}"></td>
+                                    <td th:text="${obj.ticketType}"></td>
+                                    <td th:text="${obj.stadiumName}"></td>
+                                    <td th:text="${obj.ticketName}"></td>
+                                    <td th:text="${obj.orderTime}"></td>
+                                    <td th:text="${obj.sellPrice}"></td>
+                                    <td th:text="${obj.orderChannel}"></td>
+                                    <td th:text="${obj.userTel}"></td>
+                                    <td th:text="${obj.status}"></td>
+                                    <!--<td th:text="${obj.status}"></td>-->
+                                    <td><a th:href="'/order/orderDetails.html?orderId='+${obj.id}">查看</a></td>
+                                </tr>
+                                </tbody>
+                                <!--<input id="pageAllCount" type="hidden" th:value="${pageModel.totalSize}"/>-->
+                            </table>
+                            <div th:if="${#lists.isEmpty(orderList)}">
+                                <p class="ml20">没有符合查询条件的记录！</p>
+                            </div>
+                        </div>
+                    </div>
 
                     <div id="page" class="page" align="right" style="margin-right: 10px;">
                     </div>
@@ -122,5 +169,45 @@
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    //好像很实用的样子，后端的同学再也不用写分页逻辑了。
+    $(function(){
+        laypage({
+            cont: 'page',
+            pages: [[${pageModel.totalPage}]], //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+            curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
+                var page = location.search.match(/page=(\d+)/);
+                return page ? page[1] : 1;
+            }(),
+            jump: function(e, first){ //触发分页后的回调
+                if(!first){ //一定要加此判断，否则初始时会无限刷新
+                    //console.log(location.href);
+                    $("#myPage").val(e.curr);
+                    $("#getForm").submit();
+                }
+            }
+        });
+        $("#search").click(function(){
+            $("#myPage").val("0");
+            $("#getForm").submit();
+        });
+    })
+    initForm();
+    function initForm() {
+        $("#ticketType option[value='" + [[${ticketType}]] + "']").attr("selected", "selected");
+        $("#orderChannel option[value='" + [[${orderChannel}]] + "']").attr("selected", "selected");
+    }
+    function change() {
+        $("#ticketType").val($('#ticket_type option:selected').val());
+        $("#orderChannel").val($('#order_channel option:selected').val());
+    }
+    /*全选*/
+    function check_all(obj, cName) {
+        var checkboxs = document.getElementsByName(cName);
+        for ( var i = 0; i < checkboxs.length; i+=1) {
+            checkboxs[i].checked = obj.checked;
+        }
+    }
+</script>
 </body>
 </html>
