@@ -226,7 +226,7 @@ public class YearStrategyTicketController {
         params.put("parent_id",mainStadiumId);
 
         resultMap.put("subStadiumList",subStadiumMapper.getAllSubStadiumByParentId(params));
-//        resultMap.put("classifyList",classifyMapper.selectAll());
+        resultMap.put("classifyList",classifyMapper.findAllClassify());
         try {
             int totalSize = yearStrategyDao.getYearStrategyTicketModelInfoTotalCount(params);
             Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引

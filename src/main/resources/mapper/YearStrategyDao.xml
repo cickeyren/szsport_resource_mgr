@@ -330,7 +330,7 @@
                     AND A.classify = #{classify}
                 </if>
                 <if test="subStadiumId !=null and subStadiumId != ''">
-                    AND A.subStadiumId = #{subStadiumId}
+                    AND A.sub_stadium_id = #{subStadiumId}
                 </if>
         ) E
         LEFT JOIN `year_strategy_ticket_basic_info` B ON E.ticket_strategy_id = B.id
@@ -365,7 +365,7 @@
             AND A.classify = #{classify}
         </if>
         <if test="subStadiumId !=null and subStadiumId != ''">
-            AND A.subStadiumId = #{subStadiumId}
+            AND A.sub_stadium_id = #{subStadiumId}
         </if>
         ) E
         LEFT JOIN `year_strategy_ticket_basic_info` B ON E.ticket_strategy_id = B.id
