@@ -30,7 +30,7 @@
     -->
     introduction
   </sql>
-  <select id="getAllSubStadiumByParent_id" resultType="java.util.Map">
+  <select id="getAllSubStadiumByParentId" resultType="java.util.Map" parameterType="HashMap">
     select
     <include refid="Base_Column_List"/>
     from sub_stadium

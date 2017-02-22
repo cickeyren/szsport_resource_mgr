@@ -1,7 +1,9 @@
 package com.digitalchina.sport.mgr.resource.service;
 
 import com.digitalchina.config.PropertyConfig;
+import com.digitalchina.sport.mgr.resource.dao.ClassifyMapper;
 import com.digitalchina.sport.mgr.resource.dao.MainStadiumDao;
+import com.digitalchina.sport.mgr.resource.dao.SubStadiumMapper;
 import com.digitalchina.sport.mgr.resource.model.MainStadiumModel;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,10 @@ public class MainStadiumService {
     private PropertyConfig proConfig;
     @Autowired
     private MainStadiumDao mainStadiumDao;
+    @Autowired
+    private SubStadiumMapper subStadiumMapper;
+    @Autowired
+    private ClassifyMapper classifyMapper;
     private static Logger logger = Logger.getLogger(MainStadiumService.class);
 
     public List<Map<String,Object>> getAllStadiumList(Map<String,Object> param){
