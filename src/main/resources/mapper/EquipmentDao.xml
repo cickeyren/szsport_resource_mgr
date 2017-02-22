@@ -3,10 +3,17 @@
 <mapper namespace="com.digitalchina.sport.mgr.resource.dao.EquipmentDao" >
     <!-- 根据参数查询设备列表 -->
     <select id="getEquipmentList" resultType="HashMap" parameterType="HashMap">
-        select e.id, e.equipment_id as equipmentId, e.equipment_name as equipmentType, m.name as mainStadium, s.name as subStadium, e.status
-        from equipment e
-        left join main_stadium m on e.parent_id = m.id
-        left join sub_stadium s on e.stadium_id = s.id
+        SELECT
+            e.id,
+            e.equipment_id AS equipmentId,
+            e.equipment_name AS equipmentType,
+            m.name AS mainStadium,
+            s.name AS subStadium,
+            e.status
+        FROM
+            equipment e
+        LEFT JOIN main_stadium m ON e.parent_id = m.id
+        LEFT JOIN sub_stadium s ON e.stadium_id = s.id
         <where>
             <if test="equipmentId != null and equipmentId != ''">
                 e.equipment_id like CONCAT('%',#{equipmentId},'%')
@@ -51,6 +58,9 @@
         <where>
             <if test="id != null and id != ''">
                 e.id = #{id}
+            </if>
+            <if test="equipment_id != null and equipment_id != ''">
+                AND e.equipment_id = #{equipment_id}
             </if>
         </where>
     </select>

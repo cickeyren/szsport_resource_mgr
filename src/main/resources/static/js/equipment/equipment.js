@@ -13,26 +13,34 @@ $(function () {
      * 新增设备
      */
     $("#saveEquipmentBtn").on('click', function () {
-        $.ajax({
-            url:'/equipment/addEquipment.json',
-            type:'POST',
-            data:{
-                "equipmentId":$("#equipmentId").val(),
-                "equipmentType":$("#equipmentType").val(),
-                "mainStadium":$("#mainStadium").val(),
-                "subStadium":$("#subStadium").val(),
-                "status":$('input[name="status"]:checked').val()
-            },
-            dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-            success:function(result){
-                if("000000" == result.code) {
-                    layer.msg("添加设备成功~");
+        var equipmentId = $("#equipmentId").val();
+        var reg  = /^[\d]{11}$/;
+        if(reg.test(equipmentId)){
+            $.ajax({
+                url:'/equipment/addEquipment.json',
+                type:'POST',
+                data:{
+                    "equipmentId":equipmentId,
+                    "equipmentType":$("#equipmentType").val(),
+                    "mainStadium":$("#mainStadium").val(),
+                    "subStadium":$("#subStadium").val(),
+                    "status":$('input[name="status"]:checked').val()
+                },
+                dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success:function(result){
+                    if("000000" == result.code) {
+                        layer.msg("添加设备成功~");
+                    } else {
+                        layer.msg(result.result);
+                    }
+                },
+                error:function(result){
+                    layer.msg("添加设备失败~");
                 }
-            },
-            error:function(result){
-                layer.msg("添加设备失败~");
-            }
-        })
+            });
+        } else {
+            layer.msg("设备编号需为十一位数字");
+        }
     })
 
     /**
@@ -46,27 +54,33 @@ $(function () {
      * 编辑设备信息
      */
     $("#editEquipmentBtn").on('click', function () {
-        $.ajax({
-            url:'/equipment/updateEquipment.json',
-            type:'POST',
-            data:{
-                "id":$("#id").val(),
-                "equipmentId":$("#equipmentId").val(),
-                "equipmentType":$("#equipmentType").val(),
-                "mainStadium":$("#mainStadium").val(),
-                "subStadium":$("#subStadium").val(),
-                "status":$('input[name="status"]:checked').val()
-            },
-            dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-            success:function(result){
-                if("000000" == result.code) {
-                    layer.msg("编辑设备成功~");
+        var equipmentId = $("#equipmentId").val();
+        var reg  = /^[\d]{11}$/;
+        if(reg.test(equipmentId)){
+            $.ajax({
+                url:'/equipment/updateEquipment.json',
+                type:'POST',
+                data:{
+                    "id":$("#id").val(),
+                    "equipmentId":$("#equipmentId").val(),
+                    "equipmentType":$("#equipmentType").val(),
+                    "mainStadium":$("#mainStadium").val(),
+                    "subStadium":$("#subStadium").val(),
+                    "status":$('input[name="status"]:checked').val()
+                },
+                dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success:function(result){
+                    if("000000" == result.code) {
+                        layer.msg("编辑设备成功~");
+                    }
+                },
+                error:function(result){
+                    layer.msg("编辑设备失败~");
                 }
-            },
-            error:function(result){
-                layer.msg("编辑设备失败~");
-            }
-        })
+            });
+        } else {
+            layer.msg("设备编号需为十一位数字");
+        }
     })
 
     /**

@@ -62,32 +62,6 @@ public class EquipmentController {
     }
 
     /**
-     * 按条件查询设备列表
-     * @param equipmentId
-     * @param equipmentType
-     * @param mainStadium
-     * @param subStadium
-     * @return
-     */
-    @RequestMapping(value = "/searchEquipmentList.do", method = RequestMethod.POST)
-    @ResponseBody
-    public RtnData searchEquipmentList(String equipmentId, String equipmentType, String mainStadium, String subStadium){
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("equipmentId",equipmentId);
-        paramMap.put("equipmentType",equipmentType);
-        paramMap.put("mainStadium",mainStadium);
-        paramMap.put("subStadium",subStadium);
-        try {
-            List<Map<String,Object>> list = equipmentService.getEquipmentList(paramMap);
-            return RtnData.ok(list);
-        }catch (Exception e){
-            e.printStackTrace();
-            logger.error("========查询设备信息失败=========",e);
-        }
-        return RtnData.fail("查询设备信息失败");
-    }
-
-    /**
      * 进入设备新增页面
      * @param map
      * @return
@@ -109,15 +83,21 @@ public class EquipmentController {
     @RequestMapping(value = "/addEquipment.json", method = RequestMethod.POST)
     @ResponseBody
     public RtnData addEquipment(String equipmentId, String equipmentType, String mainStadium, String subStadium, String status){
-        EquipmentModel equipmentModel = new EquipmentModel();
-        String id = UUIDUtil.generateUUID();
-        equipmentModel.setId(id);
-        equipmentModel.setEquipment_id(equipmentId);
-        equipmentModel.setEquipment_name(equipmentType);
-        equipmentModel.setParent_id(mainStadium);
-        equipmentModel.setStadium_id(subStadium);
-        equipmentModel.setStatus(status);
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("equipment_id",equipmentId);
         try {
+            EquipmentModel equipment  = equipmentService.getEquipmentInfo(paramMap);
+            if(equipment != null){
+                return RtnData.fail("设备编号已存在，请重新输入");
+            }
+            EquipmentModel equipmentModel = new EquipmentModel();
+            String id = UUIDUtil.generateUUID();
+            equipmentModel.setId(id);
+            equipmentModel.setEquipment_id(equipmentId);
+            equipmentModel.setEquipment_name(equipmentType);
+            equipmentModel.setParent_id(mainStadium);
+            equipmentModel.setStadium_id(subStadium);
+            equipmentModel.setStatus(status);
             equipmentService.addEquipment(equipmentModel);
             return RtnData.ok("添加设备成功");
         } catch (Exception e){
