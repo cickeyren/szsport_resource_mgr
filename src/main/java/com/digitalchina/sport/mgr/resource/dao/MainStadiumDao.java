@@ -16,11 +16,13 @@ import java.util.Map;
  */
 @Mapper
 public interface MainStadiumDao {
-    public List<Map<String,Object>> getAllStadiumList(Map<String,Object> param);
+    List<Map<String,Object>> getAllStadiumList(Map<String,Object> param);
 
     int findTotalCount(Map<String, Object> params);
 
     List<Map<String,Object>> findStadiumModel();
+
+    List<Map<String,Object>> findAllMainStadiumByStuts();
 
     int insertmainStadium(MainStadiumModel mainStadiumModel);
 

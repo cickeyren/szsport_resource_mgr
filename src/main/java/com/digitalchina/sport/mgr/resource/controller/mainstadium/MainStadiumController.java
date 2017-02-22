@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * （一句话描述）
@@ -98,6 +99,7 @@ public class MainStadiumController {
     @RequestMapping(value = "/addmainStadiumModel.do", method = RequestMethod.POST)
     @ResponseBody
     public RtnData add(MainStadiumModel mainStadiumModel, ModelMap map) {
+        mainStadiumModel.setId(UUID.randomUUID().toString());
         mainStadiumService.insertmainStadium(mainStadiumModel);
         return RtnData.ok("新增场馆成功");
     }

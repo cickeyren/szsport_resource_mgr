@@ -32,7 +32,7 @@
   </sql>
   <select id="getAllSubStadiumByParentId" resultType="java.util.Map" parameterType="HashMap">
     select
-    <include refid="Base_Column_List"/>
+    id, name, classify, parent_id,(case status when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '作废' ELSE '其他' END) as status , create_time
     from sub_stadium
     <where>
       <choose>

@@ -1,4 +1,9 @@
 var mainstadium;
+/*$('#distpicker1').distpicker({
+    province: '---- 所在省 ----',
+    city: '---- 所在市 ----',
+    district: '---- 所在区 ----'
+});*/
 $(function () {
     mainstadium = new MainstadiumObj();
     mainstadium.init();
@@ -19,7 +24,7 @@ MainstadiumObj.prototype = {
         pageNum: 1,
         pageSize: 1
     },
-    loadAreaSize:['600px', '400px'],//弹出框的宽高
+    loadAreaSize:['800', '600'],//弹出框的宽高
 
     //带条件查找
     doSearch:function() {
@@ -32,14 +37,14 @@ MainstadiumObj.prototype = {
     doAdd:function() {
         var data = $('#addForm').serializeArray();
         ajaxCommonFun({
-            type: 'GET',
+            type: 'POST',
             url: '/mainStadiumController/addmainStadiumModel.do',
             data: data,
             success: function (res) {
                 layer.open({
                     type: 1,
                     title:'新增',
-                    area: ['760px', '450px'],
+                    area: ['600px', '400px'],
                     content: res,
                     btn: ['确定','取消'],
                     btn1: function(index){
@@ -251,4 +256,6 @@ MainstadiumObj.prototype = {
         mainstadium.bindEvents();
     }
     /*end 页面初始化*/
+
+
 };
