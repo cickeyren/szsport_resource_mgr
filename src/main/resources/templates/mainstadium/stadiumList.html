@@ -24,7 +24,9 @@
                     &nbsp;&nbsp;&nbsp;
                     <a id="delete" th:data="${obj.id}">删除</a>
                     &nbsp;&nbsp;&nbsp;
-                    <a id="editis_special" th:data="${obj.id}">设为精选</a></td>
+                    <a id="editis_special" th:data="${obj.id}">设为精选</a>
+                    <a th:href="@{/yearstrategyticket/list.html(mainStadiumId=${obj.id})}" th:data="${obj.id}">门票</a>
+                    </td>
             </tr>
             </tbody>
 

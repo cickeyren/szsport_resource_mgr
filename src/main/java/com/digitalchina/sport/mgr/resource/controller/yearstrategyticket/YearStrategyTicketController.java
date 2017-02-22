@@ -195,23 +195,13 @@ public class YearStrategyTicketController {
         }
         return RtnData.fail("新增年卡策略失败");
     }
-    /**
-     * 进入主页面
-     *
-     * @param map
-     * @return
-     */
-    @RequestMapping(value = "/home.html")
-    public String home(ModelMap map) {
-        return "yearstrategyticket/main_strategy";
-    }
 
     @RequestMapping(value = "/list.html")
     public String list(@RequestParam(required = false, defaultValue = "10") long pageSize,
                       @RequestParam(required = false, defaultValue = "1") long page,
                        @RequestParam(required = true) String mainStadiumId,
                        @RequestParam(required = false) String classify,
-                       @RequestParam(required = true) String strategyType,
+                       @RequestParam(required = true, defaultValue = "0") String strategyType,
                        @RequestParam(required = false) String ticketName,
                        @RequestParam(required = false) String strategyState,
                        @RequestParam(required = false) String subStadiumId,
@@ -259,5 +249,26 @@ public class YearStrategyTicketController {
             resultMap.put("exception",e);
             return "error";
         }
+    }
+
+    /**
+     * 新增
+     * @param yearStrategyTicket
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/changeStrategyState.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData changeStrategyState(YearStrategyTicketModel yearStrategyTicket,HttpServletRequest request) {
+        boolean result = false;
+        try {
+            if(yearStrategyDao.updateYearStrategyTicket(yearStrategyTicket) > 0) {
+                return RtnData.ok("操作成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("========操作失败=========",e);
+        }
+        return RtnData.fail("操作失败");
     }
 }
