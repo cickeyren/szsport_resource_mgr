@@ -28,8 +28,35 @@ orderPageObj.prototype = {
         var orderEndDate = $.trim($('#orderEndDate').val());
         var userTel = $.trim($('#userTel').val());
         var ticketName = $.trim($('#ticketName').val());
-        orderPage.searchObj.title= sTitle || '';
+        var ticketType = "";
+        $('#ticketType option').each(function(){
+            if ($(this).prop("selected")) {
+                ticketType = $(this).val();
+            }
+        });
+        var orderChannel = "";
+        $('#orderChannel option').each(function(){
+            if ($(this).prop("selected")) {
+                orderChannel = $(this).val();
+            }
+        });
+        var orderStatus = [];
+        $('input[name="status"]:checkbox').each(function(){
+            if ($(this).prop("checked")) {
+                orderStatus.push($(this).prop('value'));
+            }
+        });
+        alert(orderStatus);
         orderPage.searchObj.pageNum = 1;  //reset
+        orderPage.searchObj.params = "orderStartDate="+orderStartDate+"&orderEndDate="+orderEndDate
+            +"&userTel="+userTel +"&ticketName="+ticketName +"&ticketType="+ticketType
+            +"&orderChannel="+orderChannel +"&status="+orderStatus;
+/*        alert("data:orderStartDate="+orderStartDate+";orderEndDate="+orderEndDate
+            +";userTel="+userTel
+            +";ticketName="+ticketName
+            +";ticketType="+ticketType
+            +";orderChannel="+orderChannel
+            +";status="+orderStatus);*/
         orderPage.renderPages(true);
     },
 
@@ -44,8 +71,8 @@ orderPageObj.prototype = {
     renderPages:function(isFirst) {
         var url = '/order/orderList.do', isAdd = false;
         var url2 = '/order/myOrder.html';
-        if(this.searchObj.title){
-            url = url+'?ticketName='+this.searchObj.title;
+        if(this.searchObj.params){
+            url = url+'?'+this.searchObj.params;
             isAdd = true;
         }
         if(this.searchObj.pageSize){

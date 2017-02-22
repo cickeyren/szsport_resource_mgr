@@ -3,7 +3,6 @@
 <mapper namespace="com.digitalchina.sport.mgr.resource.dao.OrderDao">
     <!-- 订单列表 -->
     <select id="getOrderListByMap" resultType="java.util.HashMap" parameterType="java.util.Map">
-        <![CDATA[
         SELECT
         id,
         ob.order_number AS orderNumber,
@@ -24,22 +23,22 @@
         FROM
         order_base_info ob
         LEFT JOIN classify c ON ob.classify = c.cid
-        WHERE
-        user_id = #{userId}
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND user_id = #{userId}
+        </if>
+
         <if test="ticketName != null and ticketName != ''">
-            AND ob.ticket_name like #{ticketName}
+            AND ob.ticket_name like CONCAT('%',#{ticketName},'%')
         </if>
         <if test="userTel != null and userTel != ''">
             AND ob.user_tel = #{userTel}
         </if>
-        <if test="ticketName != null and ticketName != ''">
-            AND ob.ticket_name like #{ticketName}
-        </if>
         <if test="orderStartDate != null and orderStartDate != '' and orderEndDate != null and orderEndDate != ''">
-            AND
+        <![CDATA[AND
             ob.order_time >=#{orderStartDate}
             AND
-            ob.order_time <= cdata#{orderEndDate}
+            ob.order_time <= #{orderEndDate}]]>
         </if>
         <if test="ticketType != null and ticketType != ''">
             AND
@@ -55,8 +54,7 @@
         </if>
         ORDER BY
         order_time DESC
-        LIMIT #{startIndex},#{endIndex}
-        ]]>
+        LIMIT #{startIndex},#{pageSize}
     </select>
     <!-- 订单个数 -->
     <select id="getCountByMap" resultType="java.lang.Integer" parameterType="java.util.Map">
@@ -64,8 +62,34 @@
           COUNT(0)
         FROM
           order_base_info ob
-        WHERE
-          user_id = #{userId}
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND user_id = #{userId}
+        </if>
+        <if test="userTel != null and userTel != ''">
+            AND ob.user_tel = #{userTel}
+        </if>
+        <if test="ticketName != null and ticketName != ''">
+            AND ob.ticket_name like CONCAT('%',#{ticketName},'%')
+        </if>
+        <if test="orderStartDate != null and orderStartDate != '' and orderEndDate != null and orderEndDate != ''">
+            <![CDATA[AND
+            ob.order_time >=#{orderStartDate}
+            AND
+            ob.order_time <= #{orderEndDate}]]>
+        </if>
+        <if test="ticketType != null and ticketType != ''">
+            AND
+            ob.ticket_type =#{ticketType}
+        </if>
+        <if test="orderChannel != null and orderChannel != ''">
+            AND
+            ob.order_channel =#{orderChannel}
+        </if>
+        <if test="status != null and status != ''">
+            AND
+            ob.`status` IN(status)
+        </if>
     </select>
     <!-- 订单详情 -->
     <select id="getOrderDetailsByOrderId" resultType="java.util.HashMap" parameterType="java.util.Map">

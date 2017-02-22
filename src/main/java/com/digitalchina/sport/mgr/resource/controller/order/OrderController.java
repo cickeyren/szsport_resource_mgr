@@ -54,17 +54,30 @@ public class OrderController {
                             @RequestParam(required = false, defaultValue = "1") long page,
                             ModelMap map,HttpServletRequest request){
         Map<String, Object> params = new HashMap<String, Object>();
-        String userId = "5eb76ae3dd5246bda465b22aa1fdb0a8";
-        params.put("userId", userId);
+        //String userId = "5eb76ae3dd5246bda465b22aa1fdb0a8";
+        //params.put("userId", userId);
+        params.put("userTel", request.getParameter("userTel"));
+        params.put("ticketType", request.getParameter("ticketType"));
+        params.put("ticketName", request.getParameter("ticketName"));
+        params.put("orderChannel", request.getParameter("orderChannel"));
+        params.put("orderStartDate", request.getParameter("orderStartDate"));
+        params.put("orderEndDate", request.getParameter("orderEndDate"));
+        params.put("status", request.getParameter("status"));
         try {
             int totalSize = orderService.getCountByMap(params);
             Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
             params.put("startIndex", pagination.getStartIndex());
-            params.put("endIndex", pagination.getEndIndex());
+            params.put("pageSize", pageSize);
             List<Map<String,Object>> orderList = orderService.getOrderListByMap(params);
             pagination.setUrl(request.getRequestURI());
             map.put("page", pagination);
-            map.put("userId", userId);//回到页面,保留搜索关键字
+            map.put("userTel", request.getParameter("userTel"));
+            map.put("ticketType", request.getParameter("ticketType"));
+            map.put("ticketName", request.getParameter("ticketName"));
+            map.put("orderChannel", request.getParameter("orderChannel"));
+            map.put("status", request.getParameter("status"));
+            map.put("orderStartDate", request.getParameter("orderStartDate"));
+            map.put("orderEndDate", request.getParameter("orderEndDate"));//回到页面,保留搜索关键字
             map.put("orderList",orderList);
         } catch (Exception e) {
             e.printStackTrace();

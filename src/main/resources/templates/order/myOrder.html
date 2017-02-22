@@ -53,32 +53,32 @@
                     <tr class="controls">
                         <td>下单时间:</td>
                         <td class="alignleft">
-                            <input type='text' style="float:none" id="orderStartDate" name="orderStartDate" class="inputw100 form-control" onClick="WdatePicker()"/>至
-                            <input type='text' style="float:none" id="orderEndDate" name="orderEndDate" class="inputw100 form-control" onClick="WdatePicker()"/>
+                            <input type='text' style="float:none" id="orderStartDate" name="orderStartDate" class="inputw100 form-control" readonly="readonly" th:value="${orderStartDate}" onClick="WdatePicker()"/>至
+                            <input type='text' style="float:none" id="orderEndDate" name="orderEndDate" class="inputw100 form-control" readonly="readonly" th:value="${orderEndDate}" onClick="WdatePicker()"/>
                         </td>
                         <td>预定手机:</td>
                         <td class="alignleft">
-                            <input type="text" id="userTel" name="userTel"/>
+                            <input type="text" id="userTel" name="userTel" th:value="${userTel}"/>
                         </td>
                         <td>产品名称:</td>
                         <td class="alignleft">
-                            <input type="text" id="ticketName" name="ticketName"/>
+                            <input type="text" id="ticketName" name="ticketName" th:value="${ticketName}"/>
                         </td>
                         <td>产品类型:</td>
                         <td class="alignleft">
                             <select id="ticketType" style="width:150px;">
-                                <option value="0">散票/年卡</option>
-                                <option value="1">场地预定</option>
-                                <option value="2">散客预定</option>
+                                <option value="0" th:selected="${ticketType eq '0'}">散票/年卡</option>
+                                <option value="1" th:selected="${ticketType eq '1'}">场地预定</option>
+                                <option value="2" th:selected="${ticketType eq '2'}">散客预定</option>
                             </select>
                         </td>
                         <td>订单来源:</td>
                         <td class="alignleft">
                             <select id="orderChannel" style="width:150px;">
-                                <option value="APP">APP</option>
-                                <option value="1">售票机</option>
-                                <option value="2">微信</option>
-                                <option value="3">PC端网页</option>
+                                <option value="APP" th:selected="${orderChannel eq 'APP'}">APP</option>
+                                <option value="1" th:selected="${orderChannel eq '1'}">售票机</option>
+                                <option value="2" th:selected="${orderChannel eq '2'}">微信</option>
+                                <option value="3" th:selected="${orderChannel eq '3'}">PC端网页</option>
                             </select>
                         </td>
                     </tr>
@@ -101,7 +101,7 @@
                             </div>
                         </td>
                         <td>
-                            <button type="submit" class="btn btn-success" id="findStadiumname">查询</button>
+                            <button type="submit" class="btn btn-success" id="search">查询</button>
                             <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
                         </td>
                     </tr>
