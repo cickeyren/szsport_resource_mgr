@@ -2,6 +2,7 @@ package com.digitalchina.sport.mgr.resource.service;
 
 import com.digitalchina.config.PropertyConfig;
 import com.digitalchina.sport.mgr.resource.dao.MainStadiumDao;
+import com.digitalchina.sport.mgr.resource.model.MainStadiumModel;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,25 @@ public class MainStadiumService {
 
     public int findTotalCount(Map<String, Object> params) {
         return mainStadiumDao.findTotalCount(params);
+    }
+
+    public List<Map<String, Object>> findStadiumModel() {
+        return mainStadiumDao.findStadiumModel();
+    }
+
+    public int insertmainStadium(MainStadiumModel mainStadiumModel) {
+        return mainStadiumDao.insertmainStadium(mainStadiumModel);
+    }
+
+    public MainStadiumModel selectmainStadiumId(Long id) {
+        return mainStadiumDao.selectmainStadiumId(id);
+    }
+
+    public int updateMainStadium(MainStadiumModel mainStadiumModel) {
+        return mainStadiumDao.updateMainStadium(mainStadiumModel);
+    }
+
+    public int deleteMainStadium(Long id) {
+        return mainStadiumDao.deleteMainStadium(id);
     }
 }

@@ -1,5 +1,6 @@
 package com.digitalchina.sport.mgr.resource.dao;
 
+import com.digitalchina.sport.mgr.resource.model.MainStadiumModel;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -18,4 +19,14 @@ public interface MainStadiumDao {
     public List<Map<String,Object>> getAllStadiumList(Map<String,Object> param);
 
     int findTotalCount(Map<String, Object> params);
+
+    List<Map<String,Object>> findStadiumModel();
+
+    int insertmainStadium(MainStadiumModel mainStadiumModel);
+
+    MainStadiumModel selectmainStadiumId(Long id);
+
+    int updateMainStadium(MainStadiumModel mainStadiumModel);
+
+    int deleteMainStadium(Long id);
 }
