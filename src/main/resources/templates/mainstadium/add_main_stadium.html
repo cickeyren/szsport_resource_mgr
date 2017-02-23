@@ -53,7 +53,7 @@
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>地理位置</td>
                     <td class="alignleft">
-                        <input type="text" id="lag" name="lag"/>
+                        <input type="text" id="lng" name="lng"/>
                         <input type="text" id="lat" name="lat"/>
                         <button type="submit" class="btn btn-success" id="ditudingwei">地图定位</button>
                     </td>
@@ -87,7 +87,7 @@
                 }
             },
             submitHandler: function () {
-                mainstadium.doAdd()
+                //mainstadium.doAdd()
             }
         };
         $('#addForm').validate(valConfig);

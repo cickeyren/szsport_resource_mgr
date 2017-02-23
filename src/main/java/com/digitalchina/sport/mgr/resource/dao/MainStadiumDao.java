@@ -32,11 +32,14 @@ public interface MainStadiumDao {
     int insertmainStadium(MainStadiumModel mainStadiumModel);
 
     //根据ID查询主场馆数据
-    MainStadiumModel selectmainStadiumId(Long id);
+    MainStadiumModel selectmainStadiumId(Map<String,Object> param);
 
     //更新主场馆数据
     int updateMainStadium(MainStadiumModel mainStadiumModel);
 
     //根据ID删除数据
-    int deleteMainStadium(Long id);
+    int deleteMainStadium(Map<String,Object> param);
+
+    //根据id设为精选
+    int updataSelectFirst(Map<String, Object> param);
 }

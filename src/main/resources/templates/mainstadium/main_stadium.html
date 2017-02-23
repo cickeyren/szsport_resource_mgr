@@ -25,8 +25,8 @@
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
     <script th:src="@{/lib/js/jquery.validate.js}"></script>
-    <script src="../../static/lib/distpicker/distpicker.js" th:src="@{/lib/distpicker/distpicker.js}"></script>
-    <script src="../../static/lib/distpicker/distpicker.data.js" th:src="@{/lib/distpicker/distpicker.data.js}"></script>
+    <!--<script src="../../static/lib/distpicker/distpicker.js" th:src="@{/lib/distpicker/distpicker.js}"></script>-->
+    <!--<script src="../../static/lib/distpicker/distpicker.data.js" th:src="@{/lib/distpicker/distpicker.data.js}"></script>-->
 
     <style>
         p.title {
@@ -59,14 +59,12 @@
 
 <!-- 内容区域 -->
 <div>
-    <div class="container-fluid pt20">
+    <div >
         <div>
             <form action="" id="getForm" method="post">
                 <table class="table">
                     <tr class="controls">
-                        <td>场馆名称:</td>
-                        <td><input type="text" id="stadiumnametext" name="name"/></td>
-                        <td>
+                        <td>场馆名称:<input type="text" id="stadiumnametext" name="name"/>
                             <button type="submit" class="btn btn-success" id="findStadiumname">查询</button>
                             <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
                         </td>

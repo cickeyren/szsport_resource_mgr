@@ -24,9 +24,17 @@
                     &nbsp;&nbsp;&nbsp;
                     <a id="delete" th:data="${obj.id}">删除</a>
                     &nbsp;&nbsp;&nbsp;
-                    <a id="editis_special" th:data="${obj.id}">设为精选</a>
+                    <span th:switch="${obj.is_special}">
+                                                <a style="color:#666666;" th:case="'1'" href="javascript:;"
+                                                   th:data="${obj.id}"
+                                                   onclick="selectFist('0',this);">取消精选</a>
+                                                <a th:case="'0'" href="javascript:;"
+                                                   th:data="${obj.id}"
+                                                   onclick="selectFist('1',this)">设为精选</a>
+                    </span>
+                    &nbsp;&nbsp;&nbsp;
                     <a th:href="@{/yearstrategyticket/list.html(mainStadiumId=${obj.id})}" th:data="${obj.id}">门票</a>
-                    </td>
+                </td>
             </tr>
             </tbody>
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalchina.sport.mgr.resource.dao.MainStadiumDao">
+    <!--带条件分页查询所有主场馆-->
     <select id="getAllStadiumList" resultType="java.util.Map" parameterType="HashMap">
         SELECT
         ms.id,ms.name,ms.provincial_level,ms.city_level,
@@ -22,6 +23,7 @@
         order by ms.create_time desc
         limit #{startIndex},#{endIndex}
     </select>
+    <!--带条件查询主场馆总条数-->
     <select id="findTotalCount" resultType="java.lang.Integer" parameterType="HashMap">
         SELECT count(*) from main_stadium ms
         <where>
@@ -35,6 +37,7 @@
             </choose>
         </where>
     </select>
+    <!--查询所有主场馆-->
     <select id="findStadiumModel" resultType="java.util.Map">
         SELECT
         ms.id,ms.name,ms.provincial_level,ms.city_level,
@@ -44,20 +47,23 @@
         (case ms.status  when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '下线' ELSE '其他' END) as status
         FROM main_stadium ms
     </select>
+    <!--新增主场馆信息-->
     <insert id="insertmainStadium" parameterType="MainStadiumModel" keyProperty="id" useGeneratedKeys="true">
        INSERT INTO main_stadium(id, name, provincial_level, city_level, district_level, trading_area, address, telephone, open_time, introduction, lng, lat, status, classify, is_special, create_time)
-                       VALUES (#{id},#{name},#{provincial_level},#{city_level},#{district_level},#{trading_area},#{address},#{telephone},#{open_time},#{introduction},#{lng},#{lat},#{status},#{classify},#{is_special},#{create_time})
+        VALUES (#{id},#{name},#{provincial_level},#{city_level},#{district_level},#{trading_area},#{address},#{telephone},#{open_time},#{introduction},#{lng},#{lat},#{status},#{classify},#{is_special},#{create_time})
     </insert>
-    <select id="selectmainStadiumId" resultType="MainStadiumModel" parameterType="java.lang.String">
-                SELECT
+    <!--根据id查询主场馆信息-->
+    <select id="selectmainStadiumId" resultType="MainStadiumModel" parameterType="HashMap">
+        SELECT
         ms.id,ms.name,ms.provincial_level,ms.city_level,
         ms.district_level,ms.trading_area,ms.address,ms.telephone,
         ms.open_time,ms.introduction,ms.lng,ms.lat,ms.classify,ms.is_special,
         ms.create_time,
         (case ms.status  when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '下线' ELSE '其他' END) as status
         FROM main_stadium ms
-        WHERE  id = #{id}
+        WHERE  id = #{mainstadiumid}
     </select>
+    <!--查询所有正常开业的主场馆信息-->
     <select id="findAllMainStadiumByStuts" resultType="java.util.Map">
         SELECT
         ms.id,ms.name,ms.provincial_level,ms.city_level,
@@ -68,14 +74,23 @@
         FROM main_stadium ms
         WHERE ms.status='1'
     </select>
-
+    <!--根据id更新主场馆信息-->
     <update id="updateMainStadium" parameterType="MainStadiumModel">
         update main_stadium
-        set name = #{name}, provincial_level = #{provincial_level}, city_level = #{city_level}, district_level = #{district_level}
+        set name = #{name}, provincial_level = #{provincial_level}, city_level = #{city_level}, district_level = #{district_level},
+        trading_area = #{trading_area},address = #{address},telephone = #{telephone},
+        open_time = #{open_time},introduction = #{introduction},lng = #{lng},lat = #{lat},
+        classify = #{classify}
         where id = #{id}
     </update>
-
-    <delete id="deleteMainStadium" parameterType="Long">
+    <!--根据id  设置精选-->
+    <update id="updataSelectFirst" parameterType="HashMap">
+        update main_stadium
+        set is_special = #{is_special}
+        where id = #{id}
+    </update>
+    <!--根据ID删除场馆-->
+    <delete id="deleteMainStadium" parameterType="HashMap">
         delete from main_stadium where id = #{id}
     </delete>
 </mapper>

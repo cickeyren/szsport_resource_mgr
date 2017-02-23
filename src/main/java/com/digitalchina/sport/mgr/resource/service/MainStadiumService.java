@@ -72,8 +72,8 @@ public class MainStadiumService {
      * @param id
      * @return
      */
-    public MainStadiumModel selectmainStadiumId(Long id) {
-        return mainStadiumDao.selectmainStadiumId(id);
+    public MainStadiumModel selectmainStadiumId(Map<String,Object> param) {
+        return mainStadiumDao.selectmainStadiumId(param);
     }
 
     /**
@@ -87,10 +87,19 @@ public class MainStadiumService {
 
     /**
      *根据ID删除数据
-     * @param id
+     * @param param
      * @return
      */
-    public int deleteMainStadium(Long id) {
-        return mainStadiumDao.deleteMainStadium(id);
+    public int deleteMainStadium(Map<String,Object> param) {
+        return mainStadiumDao.deleteMainStadium(param);
+    }
+
+    /**
+     * 根据id设为精选
+     * @param param
+     * @return
+     */
+    public int updataSelectFirst(Map<String, Object> param) {
+        return mainStadiumDao.updataSelectFirst(param);
     }
 }
