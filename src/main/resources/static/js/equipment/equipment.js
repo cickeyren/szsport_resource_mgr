@@ -9,6 +9,11 @@ $(function () {
         window.location.href = "/equipment/addEquipment.html";
     })
 
+    //给主场馆菜单绑定选择改变时同时改变子菜单的内容
+    $("#mainStadium").change(function(){
+        updateSubStadiumList($("#mainStadium").val());
+    });
+
     /**
      * 新增设备
      */
@@ -91,6 +96,43 @@ $(function () {
     })
 });
 
+/**
+ * 更新子场馆列表
+ */
+function updateSubStadiumList(mainStadiumId) {
+    $.ajax({
+        url:'/equipment/getSubStadiumByParentId.json',
+        type:'POST', //GET
+        data:{"mainStadiumId":mainStadiumId},
+        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success:function(result){
+            if("000000" == result.code) {
+                var items = result.result;
+                $("#subStadium").empty();
+                if(0 == items.length){
+                    $("#subStadium").append("<option value=\"\"  value=\"\">无子场馆</option>");
+                } else {
+                    $.each(items,function(i,n){
+                        $("#subStadium").append("<option value=\"" + n.id + "\" classify=\""+ n.classify+"\">"+n.name+"</option>");
+                    });
+                }
+
+                //alert("添加成功~");
+            } else {
+                alert("添加失败~");
+            }
+            //console.log(result);
+        },
+        error:function(result){
+            alert("添加失败~");
+        }
+    })
+}
+
+/**
+ * 删除设备
+ * @param id
+ */
 function delEquipment(id) {
     /**
      * 提示是否删除设备信息

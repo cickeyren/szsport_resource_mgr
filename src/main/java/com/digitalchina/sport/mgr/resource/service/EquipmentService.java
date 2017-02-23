@@ -1,10 +1,12 @@
 package com.digitalchina.sport.mgr.resource.service;
 
 import com.digitalchina.sport.mgr.resource.dao.EquipmentDao;
+import com.digitalchina.sport.mgr.resource.dao.SubStadiumMapper;
 import com.digitalchina.sport.mgr.resource.model.EquipmentModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,9 @@ import java.util.Map;
 public class EquipmentService {
     @Autowired
     private EquipmentDao equipmentDao;
+    //子场馆信息
+    @Autowired
+    private SubStadiumMapper subStadiumMapper;
 
     /**
      * 根据参数查询设备列表
@@ -29,6 +34,22 @@ public class EquipmentService {
     }
 
     /**
+     * 根据参数查询设备列表的总数量
+     * @param map
+     * @return
+     * @throws Exception
+     */
+    public int getEquipmentTotalCount(Map<String, Object> map){
+        int count = 0;
+        try {
+            count = equipmentDao.getEquipmentTotalCount(map);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    /**
      * 添加设备信息
      * @param equipmentModel
      * @return
@@ -36,6 +57,15 @@ public class EquipmentService {
      */
     public int addEquipment(EquipmentModel equipmentModel) throws Exception{
         return equipmentDao.addEquipment(equipmentModel);
+    }
+
+    /**
+     * 根据主场馆ID查询子场馆
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> getSubStadiumByParentId(Map<String, Object> map){
+        return subStadiumMapper.getAllSubStadiumByParentId(map);
     }
 
     /**

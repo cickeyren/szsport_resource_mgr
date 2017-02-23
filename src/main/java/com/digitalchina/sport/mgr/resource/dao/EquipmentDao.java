@@ -22,6 +22,11 @@ public interface EquipmentDao {
     public List<Map<String,Object>> getEquipmentList(Map<String, Object> map) throws Exception;
 
     /**
+     * 根据参数查询设备列表的总数量
+     */
+    public int getEquipmentTotalCount(Map<String, Object> map) throws Exception;
+
+    /**
      * 添加设备信息
      * @param equipmentModel
      * @return

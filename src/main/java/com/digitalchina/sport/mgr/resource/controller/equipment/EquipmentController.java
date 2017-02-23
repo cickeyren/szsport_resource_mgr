@@ -1,9 +1,14 @@
 package com.digitalchina.sport.mgr.resource.controller.equipment;
 
 import com.digitalchina.common.data.RtnData;
+import com.digitalchina.common.pagination.Page;
+import com.digitalchina.common.pagination.PaginationUtils;
 import com.digitalchina.common.utils.UUIDUtil;
+import com.digitalchina.sport.mgr.resource.dao.SubStadiumMapper;
 import com.digitalchina.sport.mgr.resource.model.EquipmentModel;
 import com.digitalchina.sport.mgr.resource.service.EquipmentService;
+import com.digitalchina.sport.mgr.resource.service.MainStadiumService;
+import com.digitalchina.sport.mgr.resource.service.StadiumService;
 import com.sun.corba.se.spi.orbutil.fsm.Guard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +37,12 @@ import java.util.Map;
 public class EquipmentController {
     public static final Logger logger = LoggerFactory.getLogger(EquipmentController.class);
 
+    //设备信息
     @Autowired
     private EquipmentService equipmentService;
+    //主场馆信息
+    @Autowired
+    private MainStadiumService mainStadiumService;
 
     /**
      * 进入设备列表页面
@@ -40,13 +50,20 @@ public class EquipmentController {
      * @return
      */
     @RequestMapping(value = "/equipmentList.html")
-    public String equipmentList(HttpServletRequest request, HttpServletResponse response, ModelMap map){
+    public String equipmentList(@RequestParam(required = false, defaultValue = "5") long pageSize,
+                                @RequestParam(required = false, defaultValue = "1") long page,
+                                HttpServletRequest request, ModelMap map){
         Map<String, Object> paramMap = new HashMap<String, Object>();
         List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
         paramMap.put("equipmentId", request.getParameter("equipmentId"));
         paramMap.put("equipmentType", request.getParameter("equipmentType"));
         paramMap.put("mainStadium", request.getParameter("mainStadium"));
         paramMap.put("subStadium", request.getParameter("subStadium"));
+        int totalSize = equipmentService.getEquipmentTotalCount(paramMap);
+        Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
+        pagination.setUrl(request.getRequestURI());
+        paramMap.put("pageIndex", pagination.getStartIndex());
+        paramMap.put("pageSize", pageSize);
         try {
             list = equipmentService.getEquipmentList(paramMap);
         }catch (Exception e){
@@ -58,6 +75,9 @@ public class EquipmentController {
         map.put("equipmentType", request.getParameter("equipmentType"));
         map.put("mainStadium", request.getParameter("mainStadium"));
         map.put("subStadium", request.getParameter("subStadium"));
+        map.put("pageModel", pagination);
+        map.put("pageSize",String.valueOf(pageSize));
+        map.put("page",String.valueOf(page));
         return "equipment/equipment_list";
     }
 
@@ -68,7 +88,39 @@ public class EquipmentController {
      */
     @RequestMapping(value = "/addEquipment.html")
     public String addEquipment(ModelMap map){
+        List<Map<String, Object>> mainStadiumList = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> subStadiumList = new ArrayList<Map<String, Object>>();
+        try {
+            mainStadiumList = mainStadiumService.findStadiumModel();
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("parent_id", mainStadiumList.get(0).get("id"));
+            subStadiumList = equipmentService.getSubStadiumByParentId(paramMap);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("========进入设备新增页面失败=========",e);
+        }
+        map.put("mainStadiumList", mainStadiumList);
+        map.put("subStadiumList", subStadiumList);
         return "equipment/add_equipment";
+    }
+
+    /**
+     * 根据主场馆ID查询子场馆
+     * @param mainStadiumId
+     * @return
+     */
+    @RequestMapping(value = "/getSubStadiumByParentId.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData getSubStadiumByParentId(String mainStadiumId){
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("parent_id", mainStadiumId);
+        try {
+            return RtnData.ok(equipmentService.getSubStadiumByParentId(paramMap));
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("========根据主场馆ID查询子场馆失败=========",e);
+        }
+        return RtnData.fail("根据主场馆ID查询子场馆失败");
     }
 
     /**
@@ -114,14 +166,24 @@ public class EquipmentController {
      */
     @RequestMapping(value = "/editEquipment.html")
     public String editEquipment(ModelMap map, String id){
+        EquipmentModel equipmentModel = new EquipmentModel();
+        List<Map<String, Object>> mainStadiumList = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> subStadiumList = new ArrayList<Map<String, Object>>();
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("id",id);
         try {
-            map.put("equipment", equipmentService.getEquipmentInfo(paramMap));
+            equipmentModel = equipmentService.getEquipmentInfo(paramMap);
+            Map<String, Object> stadiumMap = new HashMap<String, Object>();
+            stadiumMap.put("parent_id", equipmentModel.getParent_id());
+            subStadiumList = equipmentService.getSubStadiumByParentId(stadiumMap);
+            mainStadiumList = mainStadiumService.findStadiumModel();
         }catch (Exception e){
             e.printStackTrace();
             logger.error("========查询设备失败=========",e);
         }
+        map.put("mainStadiumList", mainStadiumList);
+        map.put("subStadiumList", subStadiumList);
+        map.put("equipment", equipmentModel);
         return "equipment/edit_equipment";
     }
 

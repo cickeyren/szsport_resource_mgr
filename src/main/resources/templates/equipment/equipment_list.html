@@ -30,6 +30,8 @@
         <div class="container-fluid" style="margin-top: 30px;height:120px;">
             <p class="title">设备信息</p>
             <form class="form-horizontal" action="/equipment/equipmentList.html" id="searchForm" method ="POST">
+                <input type="hidden" id="myPage" name="page" th:value="${page}">
+                <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
                 <div>
                     <span class="col-lg-4">
                         设备编号：<input id="equipmentId" name="equipmentId" th:value="${equipmentId}"/>
@@ -37,6 +39,7 @@
                     <span class="col-lg-4">
                         设备类型：
                         <select id="equipmentType" name="equipmentType" >
+                            <option value="">全部</option>
                             <option value="自助终端" th:selected="${equipmentType eq '自助终端'}">自助终端</option>
                             <option value="手持终端" th:selected="${equipmentType eq '手持终端'}">手持终端</option>
                             <option value="闸机" th:selected="${equipmentType eq '闸机'}">闸机</option>
@@ -59,7 +62,8 @@
                 <button type="submit" class="btn btn-success" id="addEquipmentBtn">新增</button>
             </div>
             <div>
-                <table class="table table-bordered">
+                <table class="table table-bordered" th:unless="${#lists.isEmpty(equipmentList)}">
+                    <thead>
                     <tr>
                         <th>设备编号</th>
                         <th>设备类型</th>
@@ -68,6 +72,7 @@
                         <th>状态</th>
                         <th>操作</th>
                     </tr>
+                    </thead>
                     <tbody id="equipmentListBody">
                     <tr th:each="equipment:${equipmentList}">
                         <td  th:text="${equipment.equipmentId}"></td>
@@ -81,11 +86,40 @@
                         </td>
                     </tr>
                     </tbody>
+                    <tbody th:if="${#lists.isEmpty(equipmentList)}">
+                    <tr>
+                        <td colspan="6">没有符合查询条件的记录！</td>
+                    </tr>
+                    </tbody>
                 </table>
+            </div>
+            <div id="page" class="page" align="right" style="margin-right: 10px;">
             </div>
         </div>
     </section>
     <div id="addDialogs">
     </div>
 </body>
+<script th:inline="javascript">
+    $(function () {
+        laypage({
+            cont: 'page',
+            pages: [[${pageModel.totalPage}]], //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+            curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
+                var page = [[${pageModel.currentPage}]];
+                return page;
+            }(),
+            jump: function(e, first){ //触发分页后的回调
+                if(!first){ //一定要加此判断，否则初始时会无限刷新
+                    $("#myPage").val(e.curr);
+                    $("#searchForm").submit();
+                }
+            }
+        });
+        $("#searchEquipmentBtn").click(function(){
+            $("#myPage").val("0");
+            $("#searchForm").submit();
+        });
+    });
+</script>
 </html>

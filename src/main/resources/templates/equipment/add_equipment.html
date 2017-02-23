@@ -35,7 +35,7 @@
                         <tr>
                             <td>设备编号：</td>
                             <td colspan="2">
-                                <input id="equipmentId"/>
+                                <input id="equipmentId" name="equipmentId" type="text"/>
                             </td>
                         </tr>
                         <tr>
@@ -51,16 +51,19 @@
                         <tr>
                             <td>主场馆：</td>
                             <td colspan="2">
-                                <select id="mainStadium">
-                                    <option value="1001">苏州市市民健身中心</option>
+                                <select id="mainStadium" name="mainStaium">
+                                    <option th:each="mainStadium : ${mainStadiumList}"
+                                            th:value="${mainStadium.id}" th:text="${mainStadium.name}">
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>子场馆：</td>
                             <td colspan="2">
-                                <select id="subStadium">
-                                    <option value="11001">篮球馆</option>
+                                <select id="subStadium" name="subStadium" th:switch="${#lists.isEmpty(subStadiumList)}">
+                                    <option th:case="true" value="">无子场馆</option>
+                                    <option th:case="false" th:each="subStadium : ${subStadiumList}"
+                                             th:value="${subStadium.id}}" th:text="${subStadium.name}"></option>
                                 </select>
                             </td>
                         </tr>

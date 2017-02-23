@@ -29,8 +29,7 @@
     <section>
         <div class="container-fluid" style="margin-top: 30px;height:120px;">
             <p class="title">编辑设备</p>
-            <form onsubmit="return false;" class="form-horizontal" id="\
-" method="post">
+            <form onsubmit="return false;" class="form-horizontal" id="editForm" method="post">
                 <div>
                     <table class="table">
                         <tr>
@@ -54,17 +53,17 @@
                             <td>主场馆：</td>
                             <td colspan="2">
                                 <select id="mainStadium" name="mainStadium">
-                                    <option >请选择</option>
-                                    <option value="1001" th:selected="${equipment.parent_id eq '1001'}">苏州市市民健身中心</option>
+                                    <option th:each="mainStadium : ${mainStadiumList}" th:value="${mainStadium.id}"
+                                            th:text="${mainStadium.name}" th:selected="${equipment.parent_id eq mainStadium.id}">
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>子场馆：</td>
                             <td colspan="2">
-                                <select id="subStadium">
-                                    <option >请选择</option>
-                                    <option value="11001" th:selected="${equipment.stadium_id eq '11001'}">篮球馆</option>
+                                <select id="subStadium" name="subStadium">
+                                    <option  th:each="subStadium : ${subStadiumList}" th:value="${subStadium.id}"
+                                             th:text="${subStadium.name}" th:selected="${equipment.stadium_id eq subStadium.id}"></option>
                                 </select>
                             </td>
                         </tr>
@@ -74,7 +73,7 @@
                                 <input type="radio" name="status" value="1" th:checked="${equipment.status eq '1'}">启用
                             </td>
                             <td>
-                                <input type="radio" name="status" value="2"th:checked="${equipment.status eq '2'}">停用
+                                <input type="radio" name="status" value="2" th:checked="${equipment.status eq '2'}">停用
                             </td>
                         </tr>
                     </table>
@@ -90,7 +89,5 @@
             </form>
         </div>
     </section>
-    <div id="addDialogs">
-    </div>
 </body>
 </html>
