@@ -43,6 +43,7 @@
           1&lt;&gt;1
         </otherwise>
       </choose>
+      and status='1'
     </where>
   </select>
 

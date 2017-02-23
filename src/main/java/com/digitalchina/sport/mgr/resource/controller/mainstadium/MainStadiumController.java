@@ -37,11 +37,11 @@ public class MainStadiumController {
     private MainStadiumService mainStadiumService;
 
 
-
     /**
      * 进入主页面
      *
      * @param map
+     *
      * @return
      */
     @RequestMapping(value = "/home.html")
@@ -75,11 +75,11 @@ public class MainStadiumController {
         return "mainstadium/stadiumList::dataList";
     }
 
-
     /**
      * 进入新增页面
      *
      * @param map
+     *
      * @return
      */
     @RequestMapping(value = "/add.html")
@@ -94,6 +94,7 @@ public class MainStadiumController {
      *
      * @param
      * @param map
+     *
      * @return
      */
     @RequestMapping(value = "/addmainStadiumModel.do", method = RequestMethod.POST)
@@ -109,6 +110,7 @@ public class MainStadiumController {
      *
      * @param
      * @param map
+     *
      * @return
      */
     @RequestMapping(value = "/edit.html")
@@ -126,6 +128,7 @@ public class MainStadiumController {
      *
      * @param
      * @param map
+     *
      * @return
      */
     @RequestMapping(value = "/updatemainstadium.do", method = RequestMethod.POST)
@@ -139,6 +142,7 @@ public class MainStadiumController {
      * 删除
      *
      * @param
+     *
      * @return
      */
     @RequestMapping(value = "/delete.do")

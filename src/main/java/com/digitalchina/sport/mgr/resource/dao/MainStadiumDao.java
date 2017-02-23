@@ -16,19 +16,27 @@ import java.util.Map;
  */
 @Mapper
 public interface MainStadiumDao {
-    List<Map<String,Object>> getAllStadiumList(Map<String,Object> param);
+    //分页查询所有主场馆
+    List<Map<String, Object>> getAllStadiumList(Map<String, Object> param);
 
+    //带条件查询总条数
     int findTotalCount(Map<String, Object> params);
 
-    List<Map<String,Object>> findStadiumModel();
+    //查询所有主场馆
+    List<Map<String, Object>> findStadiumModel();
 
-    List<Map<String,Object>> findAllMainStadiumByStuts();
+    //根据状态查询所有主场馆
+    List<Map<String, Object>> findAllMainStadiumByStuts();
 
+    //添加主场馆数据
     int insertmainStadium(MainStadiumModel mainStadiumModel);
 
+    //根据ID查询主场馆数据
     MainStadiumModel selectmainStadiumId(Long id);
 
+    //更新主场馆数据
     int updateMainStadium(MainStadiumModel mainStadiumModel);
 
+    //根据ID删除数据
     int deleteMainStadium(Long id);
 }

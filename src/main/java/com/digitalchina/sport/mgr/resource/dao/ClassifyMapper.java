@@ -8,5 +8,6 @@ import java.util.Map;
 
 @org.apache.ibatis.annotations.Mapper
 public interface ClassifyMapper extends Mapper<Classify> {
-    List<Map<String,Object>> findAllClassify();
+    //升序查询所有场馆分类
+    List<Map<String, Object>> findAllClassify();
 }

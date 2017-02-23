@@ -20,6 +20,7 @@
         cid, level_id, pid, categoryName, sort, picture, ishavesub
     </sql>
     <select id="findAllClassify" resultType="java.util.Map">
-      SELECT  cy.cid,cy.ishavesub,cy.categoryName,cy.level_id,cy.picture,cy.pid,cy.sort FROM classify cy ORDER BY cy.sort ASC
+      SELECT  cy.cid,cy.ishavesub,cy.categoryName,cy.level_id,cy.picture,cy.pid,cy.sort
+      FROM classify cy WHERE cy.pid='1' ORDER BY cy.sort ASC
     </select>
 </mapper>

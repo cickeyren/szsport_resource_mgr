@@ -8,10 +8,27 @@
                 </tr>
                 <tr class="controls">
                     <td class="alignright" width="10%"><span class="red">*</span>区域</td>
-                    <td class="alignleft" id="distpicker1" data-toggle="distpicker">
-                        <select data-province="---- 选择省 ----"></select>
-                        <select data-city="---- 选择市 ----"></select>
-                        <select data-district="---- 选择区 ----"></select>
+                    <td class="alignleft">
+                        <select id="provincial_level" name="provincial_level">
+                            <option value="0">---- 选择省 ----</option>
+                            <option value="1">江苏省</option>
+                        </select>
+                        <select id="city_level" name="city_level">
+                            <option value="0">---- 选择市 ----</option>
+                            <option value="1">苏州市</option>
+                        </select>
+                        <select id="district_level" name="district_level">
+                            <option value="0">---- 选择区 ----</option>
+                            <option value="1">虎丘区</option>
+                            <option value="2">吴中区</option>
+                            <option value="3">相城区</option>
+                            <option value="4">姑苏区</option>
+                            <option value="5">吴江区</option>
+                            <option value="6">常熟市</option>
+                            <option value="7">张家港市</option>
+                            <option value="8">昆山市</option>
+                            <option value="9">太仓市</option>
+                        </select>
                     </td>
                 </tr>
                 <tr class="controls">
@@ -24,30 +41,35 @@
                 </tr>
                 <tr class="controls">
                     <td width="10%" class="alignright"><span class="red">*</span>开放时间</td>
-                    <td class="alignleft"><input type='text' style="float:none" id="open_time" name="open_time" class="inputw100 form-control" onClick="WdatePicker()"/></td>
+                    <td class="alignleft"><input type='text' style="float:none" id="open_time" name="open_time"
+                                                 class="inputw100 form-control" onClick="WdatePicker()"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>简介</td>
                     <td class="alignleft">
-                        <textarea id="introduction" name="introduction" style="width:500px;height:200px;" ></textarea>
+                        <textarea id="introduction" name="introduction" style="width:500px;height:100px;"></textarea>
                     </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>地理位置</td>
-                    <td class="alignleft"><input type="text" id="lag" name="lag" /><input type="text" id="lat" name="lat"/></td>
+                    <td class="alignleft">
+                        <input type="text" id="lag" name="lag"/>
+                        <input type="text" id="lat" name="lat"/>
+                        <button type="submit" class="btn btn-success" id="ditudingwei">地图定位</button>
+                    </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>状态</td>
-                    <td class="alignleft">
-                        <input value="1" type="checkbox" checked name="status">正常
-                        <input value="0" type="checkbox" name="status">闭馆
-                        <input value="2" type="checkbox" name="status">下线
+                    <td class="alignleft" id="checkone">
+                        <input class="check" value="1" type="checkbox" checked name="status">正常
+                        <input class="check" value="0" type="checkbox" name="status">闭馆
+                        <input class="check" value="2" type="checkbox" name="status">下线
                     </td>
                 </tr>
                 <tr>
                     <td class="tableleft"></td>
                     <td class="text-right">
-                        <button type="submit" class="query-btn" id="savemainstaium">保存</button>
+                        <button type="submit" class="btn btn-success" id="savemainstaium">保存</button>
                     </td>
                 </tr>
             </table>
@@ -56,7 +78,7 @@
 </section>
 
 <script type="text/javascript">
-    $(function(){
+    $(function () {
         var valConfig = {
             rules: {
                 title: {
@@ -64,8 +86,14 @@
                     minlength: 2
                 }
             },
-            submitHandler: function(){mainstadium.doAdd()}
+            submitHandler: function () {
+                mainstadium.doAdd()
+            }
         };
         $('#addForm').validate(valConfig);
+        //场馆状态只能单选
+        $('#checkone').find('input[type=checkbox]').bind('click', function () {
+            $('#checkone').find('input[type=checkbox]').not(this).attr("checked", false);
+        });
     });
 </script>
