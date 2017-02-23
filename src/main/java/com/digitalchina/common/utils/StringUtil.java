@@ -408,4 +408,11 @@ public final class StringUtil {
 		return sBuffer.toString();
 	}
 
+	public static int[] StringToInt(String[] arrs){
+		int[] ints = new int[arrs.length];
+		for(int i=0;i<arrs.length;i++){
+			ints[i] = Integer.parseInt(arrs[i]);
+		}
+		return ints;
+	}
 }
