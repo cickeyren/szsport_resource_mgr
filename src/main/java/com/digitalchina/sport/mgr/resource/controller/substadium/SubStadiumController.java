@@ -77,7 +77,7 @@ public class SubStadiumController {
      *
      * @return
      */
-    @RequestMapping(value = "/add.html")
+    @RequestMapping(value = "/add.html" , method = RequestMethod.GET)
     public String add(ModelMap map) {
         List<Map<String, Object>> subStadiumList = subStadiumService.findsubStadium();
         map.put("subStadiumList", subStadiumList);
@@ -114,7 +114,7 @@ public class SubStadiumController {
      *
      * @return
      */
-    @RequestMapping(value = "/edit.html")
+    @RequestMapping(value = "/edit.html" , method = RequestMethod.GET)
     public String edit(@RequestParam String subStadiumid, ModelMap map) {
         Map<String,Object> param = new HashMap<>();
         param.put("subStadiumid",subStadiumid);
@@ -122,8 +122,8 @@ public class SubStadiumController {
 
             SubStadium subStadium = subStadiumService.selectsubStadiumId(param);
             List<Map<String, Object>> subStadiumList = subStadiumService.findsubStadium();
-            map.put("subStadiumControllers", subStadiumList);
-            map.put("subStadiumControllerModel", subStadium);
+            map.put("subStadiumList", subStadiumList);
+            map.put("subStadium", subStadium);
             return "substadium/edit_main_stadium";
         }catch (Exception e){
             e.printStackTrace();
@@ -162,7 +162,7 @@ public class SubStadiumController {
      *
      * @return
      */
-    @RequestMapping(value = "/delete.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete.do", method = RequestMethod.GET)
     @ResponseBody
     public RtnData delete(@RequestParam String subStadiumid) {
         Map<String,Object> param = new HashMap<>();

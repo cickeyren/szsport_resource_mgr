@@ -1,9 +1,10 @@
 $(function () {
+
     /**
-     * 进入主场馆新增页面
+     * 进入子场馆新增页面
      */
-    $("#addNewMainstadium").on('click', function () {
-        window.location.href = "/mainStadiumController/add.html";
+    $("#addSubstadium").on('click', function () {
+        window.location.href = "/subStadiumController/add.html";
     })
 
     /**
@@ -21,14 +22,14 @@ $(function () {
      * 取消新增主场馆
      */
     $("#cancelsavemainstaium").on('click', function () {
-        window.location.href = "mainstadium.html";
+        window.location.href = "substadium.html";
     })
 
     /**
      * 取消编辑主场馆
      */
     $("#canceleditmainstaium").on('click', function () {
-        window.location.href = "mainstadium.html";
+        window.location.href = "substadium.html";
     })
 
     /**
@@ -36,7 +37,7 @@ $(function () {
      */
     $("#resetBtn").on('click',function () {
         $("#name").val("")
-        window.location.href = "mainstadium.html";
+        window.location.href = "substadium.html";
     })
 });
 

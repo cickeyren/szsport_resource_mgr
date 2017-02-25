@@ -7,9 +7,15 @@
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
     <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
     <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+    <script src="../../static/js/yearstrategy/yearstrategy_add.js" th:src="@{/js/yearstrategy/yearstrategy_add.js}"></script>
+
     <script src="../../static/js/substadium/substadium.js" th:src="@{/js/mainstadium/mainstadium.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
@@ -29,77 +35,49 @@
 <body>
 <section>
     <div class="container-fluid" style="margin-top: 30px;height:120px;">
-        <form onsubmit="return false;" class="form-horizontal" action="#" id="updateForm">
+        <form onsubmit="return false;" class="form-horizontal" action="#" id="editForm">
             <input type="hidden" name="id" th:value="${mainStadiumModel.id}"/>
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>名称</td>
-                    <td class="alignleft"><input type="text" id="name" name="name" th:value="${mainStadiumModel.name}"/></td>
+                    <td class="alignleft"><input type="text" id="name" name="name"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright" width="10%"><span class="red">*</span>区域</td>
+                    <td class="alignright" width="10%"><span class="red">*</span>所属项目</td>
                     <td class="alignleft">
                         <select id="provincial_level" name="provincial_level">
-                            <option value="0" th:selected="${mainStadiumModel.provincial_level eq '0'}">---- 选择省 ----</option>
-                            <option value="1" th:selected="${mainStadiumModel.provincial_level eq '1'}">江苏省</option>
+                            <option value="1">体育项目</option>
                         </select>
                         <select id="city_level" name="city_level">
-                            <option value="0" th:selected="${mainStadiumModel.city_level eq '0'}">---- 选择市 ----</option>
-                            <option value="1" th:selected="${mainStadiumModel.city_level eq '1'}">苏州市</option>
+                            <option value="1">篮球</option>
                         </select>
-                        <select id="district_level" name="district_level">
-                            <option value="0" th:selected="${mainStadiumModel.district_level eq '0'}">---- 选择区 ----</option>
-                            <option value="1" th:selected="${mainStadiumModel.district_level eq '1'}">虎丘区</option>
-                            <option value="2" th:selected="${mainStadiumModel.district_level eq '2'}">吴中区</option>
-                            <option value="3" th:selected="${mainStadiumModel.district_level eq '3'}">相城区</option>
-                            <option value="4" th:selected="${mainStadiumModel.district_level eq '4'}">姑苏区</option>
-                            <option value="5" th:selected="${mainStadiumModel.district_level eq '5'}">吴江区</option>
-                            <option value="6" th:selected="${mainStadiumModel.district_level eq '6'}">常熟市</option>
-                            <option value="7" th:selected="${mainStadiumModel.district_level eq '7'}">张家港市</option>
-                            <option value="8" th:selected="${mainStadiumModel.district_level eq '8'}">昆山市</option>
-                            <option value="9" th:selected="${mainStadiumModel.district_level eq '9'}">太仓市</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright" width="10%"><span class="red">*</span>地址</td>
-                    <td class="alignleft"><input type="text" id="address" name="address" th:value="${mainStadiumModel.address}"/></td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright"><span class="red">*</span>电话</td>
-                    <td class="alignleft"><input type="text" id="telephone" name="telephone" th:value="${mainStadiumModel.telephone}"/></td>
-                </tr>
-                <tr class="controls">
-                    <td width="10%" class="alignright"><span class="red">*</span>开放时间</td>
-                    <td class="alignleft"><input type='text' style="float:none" id="open_time" name="open_time"
-                                                 class="inputw100 form-control" onClick="WdatePicker()"/></td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright"><span class="red">*</span>简介</td>
-                    <td class="alignleft">
-                        <textarea id="introduction" name="introduction" style="width:500px;height:100px;" th:text="${mainStadiumModel.introduction}"></textarea>
-                    </td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright"><span class="red">*</span>地理位置</td>
-                    <td class="alignleft">
-                        <input type="text" id="lng" name="lng" th:value="${mainStadiumModel.lng}"/>
-                        <input type="text" id="lat" name="lat" th:value="${mainStadiumModel.lat}"/>
-                        <button type="submit" class="btn btn-success" id="ditudingwei">地图定位</button>
                     </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>状态</td>
                     <td class="alignleft" id="checkone">
-                        <input class="check" value="1" type="checkbox" name="status" th:checked="${mainStadiumModel.status eq '正常'}">正常
-                        <input class="check" value="0" type="checkbox" name="status" th:checked="${mainStadiumModel.status eq '闭馆'}">闭馆
-                        <input class="check" value="2" type="checkbox" name="status" th:checked="${mainStadiumModel.status eq '下线'}">下线
+                        <input class="check" value="1" type="checkbox" checked name="status">正常
+                        <input class="check" value="0" type="checkbox" name="status">闭馆
+                        <input class="check" value="2" type="checkbox" name="status">下线
+                    </td>
+                </tr>
+
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>子馆图片</td>
+                    <td class="alignleft"><input type="text" id="address" name="address"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>简介</td>
+                    <td class="alignleft">
+                        <textarea id="orderDescription" name="orderDescription" style="width:500px;height:200px;"></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td class="tableleft"></td>
                     <td class="text-right">
-                        <button type="submit" class="btn btn-success" id="editmainstaium">保存</button>
+                        <button type="submit" class="btn btn-success" id="savemainstaium">保存</button>
+                        <button type="submit" class="btn btn-success" id="cancelsavemainstaium">取消</button>
+
                     </td>
                 </tr>
             </table>
