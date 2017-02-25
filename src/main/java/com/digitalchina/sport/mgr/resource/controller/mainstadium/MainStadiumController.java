@@ -166,7 +166,7 @@ public class MainStadiumController {
      *
      * @return
      */
-    @RequestMapping(value = "/delete.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete.do", method = RequestMethod.GET)
     @ResponseBody
     public RtnData delete(@RequestParam String mainStadiumid) {
         Map<String,Object> param = new HashMap<>();

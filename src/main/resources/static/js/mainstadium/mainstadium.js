@@ -30,6 +30,14 @@ $(function () {
     $("#canceleditmainstaium").on('click', function () {
         window.location.href = "mainstadium.html";
     })
+
+    /**
+     * 重置查詢條件
+     */
+    $("#resetBtn").on('click',function () {
+        $("#name").val("")
+        window.location.href = "mainstadium.html";
+    })
 });
 
 
