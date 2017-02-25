@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>编辑主场馆</title>
+    <title>编辑子场馆</title>
     <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
@@ -10,7 +10,7 @@
     <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
     <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
-    <script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/mainstadium/mainstadium.js}"></script>
+    <script src="../../static/js/substadium/substadium.js" th:src="@{/js/mainstadium/mainstadium.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
@@ -29,7 +29,7 @@
 <body>
 <section>
     <div class="container-fluid" style="margin-top: 30px;height:120px;">
-        <form onsubmit="return false;" class="form-horizontal" action="#" id="updateForm" method="post">
+        <form onsubmit="return false;" class="form-horizontal" action="#" id="updateForm">
             <input type="hidden" name="id" th:value="${mainStadiumModel.id}"/>
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
@@ -100,7 +100,6 @@
                     <td class="tableleft"></td>
                     <td class="text-right">
                         <button type="submit" class="btn btn-success" id="editmainstaium">保存</button>
-                        <button type="submit" class="btn btn-success" id="canceleditmainstaium">取消</button>
                     </td>
                 </tr>
             </table>

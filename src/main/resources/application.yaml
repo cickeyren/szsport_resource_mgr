@@ -37,6 +37,14 @@ spring:
 mybatis:
   config-location: classpath:mybatis-config.xml #增加mybatis xml风格的支持
   mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: tk.mybatis.springboot.model
+
+--- # mapper
+mapper:
+    mappers:
+        - tk.mybatis.springboot.util.MyMapper
+    not-empty: false
+    identity: MYSQL
 
 upms:
   url: @upms.url@

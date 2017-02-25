@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.TimeFrameMapper" >
+  <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.TimeFrame" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="time_name" property="timeName" jdbcType="VARCHAR" />
+    <result column="time_length" property="timeLength" jdbcType="VARCHAR" />
+    <result column="time_start" property="timeStart" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="time_lag" property="timeLag" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="creat_time" property="creatTime" jdbcType="DATE" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, time_name, time_length, time_start, num, time_lag, status, creat_time, update_time
+  </sql>
+  <select id="findTotalCount" resultType="java.lang.Integer" parameterType="HashMap">
+    SELECT count(0) FROM time_frame
+  </select>
+</mapper>

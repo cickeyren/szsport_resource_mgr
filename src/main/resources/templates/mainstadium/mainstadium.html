@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>主场馆信息</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/mainstadium/mainstadium.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="container-fluid" style="margin-top: 30px;height:120px;">
+        <form class="form-horizontal" action="/mainStadiumController/mainstadium.html" id="searchForm" method="POST">
+            <input type="hidden" id="myPage" name="page" th:value="${page}">
+            <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+            <table class="table">
+                <tr class="controls">
+                    <td>场馆名称:<input type="text" id="name" name="name" th:value="${name}"/>
+                        <button type="submit" class="btn btn-success" id="findStadiumname">查询</button>
+                        <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div>
+            <button type="button" class="btn btn-success" id="addNewMainstadium">新增</button>
+        </div>
+        <div>
+            <table id="dataTable" class="table table-bordered" th:unless="${#lists.isEmpty(mainstadiumlist)}">
+
+                <thead>
+                <tr>
+                    <th>场馆名称</th>
+                    <th>区域</th>
+                    <th>地址</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+
+                <tbody th:remove="all-but-first">
+                <tr th:each="obj, objStat: ${mainstadiumlist}">
+                    <input type="hidden" th:value="${obj.id}"/>
+                    <td th:text="${obj.name}"></td>
+                    <td th:text="${obj.provincial_level}+${obj.city_level}+${obj.district_level}"></td>
+                    <td th:text="${obj.address}"></td>
+                    <td th:text="${obj.status}"></td>
+                    <td>
+                        <a id="edit" th:data="${obj.id}" th:href="@{/mainStadiumController/edit.html(mainstadiumid=${obj.id})}">编辑</a>
+                        <!--&nbsp;&nbsp;&nbsp;-->
+                        <!--<a id="delete" th:data="${obj.id}" th:href="@{/mainStadiumController/delete.do(mainStadiumid=${obj.id})}" >删除</a>-->
+                        &nbsp;&nbsp;&nbsp;
+                        <span th:switch="${obj.is_special}">
+                                                <a style="color:#666666;" th:case="'1'" href="javascript:;"
+                                                   th:data="${obj.id}"
+                                                   onclick="selectFist('0',this);">取消精选</a>
+                                                <a th:case="'0'" href="javascript:;"
+                                                   th:data="${obj.id}"
+                                                   onclick="selectFist('1',this)">设为精选</a>
+                    </span>
+                        &nbsp;&nbsp;&nbsp;
+                        <a th:href="@{/yearstrategyticket/list.html(mainStadiumId=${obj.id})}"
+                           th:data="${obj.id}">门票</a>
+                    </td>
+                </tr>
+                </tbody>
+
+
+                <tbody th:if="${#lists.isEmpty(mainstadiumlist)}">
+                <tr>
+                    <td colspan="12">没有符合查询条件的记录！</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="page" class="page" align="right" style="margin-right: 10px;">
+        </div>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+</body>
+<script th:inline="javascript">
+    $(function () {
+        laypage({
+            cont: 'page',
+            pages: [[${pageModel.totalPage}]], //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+            curr: function () { //通过url获取当前页，也可以同上（pages）方式获取
+                var page = [[${pageModel.currentPage}]];
+                return page;
+            }(),
+            jump: function (e, first) { //触发分页后的回调
+                if (!first) { //一定要加此判断，否则初始时会无限刷新
+                    $("#myPage").val(e.curr);
+                    $("#searchForm").submit();
+                }
+            }
+        });
+        $("#findStadiumname").click(function () {
+            $("#myPage").val("0");
+            $("#searchForm").submit();
+        });
+
+        $("#resetBtn").click(function () {
+            $("#name").val("")
+        })
+    });
+</script>
+</html>

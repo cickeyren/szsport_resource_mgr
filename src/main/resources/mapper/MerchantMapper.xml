@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.MerchantMapper">
+  <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.Merchant">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <result column="provincial_level" jdbcType="VARCHAR" property="provincialLevel" />
+    <result column="city_level" jdbcType="VARCHAR" property="cityLevel" />
+    <result column="district_level" jdbcType="VARCHAR" property="districtLevel" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="contacts" jdbcType="VARCHAR" property="contacts" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="cooperation_way" jdbcType="VARCHAR" property="cooperationWay" />
+    <result column="pay_way" jdbcType="VARCHAR" property="payWay" />
+    <result column="pay_way_account" jdbcType="VARCHAR" property="payWayAccount" />
+    <result column="pay_way_key" jdbcType="VARCHAR" property="payWayKey" />
+    <result column="settlement_way" jdbcType="VARCHAR" property="settlementWay" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.digitalchina.sport.mgr.resource.model.Merchant">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, merchant_name, provincial_level, city_level, district_level, address, contacts, 
+    telephone, cooperation_way, pay_way, pay_way_account, pay_way_key, settlement_way, 
+    status
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    remark
+  </sql>
+</mapper>

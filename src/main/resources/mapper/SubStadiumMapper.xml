@@ -1,50 +1,76 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.digitalchina.sport.mgr.resource.dao.SubStadiumMapper" >
-  <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.SubStadium" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="classify" property="classify" jdbcType="VARCHAR" />
-    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.digitalchina.sport.mgr.resource.model.SubStadium" extends="BaseResultMap" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    <result column="introduction" property="introduction" jdbcType="LONGVARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    id, name, classify, parent_id, status, create_time
-  </sql>
-  <sql id="Blob_Column_List" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    introduction
-  </sql>
-  <select id="getAllSubStadiumByParentId" resultType="java.util.Map" parameterType="HashMap">
-    select
-    id, name, classify, parent_id,(case status when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '作废' ELSE '其他' END) as status , create_time
-    from sub_stadium
-    <where>
-      <choose>
-        <when test="parent_id !=null and parent_id !='' ">
-          parent_id=#{parent_id}
-        </when>
-        <otherwise>
-          1&lt;&gt;1
-        </otherwise>
-      </choose>
-      and status='1'
-    </where>
-  </select>
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.SubStadiumMapper">
+    <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.SubStadium">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="classify" property="classify" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.digitalchina.sport.mgr.resource.model.SubStadium"
+               extends="BaseResultMap">
+        <result column="introduction" property="introduction" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, name, classify, parent_id, status, create_time
+    </sql>
+    <sql id="Blob_Column_List">
+        introduction
+    </sql>
+
+    <!--根据主场馆id获取所有状态为正常子场馆-->
+    <select id="getAllSubStadiumByParentId" resultType="java.util.Map" parameterType="HashMap">
+        select
+        id, name, classify, parent_id,(case status when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '作废' ELSE '其他'
+        END) as status , create_time
+        from sub_stadium
+        <where>
+            <choose>
+                <when test="parent_id !=null and parent_id !='' ">
+                    parent_id=#{parent_id}
+                </when>
+                <otherwise>
+                    1&lt;&gt;1
+                </otherwise>
+            </choose>
+            and status='1'
+        </where>
+    </select>
+
+    <!--分页查询总条数-->
+    <select id="findTotalCount" resultType="java.lang.Integer" parameterType="HashMap">
+      SELECT count(0) FROM sub_stadium
+    </select>
+
+    <!--分页查询所有子场馆信息-->
+    <select id="getAllsubStadiumList" resultType="HashMap" parameterType="HashMap">
+      SELECT sm.id,sm.name,sm.introduction,
+      (case status when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '作废' ELSE '其他' END) as status,
+      cy.categoryName
+      FROM sub_stadium sm
+      JOIN classify cy ON cy.cid=sm.classify
+      limit #{startIndex},#{endIndex}
+    </select>
+
+    <!--查询 所有子场馆信息-->
+    <select id="findsubStadium" resultType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM szsport_order_mgr.sub_stadium
+    </select>
+
+    <!--根据id查询子场馆信息-->
+    <select id="selectsubStadiumId" resultType="com.digitalchina.sport.mgr.resource.model.SubStadium"
+            parameterType="HashMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM szsport_order_mgr.sub_stadium
+        WHERE id = #{id}
+    </select>
 
 </mapper>

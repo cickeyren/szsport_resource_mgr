@@ -35,42 +35,32 @@ public class MainStadiumController {
 
 
     /**
-     * 进入主页面
-     *
-     * @param map
-     *
-     * @return
-     */
-    @RequestMapping(value = "/home.html")
-    public String home(ModelMap map) {
-        return "mainstadium/main_stadium";
-    }
-
-    /**
      * 进入主馆场
      *
      * @param map
      *
      * @return
      */
-    @RequestMapping(value = "/mainstadium.do")
-    public String add(@RequestParam(required = false, defaultValue = "10") long pageSize,
-                      @RequestParam(required = false, defaultValue = "1") long page,
-                      @RequestParam(required = false) String name, ModelMap map, HttpServletRequest request) {
+    @RequestMapping(value = "/mainstadium.html")
+    public String getAllStadiumList(@RequestParam(required = false, defaultValue = "10") long pageSize,
+                                    @RequestParam(required = false, defaultValue = "1") long page,
+                                    ModelMap map, HttpServletRequest request) {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("name", name);
+        params.put("name", request.getParameter("name"));//获取查询条件
         try {
             int totalSize = mainStadiumService.findTotalCount(params);
             Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
             params.put("startIndex", pagination.getStartIndex());
-            params.put("endIndex", pagination.getEndIndex());
+            params.put("endIndex", pageSize);
             List<Map<String, Object>> mainStadiumServiceAllStadiumList = mainStadiumService.getAllStadiumList(params);
 
             pagination.setUrl(request.getRequestURI());
-            map.put("page", pagination);
-            map.put("name", name);//回到页面,保留搜索关键字
+            map.put("pageModel", pagination);
+            map.put("pageSize",String.valueOf(pageSize));
+            map.put("page",String.valueOf(page));
+            map.put("name", request.getParameter("name"));//回到页面,保留搜索关键字
             map.put("mainstadiumlist", mainStadiumServiceAllStadiumList);
-            return "mainstadium/stadiumList::dataList";
+            return "mainstadium/mainstadium";
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("========查询主场馆数据失败=========", e);
@@ -93,6 +83,7 @@ public class MainStadiumController {
         map.put("mainStadiumModels", mainStadiumModels);
         return "mainstadium/add_main_stadium";//进入对应的页面
     }
+
 
     /**
      * 新增
@@ -127,7 +118,7 @@ public class MainStadiumController {
      *
      * @return
      */
-    @RequestMapping(value = "/edit.html")
+    @RequestMapping(value = "/edit.html",method = RequestMethod.GET)
     public String edit(@RequestParam String mainstadiumid, ModelMap map) {
         Map<String,Object> param = new HashMap<>();
         param.put("mainstadiumid",mainstadiumid);

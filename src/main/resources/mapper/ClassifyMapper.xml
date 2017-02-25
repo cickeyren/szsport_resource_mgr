@@ -19,6 +19,7 @@
         -->
         cid, level_id, pid, categoryName, sort, picture, ishavesub
     </sql>
+    <!--升序查询所有场馆分类-->
     <select id="findAllClassify" resultType="java.util.Map">
       SELECT  cy.cid,cy.ishavesub,cy.categoryName,cy.level_id,cy.picture,cy.pid,cy.sort
       FROM classify cy WHERE cy.pid='1' ORDER BY cy.sort ASC
