@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑时段</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+    <script src="../../static/js/timeframe/timeFrameEdit.js" th:src="@{/js/timeframe/timeFrameEdit.js}"></script>
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="container-fluid" style="margin-top: 30px;height:120px;">
+        <p class="title">编辑时段</p>
+        <form onsubmit="return false;" class="form-horizontal" action="#" id="addForm">
+
+            <input type="hidden" id="stadium_id" name="stadium_id" th:value="${timeFrame.stadiumId}"/>
+            <input type="hidden" id="id" name="id" th:value="${timeFrame.id}"/>
+
+            <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>时段名称</td>
+                    <td class="alignleft">
+                        <input type="text" id="time_name" name="time_name" th:value="${timeFrame.timeName}"/>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>单场时长</td>
+                    <td class="alignleft">
+                        <select id="time_length" th:field="*{timeFrame.timeLength}" name="time_length">
+                            <option value=""></option>
+                            <option value="0.5">0.5小时</option>
+                            <option value="1">1小时</option>
+                            <option value="2">2小时</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>开始时间</td>
+                    <td class="alignleft" id="checkone">
+                        <select id="time_start" th:field="*{timeFrame.timeStart}" name="time_start">
+                            <option value=""></option>
+                            <option value="7:00">7:00</option>
+                            <option value="7:30">7:30</option>
+                            <option value="8:00">8:00</option>
+                            <option value="9:00">9:00</option>
+                            <option value="12:00">12:00</option>
+                        </select>
+
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>场数</td>
+                    <td class="alignleft">
+                        <input type="text" id="num" name="num" th:value="${timeFrame.num}"/>
+                    </td>
+                </tr>
+
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>每场间隔</td>
+                    <td class="alignleft">
+                        <input type="text" id="time_lag" th:value="${timeFrame.timeLag}" name="time_lag"/>&nbsp;&nbsp;分钟
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tableleft"></td>
+                    <td class="text-right">
+                        <button type="submit" class="btn btn-success" id="save">保存</button>
+                        <button type="submit" class="btn btn-success" id="cancel">取消</button>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        var valConfig = {
+            rules: {
+                title: {
+                    required: true,
+                    minlength: 2
+                }
+            },
+        };
+        $('#addForm').validate(valConfig);
+    });
+</script>
+</html>

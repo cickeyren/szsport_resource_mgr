@@ -22,7 +22,8 @@ public class TimeFrameService {
     private TimeFrameMapper timeFrameMapper;
 
     /**
-     * 獲取总条数
+     * 获取总条数
+     *
      * @param params
      * @return
      */
@@ -32,15 +33,29 @@ public class TimeFrameService {
 
     /**
      * 带条件查询所有时段
+     *
      * @param params
      * @return
      */
-    public List<TimeFrame> getAllTimeFrameList(Map<String, Object> params) {
-        return timeFrameMapper.selectByExample(params);
+    public List<Map<String, Object>> getAllTimeFrameList(Map<String, Object> params) {
+        return timeFrameMapper.getAllTimeFrame(params);
     }
 
     /**
+     * 获取最大ID
+     *
+     * @return
+     */
+    public String getMaxId(){
+
+        return timeFrameMapper.getMaxId();
+
+    }
+
+
+    /**
      * 查询所有
+     *
      * @return
      */
     public List<TimeFrame> findtimeFrame() {
@@ -49,6 +64,7 @@ public class TimeFrameService {
 
     /**
      * 添加数据
+     *
      * @param timeFrame
      * @return
      */
@@ -58,15 +74,17 @@ public class TimeFrameService {
 
     /**
      * 通过id查询
-     * @param param
+     *
+     * @param timeFrame
      * @return
      */
-    public TimeFrame selectTimeFrameId(Map<String, Object> param) {
-        return timeFrameMapper.selectByPrimaryKey(param);
+    public TimeFrame selectTimeFrameById(TimeFrame timeFrame) {
+        return timeFrameMapper.selectByPrimaryKey(timeFrame);
     }
 
     /**
      * 更新数据
+     *
      * @param timeFrame
      * @return
      */
@@ -76,6 +94,7 @@ public class TimeFrameService {
 
     /**
      * 删除数据
+     *
      * @param param
      * @return
      */

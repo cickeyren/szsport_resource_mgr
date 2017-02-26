@@ -126,7 +126,7 @@ public class FieldController {
 
         try {
             String maxId = fieldService.getMaxId();
-            field.setId(String.valueOf(Long.parseLong(maxId) + 1));
+            field.setId((maxId == null || maxId.equals("")) ? "1000001" : String.valueOf(Long.parseLong(maxId) + 1));
             int rowCount = fieldService.insertField(field);
             if (rowCount > 0) {
                 return RtnData.ok("新增子场馆场地成功");

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>子场馆-场地信息</title>
+    <title>子场馆-时段管理</title>
     <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
@@ -11,7 +11,7 @@
             th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
     <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
-    <script src="../../static/js/field/subField.js" th:src="@{/js/field/subField.js}"></script>
+    <script src="../../static/js/timeframe/timeFrame.js" th:src="@{/js/timeframe/timeFrame.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
@@ -21,7 +21,13 @@
     <style>
         p.title {
             font-size: 18px;
+            margin-top: 20px;
+            margin-left: 20px;
             font-weight: bold;
+        }
+
+        button {
+            margin-left: 10px;
         }
 
         .inputw100 {
@@ -47,42 +53,86 @@
 </head>
 <body>
 <section>
+    <p class="title">子场馆--时段管理</p>
     <div class="container-fluid" style="margin-top: 30px;height:120px;">
-        <form class="form-horizontal" action="/FieldController/subField.html" id="searchForm" method="POST">
+        <form class="form-horizontal" action="/TimeFrameController/timeFrame.html" id="searchForm" method="POST">
             <input type="hidden" id="myPage" name="page" th:value="${page}">
+            <input type="hidden" id="stadium_id" name="stadium_id" th:value="${stadium_id}"/>
             <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+
+            场次时长:
+            <select id="time_length_search" name="time_length_search">
+                <option value=""></option>
+                <option value="0.5">0.5小时</option>
+                <option value="1">1小时</option>
+                <option value="2">2小时</option>
+            </select>
+
+            &nbsp; &nbsp; &nbsp;开始时间:
+            <select id="time_start_search" name="time_start_search">
+                <option value=""></option>
+                <option value="7:00">7:00</option>
+                <option value="7:30">7:30</option>
+                <option value="8:00">8:00</option>
+                <option value="9:00">9:00</option>
+                <option value="12:00">12:00</option>
+            </select>
+
+            &nbsp; &nbsp; &nbsp;场数:
+            <select id="time_num_search" name="time_num_search">
+                <option value=""></option>
+                <option value="1">1</option>
+                <option value="1.5">1.5</option>
+                <option value="2">2</option>
+            </select>
+
+            <button type="submit" class="btn btn-success" id="searchTimeFrame" style="margin-left: 20px">查询</button>
+            <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
+            <button type="button" class="btn btn-success" id="addTimeFrame">新增时段</button>
+
         </form>
-        <input type="hidden" id="subStadiumid" name="subStadiumid" th:value="${subStadiumid}"/>
-        <div>
-            <button type="button" class="btn btn-success" id="addSubField">新增</button>
-        </div>
         <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
             <table id="dataTable" class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>场地名称</th>
-                    <th>展示名称</th>
+                    <th>时段名称</th>
+                    <th>场次时长(小时)</th>
+                    <th>开始时间</th>
+                    <th>场数</th>
+                    <th>每场间隔(分钟)</th>
                     <th>状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
 
-                <tbody th:remove="all-but-first"  th:unless="${#lists.isEmpty(subFieldList)}">
-                <tr th:each="obj, objStat: ${subFieldList}">
+                <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(timeFrameList)}">
+                <!-- 一行形式 -->
+                <tr th:each="obj, objStat: ${timeFrameList}">
+
                     <input type="hidden" th:value="${obj.id}"/>
-                    <td th:text="${obj.field_name}"></td>
-                    <td th:text="${obj.display_name}"></td>
+
+                    <td th:text="${obj.time_name}"></td>
+                    <td th:text="${obj.time_length}"></td>
+                    <td th:text="${obj.time_start}"></td>
+                    <td th:text="${obj.num}"></td>
+                    <td th:text="${obj.time_lag}"></td>
                     <td th:text="${obj.status}"></td>
+
+                    <!-- 操作栏位部分 -->
                     <td>
                         <a id="edit" th:data="${obj.id}"
-                           th:href="@{/FieldController/edit.html(id=${obj.id})}">编辑</a>
+                           th:href="@{/TimeFrameController/editTimeFrame.html(id=${obj.id})}">查看</a>
+
+                        <a id="edit" th:data="${obj.id}" th:if="${#strings.equals(obj.status,'正常')}"
+                           th:href="@{/TimeFrameController/editTimeFrame.html(id=${obj.id})}">&nbsp;&nbsp;&nbsp;编辑</a>
                         &nbsp;&nbsp;&nbsp;
-                        <a name="operate">删除</a>
+                        <a name="invalid" th:if="${#strings.equals(obj.status,'正常')}">作废</a>
                     </td>
+
                 </tr>
                 </tbody>
 
-                <tbody th:if="${#lists.isEmpty(subFieldList)}">
+                <tbody th:if="${#lists.isEmpty(timeFrameList)}">
                 <tr>
                     <td colspan="12">没有符合查询条件的记录！</td>
                 </tr>
