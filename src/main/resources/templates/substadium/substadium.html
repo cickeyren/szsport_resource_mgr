@@ -59,7 +59,7 @@
 
         </div>
         <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
-            <table id="dataTable" class="table table-bordered" th:unless="${#lists.isEmpty(subStadiumList)}">
+            <table id="dataTable" class="table table-bordered" >
 
                 <thead>
                 <tr>
@@ -70,21 +70,21 @@
                 </tr>
                 </thead>
 
-                <tbody th:remove="all-but-first">
+                <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(subStadiumList)}">
                 <tr th:each="obj, objStat: ${subStadiumList}">
                     <input type="hidden" th:value="${obj.id}"/>
                     <td th:text="${obj.name}"></td>
                     <td th:text="${obj.categoryName}"></td>
                     <td th:text="${obj.status}"></td>
                     <td>
-                        <a id="edit" th:data="${obj.id}" th:href="@{/subStadiumController/edit.html(subStadiumid=${obj.id})}">编辑</a>
+                        <a id="edit" th:data="${obj.id}" th:href="@{/subStadiumController/edit.html(subStadiumid=${obj.id},mainStadiumId=${mainStadiumId})}">编辑</a>
                         &nbsp;&nbsp;&nbsp;
                         <a name="delete" th:data="${obj.id}">删除</a>
                         &nbsp;&nbsp;&nbsp;
                         <a th:href="@{/FieldController/subField.html(subStadiumid=${obj.id})}"
                            th:data="${obj.id}">场地</a>
                         &nbsp;&nbsp;&nbsp;
-                        <a th:href="@{/yearstrategyticket/list.html(subStadiumid=${obj.id})}"
+                        <a th:href="@{/TimeFrameController/timeFrame.html(stadium_id=${obj.id})}"
                            th:data="${obj.id}">时段</a>
                         &nbsp;&nbsp;&nbsp;
                         <a th:href="@{/yearstrategyticket/list.html(subStadiumid=${obj.id})}"

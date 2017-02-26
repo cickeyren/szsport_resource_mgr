@@ -75,12 +75,10 @@
     </select>
 
     <!--根据id查询子场馆信息-->
-    <select id="selectsubStadiumId" resultType="com.digitalchina.sport.mgr.resource.model.SubStadium"
+    <select id="selectsubStadiumId" resultType="java.util.Map"
             parameterType="HashMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM szsport_order_mgr.sub_stadium
-        WHERE id = #{id}
+        SELECT su.id,su.name,su.parent_id,su.status,su.classify,su.introduction
+        FROM sub_stadium su WHERE id = #{subStadiumid}
     </select>
 
 </mapper>

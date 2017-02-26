@@ -51,6 +51,7 @@ $(function () {
             allowPreviewEmoticons: false,
             filterMode: false
         });
+        window.introductionEditor = orderDescriptionEditor;
     });
 
 });
@@ -79,21 +80,30 @@ function doAdd(mainStadiumId) {
 
 //编辑更新数据
 function doUpdate() {
-    var data = $("#editForm").serializeArray();
+//准备json数据
+    var addJson = {};
+    addJson.id = $("#id").val();
+    addJson.parentId = $("#parent_id").val();
+    addJson.name = $("#name").val();
+    addJson.status = $('input[name="status"]:checked').val();
+    window.introductionEditor.sync();
+    addJson.introduction = window.introductionEditor.html();
+    var mainStadiumIdedit = $("#mainStadiumIdedit").val();
     getHtmlByUrl({
         type: 'POST',
         url: '/subStadiumController/updatesubStadium.do',
-        data: data,
+        data: addJson,
         success: function (result) {
             if ("000000" == result.code) {
-                layer.msg("编辑数据成功！");
-                window.location.reload(true);
-                window.location.href = "substadium.html";
+                layer.msg("添加成功！");
+                setTimeout(function () {
+                    //返回到子场馆列表
+                    window.location.href = "/subStadiumController/substadium.html?mainStadiumId=" + mainStadiumIdedit;
+                }, 1000);
             }
-            //console.log(result);
         },
         error: function (result) {
-            layer.msg("编辑数据失败！");
+            layer.msg("添加失败！");
         }
     });
 }

@@ -73,7 +73,7 @@
             <button type="button" class="btn btn-success" id="addNewMainstadium">新增</button>
         </div>
         <div>
-            <table id="dataTable" class="table table-bordered" th:unless="${#lists.isEmpty(mainstadiumlist)}">
+            <table id="dataTable" class="table table-bordered" >
 
                 <thead>
                 <tr>
@@ -85,7 +85,7 @@
                 </tr>
                 </thead>
 
-                <tbody th:remove="all-but-first">
+                <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(mainstadiumlist)}">
                 <tr th:each="obj, objStat: ${mainstadiumlist}">
                     <input type="hidden" th:value="${obj.id}"/>
                     <td th:text="${obj.name}"></td>

@@ -66,7 +66,7 @@ public class SubStadiumService {
      * @param param
      * @return
      */
-    public SubStadium selectsubStadiumId(Map<String, Object> param) {
+    public Map<String,Object> selectsubStadiumId(Map<String, Object> param) {
         return subStadiumMapper.selectsubStadiumId(param);
 
     }

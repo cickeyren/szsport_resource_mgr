@@ -21,5 +21,5 @@ public interface SubStadiumMapper extends Mapper<SubStadium> {
     List<Map<String,Object>> findsubStadium();
 
     //根据id查询子场馆信息
-    SubStadium selectsubStadiumId(Map<String, Object> param);
+    Map<String,Object> selectsubStadiumId(Map<String, Object> param);
 }

@@ -123,16 +123,17 @@ public class SubStadiumController {
      * @return
      */
     @RequestMapping(value = "/edit.html" , method = RequestMethod.GET)
-    public String edit(@RequestParam String subStadiumid, ModelMap map) {
+    public String edit(@RequestParam String subStadiumid,@RequestParam String mainStadiumId, ModelMap map) {
         Map<String,Object> param = new HashMap<>();
         param.put("subStadiumid",subStadiumid);
         try {
 
-            SubStadium subStadium = subStadiumService.selectsubStadiumId(param);
+            Map<String,Object> subStadium = subStadiumService.selectsubStadiumId(param);
             List<Map<String, Object>> subStadiumList = subStadiumService.findsubStadium();
             map.put("subStadiumList", subStadiumList);
             map.put("subStadium", subStadium);
-            return "substadium/edit_main_stadium";
+            map.put("mainStadiumId",mainStadiumId);
+            return "substadium/edit_substadium";
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.error("========进入编辑页面失败=========", e);

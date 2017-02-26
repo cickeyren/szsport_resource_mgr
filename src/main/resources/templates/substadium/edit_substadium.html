@@ -35,8 +35,10 @@
 <body>
 <section>
     <div class="container-fluid" style="margin-top: 30px;height:120px;">
-        <form onsubmit="return false;" class="form-horizontal" action="#" id="editForm">
-            <input type="hidden" name="id" th:value="${mainStadiumModel.id}"/>
+        <form onsubmit="return false;" class="form-horizontal" action="#" id="editForm" method="post">
+            <input type="hidden" name="id" id="id" th:value="${subStadium.id}"/>
+            <input type="hidden" name="parent_id" id="parent_id" th:value="${subStadium.parent_id}"/>
+            <input type="hidden" name="mainStadiumIdedit" id="mainStadiumIdedit" th:value="${mainStadiumId}"/>
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>名称</td>
@@ -56,9 +58,9 @@
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>状态</td>
                     <td class="alignleft" id="checkone">
-                        <input type="radio" name="status" value="1" checked>正常
-                        <input type="radio" name="status" value="0">闭馆
-                        <input type="radio" name="status" value="2">下线
+                        <input th:checked="${subStadium.status eq '1'}" type="radio" name="status" value="1">正常
+                        <input th:checked="${subStadium.status eq '0'}" type="radio" name="status" value="0">闭馆
+                        <input th:checked="${subStadium.status eq '2'}" type="radio" name="status" value="2">下线
                     </td>
                 </tr>
 
@@ -69,7 +71,7 @@
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>简介</td>
                     <td class="alignleft">
-                        <textarea id="introduction" name="introduction" style="width:500px;height:200px;"></textarea>
+                        <textarea id="introduction" name="introduction" style="width:500px;height:100px;" th:text="${subStadium.introduction}"></textarea>
                     </td>
                 </tr>
                 <tr>
