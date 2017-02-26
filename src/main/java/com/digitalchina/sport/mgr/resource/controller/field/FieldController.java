@@ -42,7 +42,7 @@ public class FieldController {
                                      ModelMap map, HttpServletRequest request) {
 
         String subStadiumid = request.getParameter("subStadiumid");
-        subStadiumid = "11002";
+//        subStadiumid = "11002";
         Map<String, Object> param = new HashMap<>();
         param.put("stadium_id", subStadiumid);
 
