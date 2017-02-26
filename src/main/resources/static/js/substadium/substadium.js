@@ -14,22 +14,32 @@ $(function () {
         doAdd(mainStadiumId);
     })
 
+    /**
+     * 子场馆数据更新
+     */
     $("#editSubstadium").on("click", function () {
         doUpdate()
+    })
+
+    /**
+     * 子场馆数据删除
+     */
+    $('a[name="delete"]').on('click',function () {
+        doDelete(this);
     })
 
     /**
      * 取消新增子场馆
      */
     $("#cancelSubstadium").on('click', function () {
-        window.location.href = "substadium.html";
+        window.location.href = "/subStadiumController/substadium.html";
     })
 
     /**
      * 取消编辑主场馆
      */
     $("#cancelSubstadium").on('click', function () {
-        window.location.href = "substadium.html";
+        window.location.href = "/subStadiumController/substadium.html";
     })
 
     //初始化富文本编辑器---请放在点击事件之后，预防在html页面渲染失败，导致html页面无法加载
@@ -57,7 +67,7 @@ function doAdd(mainStadiumId) {
             if ("000000" == result.code) {
                 layer.msg("添加成功！");
                 window.location.reload(true);
-                window.location.href = "substadium.html?mainStadiumId="+mainStadiumId;
+                window.location.href = "/subStadiumController/substadium.html?mainStadiumId="+mainStadiumId;
             }
             //console.log(result);
         },
@@ -89,25 +99,24 @@ function doUpdate() {
 }
 
 //删除数据
-function doDelete() {
-    var $this = $(this),
-        $parent = $this.closest('tr'),
-        sid = $parent.find('input[type=hidden]').val();
+function doDelete(field) {
+    var $this = $(field),
+        $parent = $this.parent().parent(),
+        id = $parent.find('input[type="hidden"]').val();
     layer.confirm('是否确认删除？', {
         btn: ['是', '否'] //按钮
     }, function () {
         $.ajax({
             url: '/subStadiumController/delete.do',
-            type: 'POST',
+            type: 'GET',
             data: {
-                "mainStadiumid": sid
+                "subStadiumid": id
             },
             dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
             success: function (result) {
                 if ("000000" == result.code) {
                     layer.msg("删除成功！");
-                    window.location.reload(true);
-                    window.location.href = "substadium.html";
+                    window.location.href = "/subStadiumController/substadium.html?mainStadiumId="+$("#substadiumID").val();
                 }
             },
             error: function (result) {

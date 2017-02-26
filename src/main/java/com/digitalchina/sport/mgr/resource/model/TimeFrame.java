@@ -18,6 +18,12 @@ public class TimeFrame {
     private String timeName;
 
     /**
+     * 时段名称
+     */
+    @Column(name = "stadium_id")
+    private String stadiumId;
+
+    /**
      * 时长
      */
     @Column(name = "time_length")
@@ -217,5 +223,13 @@ public class TimeFrame {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getStadiumId() {
+        return stadiumId;
+    }
+
+    public void setStadiumId(String stadiumId) {
+        this.stadiumId = stadiumId;
     }
 }

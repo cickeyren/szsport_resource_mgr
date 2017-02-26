@@ -13,8 +13,18 @@ $(function () {
         doAdd();
     })
 
+    /**
+     * 主场馆数据更新
+     */
     $("#editmainstaium").on("click", function () {
-        doUpdate()
+        doUpdate();
+    })
+
+    /**
+     * 主场馆数据删除(在循环中不能用id选择器)
+     */
+    $('a[name="delete"]').on("click",function () {
+        doDelete(this);
     })
 
     /**
@@ -95,8 +105,8 @@ $(function () {
     }
 
     //删除数据
-    function doDelete() {
-        var $this = $(this),
+    function doDelete(filed) {
+        var $this = $(filed),
             $parent = $this.closest('tr'),
             sid = $parent.find('input[type=hidden]').val();
         layer.confirm('是否确认删除？', {
@@ -104,7 +114,7 @@ $(function () {
         }, function () {
             $.ajax({
                 url: '/mainStadiumController/delete.do',
-                type: 'POST',
+                type: 'GET',
                 data: {
                     "mainStadiumid": sid
                 },

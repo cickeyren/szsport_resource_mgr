@@ -12,6 +12,7 @@
     <result column="num" property="num" jdbcType="INTEGER" />
     <result column="time_lag" property="timeLag" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="stadium_id" property="stadiumId" jdbcType="VARCHAR" />
     <result column="creat_time" property="creatTime" jdbcType="DATE" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -19,7 +20,7 @@
     <!--
       WARNING - @mbggenerated
     -->
-    id, time_name, time_length, time_start, num, time_lag, status, creat_time, update_time
+    id, time_name, time_length, time_start, num, time_lag, status, creat_time, stadium_id, update_time
   </sql>
   <select id="findTotalCount" resultType="java.lang.Integer" parameterType="HashMap">
     SELECT count(0) FROM time_frame
