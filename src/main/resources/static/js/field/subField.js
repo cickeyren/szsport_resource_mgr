@@ -34,7 +34,7 @@ function doDeleteField(field) {
                 if ("000000" == result.code) {
                     layer.msg("删除成功！");
                     setTimeout(function () {
-                        window.location.href = "/FieldController/subField.html";
+                        window.location.href = "/FieldController/subField.html?subStadiumid=" + $('#subStadiumid').val();
                     }, 1000);
                 }
             },

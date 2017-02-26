@@ -7,7 +7,7 @@ $(function () {
 
     //新增界面保存按钮点击事件 ---  返回主界面
     $("#cancelSubField").on("click", function () {
-        window.location.href = "/FieldController/subField.html";
+        window.location.href = "/FieldController/subField.html?subStadiumid=" + $('#stadium_id').val();
     });
 
     //初始化富文本编辑器(该代码需放在所有事件初始化最后执行) -- 场地介绍
@@ -41,13 +41,13 @@ function doAdd() {
         url: '/FieldController/addSubField.do',
         type: 'POST', //GET
         data: addJson,
-       // contentType:'application/json',
+        // contentType:'application/json',
         dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
         success: function (result) {
             if ("000000" == result.code) {
                 layer.msg("添加成功！");
                 setTimeout(function () {
-                    window.location.href = "/FieldController/subField.html";
+                    window.location.href = "/FieldController/subField.html?subStadiumid=" + $('#stadium_id').val();
                 }, 1000);
             }
         },

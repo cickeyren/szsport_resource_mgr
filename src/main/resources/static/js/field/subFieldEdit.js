@@ -6,7 +6,7 @@ $(function () {
 
     //编辑界面保存按钮点击事件 ---  返回主界面
     $("#cancelSubField").bind("click", function () {
-        window.location.href = "/FieldController/subField.html";
+        window.location.href = "/FieldController/subField.html?subStadiumid=" + $('#stadium_id').val();
     });
 
     //初始化富文本编辑器(该代码需放在所有事件初始化最后执行) -- 场地介绍
@@ -46,7 +46,7 @@ function doSave() {
             if ("000000" == result.code) {
                 layer.msg("更新成功！");
                 setTimeout(function () {
-                    window.location.href = "/FieldController/subField.html";
+                    window.location.href = "/FieldController/subField.html?subStadiumid=" + $('#stadium_id').val();
                 }, 1000);
             } else {
                 layer.msg('更新失败', {
