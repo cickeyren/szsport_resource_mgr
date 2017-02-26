@@ -36,7 +36,7 @@ public class SubStadiumService {
     }
 
     /**
-     * 分页查询所有子场馆信息
+     * 分页查询(通过主场馆查询所有子场馆)
      * @param params
      * @return
      */

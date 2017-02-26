@@ -38,6 +38,17 @@ $(function () {
         $("#name").val("")
         window.location.href = "mainstadium.html";
     })
+
+    //初始化富文本编辑器---请放在点击事件之后，预防在html页面渲染失败，导致html页面无法加载
+    KindEditor.options.filterMode = false;
+    var orderDescriptionEditor;
+    KindEditor.ready(function (K) {
+        orderDescriptionEditor = K.create('textarea[id="introduction"]', {
+            resizeType: 1,
+            allowPreviewEmoticons: false,
+            filterMode: false
+        });
+    });
 });
 
 

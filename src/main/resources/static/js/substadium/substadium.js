@@ -1,59 +1,63 @@
 $(function () {
-
     /**
      * 进入子场馆新增页面
      */
     $("#addSubstadium").on('click', function () {
-        window.location.href = "/subStadiumController/add.html";
+        window.location.href = "/subStadiumController/add.html?substadiumID="+$("#substadiumID").val();
     })
 
     /**
-     * 主场馆新增保存数据
+     * 子场馆新增保存数据
      */
-    $("#savemainstaium").on('click', function () {
-        doAdd();
+    $("#saveSubstadium").on('click', function () {
+        var mainStadiumId = $.trim($("#substadiumAdd").val());
+        doAdd(mainStadiumId);
     })
 
-    $("#editmainstaium").on("click", function () {
+    $("#editSubstadium").on("click", function () {
         doUpdate()
     })
 
     /**
-     * 取消新增主场馆
+     * 取消新增子场馆
      */
-    $("#cancelsavemainstaium").on('click', function () {
+    $("#cancelSubstadium").on('click', function () {
         window.location.href = "substadium.html";
     })
 
     /**
      * 取消编辑主场馆
      */
-    $("#canceleditmainstaium").on('click', function () {
+    $("#cancelSubstadium").on('click', function () {
         window.location.href = "substadium.html";
     })
 
-    /**
-     * 重置查詢條件
-     */
-    $("#resetBtn").on('click',function () {
-        $("#name").val("")
-        window.location.href = "substadium.html";
-    })
+    //初始化富文本编辑器---请放在点击事件之后，预防在html页面渲染失败，导致html页面无法加载
+    KindEditor.options.filterMode = false;
+    var orderDescriptionEditor;
+    KindEditor.ready(function (K) {
+        orderDescriptionEditor = K.create('textarea[id="introduction"]', {
+            resizeType: 1,
+            allowPreviewEmoticons: false,
+            filterMode: false
+        });
+    });
+
 });
 
 
 //新增页面添加数据
-function doAdd() {
+function doAdd(mainStadiumId) {
     var data = $('#addForm').serializeArray();
     getHtmlByUrl({
         type: 'POST',
-        url: '/mainStadiumController/addmainStadiumModel.do',
+        url: '/subStadiumController/addsubStadium.do?mainStadiumId='+mainStadiumId,
         data: data,
         success: function (result) {
             if ("000000" == result.code) {
                 layer.msg("添加成功！");
                 window.location.reload(true);
-                window.location.href = "mainstadium.html";
+                window.location.href = "substadium.html?mainStadiumId="+mainStadiumId;
             }
             //console.log(result);
         },
@@ -65,16 +69,16 @@ function doAdd() {
 
 //编辑更新数据
 function doUpdate() {
-    var data = $("#updateForm").serializeArray();
+    var data = $("#editForm").serializeArray();
     getHtmlByUrl({
         type: 'POST',
-        url: '/mainStadiumController/updatemainstadium.do',
+        url: '/subStadiumController/updatesubStadium.do',
         data: data,
         success: function (result) {
             if ("000000" == result.code) {
                 layer.msg("编辑数据成功！");
                 window.location.reload(true);
-                window.location.href = "mainstadium.html";
+                window.location.href = "substadium.html";
             }
             //console.log(result);
         },
@@ -93,7 +97,7 @@ function doDelete() {
         btn: ['是', '否'] //按钮
     }, function () {
         $.ajax({
-            url: '/mainStadiumController/delete.do',
+            url: '/subStadiumController/delete.do',
             type: 'POST',
             data: {
                 "mainStadiumid": sid
@@ -103,7 +107,7 @@ function doDelete() {
                 if ("000000" == result.code) {
                     layer.msg("删除成功！");
                     window.location.reload(true);
-                    window.location.href = "mainstadium.html";
+                    window.location.href = "substadium.html";
                 }
             },
             error: function (result) {

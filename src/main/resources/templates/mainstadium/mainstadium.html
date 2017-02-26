@@ -7,10 +7,19 @@
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
     <script src="../../static/lib/My97DatePicker/WdatePicker.js"
             th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
     <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
     <script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/mainstadium/mainstadium.js}"></script>
 
@@ -84,9 +93,11 @@
                     <td th:text="${obj.address}"></td>
                     <td th:text="${obj.status}"></td>
                     <td>
-                        <a id="edit" th:data="${obj.id}" th:href="@{/mainStadiumController/edit.html(mainstadiumid=${obj.id})}">编辑</a>
+                        <a id="edit" th:data="${obj.id}"
+                           th:href="@{/mainStadiumController/edit.html(mainstadiumid=${obj.id})}">编辑</a>
                         &nbsp;&nbsp;&nbsp;
-                        <a id="delete" th:data="${obj.id}" th:href="@{/mainStadiumController/delete.do(mainStadiumid=${obj.id})}" >删除</a>
+                        <a id="delete" th:data="${obj.id}"
+                           th:href="@{/mainStadiumController/delete.do(mainStadiumid=${obj.id})}">删除</a>
                         &nbsp;&nbsp;&nbsp;
                         <span th:switch="${obj.is_special}">
                                                 <a style="color:#666666;" th:case="'1'" href="javascript:;"
@@ -95,10 +106,13 @@
                                                 <a th:case="'0'" href="javascript:;"
                                                    th:data="${obj.id}"
                                                    onclick="selectFist('1',this)">设为精选</a>
-                    </span>
+                        </span>
                         &nbsp;&nbsp;&nbsp;
                         <a th:href="@{/yearstrategyticket/list.html(mainStadiumId=${obj.id})}"
                            th:data="${obj.id}">门票</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a th:href="@{/subStadiumController/substadium.html(mainStadiumId=${obj.id})}"
+                           th:data="${obj.id}">子场馆</a>
                     </td>
                 </tr>
                 </tbody>

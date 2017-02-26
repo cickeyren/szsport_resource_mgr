@@ -15,7 +15,7 @@
     <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
     <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
 
-    <script src="../../static/js/substadium/substadium.js" th:src="@{/js/mainstadium/mainstadium.js}"></script>
+    <script src="../../static/js/substadium/substadium.js" th:src="@{/js/substadium/substadium.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
@@ -35,6 +35,7 @@
 <section>
     <div class="container-fluid" style="margin-top: 30px;height:120px;">
         <form onsubmit="return false;" class="form-horizontal" action="#" id="addForm">
+            <input type="hidden" name="substadiumAdd" id="substadiumAdd" th:value="${mainStadiumId}">
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>名称</td>
@@ -54,9 +55,9 @@
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>状态</td>
                     <td class="alignleft" id="checkone">
-                        <input class="check" value="1" type="checkbox" checked name="status">正常
-                        <input class="check" value="0" type="checkbox" name="status">闭馆
-                        <input class="check" value="2" type="checkbox" name="status">下线
+                        <input type="radio" name="status" value="1" checked>正常
+                        <input type="radio" name="status" value="0">闭馆
+                        <input type="radio" name="status" value="2">下线
                     </td>
                 </tr>
 
@@ -67,14 +68,14 @@
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>简介</td>
                     <td class="alignleft">
-                        <textarea id="orderDescription" name="orderDescription" style="width:500px;height:200px;"></textarea>
+                        <textarea id="introduction" name="introduction" style="width:500px;height:200px;"></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td class="tableleft"></td>
                     <td class="text-right">
-                        <button type="submit" class="btn btn-success" id="savemainstaium">保存</button>
-                        <button type="submit" class="btn btn-success" id="cancelsavemainstaium">取消</button>
+                        <button type="submit" class="btn btn-success" id="saveSubstadium">保存</button>
+                        <button type="submit" class="btn btn-success" id="cancelSubstadium">取消</button>
 
                     </td>
                 </tr>
@@ -97,9 +98,6 @@
         };
         $('#addForm').validate(valConfig);
         //场馆状态只能单选
-        $('#checkone').find('input[type=checkbox]').bind('click', function () {
-            $('#checkone').find('input[type=checkbox]').not(this).attr("checked", false);
-        });
     });
 </script>
 </html>

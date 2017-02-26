@@ -49,12 +49,22 @@
 
     <!--分页查询所有子场馆信息-->
     <select id="getAllsubStadiumList" resultType="HashMap" parameterType="HashMap">
-      SELECT sm.id,sm.name,sm.introduction,
-      (case status when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '作废' ELSE '其他' END) as status,
-      cy.categoryName
-      FROM sub_stadium sm
-      JOIN classify cy ON cy.cid=sm.classify
-      limit #{startIndex},#{endIndex}
+        SELECT sm.id,sm.name,sm.introduction,
+        (case status when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '作废' ELSE '其他' END) as status,
+        cy.categoryName
+        FROM sub_stadium sm
+        JOIN classify cy ON cy.cid=sm.classify
+        <where>
+            <choose>
+                <when test="mainStadiumId !=null and mainStadiumId !='' ">
+                    parent_id=#{mainStadiumId}
+                </when>
+                <otherwise>
+                    1&lt;&gt;1
+                </otherwise>
+            </choose>
+        </where>
+        limit #{startIndex},#{endIndex}
     </select>
 
     <!--查询 所有子场馆信息-->

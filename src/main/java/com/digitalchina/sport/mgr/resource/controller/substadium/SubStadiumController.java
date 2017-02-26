@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -47,19 +49,22 @@ public class SubStadiumController {
     @RequestMapping(value = "/substadium.html")
     public String getAllStadiumList(@RequestParam(required = false, defaultValue = "10") long pageSize,
                                     @RequestParam(required = false, defaultValue = "1") long page,
-                                     ModelMap map, HttpServletRequest request) {
+                                    @RequestParam(required = false) String mainStadiumId,
+                                    ModelMap map, HttpServletRequest request, HttpSession session) {
         Map<String, Object> params = new HashMap<String, Object>();
         try {
             int totalSize = subStadiumService.findTotalCount(params);
             Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
             params.put("startIndex", pagination.getStartIndex());
             params.put("endIndex", pageSize);
+            params.put("mainStadiumId",mainStadiumId);
             List<Map<String, Object>> subStadiumList = subStadiumService.getAllsubStadiumList(params);
             pagination.setUrl(request.getRequestURI());
             map.put("pageModel", pagination);
             map.put("pageSize",String.valueOf(pageSize));
             map.put("page",String.valueOf(page));
             map.put("subStadiumList", subStadiumList);
+            map.put("mainStadiumId",mainStadiumId);//在将主场馆ID传入到子场馆列表中！
             return "substadium/substadium";
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,9 +83,10 @@ public class SubStadiumController {
      * @return
      */
     @RequestMapping(value = "/add.html" , method = RequestMethod.GET)
-    public String add(ModelMap map) {
+    public String add(ModelMap map,@RequestParam String substadiumID) {
         List<Map<String, Object>> subStadiumList = subStadiumService.findsubStadium();
         map.put("subStadiumList", subStadiumList);
+        map.put("mainStadiumId",substadiumID);//将主场馆ID传入新增页面
         return "substadium/add_substadium";//进入对应的页面
     }
 
@@ -94,8 +100,10 @@ public class SubStadiumController {
      */
     @RequestMapping(value = "/addsubStadium.do", method = RequestMethod.POST)
     @ResponseBody
-    public RtnData add(SubStadium subStadium, ModelMap map) {
+    public RtnData add(SubStadium subStadium, ModelMap map,@RequestParam(required = true) String mainStadiumId) {
         try {
+            subStadium.setId(UUID.randomUUID().toString());
+            subStadium.setParentId(mainStadiumId);
             if (subStadiumService.insertsubStadium(subStadium)>0){
                 return RtnData.ok("新增子场馆成功");
             }
