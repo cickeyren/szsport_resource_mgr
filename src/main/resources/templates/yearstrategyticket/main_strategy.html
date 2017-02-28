@@ -60,8 +60,8 @@
                         <td>
                             预订类型:
                             <select id="strategyType" name="strategyType">
-                            <option value="0">散客/年卡</option>
-                            <option value="1">场地票</option>
+                                <option value="0">散客/年卡</option>
+                                <option value="1">场地票</option>
                             </select>
                         </td>
                         <td>门票名称<input type="text" id="ticketName" name="ticketName" th:value="${ticketName}"/></td>
@@ -89,7 +89,18 @@
             </form>
         </div>
         <div>
-            <a class="btn btn-success" th:href="@{/yearstrategyticket/add.html}">新增</a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle btn-xs" data-toggle="dropdown">新增
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">散客预订</a></li>
+                    <li class="divider"></li>
+                    <li><a th:href="@{/siteTicket/addSiteTicket.html}">场地票</a></li>
+                    <li class="divider"></li>
+                    <li><a th:href="@{/yearstrategyticket/add.html}">散客/年卡</a></li>
+                </ul>
+            </div>
         </div>
         <div class="row-fluid">
             <div class="span12">

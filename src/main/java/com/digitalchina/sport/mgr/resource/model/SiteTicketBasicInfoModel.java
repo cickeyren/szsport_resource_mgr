@@ -13,6 +13,10 @@ public class SiteTicketBasicInfoModel {
      */
     private String id;
     /**
+     * 套票类型
+     */
+    private String ticketType;
+    /**
      * 主场馆ID
      */
     private String mainStadium;
@@ -128,6 +132,14 @@ public class SiteTicketBasicInfoModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getTicketType() {
+        return ticketType;
+    }
+
+    public void setTicketType(String ticketType) {
+        this.ticketType = ticketType;
     }
 
     public String getMainStadium() {

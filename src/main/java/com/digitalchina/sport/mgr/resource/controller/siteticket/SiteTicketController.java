@@ -55,10 +55,10 @@ public class SiteTicketController {
     @ResponseBody
     public RtnData addSiteTicketBasicInfo(SiteTicketBasicInfoModel siteTicketBasicInfoModel, HttpServletRequest request){
         try {
-            String id = UUIDUtil.generateUUID();
-            siteTicketBasicInfoModel.setId(id);
-            siteTicketService.addSiteTicketBasicInfo(siteTicketBasicInfoModel);
-            return RtnData.ok("添加场地票基本信息成功");
+            boolean isSuccess = siteTicketService.addSiteTicketBasicInfo(siteTicketBasicInfoModel, request);
+            if (isSuccess){
+                return RtnData.ok("添加场地票基本信息成功");
+            }
         } catch (Exception e){
             e.printStackTrace();
             logger.error("========添加场地票基本信息失败=========",e);

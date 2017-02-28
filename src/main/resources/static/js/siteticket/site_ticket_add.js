@@ -138,6 +138,7 @@ $(function () {
             }
         },
         submitHandler: function () {
+            var ticketType = $("#ticketType").val();//套票类型
             var mainStadium = $("#mainStadium").val();//主场馆ID
             if(undefined == mainStadium || "" == mainStadium) {
                 alert("请选择正确的主场馆内容~");
@@ -148,6 +149,12 @@ $(function () {
                 alert("请选择正确的子场馆内容~");
                 return;
             }
+            var classify = "";//子场馆分类
+            $('#subStadium option').each(function(){
+                if ($(this).prop("selected")) {
+                    classify = $(this).attr('classify');
+                }
+            });
             var ticketName = $.trim($("#ticketName").val());//门票名称
             var merchant = $.trim($("#merchant").val());//合作商
             var stopOrderType = $('input:radio[name="stopOrderType"]:checked').val();//停止预订
@@ -200,8 +207,10 @@ $(function () {
             var refundDescription = refundDescriptionEditor.html();
 
             var reqParam = {
+                ticketType:ticketType,
                 mainStadium:mainStadium,
                 subStadium:subStadium,
+                classify:classify,
                 ticketName:ticketName,
                 merchant:merchant,
                 stopOrderType:stopOrderType,

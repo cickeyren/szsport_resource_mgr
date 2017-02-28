@@ -4,6 +4,7 @@
     <insert id="addSiteTicketBasicInfo" parameterType="SiteTicketBasicInfoModel">
         INSERT INTO site_ticket_basic_info (
             id,
+            ticket_type,
             main_stadium_id,
             sub_stadium_id,
             ticket_name,
@@ -31,6 +32,7 @@
         VALUES
         (
             #{id},
+            #{ticketType},
             #{mainStadium},
             #{subStadium},
             #{ticketName},
