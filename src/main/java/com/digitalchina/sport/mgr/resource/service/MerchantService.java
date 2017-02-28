@@ -1,0 +1,68 @@
+package com.digitalchina.sport.mgr.resource.service;
+
+import com.digitalchina.sport.mgr.resource.dao.MerchantMapper;
+import com.digitalchina.sport.mgr.resource.model.Merchant;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * （一句话描述）
+ * 作用：
+ *
+ * @author 王功文
+ * @date 2017/2/27 14:14
+ * @see
+ */
+@Service
+public class MerchantService {
+    @Autowired
+    private  MerchantMapper merchantMapper;
+
+    /**
+     * 分页查询合作商家总条数
+     * @param params
+     * @return
+     */
+    public int findTotalCount(Map<String, Object> params) {
+        return merchantMapper.findTotalCount(params);
+    }
+
+    /**
+     * 分页查询主场馆对应的合作商户
+     * @param params
+     * @return
+     */
+    public List<Map<String,Object>> getmerchantList(Map<String, Object> params) {
+        return  merchantMapper.getmerchantList(params);
+    }
+
+    /**
+     * 添加数据
+     * @param merchant
+     * @return
+     */
+    public int insertMerchant(Merchant merchant) {
+        return merchantMapper.insert(merchant);
+    }
+
+    /**
+     * 根据主键id查询合作商户信息
+     * @param merchant
+     * @return
+     */
+    public Merchant selectMerchantById(Merchant merchant) {
+        return merchantMapper.selectByPrimaryKey(merchant);
+    }
+
+    /**
+     * 修改商户信息
+     * @param merchant
+     * @return
+     */
+    public int updatemerchant(Merchant merchant) {
+        return merchantMapper.updateByPrimaryKey(merchant);
+    }
+}

@@ -53,11 +53,12 @@ public class SubStadiumController {
                                     ModelMap map, HttpServletRequest request, HttpSession session) {
         Map<String, Object> params = new HashMap<String, Object>();
         try {
+
+            params.put("mainStadiumId",mainStadiumId);
             int totalSize = subStadiumService.findTotalCount(params);
             Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
             params.put("startIndex", pagination.getStartIndex());
             params.put("endIndex", pageSize);
-            params.put("mainStadiumId",mainStadiumId);
             List<Map<String, Object>> subStadiumList = subStadiumService.getAllsubStadiumList(params);
             pagination.setUrl(request.getRequestURI());
             map.put("pageModel", pagination);

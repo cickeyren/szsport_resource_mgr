@@ -14,6 +14,11 @@ public class Field {
      */
     @Column(name = "field_name")
     private String fieldName;
+    /**
+     * 场地名称
+     */
+    @Column(name = "lock_stauts")
+    private String lockStauts;
 
     /**
      * 展示名称
@@ -143,5 +148,13 @@ public class Field {
      */
     public void setIntroduction(String introduction) {
         this.introduction = introduction == null ? null : introduction.trim();
+    }
+
+    public String getLockStauts() {
+        return lockStauts;
+    }
+
+    public void setLockStauts(String lockStauts) {
+        this.lockStauts = lockStauts;
     }
 }

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增合作商户信息</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+    <script src="../../static/js/merchant/addmerchant.js" th:src="@{/js/merchant/addmerchant.js}"></script>
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="container-fluid" style="margin-top: 30px;height:120px;">
+        <form onsubmit="return false;" class="form-horizontal" action="#" id="addForm" method="post">
+            <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
+            <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                <tr class="controls">
+                    <td class="alignright">商户名称</td>
+                    <td class="alignleft"><input type="text" id="merchant_name" name="merchant_name"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%">所在地</td>
+                    <td class="alignleft">
+                        <select id="provincial_level" name="provincial_level">
+                            <option value="0">---- 选择省 ----</option>
+                            <option value="1">江苏省</option>
+                        </select>
+                        <select id="city_level" name="city_level">
+                            <option value="0">---- 选择市 ----</option>
+                            <option value="1">苏州市</option>
+                        </select>
+                        <select id="district_level" name="district_level">
+                            <option value="0">---- 选择区 ----</option>
+                            <option value="1">虎丘区</option>
+                            <option value="2">吴中区</option>
+                            <option value="3">相城区</option>
+                            <option value="4">姑苏区</option>
+                            <option value="5">吴江区</option>
+                            <option value="6">常熟市</option>
+                            <option value="7">张家港市</option>
+                            <option value="8">昆山市</option>
+                            <option value="9">太仓市</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>地址</td>
+                    <td class="alignleft"><input type="text" id="address" name="address"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%">联系人</td>
+                    <td class="alignleft"><input type="text" id="contacts" name="contacts"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">电话</td>
+                    <td class="alignleft"><input type="text" id="telephone" name="telephone"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>合作方式</td>
+                    <td class="alignleft" id="checkone">
+                        <input class="check" value="1" type="radio" checked name="cooperation_way">支付第三方
+                        <input class="check" value="2" type="radio" name="cooperation_way">支付入统一账户
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">结算方式</td>
+                    <td class="alignleft" id="checkone">
+                        <input class="check" value="1" type="radio" checked name="settlement_way">不结算
+                        <input class="check" value="2" type="radio" name="settlement_way">按比列结算<input type="text" id="tarm" name="tarm"/>
+                        <input class="check" value="3" type="radio" name="settlement_way">按成本结算
+                        <input class="check" value="4" type="radio" name="settlement_way">银行卡
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">状态</td>
+                    <td class="alignleft" id="checkone">
+                        <input class="check" value="1" type="radio" checked name="status">正常
+                        <input class="check" value="0" type="radio" name="status">停止合作
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">商家备注</td>
+                    <td class="alignleft">
+                        <textarea id="remark" name="remark" style="width:500px;height:200px;"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tableleft"></td>
+                    <td class="text-right">
+                        <button type="submit" class="btn btn-success" id="saveMerchant">保存</button>
+                        <button type="submit" class="btn btn-success" id="cancelMerchant">取消</button>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        var valConfig = {
+            rules: {
+                title: {
+                    required: true,
+                    minlength: 2
+                }
+            },
+        };
+        $('#addForm').validate(valConfig);
+        //场馆状态只能单选
+        $('#checkone').find('input[type=checkbox]').bind('click', function () {
+            $('#checkone').find('input[type=checkbox]').not(this).attr("checked", false);
+        });
+    });
+</script>
+</html>

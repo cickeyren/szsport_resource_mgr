@@ -1,35 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalchina.sport.mgr.resource.dao.MerchantPayAccountMapper">
-  <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.MerchantPayAccount">
-    <!--
-      WARNING - @mbggenerated
-    -->
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
-    <result column="pay_way" jdbcType="VARCHAR" property="payWay" />
-    <result column="seller_id" jdbcType="VARCHAR" property="sellerId" />
-    <result column="partner_id" jdbcType="VARCHAR" property="partnerId" />
-    <result column="app_id" jdbcType="VARCHAR" property="appId" />
-    <result column="sign_type" jdbcType="VARCHAR" property="signType" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.digitalchina.sport.mgr.resource.model.MerchantPayAccount">
-    <!--
-      WARNING - @mbggenerated
-    -->
-    <result column="pay_key" jdbcType="LONGVARCHAR" property="payKey" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--
-      WARNING - @mbggenerated
-    -->
-    id, merchant_id, pay_way, seller_id, partner_id, app_id, sign_type, create_time
-  </sql>
-  <sql id="Blob_Column_List">
-    <!--
-      WARNING - @mbggenerated
-    -->
-    pay_key
-  </sql>
+    <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.MerchantPayAccount">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="merchant_id" jdbcType="VARCHAR" property="merchantId"/>
+        <result column="pay_way" jdbcType="VARCHAR" property="payWay"/>
+        <result column="seller_id" jdbcType="VARCHAR" property="sellerId"/>
+        <result column="partner_id" jdbcType="VARCHAR" property="partnerId"/>
+        <result column="app_id" jdbcType="VARCHAR" property="appId"/>
+        <result column="sign_type" jdbcType="VARCHAR" property="signType"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="com.digitalchina.sport.mgr.resource.model.MerchantPayAccount">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <result column="pay_key" jdbcType="LONGVARCHAR" property="payKey"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        id, merchant_id, pay_way, seller_id, partner_id, app_id, sign_type, create_time
+    </sql>
+    <sql id="Blob_Column_List">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        pay_key
+    </sql>
+    <!--分页查询合作商家对应的支付方式-->
+    <select id="getmerchant_payList" resultType="java.util.Map" parameterType="HashMap">
+        SELECT mp.id, mp.merchant_id,(CASE mp.pay_way WHEN '1' THEN '微信' WHEN '0' THEN '支付宝' END) AS pay_way ,
+        mp.seller_id,mp.partner_id,mp.app_id,mp.pay_key,mp.sign_type
+        FROM merchant_pay_account mp
+        <where>
+            <choose>
+                <when test="merchant_id !=null and merchant_id !='' ">
+                    mp.merchant_id=#{merchant_id}
+                </when>
+                <otherwise>
+                    1&lt;&gt;1
+                </otherwise>
+            </choose>
+        </where>
+        limit #{startIndex},#{endIndex}
+
+    </select>
+    <!--根据合作商家查询支付方式总条数-->
+    <select id="findTotalCount" resultType="java.lang.Integer" parameterType="HashMap">
+        SELECT COUNT(0) FROM merchant_pay_account
+        <where>
+            <choose>
+                <when test="merchant_id !=null and merchant_id !='' ">
+                    merchant_id=#{merchant_id}
+                </when>
+                <otherwise>
+                    1&lt;&gt;1
+                </otherwise>
+            </choose>
+        </where>
+    </select>
 </mapper>

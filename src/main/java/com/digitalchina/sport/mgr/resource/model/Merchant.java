@@ -14,6 +14,11 @@ public class Merchant {
      */
     @Column(name = "merchant_name")
     private String merchantName;
+    /**
+     * 主场馆id
+     */
+    @Column(name = "mainstadium_id")
+    private String mainstadiumId;
 
     /**
      * 省级
@@ -356,5 +361,13 @@ public class Merchant {
      */
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public String getMainstadiumId() {
+        return mainstadiumId;
+    }
+
+    public void setMainstadiumId(String mainstadiumId) {
+        this.mainstadiumId = mainstadiumId;
     }
 }

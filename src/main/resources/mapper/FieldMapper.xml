@@ -10,6 +10,7 @@
         <result column="display_name" jdbcType="VARCHAR" property="displayName"/>
         <result column="status" jdbcType="VARCHAR" property="status"/>
         <result column="stadium_id" jdbcType="VARCHAR" property="stadiumId"/>
+        <result column="lock_stauts" jdbcType="VARCHAR" property="lockStauts"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.digitalchina.sport.mgr.resource.model.Field">
         <!--

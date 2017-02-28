@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>主场馆信息</title>
+    <title>合作商户支付方式信息</title>
     <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
@@ -21,7 +21,7 @@
 
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
-    <script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/mainstadium/mainstadium.js}"></script>
+    <script src="../../static/js/merchant_pay/merchant_pay.js" th:src="@{/js/merchant_pay/merchant_pay.js}"></script>
 
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
@@ -57,70 +57,48 @@
 <body>
 <section>
     <div class="container-fluid">
-        <form class="form-horizontal" action="/mainStadiumController/mainstadium.html" id="searchForm" method="POST">
+        <form class="form-horizontal" action="/MerchantPayController/merchant_pay.html" id="searchForm" method="POST">
             <input type="hidden" id="myPage" name="page" th:value="${page}">
             <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
-            <table class="table">
-                <tr class="controls">
-                    <td>场馆名称:<input type="text" id="name" name="name" th:value="${name}"/>
-                        <button type="submit" class="btn btn-success" id="findStadiumname">查询</button>
-                        <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
-                    </td>
-                </tr>
-            </table>
+            <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
+            <input type="hidden" name="merchantId" id="merchantId" th:value="${merchantId}">
         </form>
         <div>
-            <button type="button" class="btn btn-success" id="addNewMainstadium">新增</button>
+            <button type="button" class="btn btn-success" id="addMerchant">新增</button>
         </div>
         <div>
             <table id="dataTable" class="table table-bordered" >
 
                 <thead>
                 <tr>
-                    <th>场馆名称</th>
-                    <th>区域</th>
-                    <th>地址</th>
-                    <th>状态</th>
+                    <th>支付方式</th>
+                    <th>账号</th>
+                    <th>合作身份ID</th>
+                    <th>应用ID</th>
+<!--                    <th>支付KEY</th>-->
+                    <th>签名方式</th>
                     <th>操作</th>
                 </tr>
                 </thead>
 
-                <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(mainstadiumlist)}">
-                <tr th:each="obj, objStat: ${mainstadiumlist}">
+                <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(merchant_payList)}">
+                <tr th:each="obj, objStat: ${merchant_payList}">
                     <input type="hidden" th:value="${obj.id}"/>
-                    <td th:text="${obj.name}"></td>
-                    <td th:text="${obj.provincial_level}+${obj.city_level}+${obj.district_level}"></td>
-                    <td th:text="${obj.address}"></td>
-                    <td th:text="${obj.status}"></td>
+                    <td th:text="${obj.pay_way}"></td>
+                    <td th:text="${obj.seller_id}"></td>
+                    <td th:text="${obj.partner_id}"></td>
+                    <td th:text="${obj.app_id}"></td>
+<!--                    <td th:text="${obj.pay_key}"></td>-->
+                    <td th:text="${obj.sign_type}"></td>
                     <td>
                         <a id="edit" th:data="${obj.id}"
-                           th:href="@{/mainStadiumController/edit.html(mainstadiumid=${obj.id})}">编辑</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a name="delete" th:data="${obj.id}">删除</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <span th:switch="${obj.is_special}">
-                                                <a style="color:#666666;" th:case="'1'" href="javascript:;"
-                                                   th:data="${obj.id}"
-                                                   onclick="selectFist('0',this);">取消精选</a>
-                                                <a th:case="'0'" href="javascript:;"
-                                                   th:data="${obj.id}"
-                                                   onclick="selectFist('1',this)">设为精选</a>
-                        </span>
-                        &nbsp;&nbsp;&nbsp;
-                        <a th:href="@{/yearstrategyticket/list.html(mainStadiumId=${obj.id})}"
-                           th:data="${obj.id}">门票</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a th:href="@{/subStadiumController/substadium.html(mainStadiumId=${obj.id})}"
-                           th:data="${obj.id}">子场馆</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a th:href="@{/MerchantController/merchant.html(mainstadium_id=${obj.id})}"
-                           th:data="${obj.id}">合作商家</a>
-                    </td>
+                           th:href="@{/MerchantController/edit.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">编辑</a>
+
                 </tr>
                 </tbody>
 
 
-                <tbody th:if="${#lists.isEmpty(mainstadiumlist)}">
+                <tbody th:if="${#lists.isEmpty(merchant_payList)}">
                 <tr>
                     <td colspan="12">没有符合查询条件的记录！</td>
                 </tr>
@@ -149,10 +127,6 @@
                     $("#searchForm").submit();
                 }
             }
-        });
-        $("#findStadiumname").click(function () {
-            $("#myPage").val("0");
-            $("#searchForm").submit();
         });
     });
 </script>
