@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.SiteTicketDao" >
+    <insert id="addSiteTicketBasicInfo" parameterType="SiteTicketBasicInfoModel">
+        INSERT INTO site_ticket_basic_info (
+            id,
+            main_stadium_id,
+            sub_stadium_id,
+            ticket_name,
+            merchant_id,
+            stop_order_type,
+            before_open_time,
+            after_open_time,
+            before_close_time,
+            reserve_time,
+            available_start_time,
+            available_end_time,
+            order_refund_rule,
+            no_refund_time,
+            sell_way,
+            minimum_time_limit,
+            site_num_limit,
+            check_ticket_type,
+            check_ticket_way,
+            approach_time,
+            departure_time,
+            people_num_limit,
+            order_description,
+            refund_description
+        )
+        VALUES
+        (
+            #{id},
+            #{mainStadium},
+            #{subStadium},
+            #{ticketName},
+            #{merchant},
+            #{stopOrderType},
+            #{beforeOpenTime},
+            #{afterOpenTime},
+            #{beforeCloseTime},
+            #{reserveTime},
+            #{availableStartTime},
+            #{availableEndTime},
+            #{orderRefundRule},
+            #{noRefundTime},
+            #{sellWay},
+            #{minimumTimeLimit},
+            #{siteNumLimit},
+            #{checkTicketType},
+            #{checkTicketWay},
+            #{approachTime},
+            #{departureTime},
+            #{peopleNumLimit},
+            #{orderDescription},
+            #{refundDescription}
+        )
+    </insert>
+</mapper>

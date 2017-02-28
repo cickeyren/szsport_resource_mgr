@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>场地票新增页面</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+    <script src="../../static/js/siteticket/site_ticket_add.js" th:src="@{/js/siteticket/site_ticket_add.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container-fluid" style="margin-top: 30px;height:120px;">
+            <p class="title">新增门票-场地票</p>
+            <form onsubmit="return false;" class="form-horizontal" action="#" id="addSiteTicketBasicInfoForm">
+                <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                    <tr class="controls">
+                        <th colspan="2">基本信息</th>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright" width="10%"><span class="red">*</span>选择场馆</td>
+                        <td class="alignleft">
+                            <select id="mainStadium" name="mainStadium">
+                                <option th:each="mainStadium,eStat:${mainStadiumList}" th:value="${mainStadium.id}" th:text="${mainStadium.name}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright" width="10%"><span class="red">*</span>子场馆</td>
+                        <td class="alignleft">
+                            <select id="subStadium" name="subStadium">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright"><span class="red">*</span>门票名称</td>
+                        <td class="alignleft"><input type="text" id="ticketName" name="ticketName"/></td>
+                    </tr>
+                    <tr class="controls">
+                        <td width="10%" class="alignright"><span class="red">*</span>合作商</td>
+                        <td class="alignleft">
+                            <select id="merchant" name="merchant">
+                                <option th:each="merchant,eStat:${merchantList}" th:value="${merchant.id}" th:text="${merchant.merchant_name}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <th colspan="2">预订规则</th>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright" width="15%"><span class="red">*</span>停止预订</td>
+                        <td class="alignleft">
+                            <input  type="radio" checked name="stopOrderType" id="stopOrderType0" value="0"/>
+                            <label style="display:inline">开场前</label>
+                            <input type="text" style="width:35px;display:inline;" id="beforeOpenTime" name="beforeOpenTime"/>
+                            <label style="display:inline">分钟停止预订</label>
+                            <input  type="radio" name="stopOrderType" id="stopOrderType1" value="1"/>
+                            <label style="display:inline">开场后</label>
+                            <input type="text" style="width:35px;display:inline;" id="afterOpenTime" name="afterOpenTime"/>
+                            <label style="display:inline">分钟停止预订</label>
+                            <input  type="radio" name="stopOrderType" id="stopOrderType2" value="2"/>
+                            <label style="display:inline">闭场前</label>
+                            <input type="text" style="width:35px;display:inline;" id="beforeCloseTime" name="beforeCloseTime"/>
+                            <label style="display:inline">分钟停止预订</label>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright"><span class="red">*</span>可预订时间</td>
+                        <td class="alignleft">
+                            <label style="display:inline">可预订</label>
+                            <input type="text" style="width:35px;display:inline;" id="reserveTime" name="reserveTime"/>
+                            <label style="display:inline">日内门票</label>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright"><span class="red">*</span>生效时间</td>
+                        <td class="alignleft">
+                            <input style="width:105px;float: none" type="text" id="availableStartTime" name="availableStartTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'availableEndTime\')}'})" class="Wdate">
+                            <span>至</span>
+                            <input style="width:105px;float: none;" type="text" id="availableEndTime" name="availableEndTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'availableStartTime\')}'})"  class="Wdate">
+
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright"><span class="red">*</span>退票规则</td>
+                        <td class="alignleft">
+                            <input  type="radio" checked name="orderRefundRule" id="orderR0" value="0"><label style="display:inline" for="orderR0">不可退</label>
+                            <input type="radio" name="orderRefundRule" id="orderR1" value="1"><label style="display:inline" for="orderR1">随时退</label>
+                            <input type="radio" name="orderRefundRule" id="orderR2" value="2">
+                            <label style="display:inline">开场前</label>
+                            <input type="text" style="width:35px;display:inline;" id="noRefundTime" name="noRefundTime"/>
+                            <label style="display:inline">小时不可退</label>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright">售卖渠道</td>
+                        <td class="alignleft">
+                            <input type="checkbox" checked="checked" value="0" name="sellWay">线上售卖
+                            <input type="checkbox" value="1" name="sellWay">窗口售卖
+                            <input type="checkbox" value="2" name="sellWay">自助售票机
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright">起订时限</td>
+                        <td class="alignleft">
+                            <label style="display:inline">每片场</label>
+                            <input type="text" style="width:35px;display:inline;" id="minimumTimeLimit" name="minimumTimeLimit"/>
+                            <label style="display:inline">小时起订</label>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright">限订场次数</td>
+                        <td class="alignleft">
+                            <label style="display:inline">每人限订</label>
+                            <input type="text" style="width:35px;display:inline;" id="siteNumLimit" name="siteNumLimit"/>
+                            <label style="display:inline">场次</label>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <th colspan="2">验票</th>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright"><span class="red">*</span>验票凭证</td>
+                        <td class="alignleft">
+                            <input value="0" type="checkbox" checked name="checkTicketType">验证码
+                            <input value="1" type="checkbox" name="checkTicketType">身份证
+                            <input value="2" type="checkbox" name="checkTicketType">市民卡
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright"><span class="red">*</span>验票渠道</td>
+                        <td class="alignleft">
+                            <input value="0" checked type="checkbox" name="checkTicketWay">支持闸机验票
+                            <input value="1" type="checkbox" name="checkTicketWay">支持窗口验票
+                            <input value="2" type="checkbox" name="checkTicketWay">支持手持终端验票
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright">进场时间</td>
+                        <td class="alignleft">
+                            <label style="display:inline">可提前</label>
+                            <input type="text" style="width:35px;display:inline;" id="approachTime" name="approachTime"/>
+                            <label style="display:inline;">分钟进场</label>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright">离场时间</td>
+                        <td class="alignleft">
+                            <label style="display:inline">可退后</label>
+                            <input style="width:35px;display:inline;" type="text" id="departureTime" name="departureTime">
+                            <label style="display:inline;">分钟离场</label>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright">限用人数</td>
+                        <td class="alignleft">
+                            <input style="width:35px;display:inline;" type="text" id="peopleNumLimit" name="peopleNumLimit">
+                            <label style="display:inline;">人</label>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <th colspan="2">门票需知</th>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright"><span class="red">*</span>预订说明</td>
+                        <td class="alignleft">
+                            <textarea id="orderDescription" name="orderDescription" style="width:500px;height:200px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright"><span class="red">*</span>退票说明</td>
+                        <td class="alignleft">
+                            <textarea id="refundDescription" name="refundDescription" style="width:500px;height:200px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><button type="submit" class="btn btn-success" id="addSiteTicket">保存</button></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </section>
+</body>
+</html>
