@@ -65,4 +65,25 @@ public class SiteTicketController {
         }
         return RtnData.fail("添加场地票基本信息失败");
     }
+
+    /**
+     * 修改场地票基本信息
+     * @param siteTicketBasicInfoModel
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/updateSiteTicket.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData updateSiteTicketBasicInfo(SiteTicketBasicInfoModel siteTicketBasicInfoModel, HttpServletRequest request){
+        try {
+            int num = siteTicketService.updateSiteTicketBasicInfo(siteTicketBasicInfoModel);
+            if(num > 0) {
+                return RtnData.ok("修改场地票基本信息成功");
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            logger.error("========修改场地票基本信息失败=========",e);
+        }
+        return RtnData.fail("修改场地票基本信息失败");
+    }
 }
