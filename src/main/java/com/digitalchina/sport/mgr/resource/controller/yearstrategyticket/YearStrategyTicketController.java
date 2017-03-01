@@ -10,6 +10,7 @@ import com.digitalchina.sport.mgr.resource.dao.YearStrategyDao;
 import com.digitalchina.sport.mgr.resource.model.TicketStrategyCommonCheckShieldTimeModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketCheckUseableTimeModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketModel;
+import com.digitalchina.sport.mgr.resource.service.SiteTicketService;
 import com.digitalchina.sport.mgr.resource.service.YearStrategyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,8 @@ public class YearStrategyTicketController {
     private ClassifyMapper classifyMapper;
     @Autowired
     private PropertyConfig config;
+    @Autowired
+    private SiteTicketService siteTicketService;
     /**
      * 进入新增页面
      *
@@ -218,29 +221,48 @@ public class YearStrategyTicketController {
         resultMap.put("subStadiumList",subStadiumMapper.getAllSubStadiumByParentId(params));
         resultMap.put("classifyList",classifyMapper.findAllClassify());
         try {
-            int totalSize = yearStrategyDao.getYearStrategyTicketModelInfoTotalCount(params);
-            Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
-            pagination.setUrl(req.getRequestURI());
-            params.put("pageIndex", pagination.getStartIndex());
-            params.put("pageSize", pageSize);
-            List<Map<String, Object>> strategyList = yearStrategyDao.getYearStrategyTicketModelInfoList4Mgr(params);
+            if("0".equals(strategyType)){
+                //散客/年卡类型场馆票列表信息
+                int totalSize = siteTicketService.getSiteTicketTotalCount(params);
+                Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
+                pagination.setUrl(req.getRequestURI());
+                params.put("pageIndex", pagination.getStartIndex());
+                params.put("pageSize", pageSize);
+                List<Map<String, Object>> strategyList = yearStrategyDao.getYearStrategyTicketModelInfoList4Mgr(params);
 
-            resultMap.put("pageModel", pagination);
-            resultMap.put("mainStadiumId", mainStadiumId);//回到页面,保留搜索关键字
-            resultMap.put("classify", classify);//回到页面,保留搜索关键字
-            resultMap.put("strategyType", strategyType);//回到页面,保留搜索关键字
-            resultMap.put("ticketName", ticketName);//回到页面,保留搜索关键字
-            resultMap.put("strategyState", strategyState);//回到页面,保留搜索关键字
-            resultMap.put("subStadiumId", subStadiumId);//回到页面,保留搜索关键字
-            resultMap.put("strategyList", strategyList);//回到页面,保留搜索关键字
-            resultMap.put("pageSize",String.valueOf(pageSize));
-            resultMap.put("page",String.valueOf(page));
-            if("0".equals(strategyType)) {
+                resultMap.put("pageModel", pagination);
+                resultMap.put("mainStadiumId", mainStadiumId);//回到页面,保留搜索关键字
+                resultMap.put("classify", classify);//回到页面,保留搜索关键字
+                resultMap.put("strategyType", strategyType);//回到页面,保留搜索关键字
+                resultMap.put("ticketName", ticketName);//回到页面,保留搜索关键字
+                resultMap.put("strategyState", strategyState);//回到页面,保留搜索关键字
+                resultMap.put("subStadiumId", subStadiumId);//回到页面,保留搜索关键字
+                resultMap.put("strategyList", strategyList);//回到页面,保留搜索关键字
+                resultMap.put("pageSize",String.valueOf(pageSize));
+                resultMap.put("page",String.valueOf(page));
                 resultMap.put("type", "散客/年卡");
-            return "yearstrategyticket/main_strategy";
+                return "yearstrategyticket/main_strategy";
             } else {
-                //TODO场地票做好了后要改
-            return "yearstrategyticket/main_strategy";
+                //场地票类型场馆票列表信息
+                int totalSize = siteTicketService.getSiteTicketTotalCount(params);
+                Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
+                pagination.setUrl(req.getRequestURI());
+                params.put("pageIndex", pagination.getStartIndex());
+                params.put("pageSize", pageSize);
+                List<Map<String, Object>> ticketList = siteTicketService.getSiteTicketInfoList4Mgr(params);
+
+                resultMap.put("pageModel", pagination);
+                resultMap.put("mainStadiumId", mainStadiumId);//回到页面,保留搜索关键字
+                resultMap.put("classify", classify);//回到页面,保留搜索关键字
+                resultMap.put("strategyType", strategyType);//回到页面,保留搜索关键字
+                resultMap.put("ticketName", ticketName);//回到页面,保留搜索关键字
+                resultMap.put("strategyState", strategyState);//回到页面,保留搜索关键字
+                resultMap.put("subStadiumId", subStadiumId);//回到页面,保留搜索关键字
+                resultMap.put("strategyList", ticketList);//回到页面,保留搜索关键字
+                resultMap.put("pageSize",String.valueOf(pageSize));
+                resultMap.put("page",String.valueOf(page));
+                resultMap.put("type", "场地票");
+                return "yearstrategyticket/main_strategy";
             }
         } catch (Exception e) {
             e.printStackTrace();

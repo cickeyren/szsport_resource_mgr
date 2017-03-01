@@ -133,7 +133,10 @@
                                     <td th:text="0"></td>
                                     <td th:text="${obj.strategy_state eq '1'?'上线':'下线'}"></td>
                                     <td>
-                                        <a th:href="@{/yearstrategyticket/modify.html(yearStrategyId=${obj.ticket_strategy_id})}">编辑</a>
+                                        <span th:switch="${strategyType}">
+                                            <a th:case="'0'" th:href="@{/yearstrategyticket/modify.html(yearStrategyId=${obj.ticket_strategy_id})}">编辑</a>
+                                            <a th:case="'1'" th:href="@{/siteTicket/modify.html(yearStrategyId=${obj.ticket_strategy_id})}">编辑</a>
+                                        </span>
                                         &nbsp;&nbsp;&nbsp;
                                         <!--<a id="delete" th:data="@{/yearstrategyticket/modify.html(yearStrategyId=${obj.ticket_strategy_id})}">下线</a>-->
                                         <span th:switch="${obj.strategy_state}">
@@ -208,28 +211,50 @@
      * @param strategyState
      */
     function changeStrategyState(strategyState,obj) {
+        var strategyType = $("#strategyType").val();
         var id = $(obj).attr("data")
         var tip = "0" == strategyState ? "确定要下线该策略吗?":"确定要上架该策略吗";
         if(confirm(tip)) {
-            //alert(true);
-            $.ajax({
-                url:'/yearstrategyticket/changeStrategyState.json',
-                type:'POST', //GET
-                data:{"id":id,"strategyState":strategyState},
-                dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-                success:function(result){
-                    if("000000" == result.code) {
-                        alert("操作成功~");
-                        window.location.href=sourceURL;
-                    } else {
+            if('0' == strategyType){
+                $.ajax({
+                    url:'/yearstrategyticket/changeStrategyState.json',
+                    type:'POST', //GET
+                    data:{"id":id,"strategyState":strategyState},
+                    dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                    success:function(result){
+                        if("000000" == result.code) {
+                            alert("操作成功~");
+                            window.location.href=sourceURL;
+                        } else {
+                            alert("操作失败~");
+                        }
+                        //console.log(result);
+                    },
+                    error:function(result){
                         alert("操作失败~");
                     }
-                    //console.log(result);
-                },
-                error:function(result){
-                    alert("操作失败~");
-                }
-            })
+                });
+            } else if('1' == strategyType){
+                $.ajax({
+                    url:'/siteTicket/updateSiteTicket.json',
+                    type:'POST', //GET
+                    data:{"id":id,"ticketState":strategyState},
+                    dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                    success:function(result){
+                        if("000000" == result.code) {
+                            alert("操作成功~");
+                            window.location.href=sourceURL;
+                        } else {
+                            alert("操作失败~");
+                        }
+                        //console.log(result);
+                    },
+                    error:function(result){
+                        alert("操作失败~");
+                    }
+                })
+            }
+
         }
     }
 </script>

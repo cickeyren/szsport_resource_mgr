@@ -116,7 +116,7 @@ public class SiteTicketBasicInfoModel {
     /**
      * 场地票状态
      */
-    private String ticketStatus;
+    private String ticketState;
     /**
      * 创建时间
      */
@@ -326,12 +326,12 @@ public class SiteTicketBasicInfoModel {
         this.refundDescription = refundDescription;
     }
 
-    public String getTicketStatus() {
-        return ticketStatus;
+    public String getTicketState() {
+        return ticketState;
     }
 
-    public void setTicketStatus(String ticketStatus) {
-        this.ticketStatus = ticketStatus;
+    public void setTicketState(String ticketState) {
+        this.ticketState = ticketState;
     }
 
     public Date getCreateTime() {

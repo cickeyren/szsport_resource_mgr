@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalchina.sport.mgr.resource.dao.SiteTicketDao" >
+    <!-- 新增场地票基本信息 -->
     <insert id="addSiteTicketBasicInfo" parameterType="SiteTicketBasicInfoModel">
         INSERT INTO site_ticket_basic_info (
             id,
@@ -58,4 +59,172 @@
             #{refundDescription}
         )
     </insert>
+
+    <!--根据分页状态、分类，子场馆等信息参数获取场地票信息(后台用)-->
+    <select id="getSiteTicketTotalCount" parameterType="HashMap" resultType="Integer">
+        SELECT count(*)
+        FROM
+        (
+            SELECT
+                A.main_stadium_id,
+                A.sub_stadium_id,
+                A.ticket_strategy_id,
+                A.classify,
+                F.cid,
+                F.categoryName
+            FROM
+                year_strategy_stadium_relations A
+            LEFT JOIN classify F ON A.classify = F.cid
+            WHERE A.main_stadium_id = #{mainStadiumId}
+            <if test="classify !=null and classify != ''">
+                AND A.classify = #{classify}
+            </if>
+            <if test="subStadiumId !=null and subStadiumId != ''">
+                AND A.sub_stadium_id = #{subStadiumId}
+            </if>
+        ) E
+        JOIN site_ticket_basic_info B ON E.ticket_strategy_id = B.id
+        LEFT JOIN sub_stadium C ON E.sub_stadium_id = C.id
+        LEFT JOIN main_stadium D ON C.parent_id = D.id
+        <where>
+            <if test="strategyState !=null and strategyState != ''">
+                AND  B.ticket_state = #{strategyState}
+            </if>
+            <if test="ticketName !=null and ticketName != ''">
+                AND B.ticket_name LIKE concat('%', #{ticketName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!--根据分页状态、分类，子场馆等信息参数获取场地票list(后台用)-->
+    <select id="getSiteTicketInfoList4Mgr" parameterType="HashMap" resultType="HashMap">
+        SELECT
+            E.*, B.id AS yearStrategyId,
+            B.ticket_name,
+            B.refund_description AS refundDescription,
+            B.order_description AS orderDescription,
+            B.order_refund_rule AS orderRefundRule,
+            C.id AS subStadiumId,
+            C.`name` AS subStadiumName,
+            D.id AS mainStadiumId,
+            D.`name` AS mainStadiumName,
+            B.create_time AS createTime,
+            B.ticket_state AS strategy_state
+        FROM
+        (
+            SELECT
+                A.main_stadium_id,
+                A.sub_stadium_id,
+                A.ticket_strategy_id,
+                A.classify,
+                F.cid,
+                F.categoryName
+            FROM
+                year_strategy_stadium_relations A
+            LEFT JOIN classify F ON A.classify = F.cid
+            WHERE A.main_stadium_id = #{mainStadiumId}
+            <if test="classify !=null and classify != ''">
+                AND A.classify = #{classify}
+            </if>
+            <if test="subStadiumId !=null and subStadiumId != ''">
+                AND A.sub_stadium_id = #{subStadiumId}
+            </if>
+        ) E
+        JOIN site_ticket_basic_info B ON E.ticket_strategy_id = B.id
+        LEFT JOIN `sub_stadium` C ON E.sub_stadium_id = C.id
+        LEFT JOIN `main_stadium` D ON C.parent_id = D.id
+        <where>
+            <if test="strategyState !=null and strategyState != ''">
+                AND  B.ticket_state = #{strategyState}
+            </if>
+            <if test="ticketName !=null and ticketName != ''">
+                AND B.ticket_name LIKE concat('%', #{ticketName}, '%')
+            </if>
+        </where>
+        ORDER BY B.create_time DESC  LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 修改场地票基本信息 -->
+    <update id="updateSiteTicketBasicInfo" parameterType="SiteTicketBasicInfoModel">
+        UPDATE site_ticket_basic_info
+        <set>
+            <if test="ticketType != null">
+                ticket_type = #{ticketType},
+            </if>
+            <if test="mainStadium != null">
+                main_stadium_id = #{mainStadium},
+            </if>
+            <if test="subStadium != null">
+                sub_stadium_id = #{subStadium},
+            </if>
+            <if test="ticketName != null">
+                ticket_name = #{ticketName},
+            </if>
+            <if test="merchant != null">
+                merchant_id = #{merchant},
+            </if>
+            <if test="stopOrderType != null">
+                stop_order_type = #{stopOrderType},
+            </if>
+            <if test="beforeOpenTime != null">
+                before_open_time = #{beforeOpenTime},
+            </if>
+            <if test="afterOpenTime != null">
+                after_open_time = #{afterOpenTime},
+            </if>
+            <if test="beforeCloseTime != null">
+                before_close_time = #{beforeCloseTime},
+            </if>
+            <if test="reserveTime != null">
+                reserve_time = #{reserveTime},
+            </if>
+            <if test="availableStartTime != null">
+                available_start_time = #{availableStartTime},
+            </if>
+            <if test="availableEndTime != null">
+                available_end_time = #{availableEndTime},
+            </if>
+            <if test="orderRefundRule != null">
+                order_refund_rule = #{orderRefundRule},
+            </if>
+            <if test="noRefundTime != null">
+                no_refund_time = #{noRefundTime},
+            </if>
+            <if test="sellWay != null">
+                sell_way = #{sellWay},
+            </if>
+            <if test="minimumTimeLimit != null">
+                minimum_time_limit = #{minimumTimeLimit},
+            </if>
+            <if test="siteNumLimit != null">
+                site_num_limit = #{siteNumLimit},
+            </if>
+            <if test="checkTicketType != null">
+                check_ticket_type = #{checkTicketType},
+            </if>
+            <if test="checkTicketWay != null">
+                check_ticket_way = #{checkTicketWay},
+            </if>
+            <if test="approachTime != null">
+                approach_time = #{approachTime},
+            </if>
+            <if test="departureTime != null">
+                departure_time = #{departureTime},
+            </if>
+            <if test="peopleNumLimit != null">
+                people_num_limit = #{peopleNumLimit},
+            </if>
+            <if test="orderDescription != null">
+                order_description = #{orderDescription},
+            </if>
+            <if test="refundDescription != null">
+                refund_description = #{refundDescription},
+            </if>
+            <if test="ticketState != null">
+                ticket_state = #{ticketState},
+            </if>
+            update_time = now()
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>
