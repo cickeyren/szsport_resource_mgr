@@ -40,4 +40,35 @@ public class MerchantPayAccountService {
     public List<Map<String,Object>> getmerchant_payList(Map<String, Object> params) {
         return merchantPayAccountMapper.getmerchant_payList(params);
     }
+
+    /**
+     * 添加数据
+     * @param merchantPayAccount
+     * @return
+     */
+    public int insert(MerchantPayAccount merchantPayAccount) {
+        return merchantPayAccountMapper.insert(merchantPayAccount);
+    }
+
+    /**
+     * 查询数据条数
+     * @param
+     * @return
+     */
+    public Integer selectByParams(Map<String,Object> map) {
+        return merchantPayAccountMapper.selectByParams(map);
+    }
+
+    public MerchantPayAccount getmerchant_payByparams(MerchantPayAccount params) {
+        return merchantPayAccountMapper.selectByPrimaryKey(params);
+    }
+
+    /**
+     * 更新数据
+     * @param merchantPayAccount
+     * @return
+     */
+    public int update(MerchantPayAccount merchantPayAccount) {
+        return merchantPayAccountMapper.updateByPrimaryKey(merchantPayAccount);
+    }
 }

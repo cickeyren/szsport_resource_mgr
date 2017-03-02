@@ -18,6 +18,7 @@
     <script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/mainstadium/mainstadium.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
@@ -61,26 +62,11 @@
                 <tr class="controls">
                     <td class="alignright" width="10%"><span class="red">*</span>区域</td>
                     <td class="alignleft">
-                        <select id="provincial_level" name="provincial_level">
-                            <option value="0">---- 选择省 ----</option>
-                            <option value="1">江苏省</option>
-                        </select>
-                        <select id="city_level" name="city_level">
-                            <option value="0">---- 选择市 ----</option>
-                            <option value="1">苏州市</option>
-                        </select>
-                        <select id="district_level" name="district_level">
-                            <option value="0">---- 选择区 ----</option>
-                            <option value="1">虎丘区</option>
-                            <option value="2">吴中区</option>
-                            <option value="3">相城区</option>
-                            <option value="4">姑苏区</option>
-                            <option value="5">吴江区</option>
-                            <option value="6">常熟市</option>
-                            <option value="7">张家港市</option>
-                            <option value="8">昆山市</option>
-                            <option value="9">太仓市</option>
-                        </select>
+                        <select id="provincial_level" name="provincial_level"></select>  
+
+                        <select id="city_level" name="city_level" ></select>  
+
+                        <select id="district_level" name="district_level"></select>
                     </td>
                 </tr>
                 <tr class="controls">
@@ -119,8 +105,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tableleft"></td>
-                    <td class="text-right">
+                    <td class="text-right" colspan="2">
                         <button type="submit" class="btn btn-success" id="savemainstaium">保存</button>
                         <button type="submit" class="btn btn-success" id="cancelsavemainstaium">取消</button>
 
@@ -134,6 +119,7 @@
 </div>
 </body>
 <script type="text/javascript">
+    _init_area();//省级联动启用
     $(function () {
         var valConfig = {
             rules: {

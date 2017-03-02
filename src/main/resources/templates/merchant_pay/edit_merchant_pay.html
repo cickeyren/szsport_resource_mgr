@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑支付方式信息</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+    <script src="../../static/js/merchant_pay/editmerchant_pay.js"
+            th:src="@{/js/merchant_pay/editmerchant_pay.js}"></script>
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="container-fluid" style="margin-top: 30px;height:120px;">
+        <form onsubmit="return false;" class="form-horizontal" action="#" id="editForm" method="post">
+            <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
+            <input type="hidden" name="merchantId" id="merchantId" th:value="${merchantId}">
+            <input type="hidden" name="id" id="id" th:value="${id}">
+            <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>支付方式</td>
+                    <td class="alignleft" id="checkone">
+                        <input class="check" about="#zhifubaoDiv" value="1" type="radio"  name="pay_way" th:checked="${merchantPayAccount.payWay eq '1'}">支付宝
+                        <input class="check" about="#weixDiv" value="2" type="radio" name="pay_way" th:checked="${merchantPayAccount.payWay eq '2'}">微信
+                        <input class="check" about="#yingliankaDiv" value="3" type="radio" name="pay_way" th:checked="${merchantPayAccount.payWay eq '3'}">银联卡
+                        <input class="check" about="#yinhangkaDiv" value="4" type="radio" name="pay_way" th:checked="${merchantPayAccount.payWay eq '4'}">银行卡
+                    </td>
+                </tr>
+
+                <tbody class="zf-type" id="weixDiv" style="display: none">
+                <tr>
+                    <td colspan="2">
+                        <span>正在开发该支付方式</span>
+                    </td>
+                </tr>
+                </tbody>
+
+
+                <tbody class="zf-type" id="zhifubaoDiv">
+                <tr class="controls">
+                    <td class="alignright">支付宝账户</td>
+                    <td class="alignleft"><input type="text" id="seller_id" name="seller_id" th:value="${merchantPayAccount.sellerId}"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">支付宝Key</td>
+                    <td class="alignleft">
+                        <input type="text" id="pay_key" name="pay_key" th:value="${merchantPayAccount.payKey}"/>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">支付宝身份者ID</td>
+                    <td class="alignleft"><input type="text" id="partner_id" name="partner_id" th:value="${merchantPayAccount.partnerId}"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">支付宝应用ID</td>
+                    <td class="alignleft"><input type="text" id="app_id" name="app_id" th:value="${merchantPayAccount.appId}"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">支付宝加密方式</td>
+                    <td class="alignleft">
+                        <select id="sign_type" name="sign_type" th:field="*{merchantPayAccount.signType}">
+                            <option value="1">RSA</option>
+                            <option value="2">RSA2</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+
+                <tbody class="zf-type" id="yingliankaDiv" style="display: none">
+                <tr>
+                    <td colspan="2">
+                        <span>正在开发该支付方式</span>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody class="zf-type" id="yinhangkaDiv" style="display: none">
+                <tr>
+                    <td colspan="2">
+                        <span>正在开发该支付方式</span>
+                    </td>
+                </tr>
+                </tbody>
+
+                <tr>
+                    <td class="text-right" colspan="2">
+                        <button type="submit" class="btn btn-success" id="saveEdit">保存</button>
+                        <button type="submit" class="btn btn-success" id="cancelEdit">取消</button>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        var valConfig = {
+            rules: {
+                title: {
+                    required: true,
+                    minlength: 2
+                }
+            },
+        };
+        $('#editForm').validate(valConfig);
+    });
+    /**
+     * 支付方式选择
+     */
+    $('#checkone input').click(function () {
+        $($(this).attr('about')).show().siblings('.zf-type').hide();
+    })
+    $('#checkone input').each(function () {
+       if($(this).attr('checked')){
+           $($(this).attr('about')).show().siblings('.zf-type').hide();
+       }
+    })
+
+
+</script>
+</html>

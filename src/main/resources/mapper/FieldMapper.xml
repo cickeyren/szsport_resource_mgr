@@ -38,6 +38,13 @@
         status,introduction,stadium_id FROM field WHERE stadium_id=#{stadium_id} limit #{startIndex},#{endIndex}
 
     </select>
+    <!-- 根据子场馆ID查询出子场馆场地的所有信息 -->
+    <select id="getAllByid" parameterType="java.util.Map" resultType="java.util.Map">
+
+        SELECT id,field_name,display_name,(CASE status WHEN '1' THEN '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '下线' ELSE '其他' END ) AS
+        status,introduction,stadium_id FROM field WHERE stadium_id=#{stadium_id}
+
+    </select>
 
     <!-- 根据子场馆ID查询子场地总数 -->
     <select id="getTotalCount" parameterType="java.util.Map" resultType="java.lang.Integer">

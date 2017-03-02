@@ -21,4 +21,18 @@ public interface MerchantPayAccountMapper extends Mapper<MerchantPayAccount> {
      * @return
      */
     int findTotalCount(Map<String, Object> params);
+
+    /**
+     * 根据条件查询数据条数
+     * @param map
+     * @return
+     */
+    Integer selectByParams(Map<String, Object> map);
+
+    /**
+     * 根据条件查询实体
+     * @param params
+     * @return
+     */
+    MerchantPayAccount getmerchant_payByparams(Map<String, Object> params);
 }

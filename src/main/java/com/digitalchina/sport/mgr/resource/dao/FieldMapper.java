@@ -18,6 +18,13 @@ public interface FieldMapper extends Mapper<Field> {
     List<Map<String, Object>> getAllSubField(Map<String, Object> param);
 
     /**
+     * 根据子场馆ID查询出子场馆场地的所有信息
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getAllByid(Map<String, Object> param);
+
+    /**
      * 根据子场馆ID查询子场地总数
      *
      * @param param 子场馆ID
@@ -31,4 +38,6 @@ public interface FieldMapper extends Mapper<Field> {
      * @return
      */
     String getMaxId();
+
+
 }

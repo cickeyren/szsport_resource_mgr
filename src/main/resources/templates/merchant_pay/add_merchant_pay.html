@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>新增合作商户信息</title>
+    <title>新增支付方式信息</title>
     <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
@@ -19,10 +19,10 @@
     <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
             th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
 
-    <script src="../../static/js/merchant/addmerchant.js" th:src="@{/js/merchant/addmerchant.js}"></script>
+    <script src="../../static/js/merchant_pay/addmerchant_pay.js"
+            th:src="@{/js/merchant_pay/addmerchant_pay.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
-    <script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
@@ -59,68 +59,76 @@
     <div class="container-fluid" style="margin-top: 30px;height:120px;">
         <form onsubmit="return false;" class="form-horizontal" action="#" id="addForm" method="post">
             <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
+            <input type="hidden" name="merchantId" id="merchantId" th:value="${merchantId}">
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
-                    <td class="alignright">商户名称</td>
-                    <td class="alignleft"><input type="text" id="merchant_name" name="merchant_name"/></td>
+                    <td class="alignright"><span class="red">*</span>支付方式</td>
+                    <td class="alignleft" id="checkone">
+                        <input class="check" about="#zhifubaoDiv" value="1" type="radio" checked name="pay_way">支付宝
+                        <input class="check" about="#weixDiv" value="2" type="radio" name="pay_way">微信
+                        <input class="check" about="#yingliankaDiv" value="3" type="radio" name="pay_way">银联卡
+                        <input class="check" about="#yinhangkaDiv" value="4" type="radio" name="pay_way">银行卡
+                    </td>
                 </tr>
+
+                <tbody class="zf-type" id="weixDiv" style="display: none">
                 <tr>
-                    <td class="alignright" width="10%">所在地</td>
-                    <td class="alignleft">
-                        <select id="provincial_level" name="provincial_level"></select>  
+                    <td colspan="2">
+                        <span>正在开发该支付方式</span>
+                    </td>
+                </tr>
+                </tbody>
 
-                        <select id="city_level" name="city_level"></select>  
 
-                        <select id="district_level" name="district_level"></select>
-                    </td>
+                <tbody class="zf-type" id="zhifubaoDiv">
+                <tr class="controls">
+                    <td class="alignright">支付宝账户</td>
+                    <td class="alignleft"><input type="text" id="seller_id" name="seller_id"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright" width="10%"><span class="red">*</span>地址</td>
-                    <td class="alignleft"><input type="text" id="address" name="address"/></td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright" width="10%">联系人</td>
-                    <td class="alignleft"><input type="text" id="contacts" name="contacts"/></td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright">电话</td>
-                    <td class="alignleft"><input type="text" id="telephone" name="telephone"/></td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright"><span class="red">*</span>合作方式</td>
-                    <td class="alignleft" id="checkone">
-                        <input class="check" value="1" type="radio" checked name="cooperation_way">支付第三方
-                        <input class="check" value="2" type="radio" name="cooperation_way">支付入统一账户
-                    </td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright">结算方式</td>
-                    <td class="alignleft" id="checkone">
-                        <input class="check" value="1" type="radio" checked name="settlement_way">不结算
-                        <input class="check" value="2" type="radio" name="settlement_way">按比列结算<input type="text"
-                                                                                                      id="tarm"
-                                                                                                      name="tarm"/>
-                        <input class="check" value="3" type="radio" name="settlement_way">按成本结算
-                        <input class="check" value="4" type="radio" name="settlement_way">银行卡
-                    </td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright">状态</td>
-                    <td class="alignleft" id="checkone">
-                        <input class="check" value="1" type="radio" checked name="status">正常
-                        <input class="check" value="0" type="radio" name="status">停止合作
-                    </td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright">商家备注</td>
+                    <td class="alignright">支付宝Key</td>
                     <td class="alignleft">
-                        <textarea id="remark" name="remark" style="width:500px;height:200px;"></textarea>
+                        <input type="text" id="pay_key" name="pay_key"/>
                     </td>
                 </tr>
+                <tr class="controls">
+                    <td class="alignright">支付宝身份者ID</td>
+                    <td class="alignleft"><input type="text" id="partner_id" name="partner_id"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">支付宝应用ID</td>
+                    <td class="alignleft"><input type="text" id="app_id" name="app_id"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">支付宝加密方式</td>
+                    <td class="alignleft">
+                        <select id="sign_type" name="sign_type">
+                            <option value="1">RSA</option>
+                            <option value="2">RSA2</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+
+                <tbody class="zf-type" id="yingliankaDiv" style="display: none">
+                <tr>
+                    <td colspan="2">
+                        <span>正在开发该支付方式</span>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody class="zf-type" id="yinhangkaDiv" style="display: none">
+                <tr>
+                    <td colspan="2">
+                        <span>正在开发该支付方式</span>
+                    </td>
+                </tr>
+                </tbody>
+
                 <tr>
                     <td class="text-right" colspan="2">
-                        <button type="submit" class="btn btn-success" id="saveMerchant">保存</button>
-                        <button type="submit" class="btn btn-success" id="cancelMerchant">取消</button>
+                        <button type="submit" class="btn btn-success" id="save">保存</button>
+                        <button type="submit" class="btn btn-success" id="cancel">取消</button>
 
                     </td>
                 </tr>
@@ -132,7 +140,6 @@
 </div>
 </body>
 <script type="text/javascript">
-    _init_area();//省级联动启用
     $(function () {
         var valConfig = {
             rules: {
@@ -143,10 +150,13 @@
             },
         };
         $('#addForm').validate(valConfig);
-        //场馆状态只能单选
-        $('#checkone').find('input[type=checkbox]').bind('click', function () {
-            $('#checkone').find('input[type=checkbox]').not(this).attr("checked", false);
-        });
     });
+    /**
+     * 支付方式选择
+     */
+    $('#checkone input').click(function () {
+        $($(this).attr('about')).show().siblings('.zf-type').hide();
+    })
+
 </script>
 </html>

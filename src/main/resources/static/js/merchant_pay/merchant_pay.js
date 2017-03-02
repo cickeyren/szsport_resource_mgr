@@ -7,6 +7,6 @@ $(function () {
      * 进入合作商户新增页面
      */
     $("#addMerchant").bind('click', function () {
-        window.location.href = "/MerchantController/add.html?mainstadium_id=" + $('#mainstadium_id').val();
+        window.location.href = "/MerchantPayController/add.html?mainstadium_id=" + $('#mainstadium_id').val()+"&merchantId="+$('#merchantId').val();
     });
 });

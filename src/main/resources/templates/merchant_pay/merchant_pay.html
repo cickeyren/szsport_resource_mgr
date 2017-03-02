@@ -61,7 +61,7 @@
             <input type="hidden" id="myPage" name="page" th:value="${page}">
             <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
             <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
-            <input type="hidden" name="merchantId" id="merchantId" th:value="${merchantId}">
+            <input type="hidden" name="merchantId" id="merchantId" th:value="${merchant_id}">
         </form>
         <div>
             <button type="button" class="btn btn-success" id="addMerchant">新增</button>
@@ -92,7 +92,7 @@
                     <td th:text="${obj.sign_type}"></td>
                     <td>
                         <a id="edit" th:data="${obj.id}"
-                           th:href="@{/MerchantController/edit.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">编辑</a>
+                           th:href="@{/MerchantPayController/edit.html(id=${obj.id},mainstadium_id=${mainstadium_id},merchantId=${merchant_id})}">编辑</a>
 
                 </tr>
                 </tbody>

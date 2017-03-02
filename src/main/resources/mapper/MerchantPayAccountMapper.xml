@@ -35,7 +35,7 @@
     </sql>
     <!--分页查询合作商家对应的支付方式-->
     <select id="getmerchant_payList" resultType="java.util.Map" parameterType="HashMap">
-        SELECT mp.id, mp.merchant_id,(CASE mp.pay_way WHEN '1' THEN '微信' WHEN '0' THEN '支付宝' END) AS pay_way ,
+        SELECT mp.id, mp.merchant_id,(CASE mp.pay_way WHEN '1' THEN '支付宝' WHEN '2' THEN '微信' END) AS pay_way ,
         mp.seller_id,mp.partner_id,mp.app_id,mp.pay_key,mp.sign_type
         FROM merchant_pay_account mp
         <where>
@@ -64,5 +64,15 @@
                 </otherwise>
             </choose>
         </where>
+    </select>
+    <select id="selectByParams" resultType="java.lang.Integer" parameterType="HashMap">
+          SELECT COUNT(0) FROM merchant_pay_account WHERE  merchant_id=#{merchantId} and pay_way =#{payWay}
+    </select>
+    <select id="getmerchant_payByparams"
+            resultType="com.digitalchina.sport.mgr.resource.model.MerchantPayAccount" parameterType="HashMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM merchant_pay_account
+        WHERE id = #{id} and pay_way=#{pay_way}
     </select>
 </mapper>
