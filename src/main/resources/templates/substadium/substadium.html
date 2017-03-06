@@ -87,8 +87,8 @@
                         <a th:href="@{/TimeFrameController/timeFrame.html(stadium_id=${obj.id})}"
                            th:data="${obj.id}">时段</a>
                         &nbsp;&nbsp;&nbsp;
-                        <a th:href="@{/yearstrategyticket/list.html(subStadiumid=${obj.id})}"
-                           th:data="${obj.id}">观众席</a>
+                        <span th:href="@{/yearstrategyticket/list.html(subStadiumid=${obj.id})}"
+                           th:data="${obj.id}">观众席</span>
                     </td>
                 </tr>
                 </tbody>
