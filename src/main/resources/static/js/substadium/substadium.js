@@ -42,6 +42,11 @@ $(function () {
         window.location.href = "/subStadiumController/substadium.html";
     })
 
+    //给体育项目增加change事件
+    $("#classflyOne").change(function(){
+        updateclassflyList($("#classflyOne").val());
+    });
+
     //初始化富文本编辑器---请放在点击事件之后，预防在html页面渲染失败，导致html页面无法加载
     KindEditor.options.filterMode = false;
     var orderDescriptionEditor;
@@ -56,9 +61,33 @@ $(function () {
 
 });
 
+/**
+ * 根据体育馆的主向项目获取子项目列表
+ * @param
+ */
+function updateSubStadiumList(cid) {
+    $.ajax({
+        url:'/subStadiumController/getclassflyByMainId.json',
+        type:'POST', //GET
+        data:{"cid":cid},
+        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success:function(result){
+            if("000000" == result.code) {
+                var items = result.result.classflyList;
+                $("#classify").empty();
+                $.each(items,function(i,n){
+                    $("#classify").append("<option value=\"" + n.cid + "\">"+n.categoryName+"</option>");
+                });
+            } else {
+                layer.msg("添加失败")
+            }
+        },
+    })
+}
 
 //新增页面添加数据
 function doAdd(mainStadiumId) {
+    window.introductionEditor.sync();
     var data = $('#addForm').serializeArray();
     getHtmlByUrl({
         type: 'POST',
@@ -85,6 +114,8 @@ function doUpdate() {
     addJson.id = $("#id").val();
     addJson.parentId = $("#parent_id").val();
     addJson.name = $("#name").val();
+    addJson.name = $("#name").val();
+    addJson.classify = $("#classify").val();
     addJson.status = $('input[name="status"]:checked').val();
     window.introductionEditor.sync();
     addJson.introduction = window.introductionEditor.html();
