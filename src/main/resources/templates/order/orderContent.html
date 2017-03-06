@@ -41,15 +41,18 @@
         .form-horizontal .control-group .controls label {
             float: none;
         }
+        .tab_1{width: 400px;height: auto;}
+        .tab_1 tr th{height: 40px;background-color: #CCCCCC;}
+        .tab_1 tr {height: 30px;}
+        .p_1{display: inline-block;width: auto;}
+        .lab_1{display: inline-block;  }
     </style>
 </head>
 <body>
 <div>
-    <p class="title ml10 mt10">取票状态</p>
-    <div>
-        <div class="ml20" th:text="${orderContent.takeStatus}"></div>
-    </div>
-    <table th:if="${#strings.equals(orderContent.takeStatus,'1')}">
+    <p class="title ml10 mt10 p_1">取票状态:</p>
+    <label class="ml20 lab_1" th:text="${orderContent.takeStatus}"></label>
+    <table class="tab_1 table-bordered table-hover definewidth m10 ml20" th:if="${#strings.equals(orderContent.takeStatus,'已取票')}">
         <tr>
             <th>取票方式</th>
             <th>取票时间</th>
@@ -61,11 +64,9 @@
     </table>
 </div>
 <div>
-    <p class="title ml10 mt10">验票状态</p>
-    <div>
-        <div class="ml20" th:text="${orderContent.checkStatus}"></div>
-    </div>
-    <table th:if="${#strings.equals(orderContent.checkStatus,'1')}">
+    <p class="title ml10 mt10 p_1">验票状态:</p>
+    <label class="ml20 lab_1" th:text="${orderContent.checkStatus}"></label>
+    <table class="tab_1 table-bordered table-hover definewidth m10 ml20" th:if="${#strings.equals(orderContent.checkStatus,'已验票')}">
         <tr>
             <th>验票方式</th>
             <th>验票时间</th>
