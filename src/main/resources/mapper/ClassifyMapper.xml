@@ -24,4 +24,21 @@
       SELECT  cy.cid,cy.ishavesub,cy.categoryName,cy.level_id,cy.picture,cy.pid,cy.sort
       FROM classify cy WHERE cy.pid='1' ORDER BY cy.sort ASC
     </select>
+    <!--根据条件查询所有子项目-->
+    <select id="findAllClassifyByCid" resultType="java.util.Map">
+      SELECT  cy.cid,cy.ishavesub,cy.categoryName,cy.level_id,cy.picture,cy.pid,cy.sort
+      FROM classify cy
+      <where>
+          <if test="cid != null and cid !=''">
+              cy.pid=#{cid}
+          </if>
+      </where>
+       ORDER BY cy.sort ASC
+    </select>
+
+    <!--查询所有主项目-->
+    <select id="findAllClassifyByMain" resultType="java.util.Map">
+      SELECT  cy.cid,cy.ishavesub,cy.categoryName,cy.level_id,cy.picture,cy.pid,cy.sort
+      FROM classify cy WHERE cy.pid='0' AND cy.ishavesub = '1' ORDER BY cy.sort ASC
+    </select>
 </mapper>

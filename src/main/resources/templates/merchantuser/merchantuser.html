@@ -2,18 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>子场馆信息</title>
+    <title>合作商户账户信息</title>
     <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
     <script src="../../static/lib/My97DatePicker/WdatePicker.js"
             th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
     <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
-    <script src="../../static/js/substadium/substadium.js" th:src="@{/js/substadium/substadium.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/js/merchantuser/merchantuser.js" th:src="@{/js/merchantuser/merchantuser.js}"></script>
+
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
@@ -47,60 +56,52 @@
 </head>
 <body>
 <section>
-    <div class="container-fluid" style="margin-top: 30px;height:120px;">
-        <form class="form-horizontal" action="/subStadiumController/substadium.html" id="searchForm" method="POST">
+    <div class="container-fluid">
+        <form class="form-horizontal" action="#" id="searchForm" method="POST">
             <input type="hidden" id="myPage" name="page" th:value="${page}">
             <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
-            <input type="hidden" name="substadiumID" id="substadiumID" th:value="${mainStadiumId}">
+            <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
+            <input type="hidden" name="merchant_id" id="merchant_id" th:value="${merchant_id}">
         </form>
         <div>
-            <button type="button" class="btn btn-success" id="addSubstadium">新增</button>
-            <button type="button" class="btn btn-success" id="projectSort">项目排序</button>
-
+            <button type="button" class="btn btn-success" id="addMerchant">新增</button>
         </div>
-        <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
+        <div>
             <table id="dataTable" class="table table-bordered" >
 
                 <thead>
                 <tr>
-                    <th>子馆名称</th>
-                    <th>所属项目</th>
-                    <th>状态</th>
+                    <th>用户名</th>
+                    <th>手机号</th>
+                    <th>用户权限</th>
+                    <th>描述</th>
+                    <th>用户状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
 
-                <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(subStadiumList)}">
-                <tr th:each="obj, objStat: ${subStadiumList}">
+                <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(merchantuser)}">
+                <tr th:each="obj, objStat: ${merchantuser}">
                     <input type="hidden" th:value="${obj.id}"/>
-                    <td th:text="${obj.name}"></td>
-                    <td th:text="${obj.categoryName}"></td>
+                    <td th:text="${obj.user_name}"></td>
+                    <td th:text="${obj.user_tel}"></td>
+                    <td th:text="${obj.admin_role}"></td>
+                    <td th:text="${obj.descride}"></td>
                     <td th:text="${obj.status}"></td>
                     <td>
-                        <a id="edit" th:data="${obj.id}" th:href="@{/subStadiumController/edit.html(subStadiumid=${obj.id},mainStadiumId=${mainStadiumId})}">编辑</a>
+                        <a id="edit" th:data="${obj.id}"
+                           th:href="@{/MerchantUserController/edit.html(id=${obj.id},mainstadium_id=${mainstadium_id},merchantId=${merchant_id})}">编辑</a>
                         &nbsp;&nbsp;&nbsp;
-                        <a name="delete" th:data="${obj.id}">删除</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a th:href="@{/FieldController/subField.html(subStadiumid=${obj.id})}"
-                           th:data="${obj.id}">场地</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a th:href="@{/TimeFrameController/timeFrame.html(stadium_id=${obj.id})}"
-                           th:data="${obj.id}">时段</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <span th:href="@{/yearstrategyticket/list.html(subStadiumid=${obj.id})}"
-                           th:data="${obj.id}">观众席</span>
-                    </td>
                 </tr>
                 </tbody>
 
 
-                <tbody th:if="${#lists.isEmpty(subStadiumList)}">
+                <tbody th:if="${#lists.isEmpty(merchantuser)}">
                 <tr>
                     <td colspan="12">没有符合查询条件的记录！</td>
                 </tr>
                 </tbody>
             </table>
-
         </div>
         <div id="page" class="page" align="right" style="margin-right: 10px;">
         </div>
@@ -121,7 +122,7 @@
             jump: function (e, first) { //触发分页后的回调
                 if (!first) { //一定要加此判断，否则初始时会无限刷新
                     $("#myPage").val(e.curr);
-                    $("#searchForm").submit();//提交进行查询
+                    $("#searchForm").submit();
                 }
             }
         });

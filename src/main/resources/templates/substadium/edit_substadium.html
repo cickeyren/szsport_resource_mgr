@@ -47,11 +47,11 @@
                 <tr class="controls">
                     <td class="alignright" width="10%"><span class="red">*</span>所属项目</td>
                     <td class="alignleft">
-                        <select id="provincial_level" name="provincial_level">
-                            <option value="1">体育项目</option>
+                        <select id="classflyOne" >
+                            <option th:each="obj,eStat:${ClassifyByMainList}" th:value="${obj.cid}" th:text="${obj.categoryName}" ></option>
                         </select>
-                        <select id="city_level" name="city_level">
-                            <option value="1">篮球</option>
+                        <select id="classify" name="classify" >
+                            <option th:each="obj,eStat:${classflyList}" th:value="${obj.cid}" th:text="${obj.categoryName}" th:selected="${#strings.contains(subStadium.classify,obj.cid)}"></option>
                         </select>
                     </td>
                 </tr>

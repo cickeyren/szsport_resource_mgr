@@ -3,6 +3,7 @@ package com.digitalchina.sport.mgr.resource.controller.substadium;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
+import com.digitalchina.sport.mgr.resource.dao.ClassifyMapper;
 import com.digitalchina.sport.mgr.resource.model.SubStadium;
 import com.digitalchina.sport.mgr.resource.service.SubStadiumService;
 import org.slf4j.LoggerFactory;
@@ -16,10 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -38,6 +36,9 @@ public class SubStadiumController {
     @Autowired
     private SubStadiumService subStadiumService;
 
+    @Autowired
+    private ClassifyMapper classifyMapper;
+
 
     /**
      * 进入子馆场列表页面
@@ -54,7 +55,7 @@ public class SubStadiumController {
         Map<String, Object> params = new HashMap<String, Object>();
         try {
 
-            params.put("mainStadiumId",mainStadiumId);
+            params.put("mainStadiumId", mainStadiumId);
             int totalSize = subStadiumService.findTotalCount(params);
             Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
             params.put("startIndex", pagination.getStartIndex());
@@ -62,10 +63,10 @@ public class SubStadiumController {
             List<Map<String, Object>> subStadiumList = subStadiumService.getAllsubStadiumList(params);
             pagination.setUrl(request.getRequestURI());
             map.put("pageModel", pagination);
-            map.put("pageSize",String.valueOf(pageSize));
-            map.put("page",String.valueOf(page));
+            map.put("pageSize", String.valueOf(pageSize));
+            map.put("page", String.valueOf(page));
             map.put("subStadiumList", subStadiumList);
-            map.put("mainStadiumId",mainStadiumId);//在将主场馆ID传入到子场馆列表中！
+            map.put("mainStadiumId", mainStadiumId);//在将主场馆ID传入到子场馆列表中！
             return "substadium/substadium";
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,12 +84,28 @@ public class SubStadiumController {
      *
      * @return
      */
-    @RequestMapping(value = "/add.html" , method = RequestMethod.GET)
-    public String add(ModelMap map,@RequestParam String substadiumID) {
-        List<Map<String, Object>> subStadiumList = subStadiumService.findsubStadium();
-        map.put("subStadiumList", subStadiumList);
-        map.put("mainStadiumId",substadiumID);//将主场馆ID传入新增页面
+    @RequestMapping(value = "/add.html", method = RequestMethod.GET)
+    public String add(ModelMap map, @RequestParam String substadiumID) {
+        Map<String, Object> param = new HashMap<>();
+            param.put("cid", "1");
+        List<Map<String, Object>> ClassifyByMainList = classifyMapper.findAllClassifyByMain();
+        List<Map<String, Object>> classflyList = classifyMapper.findAllClassifyByCid(param);
+        map.put("ClassifyByMainList", ClassifyByMainList);
+        map.put("classflyList", classflyList);
+        map.put("mainStadiumId", substadiumID);//将主场馆ID传入新增页面
         return "substadium/add_substadium";//进入对应的页面
+    }
+
+    @RequestMapping(value = "/getclassflyByMainId", method = RequestMethod.POST)
+    public List<Map<String, Object>> getclassflyByMainId(ModelMap map, @RequestParam String cid) {
+        Map<String, Object> param = new HashMap<>();
+        if (cid!=null){
+            param.put("cid", cid);
+        }else {
+            param.put("cid", "1");
+        }
+        List<Map<String, Object>> classflyList = classifyMapper.findAllClassifyByCid(param);
+        return classflyList;
     }
 
     /**
@@ -101,11 +118,12 @@ public class SubStadiumController {
      */
     @RequestMapping(value = "/addsubStadium.do", method = RequestMethod.POST)
     @ResponseBody
-    public RtnData add(SubStadium subStadium, ModelMap map,@RequestParam(required = true) String mainStadiumId) {
+    public RtnData add(SubStadium subStadium, ModelMap map, @RequestParam(required = true) String mainStadiumId) {
         try {
             subStadium.setId(UUID.randomUUID().toString());
             subStadium.setParentId(mainStadiumId);
-            if (subStadiumService.insertsubStadium(subStadium)>0){
+            subStadium.setCreateTime(new Date());
+            if (subStadiumService.insertsubStadium(subStadium) > 0) {
                 return RtnData.ok("新增子场馆成功");
             }
         } catch (Exception e) {
@@ -123,19 +141,24 @@ public class SubStadiumController {
      *
      * @return
      */
-    @RequestMapping(value = "/edit.html" , method = RequestMethod.GET)
-    public String edit(@RequestParam String subStadiumid,@RequestParam String mainStadiumId, ModelMap map) {
-        Map<String,Object> param = new HashMap<>();
-        param.put("subStadiumid",subStadiumid);
+    @RequestMapping(value = "/edit.html", method = RequestMethod.GET)
+    public String edit(@RequestParam String subStadiumid, @RequestParam String mainStadiumId, ModelMap map) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("subStadiumid", subStadiumid);
+        param.put("cid", "1");
         try {
 
-            Map<String,Object> subStadium = subStadiumService.selectsubStadiumId(param);
+            Map<String, Object> subStadium = subStadiumService.selectsubStadiumId(param);
             List<Map<String, Object>> subStadiumList = subStadiumService.findsubStadium();
+            List<Map<String, Object>> ClassifyByMainList = classifyMapper.findAllClassifyByMain();
+            List<Map<String, Object>> classflyList = classifyMapper.findAllClassifyByCid(param);
             map.put("subStadiumList", subStadiumList);
             map.put("subStadium", subStadium);
-            map.put("mainStadiumId",mainStadiumId);
+            map.put("mainStadiumId", mainStadiumId);
+            map.put("ClassifyByMainList", ClassifyByMainList);
+            map.put("classflyList", classflyList);
             return "substadium/edit_substadium";
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("========进入编辑页面失败=========", e);
             return "error";
@@ -155,10 +178,10 @@ public class SubStadiumController {
     @ResponseBody
     public RtnData update(SubStadium subStadium, ModelMap map) {
         try {
-            if (subStadiumService.updatesubStadium(subStadium)>0){
+            if (subStadiumService.updatesubStadium(subStadium) > 0) {
                 return RtnData.ok("修改子场馆成功");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("========修改子场馆失败=========", e);
         }
@@ -175,22 +198,21 @@ public class SubStadiumController {
     @RequestMapping(value = "/delete.do", method = RequestMethod.GET)
     @ResponseBody
     public RtnData delete(@RequestParam String subStadiumid) {
-        Map<String,Object> param = new HashMap<>();
-        param.put("id",subStadiumid);
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", subStadiumid);
         try {
-            if (subStadiumService.deletesubStadium(param)>0){
+            if (subStadiumService.deletesubStadium(param) > 0) {
                 RtnData rtnData = new RtnData();
                 rtnData.setMessage("删除子场馆成功");
                 rtnData.ok("删除子场馆成功");
                 return rtnData;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("========删除子场馆失败=========", e);
         }
         return RtnData.fail("删除子场馆失败");
     }
-
 
 
 }
