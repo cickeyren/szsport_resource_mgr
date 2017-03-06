@@ -135,7 +135,7 @@
                                     <td>
                                         <span th:switch="${strategyType}">
                                             <a th:case="'0'" th:href="@{/yearstrategyticket/modify.html(yearStrategyId=${obj.ticket_strategy_id})}">编辑</a>
-                                            <a th:case="'1'" th:href="@{/siteTicket/modify.html(yearStrategyId=${obj.ticket_strategy_id})}">编辑</a>
+                                            <a th:case="'1'" th:href="@{/siteTicket/editSiteTicket.html(ticketId=${obj.ticket_strategy_id})}">编辑</a>
                                         </span>
                                         &nbsp;&nbsp;&nbsp;
                                         <!--<a id="delete" th:data="@{/yearstrategyticket/modify.html(yearStrategyId=${obj.ticket_strategy_id})}">下线</a>-->

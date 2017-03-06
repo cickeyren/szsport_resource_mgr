@@ -227,4 +227,61 @@
         </set>
         WHERE id = #{id}
     </update>
+
+    <!-- 编辑场地票与场馆关联 -->
+    <update id="updateTicketStadiumRelation" parameterType="YearStrategyStadiumRelationsModel">
+        UPDATE year_strategy_stadium_relations
+        <set>
+            <if test="classify != null">
+                classify = #{classify},
+            </if>
+            <if test="mainStadiumId != null">
+                main_stadium_id = #{mainStadiumId},
+            </if>
+            <if test="subStadiumId != null">
+                sub_stadium_id = #{subStadiumId},
+            </if>
+        </set>
+        WHERE ticket_strategy_id = #{ticketStrategyId}
+    </update>
+
+    <!-- 查询场地票基本信息 -->
+    <select id="getSiteTicketInfoByParam" parameterType="HashMap" resultType="SiteTicketBasicInfoModel">
+        select
+            id,
+            ticket_type AS ticketType,
+            main_stadium_id AS mainStadium,
+            sub_stadium_id AS subStadium,
+            ticket_name AS ticketName,
+            merchant_id AS merchant,
+            stop_order_type AS stopOrderType,
+            before_open_time AS beforeOpenTime,
+            after_open_time AS afterOpenTime,
+            before_close_time AS beforeCloseTime,
+            reserve_time AS reserveTime,
+            date_format(available_start_time, '%Y-%m-%d') AS availableStartTime,
+            date_format(available_end_time, '%Y-%m-%d') AS availableEndTime,
+            order_refund_rule AS orderRefundRule,
+            no_refund_time AS noRefundTime,
+            sell_way AS sellWay,
+            minimum_time_limit AS minimumTimeLimit,
+            site_num_limit AS siteNumLimit,
+            check_ticket_type AS checkTicketType,
+            check_ticket_way AS checkTicketWay,
+            approach_time AS approachTime,
+            departure_time AS departureTime,
+            people_num_limit AS peopleNumLimit,
+            order_description AS orderDescription,
+            refund_description AS refundDescription,
+            ticket_state AS ticketState,
+            create_time AS createTime,
+            update_time AS updateTime
+        FROM
+            site_ticket_basic_info
+        <where>
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.digitalchina.sport.mgr.resource.dao;
 
 import com.digitalchina.sport.mgr.resource.model.SiteTicketBasicInfoModel;
+import com.digitalchina.sport.mgr.resource.model.YearStrategyStadiumRelationsModel;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -40,4 +41,18 @@ public interface SiteTicketDao {
      * @return
      */
     public int updateSiteTicketBasicInfo(SiteTicketBasicInfoModel siteTicketBasicInfoModel);
+
+    /**
+     * 编辑场地票与场馆关联
+     * @param yearStrategyStadiumRelationsModel
+     * @return
+     */
+    public int updateTicketStadiumRelation(YearStrategyStadiumRelationsModel yearStrategyStadiumRelationsModel);
+
+    /**
+     * 查询场地票基本信息
+     * @param map
+     * @return
+     */
+    public SiteTicketBasicInfoModel getSiteTicketInfoByParam(Map<String, Object> map);
 }

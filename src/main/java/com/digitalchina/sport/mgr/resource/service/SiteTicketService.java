@@ -78,4 +78,35 @@ public class SiteTicketService {
     public int updateSiteTicketBasicInfo(SiteTicketBasicInfoModel siteTicketBasicInfoModel){
         return siteTicketDao.updateSiteTicketBasicInfo(siteTicketBasicInfoModel);
     }
+
+    /**
+     * 查询场地票基本信息
+     * @param map
+     * @return
+     */
+    public SiteTicketBasicInfoModel getSiteTicketInfoByParam(Map<String, Object> map){
+        return siteTicketDao.getSiteTicketInfoByParam(map);
+    }
+
+    /**
+     * 编辑场地票基本信息
+     * @param siteTicketBasicInfoModel
+     * @return
+     */
+    @Transactional
+    public boolean editSiteTicketBasicInfo(SiteTicketBasicInfoModel siteTicketBasicInfoModel, HttpServletRequest request) throws Exception{
+        //编辑场地票基本信息
+        siteTicketDao.updateSiteTicketBasicInfo(siteTicketBasicInfoModel);
+        //编辑场地票与场馆关联
+        String mainStadium = request.getParameter("mainStadium");//主场馆列表
+        String subStadium = request.getParameter("subStadium");//子场馆列表
+        String classify = request.getParameter("classify");//子场馆分类
+        YearStrategyStadiumRelationsModel stadiumModel = new YearStrategyStadiumRelationsModel();
+        stadiumModel.setClassify(classify);
+        stadiumModel.setMainStadiumId(mainStadium);
+        stadiumModel.setSubStadiumId(subStadium);
+        stadiumModel.setTicketStrategyId(siteTicketBasicInfoModel.getId());
+        siteTicketDao.updateTicketStadiumRelation(stadiumModel);
+        return true;
+    }
 }

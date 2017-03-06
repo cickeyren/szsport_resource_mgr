@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>场地票价格策略新增页面</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+    <script src="../../static/js/siteticket/site_strategy_add.js" th:src="@{/js/siteticket/site_strategy_add.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container-fluid" style="margin-top: 30px;height:120px;">
+            <p class="title">新增价格策略</p>
+            <form onsubmit="return false;" class="form-horizontal" action="#" id="addSiteTicketBasicInfoForm">
+                <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                    <tr class="controls" hidden>
+                        <td class="alignright" width="10%"><span class="red">*</span>场地票编号</td>
+                        <td class="alignleft">
+                            <input type="hidden" id="ticketId" th:value="${ticketId}">
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright" width="10%"><span class="red">*</span>策略名称</td>
+                        <td class="alignleft">
+                            <input type="text" id="strategyName">
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright" width="10%"><span class="red">*</span>选择场地</td>
+                        <td class="alignleft">
+                            <div>
+                                <input type="checkbox" id="siteCheckAll">全选/全不选
+                            </div>
+                            <div>
+                                <input type="checkbox" name="fieldCheck" th:each="field, objStat: ${fieldList}" th:value="${field.id}" th:text="${field.field_name}">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright" width="10%"><span class="red">*</span>日期类型</td>
+                        <td class="alignleft">
+                            <div>
+                                <input type="radio" name="dateType" value="0" checked>每日
+                                <input type="radio" name="dateType" value="1">每周
+                                <input type="radio" name="dateType" value="2">每月
+                                <input type="radio" name="dateType" value="3">指定日
+                            </div>
+                            <div>
+                                <div></div>
+                                <div id="weekDiv" hidden>
+                                    <input type="checkbox" name="weekDetails" value="1">周一
+                                    <input type="checkbox" name="weekDetails" value="2">周二
+                                    <input type="checkbox" name="weekDetails" value="3">周三
+                                    <input type="checkbox" name="weekDetails" value="4">周四
+                                    <input type="checkbox" name="weekDetails" value="5">周五
+                                    <input type="checkbox" name="weekDetails" value="6">周六
+                                    <input type="checkbox" name="weekDetails" value="7">周日
+                                </div>
+                                <div id="monthDiv" hidden>
+                                    <div>
+                                        <input type="checkbox" id="monthCheckAll">全选/全不选
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="monthCheck" value="1">1月
+                                        <input type="checkbox" name="monthCheck" value="2">2月
+                                        <input type="checkbox" name="monthCheck" value="3">3月
+                                        <input type="checkbox" name="monthCheck" value="4">4月
+                                        <input type="checkbox" name="monthCheck" value="5">5月
+                                        <input type="checkbox" name="monthCheck" value="6">6月
+                                        <input type="checkbox" name="monthCheck" value="7">7月
+                                        <input type="checkbox" name="monthCheck" value="8">8月
+                                        <input type="checkbox" name="monthCheck" value="9">9月
+                                        <input type="checkbox" name="monthCheck" value="10">10月
+                                        <input type="checkbox" name="monthCheck" value="11">11月
+                                        <input type="checkbox" name="monthCheck" value="12">12月
+                                    </div>
+                                </div>
+                                <div id="specificDateDiv" hidden>
+                                    <input style="width:105px;float: none" type="text" id="specificStartTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'shieldEndTime\')}'})" class="Wdate">
+                                    <span>至</span>
+                                    <input style="width:105px;float: none;" type="text" id="specificEndTime" onClick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'shieldStartTime\')}'})"  class="Wdate">
+                                    <input type="button" class="btn" value="添加" id="addSpecificDateBtn">
+                                    <span>
+                                        <select id="specificDateSelects" multiple="multiple" style="width:250px;">
+                                        </select>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright"><span class="red">*</span>选择时段</td>
+                        <td class="alignleft">
+                            <div>
+                                <select id="timeCode" name="timeCode">
+                                    <option th:text="时段1" th:value="1"></option>
+                                    <option th:text="时段2" th:value="2"></option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="timeIntervalCheckAll">全选/全不选
+                                <div>
+                                    <input type="checkbox" name="timeIntervalCheck" value="1">6:00 - 7:00
+                                    <input type="checkbox" name="timeIntervalCheck" value="2">7:00 - 8:00
+                                    <input type="checkbox" name="timeIntervalCheck" value="3">8:00 - 9:00
+                                    <input type="checkbox" name="timeIntervalCheck" value="4">9:00 - 10:00
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td width="10%" class="alignright"><span class="red">*</span>设置价格</td>
+                        <td class="alignleft">
+                            <span class="red">*</span>销售价<input type="text" id="sellPrice" style="width:35px;display:inline;">
+                            <span class="red">*</span>成本价<input type="text" id="costPrice" style="width:35px;display:inline;">
+                            <span class="red">*</span>门市价<input type="text" id="storePrice" style="width:35px;display:inline;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-success" id="addStragrey">保存</button>
+                            <button type="submit" class="btn btn-success" id="cancelBtn">取消</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </section>
+    <script th:inline="javascript">
+        $(function(){
+            //取消按钮响应事件
+            $("#cancelBtn").click(function (){
+                window.location.href = "editSiteTicket.html?ticketId=" + [[${ticketId}]];
+            });
+        });
+    </script>
+</body>
+</html>

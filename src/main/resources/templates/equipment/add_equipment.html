@@ -63,7 +63,7 @@
                                 <select id="subStadium" name="subStadium" th:switch="${#lists.isEmpty(subStadiumList)}">
                                     <option th:case="true" value="">无子场馆</option>
                                     <option th:case="false" th:each="subStadium : ${subStadiumList}"
-                                             th:value="${subStadium.id}}" th:text="${subStadium.name}"></option>
+                                             th:value="${subStadium.id}" th:text="${subStadium.name}"></option>
                                 </select>
                             </td>
                         </tr>

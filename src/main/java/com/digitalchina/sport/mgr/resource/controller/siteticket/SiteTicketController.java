@@ -2,6 +2,7 @@ package com.digitalchina.sport.mgr.resource.controller.siteticket;
 
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.utils.UUIDUtil;
+import com.digitalchina.sport.mgr.resource.dao.FieldMapper;
 import com.digitalchina.sport.mgr.resource.model.SiteTicketBasicInfoModel;
 import com.digitalchina.sport.mgr.resource.service.MainStadiumService;
 import com.digitalchina.sport.mgr.resource.service.SiteTicketService;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author:wangw
@@ -33,6 +36,8 @@ public class SiteTicketController {
     private MainStadiumService mainStadiumService;
     @Autowired
     private YearStrategyService yearStrategyService;
+    @Autowired
+    private FieldMapper fieldMapper;
 
     /**
      * 进入场地票新增页面
@@ -85,5 +90,56 @@ public class SiteTicketController {
             logger.error("========修改场地票基本信息失败=========",e);
         }
         return RtnData.fail("修改场地票基本信息失败");
+    }
+
+    /**
+     * 进入场地票编辑页面
+     * @param map
+     * @return
+     */
+    @RequestMapping(value = "/editSiteTicket.html")
+    public String editSiteTicket(ModelMap map, HttpServletRequest request){
+        //主场馆信息
+        map.put("mainStadiumList", mainStadiumService.findStadiumModel());
+        //合作商信息
+        map.put("merchantList", yearStrategyService.getAllMerchant());
+        //场地票基本信息
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("id",request.getParameter("ticketId"));
+        map.put("siteTicket", siteTicketService.getSiteTicketInfoByParam(paramMap));
+        return "siteticket/edit_site_ticket";
+    }
+
+    /**
+     * 编辑场地票基本信息
+     * @return
+     */
+    @RequestMapping(value = "/editSiteTicketBasicInfo.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData editSiteTicketBasicInfo(SiteTicketBasicInfoModel siteTicketBasicInfoModel, HttpServletRequest request){
+        try {
+            boolean isSuccess = siteTicketService.editSiteTicketBasicInfo(siteTicketBasicInfoModel, request);
+            if (isSuccess){
+                return RtnData.ok("编辑场地票基本信息成功");
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            logger.error("========编辑场地票基本信息失败=========",e);
+        }
+        return RtnData.fail("编辑场地票基本信息失败");
+    }
+
+    /**
+     * 进入场地票价格策略新增页面
+     * @return
+     */
+    @RequestMapping(value = "/addSiteTicketStrategy.html")
+    public String addSiteTicketStrategy(ModelMap map,HttpServletRequest request){
+        //子场馆中场地列表
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("stadium_id",request.getParameter("subStadium"));
+        map.put("fieldList", fieldMapper.getAllByid(paramMap));
+        map.put("ticketId", request.getParameter("ticketId"));
+        return "siteticket/add_site_strategy";
     }
 }
