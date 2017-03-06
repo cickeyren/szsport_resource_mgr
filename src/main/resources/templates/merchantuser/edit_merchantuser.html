@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增账户信息</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+    <script src="../../static/js/merchantuser/editmerchantuser.js"
+            th:src="@{/js/merchantuser/editmerchantuser.js}"></script>
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="container-fluid" style="margin-top: 30px;height:120px;">
+        <form onsubmit="return false;" class="form-horizontal" action="#" id="addForm" method="post">
+            <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
+            <input type="hidden" name="merchant_id" id="merchant_id" th:value="${merchantId}">
+            <input type="hidden" name="id" id="id" th:value="${id}">
+            <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                <tr class="controls">
+                    <td class="alignright">用户名</td>
+                    <td class="alignleft"><input type="text" id="user_name" name="user_name" th:value="${merchantUser.userName}"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%">手机号</td>
+                    <td class="alignleft"><input type="text" id="user_tel" name="user_tel" th:value="${merchantUser.userTel}"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%">初始密码</td>
+                    <td class="alignleft"><input type="text" id="user_pwd" name="user_pwd" th:value="${merchantUser.userPwd}"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">描述</td>
+                    <td class="alignleft"><input type="text" id="descride" name="descride" th:value="${merchantUser.descride}"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>状态</td>
+                    <td class="alignleft" id="checkone">
+                        <input class="check" value="1" type="radio" checked name="status" th:checked="${merchantUser.status eq '1'}">正常
+                        <input class="check" value="0" type="radio" name="status" th:checked="${merchantUser.status eq '0'}">停用
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>管理权限</td>
+                    <td class="alignleft" id="checkone">
+                        <select id="admin_role" name="admin_role" th:field="*{merchantUser.adminRole}">
+                            <option value=""></option>
+                            <option value="0">全部</option>
+                            <option value="1">其他</option>
+                        </select>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="2">
+                        <button type="submit" class="btn btn-success" id="saveEdit">保存</button>
+                        <button type="submit" class="btn btn-success" id="cancelEdit">取消</button>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+</body>
+<script type="text/javascript">
+    _init_area();//省级联动启用
+    $(function () {
+        var valConfig = {
+            rules: {
+                title: {
+                    required: true,
+                    minlength: 2
+                }
+            },
+        };
+        $('#addForm').validate(valConfig);
+    });
+</script>
+</html>

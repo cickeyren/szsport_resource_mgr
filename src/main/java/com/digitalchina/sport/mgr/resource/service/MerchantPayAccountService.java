@@ -59,6 +59,11 @@ public class MerchantPayAccountService {
         return merchantPayAccountMapper.selectByParams(map);
     }
 
+    /**
+     * 更具主键查询数据
+     * @param params
+     * @return
+     */
     public MerchantPayAccount getmerchant_payByparams(MerchantPayAccount params) {
         return merchantPayAccountMapper.selectByPrimaryKey(params);
     }

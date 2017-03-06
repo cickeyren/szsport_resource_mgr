@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>合作商户信息</title>
+    <title>合作商户账户信息</title>
     <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
@@ -21,7 +21,7 @@
 
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
-    <script src="../../static/js/merchant/merchant.js" th:src="@{/js/merchant/merchant.js}"></script>
+    <script src="../../static/js/merchantuser/merchantuser.js" th:src="@{/js/merchantuser/merchantuser.js}"></script>
 
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
@@ -57,10 +57,11 @@
 <body>
 <section>
     <div class="container-fluid">
-        <form class="form-horizontal" action="/MerchantController/merchant.html" id="searchForm" method="POST">
+        <form class="form-horizontal" action="#" id="searchForm" method="POST">
             <input type="hidden" id="myPage" name="page" th:value="${page}">
             <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
             <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
+            <input type="hidden" name="merchant_id" id="merchant_id" th:value="${merchant_id}">
         </form>
         <div>
             <button type="button" class="btn btn-success" id="addMerchant">新增</button>
@@ -70,40 +71,32 @@
 
                 <thead>
                 <tr>
-                    <th>商家名称</th>
-                    <th>合作方式</th>
-                    <th>联系人</th>
-                    <th>联系电话</th>
-                    <th>状态</th>
+                    <th>用户名</th>
+                    <th>手机号</th>
+                    <th>用户权限</th>
+                    <th>描述</th>
+                    <th>用户状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
 
-                <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(merchantList)}">
-                <tr th:each="obj, objStat: ${merchantList}">
+                <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(merchantuser)}">
+                <tr th:each="obj, objStat: ${merchantuser}">
                     <input type="hidden" th:value="${obj.id}"/>
-                    <td th:text="${obj.merchant_name}"></td>
-                    <td th:text="${obj.cooperation_way}"></td>
-                    <td th:text="${obj.contacts}"></td>
-                    <td th:text="${obj.telephone}"></td>
+                    <td th:text="${obj.user_name}"></td>
+                    <td th:text="${obj.user_tel}"></td>
+                    <td th:text="${obj.admin_role}"></td>
+                    <td th:text="${obj.descride}"></td>
                     <td th:text="${obj.status}"></td>
                     <td>
                         <a id="edit" th:data="${obj.id}"
-                           th:href="@{/MerchantController/edit.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">编辑</a>
+                           th:href="@{/MerchantUserController/edit.html(id=${obj.id},mainstadium_id=${mainstadium_id},merchantId=${merchant_id})}">编辑</a>
                         &nbsp;&nbsp;&nbsp;
-                        <a id="edit" th:data="${obj.id}"
-                           th:href="@{/MerchantPayController/merchant_pay.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">支付方式</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a id="edit" th:data="${obj.id}"
-                           th:href="@{/MerchantUserController/merchantuser.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">账户</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <span id="edit" th:data="${obj.id}"
-                           th:href="@{/MerchantController/edit.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">合同</span>
                 </tr>
                 </tbody>
 
 
-                <tbody th:if="${#lists.isEmpty(merchantList)}">
+                <tbody th:if="${#lists.isEmpty(merchantuser)}">
                 <tr>
                     <td colspan="12">没有符合查询条件的记录！</td>
                 </tr>

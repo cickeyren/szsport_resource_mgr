@@ -23,4 +23,42 @@
     id, merchant_id, user_name, user_tel, user_pwd, descride, status, admin_role, create_time, 
     update_time
   </sql>
+
+  <!--根据账户总条数-->
+  <select id="findTotalCount" resultType="java.lang.Integer" parameterType="HashMap">
+    SELECT count(0) FROM merchant_user
+    <where>
+      <choose>
+        <when test="merchant_id !=null and merchant_id !='' ">
+          merchant_id=#{merchant_id}
+        </when>
+        <otherwise>
+          1&lt;&gt;1
+        </otherwise>
+      </choose>
+    </where>
+  </select>
+
+  <!--分页查询所有账户信息-->
+  <select id="getmerchantuser" resultType="java.util.Map" parameterType="HashMap">
+    SELECT mu.id,mu.merchant_id,(CASE mu.status WHEN '0' THEN '停用' WHEN '1' THEN '正常' END ) AS status ,mu.descride,
+    (CASE mu.admin_role WHEN '0' THEN '全部' WHEN '1' THEN '其他' END ) AS admin_role,
+    mu.user_name,mu.user_pwd,mu.user_tel,mu.create_time
+    FROM merchant_user mu
+    <where>
+      <choose>
+        <when test="merchant_id !=null and merchant_id !='' ">
+          mu.merchant_id=#{merchant_id}
+        </when>
+        <otherwise>
+          1&lt;&gt;1
+        </otherwise>
+      </choose>
+    </where>
+    limit #{startIndex},#{endIndex}
+
+  </select>
+
+
+
 </mapper>
