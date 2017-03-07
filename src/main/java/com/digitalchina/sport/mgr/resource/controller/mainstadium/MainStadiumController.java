@@ -178,9 +178,19 @@ public class MainStadiumController {
         Map<String, Object> param = new HashMap<>();
         param.put("mainstadiumid", mainstadiumid);
         try {
-
             MainStadiumModel mainStadiumModel = mainStadiumService.selectmainStadiumId(param);
             List<Map<String, Object>> mainstadiums = mainStadiumService.findStadiumModel();
+            //获取所有省份列表
+            List<Map<String, Object>> provinceLise = mainStadiumService.getAllProvince();
+            //获取所有市区数据(北京市区列表)
+            param.put("provinceID",mainStadiumModel.getProvincial_level());
+            List<Map<String, Object>> cityList = mainStadiumService.getAllCity(param);
+            //获取所有县区数据（北京市辖区列表）
+            param.put("cityID", mainStadiumModel.getCity_level());
+            List<Map<String, Object>> areaList = mainStadiumService.getAllArea(param);
+            map.put("provinceLise", provinceLise);
+            map.put("cityList", cityList);
+            map.put("areaList", areaList);
             map.put("mainstadiums", mainstadiums);
             map.put("mainStadiumModel", mainStadiumModel);
             return "mainstadium/edit_main_stadium";

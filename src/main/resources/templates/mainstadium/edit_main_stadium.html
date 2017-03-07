@@ -70,16 +70,16 @@
                     <td class="alignleft">
                         <select id="provincial_level" name="provincial_level">
                             <option th:each="obj,eStat:${provinceLise}" th:value="${obj.provinceID}"
-                                    th:text="${obj.province}"></option>
+                                    th:text="${obj.province}" th:selected="${#strings.contains(mainStadiumModel.provincial_level,obj.provinceID)}"></option>
                         </select>  
                         <select id="city_level" name="city_level">
                             <option th:each="obj,eStat:${cityList}" th:value="${obj.cityID}"
-                                    th:text="${obj.city}"></option>
+                                    th:text="${obj.city}" th:selected="${#strings.contains(mainStadiumModel.city_level,obj.cityID)}"></option>
                         </select>  
 
                         <select id="district_level" name="district_level">
                             <option th:each="obj,eStat:${areaList}" th:value="${obj.areaID}"
-                                    th:text="${obj.area}"></option>
+                                    th:text="${obj.area}" th:selected="${#strings.contains(mainStadiumModel.district_level,obj.areaID)}"></option>
                         </select>
                     </td>
                 </tr>
