@@ -1,11 +1,10 @@
 package com.digitalchina.sport.mgr.resource.service;
 
-import com.digitalchina.config.PropertyConfig;
-import com.digitalchina.sport.mgr.resource.dao.ClassifyMapper;
+import com.digitalchina.sport.mgr.resource.dao.AreaMapper;
+import com.digitalchina.sport.mgr.resource.dao.CityMapper;
 import com.digitalchina.sport.mgr.resource.dao.MainStadiumDao;
-import com.digitalchina.sport.mgr.resource.dao.SubStadiumMapper;
+import com.digitalchina.sport.mgr.resource.dao.ProvinceMapper;
 import com.digitalchina.sport.mgr.resource.model.MainStadiumModel;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,19 +21,21 @@ import java.util.Map;
  */
 @Service
 public class MainStadiumService {
-    @Autowired
-    private PropertyConfig proConfig;
+
     @Autowired
     private MainStadiumDao mainStadiumDao;
     @Autowired
-    private SubStadiumMapper subStadiumMapper;
+    private ProvinceMapper provinceMapper;
     @Autowired
-    private ClassifyMapper classifyMapper;
-    private static Logger logger = Logger.getLogger(MainStadiumService.class);
+    private CityMapper cityMapper;
+    @Autowired
+    private AreaMapper areaMapper;
 
     /**
      * 分页查询所有主场馆
+     *
      * @param param
+     *
      * @return
      */
     public List<Map<String, Object>> getAllStadiumList(Map<String, Object> param) {
@@ -43,7 +44,9 @@ public class MainStadiumService {
 
     /**
      * 带条件查询总条数
+     *
      * @param params
+     *
      * @return
      */
     public int findTotalCount(Map<String, Object> params) {
@@ -52,6 +55,7 @@ public class MainStadiumService {
 
     /**
      * 查询所有主场馆
+     *
      * @return
      */
     public List<Map<String, Object>> findStadiumModel() {
@@ -59,8 +63,10 @@ public class MainStadiumService {
     }
 
     /**
-     *添加主场馆数据
+     * 添加主场馆数据
+     *
      * @param mainStadiumModel
+     *
      * @return
      */
     public int insertmainStadium(MainStadiumModel mainStadiumModel) {
@@ -68,17 +74,21 @@ public class MainStadiumService {
     }
 
     /**
-     *根据ID查询主场馆数据
-     * @param id
+     * 根据ID查询主场馆数据
+     *
+     * @param
+     *
      * @return
      */
-    public MainStadiumModel selectmainStadiumId(Map<String,Object> param) {
+    public MainStadiumModel selectmainStadiumId(Map<String, Object> param) {
         return mainStadiumDao.selectmainStadiumId(param);
     }
 
     /**
-     *更新主场馆数据
+     * 更新主场馆数据
+     *
      * @param mainStadiumModel
+     *
      * @return
      */
     public int updateMainStadium(MainStadiumModel mainStadiumModel) {
@@ -86,20 +96,51 @@ public class MainStadiumService {
     }
 
     /**
-     *根据ID删除数据
+     * 根据ID删除数据
+     *
      * @param param
+     *
      * @return
      */
-    public int deleteMainStadium(Map<String,Object> param) {
+    public int deleteMainStadium(Map<String, Object> param) {
         return mainStadiumDao.deleteMainStadium(param);
     }
 
     /**
      * 根据id设为精选
+     *
      * @param param
+     *
      * @return
      */
     public int updataSelectFirst(Map<String, Object> param) {
         return mainStadiumDao.updataSelectFirst(param);
+    }
+
+    /**
+     * 获取所有省份列表
+     *
+     * @return
+     */
+    public List<Map<String, Object>> getAllProvince() {
+        return provinceMapper.getAllProvince();
+    }
+
+    /**
+     * 获取所有市区
+     * @return
+     * @param params
+     */
+    public List<Map<String,Object>> getAllCity(Map<String, Object> params) {
+        return cityMapper.getAllCity(params);
+    }
+
+    /**
+     * 获取所有县区
+     * @return
+     * @param params
+     */
+    public List<Map<String,Object>> getAllArea(Map<String, Object> params) {
+        return areaMapper.getAllArea(params);
     }
 }

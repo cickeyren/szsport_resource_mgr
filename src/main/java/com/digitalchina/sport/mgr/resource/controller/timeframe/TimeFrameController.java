@@ -149,7 +149,7 @@ public class TimeFrameController {
                     timeInterval.setSubstadium_id(timeFrame.getStadiumId());//子场馆id
                     timeInterval.setTime_sort(i + 1);
                     if (time_lags == 0) {  //当无间隔时间时候
-                        time_StartA = time_end;  //1.开始时间等于开始
+                        time_StartA = time_end;  //1.开始时间等于开始  循环之后开始时间等于结束时间
                     } else {
                         if (i == 0) {
                             time_StartA = time_end;

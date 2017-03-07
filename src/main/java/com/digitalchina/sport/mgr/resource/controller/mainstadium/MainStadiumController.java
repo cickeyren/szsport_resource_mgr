@@ -4,6 +4,7 @@ import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
 import com.digitalchina.sport.mgr.resource.model.MainStadiumModel;
+import com.digitalchina.sport.mgr.resource.model.Province;
 import com.digitalchina.sport.mgr.resource.service.MainStadiumService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,8 +57,8 @@ public class MainStadiumController {
 
             pagination.setUrl(request.getRequestURI());
             map.put("pageModel", pagination);
-            map.put("pageSize",String.valueOf(pageSize));
-            map.put("page",String.valueOf(page));
+            map.put("pageSize", String.valueOf(pageSize));
+            map.put("page", String.valueOf(page));
             map.put("name", request.getParameter("name"));//回到页面,保留搜索关键字
             map.put("mainstadiumlist", mainStadiumServiceAllStadiumList);
             return "mainstadium/mainstadium";
@@ -79,9 +80,63 @@ public class MainStadiumController {
      */
     @RequestMapping(value = "/add.html")
     public String add(ModelMap map) {
+        Map<String, Object> params = new HashMap<>();
         List<Map<String, Object>> mainStadiumModels = mainStadiumService.findStadiumModel();
+        //获取所有省份列表
+        List<Map<String, Object>> provinceLise = mainStadiumService.getAllProvince();
+        //获取所有市区数据(北京市区列表)
+        params.put("provinceID", "110000");
+        List<Map<String, Object>> cityList = mainStadiumService.getAllCity(params);
+        //获取所有县区数据（北京市辖区列表）
+        params.put("cityID", "110100");
+        List<Map<String, Object>> areaList = mainStadiumService.getAllArea(params);
         map.put("mainStadiumModels", mainStadiumModels);
+        map.put("provinceLise", provinceLise);
+        map.put("cityList", cityList);
+        map.put("areaList", areaList);
         return "mainstadium/add_main_stadium";//进入对应的页面
+    }
+
+    /**
+     * 获取城市列表
+     * @param map
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getCityByID.do", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData getCityByID(ModelMap map, HttpServletRequest request) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("provinceID", request.getParameter("provinceID"));
+            List<Map<String, Object>> cityList = mainStadiumService.getAllCity(params);
+            return RtnData.ok(cityList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========查询城市列表失败=========", e);
+        }
+        return RtnData.fail("查询城市列表失败");
+    }
+
+    /**
+     * 获取县区列表
+     * @param map
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getAreaByID.do", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData getAreaByID(ModelMap map, HttpServletRequest request) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("cityID", request.getParameter("cityID"));
+            List<Map<String, Object>> areaList = mainStadiumService.getAllArea(params);
+            return RtnData.ok(areaList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========查询县区列表失败=========", e);
+        }
+        return RtnData.fail("查询县区列表失败");
     }
 
 
@@ -100,7 +155,7 @@ public class MainStadiumController {
             mainStadiumModel.setId(UUID.randomUUID().toString());
             mainStadiumModel.setCreate_time(new Date());
             mainStadiumModel.setIs_special("0");//默认为非精选场馆
-            if (mainStadiumService.insertmainStadium(mainStadiumModel)>0){
+            if (mainStadiumService.insertmainStadium(mainStadiumModel) > 0) {
                 return RtnData.ok("新增场馆成功");
             }
         } catch (Exception e) {
@@ -118,10 +173,10 @@ public class MainStadiumController {
      *
      * @return
      */
-    @RequestMapping(value = "/edit.html",method = RequestMethod.GET)
+    @RequestMapping(value = "/edit.html", method = RequestMethod.GET)
     public String edit(@RequestParam String mainstadiumid, ModelMap map) {
-        Map<String,Object> param = new HashMap<>();
-        param.put("mainstadiumid",mainstadiumid);
+        Map<String, Object> param = new HashMap<>();
+        param.put("mainstadiumid", mainstadiumid);
         try {
 
             MainStadiumModel mainStadiumModel = mainStadiumService.selectmainStadiumId(param);
@@ -129,7 +184,7 @@ public class MainStadiumController {
             map.put("mainstadiums", mainstadiums);
             map.put("mainStadiumModel", mainStadiumModel);
             return "mainstadium/edit_main_stadium";
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("========进入编辑页面失败=========", e);
             return "error";
@@ -149,10 +204,10 @@ public class MainStadiumController {
     @ResponseBody
     public RtnData update(MainStadiumModel mainStadiumModel, ModelMap map) {
         try {
-            if (mainStadiumService.updateMainStadium(mainStadiumModel)>0){
+            if (mainStadiumService.updateMainStadium(mainStadiumModel) > 0) {
                 return RtnData.ok("修改场馆成功");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("========修改场馆失败=========", e);
         }
@@ -169,13 +224,13 @@ public class MainStadiumController {
     @RequestMapping(value = "/delete.do", method = RequestMethod.GET)
     @ResponseBody
     public RtnData delete(@RequestParam String mainStadiumid) {
-        Map<String,Object> param = new HashMap<>();
-        param.put("id",mainStadiumid);
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", mainStadiumid);
         try {
-            if (mainStadiumService.deleteMainStadium(param)>0){
+            if (mainStadiumService.deleteMainStadium(param) > 0) {
                 return RtnData.ok("删除场馆成功");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("========删除场馆失败=========", e);
         }
@@ -184,20 +239,22 @@ public class MainStadiumController {
 
     /**
      * 设为精选
+     *
      * @param mainStadiumid
+     *
      * @return
      */
     @RequestMapping(value = "/updataSelectFirst.do", method = RequestMethod.POST)
     @ResponseBody
-    public RtnData updataSelectFirst(@RequestParam String mainStadiumid,@RequestParam String is_special) {
-        Map<String,Object> param = new HashMap<>();
-        param.put("id",mainStadiumid);
-        param.put("is_special",is_special);
+    public RtnData updataSelectFirst(@RequestParam String mainStadiumid, @RequestParam String is_special) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", mainStadiumid);
+        param.put("is_special", is_special);
         try {
-            if (mainStadiumService.updataSelectFirst(param)>0){
+            if (mainStadiumService.updataSelectFirst(param) > 0) {
                 return RtnData.ok("设为精选成功");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("========设为精选失败=========", e);
         }

@@ -44,7 +44,7 @@ $(function () {
 
     //给体育项目增加change事件
     $("#classflyOne").change(function(){
-        updateclassflyList($("#classflyOne").val());
+        updateSubStadiumList($("#classflyOne").val());
     });
 
     //初始化富文本编辑器---请放在点击事件之后，预防在html页面渲染失败，导致html页面无法加载
@@ -62,7 +62,7 @@ $(function () {
 });
 
 /**
- * 根据体育馆的主向项目获取子项目列表
+ * 根据体育馆的主向项目获取子项目列表(该功能无测试数据)
  * @param
  */
 function updateSubStadiumList(cid) {

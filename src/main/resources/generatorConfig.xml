@@ -31,7 +31,7 @@
       <property name="enableSubPackages" value="true" />
     </javaClientGenerator>
 	<!-- 要生成哪些表-->
-	<table tableName="time_interval"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+	<table tableName="%"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
 		<!-- 自动生成的属性名和数据库列名一样 true：是 ： false:否(驼峰式) -->
 		<property name="useActualColumnNames" value="true"/>
 		<!-- 生成的SQL中的表名将不会包含schema和catalog前缀 -->

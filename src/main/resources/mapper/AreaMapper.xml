@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.AreaMapper">
+    <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.Area">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="areaID" property="areaID" jdbcType="VARCHAR"/>
+        <result column="area" property="area" jdbcType="VARCHAR"/>
+        <result column="father" property="father" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        id, areaID, area, father
+    </sql>
+    <select id="getAllArea" resultType="java.util.Map">
+        SELECT id, areaID, area FROM area WHERE father = #{cityID}
+    </select>
+</mapper>

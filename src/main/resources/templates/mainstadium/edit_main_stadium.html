@@ -8,12 +8,16 @@
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
     <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
-    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
     <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
-    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
-    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
-    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
 
     <script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/mainstadium/mainstadium.js}"></script>
 
@@ -24,12 +28,30 @@
     <script th:src="@{/lib/layPage/laypage.js}"></script>
     <script th:src="@{/lib/js/jquery.validate.js}"></script>
     <style>
-        p.title{font-size:18px;font-weight: bold;}
-        .inputw100{width:100px;}
-        #contentTable td.alignleft{text-align: left;}
-        #contentTable td.alignright{text-align: right;}
-        .form-horizontal .control-group .controls input {float:none;}
-        .form-horizontal .control-group .controls label {float: none;}
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
     </style>
 </head>
 <body>
@@ -40,32 +62,47 @@
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>名称</td>
-                    <td class="alignleft"><input type="text" id="name" name="name" th:value="${mainStadiumModel.name}"/></td>
+                    <td class="alignleft"><input type="text" id="name" name="name" th:value="${mainStadiumModel.name}"/>
+                    </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright" width="10%"><span class="red">*</span>区域</td>
                     <td class="alignleft">
-                        <select id="provincial_level" name="provincial_level"></select>  
-                        <select id="city_level" name="city_level" > </select>
-                        <select id="district_level" name="district_level" ></select>
+                        <select id="provincial_level" name="provincial_level">
+                            <option th:each="obj,eStat:${provinceLise}" th:value="${obj.provinceID}"
+                                    th:text="${obj.province}"></option>
+                        </select>  
+                        <select id="city_level" name="city_level">
+                            <option th:each="obj,eStat:${cityList}" th:value="${obj.cityID}"
+                                    th:text="${obj.city}"></option>
+                        </select>  
+
+                        <select id="district_level" name="district_level">
+                            <option th:each="obj,eStat:${areaList}" th:value="${obj.areaID}"
+                                    th:text="${obj.area}"></option>
+                        </select>
                     </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright" width="10%"><span class="red">*</span>地址</td>
-                    <td class="alignleft"><input type="text" id="address" name="address" th:value="${mainStadiumModel.address}"/></td>
+                    <td class="alignleft"><input type="text" id="address" name="address"
+                                                 th:value="${mainStadiumModel.address}"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>电话</td>
-                    <td class="alignleft"><input type="text" id="telephone" name="telephone" th:value="${mainStadiumModel.telephone}"/></td>
+                    <td class="alignleft"><input type="text" id="telephone" name="telephone"
+                                                 th:value="${mainStadiumModel.telephone}"/></td>
                 </tr>
                 <tr class="controls">
                     <td width="10%" class="alignright"><span class="red">*</span>开放时间</td>
-                    <td class="alignleft"><input type="text" id="open_time" name="open_time" th:value="${mainStadiumModel.open_time}"/></td>
+                    <td class="alignleft"><input type="text" id="open_time" name="open_time"
+                                                 th:value="${mainStadiumModel.open_time}"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>简介</td>
                     <td class="alignleft">
-                        <textarea id="introduction" name="introduction" style="width:500px;height:100px;" th:text="${mainStadiumModel.introduction}"></textarea>
+                        <textarea id="introduction" name="introduction" style="width:500px;height:100px;"
+                                  th:text="${mainStadiumModel.introduction}"></textarea>
                     </td>
                 </tr>
                 <tr class="controls">
@@ -79,9 +116,12 @@
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>状态</td>
                     <td class="alignleft" id="checkone">
-                        <input class="check" value="1" type="checkbox" name="status" th:checked="${mainStadiumModel.status eq '正常'}">正常
-                        <input class="check" value="0" type="checkbox" name="status" th:checked="${mainStadiumModel.status eq '闭馆'}">闭馆
-                        <input class="check" value="2" type="checkbox" name="status" th:checked="${mainStadiumModel.status eq '下线'}">下线
+                        <input class="check" value="1" type="checkbox" name="status"
+                               th:checked="${mainStadiumModel.status eq '正常'}">正常
+                        <input class="check" value="0" type="checkbox" name="status"
+                               th:checked="${mainStadiumModel.status eq '闭馆'}">闭馆
+                        <input class="check" value="2" type="checkbox" name="status"
+                               th:checked="${mainStadiumModel.status eq '下线'}">下线
                     </td>
                 </tr>
                 <tr>
@@ -116,7 +156,7 @@
         });
     });
 
-//    _init_area();//省级联动启用
-//    $("#provincial_level").val("+ [[${mainStadiumModel.provincial_level}]]+");
+    //    _init_area();//省级联动启用
+    //    $("#provincial_level").val("+ [[${mainStadiumModel.provincial_level}]]+");
 </script>
 </html>
