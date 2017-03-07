@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.TimeIntervalMapper">
+  <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.TimeInterval">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="time_code" jdbcType="VARCHAR" property="time_code" />
+    <result column="substadium_id" jdbcType="VARCHAR" property="substadium_id" />
+    <result column="time_inter" jdbcType="VARCHAR" property="time_inter" />
+    <result column="time_sort" jdbcType="INTEGER" property="time_sort" />
+    <result column="creat_time" jdbcType="TIMESTAMP" property="creat_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+  </resultMap>
+
+
+</mapper>

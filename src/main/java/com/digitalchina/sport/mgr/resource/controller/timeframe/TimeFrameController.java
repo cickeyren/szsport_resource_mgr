@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Time;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -112,18 +113,36 @@ public class TimeFrameController {
     @RequestMapping(value = "/addTimeFrame.do", method = RequestMethod.POST)
     @ResponseBody
     public RtnData add(TimeFrame timeFrame, ModelMap map) {
-        try {
-            String maxId = timeFrameService.getMaxId();
-            timeFrame.setStatus("1");//状态默认为正常
-            timeFrame.setCreatTime(new Date());
-            timeFrame.setUpdateTime(new Date());
-            timeFrame.setId((maxId == null || maxId.equals("")) ? "1000001" : String.valueOf(Long.parseLong(maxId) + 1));
-            if (timeFrameService.inserttimeFrame(timeFrame) > 0) {
-                return RtnData.ok("新增時段成功");
+        String time_length = timeFrame.getTimeLength();//每场时间
+        String time_start = timeFrame.getTimeStart();//开始时间
+        String[] time_start1 = time_start.split(":");
+        double timearr;
+        if (time_start1[1].equals("00")){
+            timearr= Double.parseDouble(time_start1[0]);
+        }else {
+            timearr=Double.parseDouble(time_start1[0])+0.5;
+        }
+        Integer num = timeFrame.getNum();//场次
+        String time_lag = timeFrame.getTimeLag();//间隔时间
+
+        double overTime = 24-timearr-((Double.parseDouble(time_length)+(Double.parseDouble(time_lag)/60))*num);
+        if (overTime>0){
+            try {
+                String maxId = timeFrameService.getMaxId();
+                timeFrame.setStatus("1");//状态默认为正常
+                timeFrame.setCreatTime(new Date());
+                timeFrame.setUpdateTime(new Date());
+                timeFrame.setId((maxId == null || maxId.equals("")) ? "1000001" : String.valueOf(Long.parseLong(maxId) + 1));
+
+                if (timeFrameService.inserttimeFrame(timeFrame) > 0) {
+                    return RtnData.ok("新增時段成功");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                LOGGER.error("========新增時段失败=========", e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("========新增時段失败=========", e);
+        }else {
+            return RtnData.fail("场次超过当日时间，请修改场次重新添加!");
         }
         return RtnData.fail("新增時段失败");
     }
