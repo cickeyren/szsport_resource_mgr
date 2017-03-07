@@ -6,11 +6,13 @@ import com.digitalchina.common.pagination.PaginationUtils;
 import com.digitalchina.sport.mgr.resource.dao.TimeFrameMapper;
 import com.digitalchina.sport.mgr.resource.model.SubStadium;
 import com.digitalchina.sport.mgr.resource.model.TimeFrame;
+import com.digitalchina.sport.mgr.resource.model.TimeInterval;
 import com.digitalchina.sport.mgr.resource.service.TimeFrameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,10 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Time;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * （一句话描述）
@@ -43,6 +42,7 @@ public class TimeFrameController {
      * 进入时段管理
      *
      * @param map
+     *
      * @return
      */
     @RequestMapping(value = "/timeFrame.html")
@@ -92,6 +92,7 @@ public class TimeFrameController {
      *
      * @param map
      * @param request
+     *
      * @return
      */
     @RequestMapping(value = "/addTimeFrame.html", method = RequestMethod.GET)
@@ -108,8 +109,10 @@ public class TimeFrameController {
      *
      * @param
      * @param map
+     *
      * @return
      */
+    @Transactional//添加事务保证同时保存成功
     @RequestMapping(value = "/addTimeFrame.do", method = RequestMethod.POST)
     @ResponseBody
     public RtnData add(TimeFrame timeFrame, ModelMap map) {
@@ -117,16 +120,16 @@ public class TimeFrameController {
         String time_start = timeFrame.getTimeStart();//开始时间
         String[] time_start1 = time_start.split(":");
         double timearr;
-        if (time_start1[1].equals("00")){
-            timearr= Double.parseDouble(time_start1[0]);
-        }else {
-            timearr=Double.parseDouble(time_start1[0])+0.5;
+        if (time_start1[1].equals("00")) {//开始时间是半个小时为时间间隔
+            timearr = Double.parseDouble(time_start1[0]);
+        } else {
+            timearr = Double.parseDouble(time_start1[0]) + 0.5;
         }
         Integer num = timeFrame.getNum();//场次
-        String time_lag = timeFrame.getTimeLag();//间隔时间
+        String time_lag = timeFrame.getTimeLag();//间隔时间（时间间隔不固定，可能15分钟，可能30分钟。任何情况都有）
 
-        double overTime = 24-timearr-((Double.parseDouble(time_length)+(Double.parseDouble(time_lag)/60))*num);
-        if (overTime>0){
+        double overTime = 24 - timearr - ((Double.parseDouble(time_length) + (Double.parseDouble(time_lag) / 60)) * num);
+        if (overTime > 0) {
             try {
                 String maxId = timeFrameService.getMaxId();
                 timeFrame.setStatus("1");//状态默认为正常
@@ -134,14 +137,42 @@ public class TimeFrameController {
                 timeFrame.setUpdateTime(new Date());
                 timeFrame.setId((maxId == null || maxId.equals("")) ? "1000001" : String.valueOf(Long.parseLong(maxId) + 1));
 
+                TimeInterval timeInterval = new TimeInterval();
+                int time_end = getTime_guize(time_start);//获取了总分钟  开始种分钟（开始总分钟）
+                int time_lags = Integer.parseInt(time_lag);//间隔时间
+                int time_lengths = getTime_length(time_length); //获取每场时间总分钟
+                int time_StartA = 0;
+                for (int i = 0; i < num; i++) {
+                    //与时段进行关联
+                    timeInterval.setId(UUID.randomUUID().toString());
+                    timeInterval.setTime_code((maxId == null || maxId.equals("")) ? "1000001" : String.valueOf(Long.parseLong(maxId) + 1));
+                    timeInterval.setSubstadium_id(timeFrame.getStadiumId());//子场馆id
+                    timeInterval.setTime_sort(i + 1);
+                    if (time_lags == 0) {  //当无间隔时间时候
+                        time_StartA = time_end;  //1.开始时间等于开始
+                    } else {
+                        if (i == 0) {
+                            time_StartA = time_end;
+                        } else {
+                            time_StartA = time_end + time_lags;
+                        }
+                    }
+                    time_end = time_StartA + time_lengths;  //结束时间等于开始时间+每场时间
+                    timeInterval.setTime_inter(getTimeByint(time_StartA) + "-" + getTimeByint(time_end));
+                    timeInterval.setCreat_time(new Date());
+                    timeFrameService.insertTimeInterval(timeInterval);
+                }
+
                 if (timeFrameService.inserttimeFrame(timeFrame) > 0) {
                     return RtnData.ok("新增時段成功");
                 }
+
+
             } catch (Exception e) {
                 e.printStackTrace();
                 LOGGER.error("========新增時段失败=========", e);
             }
-        }else {
+        } else {
             return RtnData.fail("场次超过当日时间，请修改场次重新添加!");
         }
         return RtnData.fail("新增時段失败");
@@ -153,6 +184,7 @@ public class TimeFrameController {
      *
      * @param map
      * @param request
+     *
      * @return
      */
     @RequestMapping(value = "/editTimeFrame.html", method = RequestMethod.GET)
@@ -173,6 +205,7 @@ public class TimeFrameController {
      *
      * @param timeFrame
      * @param map
+     *
      * @return
      */
     @RequestMapping(value = "/updateTimeFrame.do", method = RequestMethod.POST)
@@ -203,6 +236,7 @@ public class TimeFrameController {
      *
      * @param timeFrame
      * @param map
+     *
      * @return
      */
     @RequestMapping(value = "/invalid.do", method = RequestMethod.POST)
@@ -224,4 +258,55 @@ public class TimeFrameController {
     }
 
 
+    /**
+     * 7:00转换成分钟
+     *
+     * @param time
+     *
+     * @return
+     */
+    public Integer getTime_guize(String time) {
+        Integer timeALL = 0;
+        String[] timeARR = time.split(":");
+        if (timeARR[1].equals("00")) {
+            timeALL = Integer.parseInt(timeARR[0]) * 60;//获取总分钟
+        } else {
+            timeALL = (Integer.parseInt(timeARR[0]) * 60) + 30;//额外加30分钟
+        }
+        return timeALL;
+    }
+
+    /**
+     * 转换成分钟(1.5)
+     */
+    public Integer getTime_length(String time) {
+        Integer timeAll = 0;
+        if (time.indexOf(".") >= 0) {
+            Double times = Double.parseDouble(time) * 60;
+            timeAll = times.intValue();
+        } else {
+            timeAll = Integer.parseInt(time) * 60;
+        }
+        return timeAll;
+    }
+
+    /**
+     * 将分钟转换成9:00这样的格式
+     */
+    public String getTimeByint(Integer time) {
+        Integer timeHore = time / 60;
+        Integer timeScend = time % 60;
+        String timeString="";
+        if (timeScend == 0) {
+            timeString = timeHore.toString() + ":00" ;
+        } else {
+            timeString = timeHore.toString() + ":" + timeScend;
+        }
+
+        return timeString;
+    }
+
+
 }
+
+

@@ -1,7 +1,9 @@
 package com.digitalchina.sport.mgr.resource.service;
 
 import com.digitalchina.sport.mgr.resource.dao.TimeFrameMapper;
+import com.digitalchina.sport.mgr.resource.dao.TimeIntervalMapper;
 import com.digitalchina.sport.mgr.resource.model.TimeFrame;
+import com.digitalchina.sport.mgr.resource.model.TimeInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,9 @@ import java.util.Map;
 public class TimeFrameService {
     @Autowired
     private TimeFrameMapper timeFrameMapper;
+
+    @Autowired
+    private TimeIntervalMapper timeIntervalMapper;
 
     /**
      * 获取总条数
@@ -100,5 +105,14 @@ public class TimeFrameService {
      */
     public int deletetimeFrame(Map<String, Object> param) {
         return timeFrameMapper.deleteByPrimaryKey(param);
+    }
+
+    /**
+     * 添加数据到时段规则
+     * @param timeInterval
+     * @return
+     */
+    public int insertTimeInterval(TimeInterval timeInterval) {
+        return timeIntervalMapper.insert(timeInterval);
     }
 }
