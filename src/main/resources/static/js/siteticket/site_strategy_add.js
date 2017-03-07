@@ -64,11 +64,11 @@ $(function () {
     //表单配置
     var valConfig = {
         rules: {
-            ticketName: {
+            strategyName: {
                 required: true,
                 maxlength: 100
             },
-            site:{
+            fieldCheck:{
                 required: true
             },
             sellPrice: {
@@ -88,64 +88,51 @@ $(function () {
             strategyName: {
                 required: "请填写策略名称"
             },
-            site:{
+            fieldCheck:{
                 required: "请选择场地"
             },
             sellPrice: {
+                required: "请填写销售价",
                 digits: "请输入有效的数字"
             },
             costPrice: {
+                required: "请填写成本价",
                 digits: "请输入有效的数字"
             },
             storePrice: {
+                required: "请填写门市价",
                 digits: "请输入有效的数字"
             }
         },
         submitHandler: function () {
-            var ticketType = $("#ticketType").val();//套票类型
-            var mainStadium = $("#mainStadium").val();//主场馆ID
-            if(undefined == mainStadium || "" == mainStadium) {
-                alert("请选择正确的主场馆内容~");
-                return;
-            }
-            var subStadium = $("#subStadium").val();//子场馆ID
-            if(undefined == subStadium || "" == subStadium) {
-                alert("请选择正确的子场馆内容~");
-                return;
-            }
-            var classify = "";//子场馆分类
-            $('#subStadium option').each(function(){
-                if ($(this).prop("selected")) {
-                    classify = $(this).attr('classify');
-                }
-            });
-            var ticketName = $.trim($("#ticketName").val());//门票名称
-            var merchant = $.trim($("#merchant").val());//合作商
-            var stopOrderType = $('input:radio[name="stopOrderType"]:checked').val();//停止预订
-            var beforeOpenTime = $.trim($("#beforeOpenTime").val());//开场前停止预订时间
-            var afterOpenTime = $.trim($("#afterOpenTime").val());//开场后停止预订时间
-            var beforeCloseTime = $.trim($("#beforeCloseTime").val());//闭场前停止预订时间
-            var reserveTime = $.trim($("#reserveTime").val());//可预订时间
-            var availableStartTime = $.trim($("#availableStartTime").val());//生效开始时间
-            var availableEndTime = $.trim($("#availableEndTime").val());//生效结束时间
-            var orderRefundRule = $('input:radio[name="orderRefundRule"]:checked').val();//退款规则 0：不可退 1：随时退 2：条件退
-            var noRefundTime = $.trim($("#noRefundTime").val());//开场前多少小时不可退
-            var sellWayArray = [];//售卖渠道
-            $('input[name="sellWay"]:checkbox').each(function(){
+            var ticketId = $.trim($("#ticketId").val());//场地票编号
+            var strategyName = $.trim($("#strategyName").val());//策略名称
+            var siteArray = [];//选择场地
+            $('input[name="fieldCheck"]:checkbox').each(function(){
                 if ($(this).prop("checked")) {
-                    sellWayArray.push($(this).prop('value'));
+                    siteArray.push($(this).prop('value'));
                 }
             });
-            var sellWay = sellWayArray.toString();//售卖渠道
-            var minimumTimeLimit = $.trim($("#minimumTimeLimit").val());//起订时限
-            var siteNumLimit = $.trim($("#siteNumLimit").val());//限订场次数
-            var checkTicketTypeArray=[];
-            $('input[name="checkTicketType"]:checkbox').each(function(){
+            var site = siteArray.toString();//选择场地
+
+            var dateType = $('input:radio[name="dateType"]:checked').val();//日期类型
+            var weekDetailsArray = [];//日期类型每周
+            $('input[name="weekDetails"]:checkbox').each(function(){
                 if ($(this).prop("checked")) {
-                    checkTicketTypeArray.push($(this).prop('value'));
+                    weekDetailsArray.push($(this).prop('value'));
                 }
             });
-            var checkTicketType = checkTicketTypeArray.toString();
+            var weekDetails = weekDetailsArray.toString();//日期类型每周
+
+            var monthDetailsArray = [];//日期类型每月
+            $('input[name="monthDetails"]:checkbox').each(function(){
+                if ($(this).prop("checked")) {
+                    monthDetailsArray.push($(this).prop('value'));
+                }
+            });
+            var monthDetails = monthDetailsArray.toString();//日期类型每周
+
+            var specificDate = specificDateArray.toString();//日期类型指定日
 
             var timeCode = $("#timeCode").val();//选择时段
             var timeIntervalArray = [];
@@ -160,21 +147,13 @@ $(function () {
             var storePrice = $.trim($("#storePrice").val());//门市价
 
             var reqParam = {
-                ticketType:ticketType,
-                mainStadium:mainStadium,
-                subStadium:subStadium,
-                classify:classify,
-                ticketName:ticketName,
-                merchant:merchant,
-                stopOrderType:stopOrderType,
-                beforeOpenTime:beforeOpenTime,
-                afterOpenTime:afterOpenTime,
-                beforeCloseTime:beforeCloseTime,
-                reserveTime:reserveTime,
-                availableStartTime:availableStartTime,
-                availableEndTime:availableEndTime,
-                orderRefundRule:orderRefundRule,
-                noRefundTime:noRefundTime,
+                ticketId:ticketId,
+                strategyName:strategyName,
+                site:site,
+                dateType:dateType,
+                weekDetails:weekDetails,
+                monthDetails:monthDetails,
+                specificDate:specificDate,
                 timeCode:timeCode,
                 timeInterval:timeInterval,
                 sellPrice:sellPrice,
@@ -182,7 +161,7 @@ $(function () {
                 storePrice:storePrice
             };
             $.ajax({
-                url:'/siteTicket/addSiteTicketBasicInfo.json',
+                url:'/siteTicket/addStrategyInfo.json',
                 type:'POST', //GET
                 data:reqParam,
                 dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
@@ -197,6 +176,6 @@ $(function () {
                 }
             });
         }
-    }
-    $('#addStragrey').validate(valConfig);
+    };
+    $("#addSiteTicketStrategyForm").validate(valConfig);
 });

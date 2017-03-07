@@ -3,7 +3,9 @@ package com.digitalchina.sport.mgr.resource.controller.siteticket;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.utils.UUIDUtil;
 import com.digitalchina.sport.mgr.resource.dao.FieldMapper;
+import com.digitalchina.sport.mgr.resource.dao.TimeIntervalMapper;
 import com.digitalchina.sport.mgr.resource.model.SiteTicketBasicInfoModel;
+import com.digitalchina.sport.mgr.resource.model.SiteTicketStrategyInfoModel;
 import com.digitalchina.sport.mgr.resource.service.MainStadiumService;
 import com.digitalchina.sport.mgr.resource.service.SiteTicketService;
 import com.digitalchina.sport.mgr.resource.service.YearStrategyService;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +41,8 @@ public class SiteTicketController {
     private YearStrategyService yearStrategyService;
     @Autowired
     private FieldMapper fieldMapper;
+    @Autowired
+    private TimeIntervalMapper timeInteralMapper;
 
     /**
      * 进入场地票新增页面
@@ -139,7 +144,34 @@ public class SiteTicketController {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("stadium_id",request.getParameter("subStadium"));
         map.put("fieldList", fieldMapper.getAllByid(paramMap));
+        //子场馆中时段策略列表
+        List<Map<String, Object>> timeFrame = timeInteralMapper.getTimeIntervalByStadiumid(paramMap);
+        map.put("timeFrameList",timeFrame);
+        //时段策略中的时间列表
+        paramMap.put("time_code", timeFrame.get(0).get("id"));
+        map.put("timeIntervalList", timeInteralMapper.getTimeIntervalByTimecode(paramMap));
         map.put("ticketId", request.getParameter("ticketId"));
         return "siteticket/add_site_strategy";
+    }
+
+    /**
+     * 新增场地票价格策略
+     * @param siteTicketStrategyInfoModel
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/addStrategyInfo", method=RequestMethod.POST)
+    @ResponseBody
+    public RtnData addStrategyInfo(SiteTicketStrategyInfoModel siteTicketStrategyInfoModel, HttpServletRequest request){
+        try{
+            boolean isSuccess = siteTicketService.addStrategyInfo(siteTicketStrategyInfoModel, request);
+            if(isSuccess){
+                return RtnData.ok("新增场地票策略信息成功");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("========新增场地票策略信息失败=========",e);
+        }
+        return RtnData.fail("新增场地票策略信息失败");
     }
 }

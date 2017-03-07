@@ -284,4 +284,39 @@
             </if>
         </where>
     </select>
+
+    <!-- 新增场地票策略信息 -->
+    <insert id="addSiteTicketStrategyInfo" parameterType="SiteTicketStrategyInfoModel">
+        INSERT INTO site_ticket_strategy_info (
+            id,
+            ticket_id,
+            strategy_name,
+            site,
+            date_type,
+            week_details,
+            month_details,
+            specific_date,
+            time_code,
+            time_interval_id,
+            sell_price,
+            cost_price,
+            store_price
+        )
+        VALUES
+        (
+            #{id},
+            #{ticketId},
+            #{strategyName},
+            #{site},
+            #{dateType},
+            #{weekDetails},
+            #{monthDetails},
+            #{specificDate},
+            #{timeCode},
+            #{timeInterval},
+            #{sellPrice},
+            #{costPrice},
+            #{storePrice}
+        )
+    </insert>
 </mapper>

@@ -15,9 +15,9 @@
   </resultMap>
   <!--根据场馆查询时间策略-->
     <select id="getTimeIntervalByStadiumid" resultType="java.util.Map" parameterType="HashMap">
-        SELECT id,time_code,time_inter,time_sort
-        FROM  time_interval
-        WHERE substadium_id=#{substadium_id}
+        SELECT id,time_name,status
+        FROM  time_frame
+        WHERE stadium_id=#{stadium_id}
     </select>
   <!--根据时段编号查询时间策略-->
     <select id="getTimeIntervalByTimecode" resultType="java.util.Map" parameterType="HashMap">

@@ -3,6 +3,7 @@ package com.digitalchina.sport.mgr.resource.service;
 import com.digitalchina.common.utils.UUIDUtil;
 import com.digitalchina.sport.mgr.resource.dao.SiteTicketDao;
 import com.digitalchina.sport.mgr.resource.model.SiteTicketBasicInfoModel;
+import com.digitalchina.sport.mgr.resource.model.SiteTicketStrategyInfoModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyStadiumRelationsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,6 +108,35 @@ public class SiteTicketService {
         stadiumModel.setSubStadiumId(subStadium);
         stadiumModel.setTicketStrategyId(siteTicketBasicInfoModel.getId());
         siteTicketDao.updateTicketStadiumRelation(stadiumModel);
+        return true;
+    }
+
+    /**
+     *
+     * @param siteTicketStrategyInfoModel
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @Transactional
+    public boolean addStrategyInfo(SiteTicketStrategyInfoModel siteTicketStrategyInfoModel, HttpServletRequest request) throws Exception{
+        //添加场地票策略信息
+        String id = UUIDUtil.generateUUID();
+        siteTicketStrategyInfoModel.setId(id);
+        siteTicketDao.addSiteTicketStrategyInfo(siteTicketStrategyInfoModel);
+        //添加场地票策略与指定日之间的关联
+        /*List<YearStrategyStadiumRelationsModel> yearStdaiumList = new ArrayList<YearStrategyStadiumRelationsModel>();
+        String mainStadium = request.getParameter("mainStadium");//主场馆列表
+        String subStadium = request.getParameter("subStadium");//子场馆列表
+        String classify = request.getParameter("classify");//子场馆分类
+        YearStrategyStadiumRelationsModel stadiumModel = new YearStrategyStadiumRelationsModel();
+        stadiumModel.setId(UUIDUtil.generateUUID());
+        stadiumModel.setClassify(classify);
+        stadiumModel.setMainStadiumId(mainStadium);
+        stadiumModel.setSubStadiumId(subStadium);
+        stadiumModel.setTicketStrategyId(siteTicketBasicInfoModel.getId());
+        yearStdaiumList.add(stadiumModel);
+        yearStrategyService.insertYearStrategyStadiumRelationsList(yearStdaiumList);*/
         return true;
     }
 }
