@@ -4,12 +4,15 @@
     <!--带条件分页查询所有主场馆-->
     <select id="getAllStadiumList" resultType="java.util.Map" parameterType="HashMap">
         SELECT
-        ms.id,ms.name,ms.provincial_level,ms.city_level,
-        ms.district_level,ms.trading_area,ms.address,ms.telephone,
+        ms.id,ms.name,p.province AS provincial_level,c.city as city_level,
+        a.area AS district_level,ms.trading_area,ms.address,ms.telephone,
         ms.open_time,ms.introduction,ms.lng,ms.lat,ms.classify,ms.is_special,
         ms.create_time,
         (case ms.status when '1' then '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '下线' ELSE '其他' END) as status
         FROM main_stadium ms
+        LEFT JOIN province p ON  p.provinceID=ms.provincial_level
+        LEFT JOIN city c ON c.cityID = ms.city_level
+        LEFT JOIN area a ON a.areaID = ms.district_level
         <where>
             <choose>
                 <when test="name !=null and name !='' ">
