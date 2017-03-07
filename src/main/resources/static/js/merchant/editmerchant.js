@@ -13,6 +13,20 @@ $(function () {
         window.location.href = "/MerchantController/merchant.html?mainstadium_id=" + $('#mainstadium_id').val();
     });
 
+    /**
+     * 省区发生改变之后
+     */
+    $("#provincial_level").change(function () {
+        updateprovinceList($("#provincial_level").val());
+    })
+
+    /**
+     * 市区发生改变之后
+     */
+    $("#city_level").change(function () {
+        updatecityList($("#city_level").val());
+    })
+
     //初始化富文本编辑器(该代码需放在所有事件初始化最后执行) -- 场地介绍
     KindEditor.options.filterMode = false;
     var fieldDescriptionEditor;
@@ -61,4 +75,47 @@ function doUpdate() {
             layer.msg("编辑数据失败！");
         }
     });
+}
+
+function updateprovinceList(provinceID) {
+    $.ajax({
+        url:'/mainStadiumController/getCityByID.do',
+        type:'POST', //GET
+        data:{"provinceID":provinceID},
+        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success:function(result){
+            if("000000" == result.code) {
+                var items = result.result;
+                $("#city_level").empty();
+                $.each(items,function(i,n){
+                    $("#city_level").append("<option value=\"" + n.cityID + "\">"+n.city+"</option>");
+                });
+                var cityID = $("#city_level").val();
+                updatecityList(cityID);
+            } else {
+                layer.msg("添加失败")
+            }
+        },
+    })
+}
+
+function updatecityList(cityID) {
+    $.ajax({
+        url:'/mainStadiumController/getAreaByID.do',
+        type:'POST', //GET
+        data:{"cityID":cityID},
+        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success:function(result){
+            if("000000" == result.code) {
+                var items = result.result;
+                $("#district_level").empty();
+                $.each(items,function(i,n){
+                    $("#district_level").append("<option value=\"" + n.areaID + "\">"+n.area+"</option>");
+                });
+            } else {
+                layer.msg("添加失败")
+            }
+        },
+    })
+
 }
