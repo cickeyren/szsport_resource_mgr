@@ -21,6 +21,10 @@ public class SiteTicketStrategyInfoModel {
      */
     private String strategyName;
     /**
+     * 子场馆编号
+     */
+    private String subStadium;
+    /**
      * 选择场地
      */
     private String site;
@@ -91,6 +95,14 @@ public class SiteTicketStrategyInfoModel {
 
     public void setStrategyName(String strategyName) {
         this.strategyName = strategyName;
+    }
+
+    public String getSubStadium() {
+        return subStadium;
+    }
+
+    public void setSubStadium(String subStadium) {
+        this.subStadium = subStadium;
     }
 
     public String getSite() {

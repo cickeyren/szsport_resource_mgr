@@ -105,9 +105,10 @@ $(function () {
             }
         },
         submitHandler: function () {
+            var id = $.trim($("#id").val());//价格策略编号
             var ticketId = $.trim($("#ticketId").val());//场地票编号
-            var subStadium = $.trim($("#subStadium").val());//子场馆编号
             var strategyName = $.trim($("#strategyName").val());//策略名称
+            var subStadium = $.trim($("#subStadium").val());//子场馆编号
             var siteArray = [];//选择场地
             $('input[name="fieldCheck"]:checkbox').each(function(){
                 if ($(this).prop("checked")) {
@@ -148,6 +149,7 @@ $(function () {
             var storePrice = $.trim($("#storePrice").val());//门市价
 
             var reqParam = {
+                id:id,
                 ticketId:ticketId,
                 strategyName:strategyName,
                 subStadium:subStadium,
@@ -163,21 +165,21 @@ $(function () {
                 storePrice:storePrice
             };
             $.ajax({
-                url:'/siteTicket/addStrategyInfo.json',
+                url:'/siteTicket/editStrategyInfo.json',
                 type:'POST', //GET
                 data:reqParam,
                 dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
                 success:function(result){
                     if("000000" == result.code) {
-                        layer.msg("添加场地票策略成功~");
+                        layer.msg("编辑场地票策略成功~");
                         window.location.reload(true);
                     }
                 },
                 error:function(result){
-                    layer.msg("添加场地票策略失败~");
+                    layer.msg("编辑场地票策略失败~");
                 }
             });
         }
     };
-    $("#addSiteTicketStrategyForm").validate(valConfig);
+    $("#editSiteTicketStrategyForm").validate(valConfig);
 });

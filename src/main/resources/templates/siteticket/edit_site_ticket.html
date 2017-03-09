@@ -228,6 +228,10 @@
                     </form>
                 </div>
                 <div id="site" class="tab-pane fade">
+                    <form class="form-horizontal" th:action="@{/siteTicket/editSiteTicket.html(ticketId=${siteTicket.id})}" id="searchForm" method ="POST">
+                        <input type="hidden" id="myPage" name="page" th:value="${page}">
+                        <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+                    </form>
                     <table id="strategyTable" class="table table-bordered table-hover definewidth m10 control-group">
                         <tr class="controls">
                             <td colspan="6">排场策略
@@ -244,9 +248,23 @@
                             <th>单价（元/场次）</th>
                             <th>操作</th>
                         </tr>
-                        <tr class="controls">
-                        </tr>
+                        <tbody id="strategyListBody">
+                            <tr class="controls" th:each="strategy:${strategyList}">
+                                <td th:text="${strategy.strategyName}"></td>
+                                <td th:text = "${strategy.dateTypeValue}"></td>
+                                <td th:text="${strategy.timeInterval}"></td>
+                                <td th:text="${strategy.fields}"></td>
+                                <td th:text="${strategy.sellPrice}"></td>
+                                <td>
+                                    <a th:href="@{/siteTicket/addSiteTicket.html}">查看</a>
+                                    <a th:href="@{/siteTicket/editStrategyInfo.html(id=${strategy.id})}">编辑</a>
+                                    <a th:onclick="'javascript:delStrategyInfo(\'' + ${strategy.id} + '\');'">删除</a>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
+                    <div id="page" class="page" align="right" style="margin-right: 10px;">
+                    </div>
                 </div>
             </div>
         </div>
@@ -284,6 +302,54 @@
             $('input[name="checkTicketWay"]:checkbox').each(function(){
                 if (checkTicketWayArray.indexOf($(this).val()) >= 0) {
                     $(this).attr("checked","checked");
+                }
+            });
+
+            laypage({
+                cont: 'page',
+                pages: [[${pageModel.totalPage}]], //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+                curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
+                    var page = [[${pageModel.currentPage}]];
+                    return page;
+                }(),
+                jump: function(e, first){ //触发分页后的回调
+                    if(!first){ //一定要加此判断，否则初始时会无限刷新
+                        $("#myPage").val(e.curr);
+                        $.ajax({
+                            url:'/siteTicket/getStrategyInfoByPage.json',
+                            type:'POST', //GET
+                            data:{
+                                "ticketId":$("#ticketId").val(),
+                                "pageSize":$("#pageSize").val(),
+                                "page":$("#myPage").val()
+                            },
+                            dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                            success:function(result){
+                                if("000000" == result.code) {
+                                    var items = result.result;
+                                    $("#strategyListBody").empty();
+                                    var htmlStr = "";
+                                    for(var i = 0; i < items.length; i++){
+                                        htmlStr += "<tr class=\"controls\"><td>" + items[i].strategyName +  "</td>";
+                                        htmlStr += "<td>" + items[i].dateTypeValue + "</td>";
+                                        htmlStr += "<td>" + items[i].timeInterval + "</td>";
+                                        htmlStr += "<td>" + items[i].fields + "</td>";
+                                        htmlStr += "<td>" + items[i].sellPrice + "</td>";
+                                        htmlStr += "<td><a href=‘@{/siteTicket/addSiteTicket.html}'>查看</a>&nbsp;";
+                                        htmlStr += "<a href='/siteTicket/editStrategyInfo.html?id=" + items[i].id + "'>编辑</a>&nbsp;";
+                                        htmlStr += "<a onclick='delStrategyInfo(\"" + items[i].id + "\");'>删除</a></td></tr>";
+                                    }
+                                    $("#strategyListBody").html(htmlStr);
+                                } else {
+                                    layer.msg("分页获取价格策略失败~");
+                                }
+                                //console.log(result);
+                            },
+                            error:function(result){
+                                layer.msg("分页获取价格策略失败~");
+                            }
+                        })
+                    }
                 }
             });
         });

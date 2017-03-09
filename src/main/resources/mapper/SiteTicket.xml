@@ -291,6 +291,7 @@
             id,
             ticket_id,
             strategy_name,
+            sub_stadium_id,
             site,
             date_type,
             week_details,
@@ -307,6 +308,7 @@
             #{id},
             #{ticketId},
             #{strategyName},
+            #{subStadium},
             #{site},
             #{dateType},
             #{weekDetails},
@@ -319,4 +321,148 @@
             #{storePrice}
         )
     </insert>
+
+    <!-- 获取场地票价格策略列表数量 -->
+    <select id="getSiteTicketStrategyCount" parameterType="HashMap" resultType="Int">
+        select count(id)
+        FROM
+        site_ticket_strategy_info
+        <where>
+            <if test="ticketId != null and ticketId != ''">
+                ticket_id = #{ticketId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取场地票价格策略列表 -->
+    <select id="getSiteTicketStrategyInfoList" parameterType="HashMap" resultType="SiteTicketStrategyInfoModel">
+        select
+            id,
+            ticket_Id AS ticketId,
+            strategy_name AS strategyName,
+            sub_stadium_id AS subStadium,
+            site AS site,
+            date_type AS dateType,
+            week_details AS weekDetails,
+            month_details AS monthDetails,
+            specific_date AS specificDate,
+            time_code AS timeCode,
+            time_interval_id AS timeInterval,
+            sell_price AS sellPrice,
+            cost_price AS costPrice,
+            store_price AS storePrice,
+            create_time AS createTime,
+            update_time AS updateTime
+        FROM
+        site_ticket_strategy_info
+        <where>
+            <if test="ticketId != null and ticketId != ''">
+                ticket_id = #{ticketId}
+            </if>
+        </where>
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <select id="getTimeIntervalList" parameterType="HashMap" resultType="HashMap">
+        SELECT time_inter as timeInter
+        FROM time_interval
+        <where>
+            <foreach collection="timeInterval" index="index" item="item" open="" separator="or" close="">
+                id = #{item}
+            </foreach>
+        </where>
+    </select>
+
+    <!-- 获取场地列表 -->
+    <select id="getFieldList" parameterType="HashMap" resultType="HashMap">
+        SELECT display_name as fieldName
+        FROM field
+        <where>
+            <foreach collection="site" index="index" item="item" open="" separator="or" close="">
+                id = #{item}
+            </foreach>
+        </where>
+    </select>
+
+    <delete id="delStrategyInfo" parameterType="HashMap">
+        DELETE FROM site_ticket_strategy_info
+        <where>
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
+        </where>
+    </delete>
+
+    <!-- 获取场地票价格策略 -->
+    <select id="getStrategyInfoByParam" parameterType="HashMap" resultType="SiteTicketStrategyInfoModel">
+        select
+            id,
+            ticket_Id AS ticketId,
+            strategy_name AS strategyName,
+            sub_stadium_id AS subStadium,
+            site AS site,
+            date_type AS dateType,
+            week_details AS weekDetails,
+            month_details AS monthDetails,
+            specific_date AS specificDate,
+            time_code AS timeCode,
+            time_interval_id AS timeInterval,
+            sell_price AS sellPrice,
+            cost_price AS costPrice,
+            store_price AS storePrice,
+            create_time AS createTime,
+            update_time AS updateTime
+        FROM
+        site_ticket_strategy_info
+        <where>
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <!-- 编辑场地票价格策略 -->
+    <update id="updateStrategyInfo" parameterType="SiteTicketStrategyInfoModel">
+        UPDATE site_ticket_strategy_info
+        <set>
+            <if test="strategyName != null and strategyName != ''">
+                strategy_name = #{strategyName},
+            </if>
+            <if test="subStadium != null and subStadium != ''">
+                sub_stadium_id = #{subStadium},
+            </if>
+            <if test="site != null and site != ''">
+                site = #{site},
+            </if>
+            <if test="dateType != null and dateType != ''">
+                date_type = #{dateType},
+            </if>
+            <if test="weekDetails != null and weekDetails != ''">
+                week_details = #{weekDetails},
+            </if>
+            <if test="monthDetails != null and monthDetails != ''">
+                month_details = #{monthDetails},
+            </if>
+            <if test="specificDate != null and specificDate != ''">
+                specific_date = #{specificDate},
+            </if>
+            <if test="timeCode != null and timeCode != ''">
+                time_code = #{timeCode},
+            </if>
+            <if test="timeInterval != null and timeInterval != ''">
+                time_interval_id = #{timeInterval},
+            </if>
+            <if test="sellPrice != null and sellPrice != ''">
+                sell_price = #{sellPrice},
+            </if>
+            <if test="costPrice != null and costPrice != ''">
+                cost_price = #{costPrice},
+            </if>
+            <if test="storePrice != null and storePrice != ''">
+                store_price = #{storePrice},
+            </if>
+            update_time = now()
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

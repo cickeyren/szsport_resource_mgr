@@ -63,4 +63,53 @@ public interface SiteTicketDao {
      * @return
      */
     public int addSiteTicketStrategyInfo(SiteTicketStrategyInfoModel siteTicketStrategyInfoModel);
+
+    /**
+     * 获取场地票价格策略列表数量
+     * @param map
+     * @return
+     */
+    public int getSiteTicketStrategyCount(Map<String, Object> map);
+
+    /**
+     * 获取场地票价格策略列表
+     * @param map
+     * @return
+     */
+    public List<SiteTicketStrategyInfoModel> getSiteTicketStrategyInfoList(Map<String, Object> map);
+
+    /**
+     * 获取场地列表
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> getFieldList(Map<String, Object> map);
+
+    /**
+     * 获取时段列表
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> getTimeIntervalList(Map<String, Object> map);
+
+    /**
+     * 删除场地票价格策略
+     * @param map
+     * @return
+     */
+    public int delStrategyInfo(Map<String, Object> map);
+
+    /**
+     * 获取场地票价格策略
+     * @param map
+     * @return
+     */
+    public SiteTicketStrategyInfoModel getStrategyInfoByParam(Map<String, Object> map);
+
+    /**
+     * 编辑场地票价格策略
+     * @param siteTicketStrategyInfoModel
+     * @return
+     */
+    public int updateStrategyInfo(SiteTicketStrategyInfoModel siteTicketStrategyInfoModel);
 }

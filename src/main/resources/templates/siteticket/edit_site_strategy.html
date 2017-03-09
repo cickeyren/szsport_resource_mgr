@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
     <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
     <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
-    <script src="../../static/js/siteticket/site_strategy_add.js" th:src="@{/js/siteticket/site_strategy_add.js}"></script>
+    <script src="../../static/js/siteticket/site_strategy_edit.js" th:src="@{/js/siteticket/site_strategy_edit.js}"></script>
 
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
@@ -33,19 +33,20 @@
     <section>
         <div class="container-fluid" style="margin-top: 30px;height:120px;">
             <p class="title">新增价格策略</p>
-            <form onsubmit="return false;" class="form-horizontal" action="#" id="addSiteTicketStrategyForm">
-                <input type="hidden" id="subStadium" name="subStadium" th:value="${subStadium}">
+            <form onsubmit="return false;" class="form-horizontal" action="#" id="editSiteTicketStrategyForm">
+                <input type="hidden" id="subStadium" name="subStadium" th:value="${strategy.subStadium}">
+                <input type="hidden" id="ticketId" name="ticketId" th:value="${strategy.ticketId}">
                 <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                     <tr class="controls" hidden>
                         <td class="alignright" width="10%"><span class="red">*</span>场地票编号</td>
                         <td class="alignleft">
-                            <input type="hidden" id="ticketId" name="ticketId" th:value="${ticketId}">
+                            <input type="hidden" id="id" name="id" th:value="${strategy.id}">
                         </td>
                     </tr>
                     <tr class="controls">
                         <td class="alignright" width="10%"><span class="red">*</span>策略名称</td>
                         <td class="alignleft">
-                            <input type="text" id="strategyName" name="strategyName">
+                            <input type="text" id="strategyName" name="strategyName" th:value="${strategy.strategyName}">
                         </td>
                     </tr>
                     <tr class="controls">
@@ -63,12 +64,12 @@
                         <td class="alignright" width="10%"><span class="red">*</span>日期类型</td>
                         <td class="alignleft">
                             <div>
-                                <input type="radio" name="dateType" value="0" style="display:none;">
+                                <input type="radio" name="dateType" value="0" th:checked="${strategy.dateType eq '0'}" style="display:none;">
                                 <label style="display:none">每日</label>
-                                <input type="radio" name="dateType" value="1" checked>每周
-                                <input type="radio" name="dateType" value="2" style="display:none;">
+                                <input type="radio" name="dateType" value="1" th:checked="${strategy.dateType eq '1'}">每周
+                                <input type="radio" name="dateType" value="2" th:checked="${strategy.dateType eq '2'}" style="display:none;">
                                 <label style="display:none">每月</label>
-                                <input type="radio" name="dateType" value="3">指定日
+                                <input type="radio" name="dateType" value="3" th:checked="${strategy.dateType eq '3'}">指定日
                             </div>
                             <div>
                                 <div></div>
@@ -118,7 +119,7 @@
                         <td class="alignleft">
                             <div>
                                 <select id="timeCode" name="timeCode">
-                                    <option th:each="timeFrame: ${timeFrameList}" th:text="${timeFrame.time_name}" th:value="${timeFrame.id}"></option>
+                                    <option th:each="timeFrame: ${timeFrameList}" th:text="${timeFrame.time_name}" th:value="${timeFrame.id}" th:selected="${strategy.timeCode eq timeFrame.id}"></option>
                                 </select>
                             </div>
                             <div>
@@ -132,9 +133,9 @@
                     <tr class="controls">
                         <td width="10%" class="alignright"><span class="red">*</span>设置价格</td>
                         <td class="alignleft">
-                            <span class="red">*</span>销售价<input type="text" id="sellPrice" name="sellPrice" style="width:35px;display:inline;">
-                            <span class="red">*</span>成本价<input type="text" id="costPrice" name="costPrice" style="width:35px;display:inline;">
-                            <span class="red">*</span>门市价<input type="text" id="storePrice" name="storePrice" style="width:35px;display:inline;">
+                            <span class="red">*</span>销售价<input type="text" id="sellPrice" name="sellPrice" th:value="${strategy.sellPrice}" style="width:35px;display:inline;">
+                            <span class="red">*</span>成本价<input type="text" id="costPrice" name="costPrice" th:value="${strategy.costPrice}" style="width:35px;display:inline;">
+                            <span class="red">*</span>门市价<input type="text" id="storePrice" name="storePrice" th:value="${strategy.storePrice}" style="width:35px;display:inline;">
                         </td>
                     </tr>
                     <tr>
@@ -149,9 +150,62 @@
     </section>
     <script th:inline="javascript">
         $(function(){
+            //获取到场地并设置checkbox
+            var site =  [[${strategy.site}]];
+            var siteArray = site.split(",");
+            $('input[name="fieldCheck"]:checkbox').each(function(){
+                if (siteArray.contains($(this).val())) {
+                    $(this).attr("checked","checked");
+                }
+            });
+            //日期类型控制隐藏内容
+            var dateType = [[${strategy.dateType}]];
+            $("#weekDiv").hide();
+            $("#monthDiv").hide();
+            $("#specificDateDiv").hide();
+            if ('1' == dateType) {
+                $("#weekDiv").show();
+            } else if('2' == dateType){
+                $("#monthDiv").show();
+            } else if('3' == dateType){
+                $("#specificDateDiv").show();
+            }
+
+            //获取日期类型每周的数据并设置checkbox
+            var weekDetails =  [[${strategy.weekDetails}]];
+            var weekArray = weekDetails.split(",");
+            $('input[name="weekDetails"]:checkbox').each(function(){
+                if (weekArray.contains($(this).val())) {
+                    $(this).attr("checked","checked");
+                }
+            });
+
+            //获取日期类型指定日的数据并设置
+            var specificDateArrayStr = [[${strategy.specificDate}]];
+            if("" != specificDateArrayStr) {
+                var specificDateArray = specificDateArrayStr.split(",");//日期类型指定日的数据
+                if(specificDateArray.length > 0) {
+                    for(var i=0; i < specificDateArray.length;i++) {
+                        var startAndEnd = specificDateArray[i].split("$");
+                        var start = startAndEnd[0];
+                        var end = startAndEnd[1];
+                        var startAndEndTimeValue = start+"至"+end;
+                        $("#specificDateSelects").prepend('<option value="'+startAndEnd+'">'+startAndEndTimeValue+"</option>");
+                    }
+                }
+            }
+
+            //获取时段的数据并设置checkbox
+            var timeInterval =  [[${strategy.timeInterval}]];
+            var timeIntervalArray = timeInterval.split(",");
+            $('input[name="timeIntervalCheck"]:checkbox').each(function(){
+                if (timeIntervalArray.contains($(this).val())) {
+                    $(this).attr("checked","checked");
+                }
+            });
             //取消按钮响应事件
             $("#cancelBtn").click(function (){
-                window.location.href = "editSiteTicket.html?ticketId=" + [[${ticketId}]];
+                window.location.href = "editSiteTicket.html?ticketId=" + [[${strategy.ticketId}]];
             });
         });
     </script>

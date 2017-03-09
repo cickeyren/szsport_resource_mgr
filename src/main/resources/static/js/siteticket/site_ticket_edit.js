@@ -281,3 +281,36 @@ function updateSubStadiumList(mainStadiumId, subStadiumId) {
         }
     })
 }
+
+function delStrategyInfo(id) {
+    /**
+     * 提示是否删除价格策略
+     */
+    layer.confirm('您确认是否删除此价格策略？', {
+        btn: ['删除','取消'], //按钮
+        shade: false //不显示遮罩
+    }, function(){
+        $.ajax({
+            url:'/siteTicket/delStrategyInfo.json',
+            type:'POST',
+            data:{
+                "id":id
+            },
+            dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+            success:function(result){
+                if("000000" == result.code) {
+                    layer.msg("删除设备成功~");
+                    //刷新当前页面
+                    location.reload();
+                } else {
+                    layer.msg("删除设备失败~");
+                }
+            },
+            error:function(result){
+                layer.msg("删除设备失败~");
+            }
+        })
+    }, function(){
+        //layer.msg('取消成功', {shift: 6});
+    });
+}
