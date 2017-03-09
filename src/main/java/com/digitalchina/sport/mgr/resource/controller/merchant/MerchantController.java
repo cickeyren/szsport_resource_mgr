@@ -6,6 +6,7 @@ import com.digitalchina.common.pagination.PaginationUtils;
 import com.digitalchina.sport.mgr.resource.model.Merchant;
 import com.digitalchina.sport.mgr.resource.model.SubStadium;
 import com.digitalchina.sport.mgr.resource.model.TimeFrame;
+import com.digitalchina.sport.mgr.resource.service.MainStadiumService;
 import com.digitalchina.sport.mgr.resource.service.MerchantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,9 @@ public class MerchantController {
 
     @Autowired
     private MerchantService merchantService;
+
+    @Autowired
+    private MainStadiumService mainStadiumService;
 
     /**
      * 进入合作商户页面
@@ -86,7 +90,18 @@ public class MerchantController {
      */
     @RequestMapping(value = "/add.html", method = RequestMethod.GET)
     public String add(HttpServletRequest request, ModelMap map) {
-
+        Map<String, Object> params = new HashMap<>();
+        //获取所有省份列表
+        List<Map<String, Object>> provinceLise = mainStadiumService.getAllProvince();
+        //获取所有市区数据(北京市区列表)
+        params.put("provinceID", "110000");
+        List<Map<String, Object>> cityList = mainStadiumService.getAllCity(params);
+        //获取所有县区数据（北京市辖区列表）
+        params.put("cityID", "110100");
+        List<Map<String, Object>> areaList = mainStadiumService.getAllArea(params);
+        map.put("provinceLise", provinceLise);
+        map.put("cityList", cityList);
+        map.put("areaList", areaList);
         //主场馆id
         map.put("mainstadium_id", request.getParameter("mainstadium_id"));
 
@@ -127,11 +142,22 @@ public class MerchantController {
      */
     @RequestMapping(value = "/edit.html", method = RequestMethod.GET)
     public String editTimeFrame(HttpServletRequest request, ModelMap map) {
-
+        Map<String, Object> param = new HashMap<>();
         //子场馆时段实体
         Merchant merchant = new Merchant();
         merchant.setId(request.getParameter("merchantId"));
         merchant = merchantService.selectMerchantById(merchant);
+        //获取所有省份列表
+        List<Map<String, Object>> provinceLise = mainStadiumService.getAllProvince();
+        //获取所有市区数据(北京市区列表)
+        param.put("provinceID",merchant.getProvincialLevel());
+        List<Map<String, Object>> cityList = mainStadiumService.getAllCity(param);
+        //获取所有县区数据（北京市辖区列表）
+        param.put("cityID", merchant.getCityLevel());
+        List<Map<String, Object>> areaList = mainStadiumService.getAllArea(param);
+        map.put("provinceLise", provinceLise);
+        map.put("cityList", cityList);
+        map.put("areaList", areaList);
 
         map.put("merchant", merchant);
         map.put("mainstadium_id",request.getParameter("mainstadium_id"));

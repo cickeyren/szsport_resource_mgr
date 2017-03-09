@@ -22,7 +22,7 @@
     <script src="../../static/js/merchant/addmerchant.js" th:src="@{/js/merchant/addmerchant.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
-    <script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>
+    <!--<script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>-->
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
@@ -67,11 +67,20 @@
                 <tr>
                     <td class="alignright" width="10%">所在地</td>
                     <td class="alignleft">
-                        <select id="provincial_level" name="provincial_level"></select>  
+                        <select id="provincial_level" name="provincial_level">
+                            <option th:each="obj,eStat:${provinceLise}" th:value="${obj.provinceID}"
+                                    th:text="${obj.province}"></option>
+                        </select>  
 
-                        <select id="city_level" name="city_level"></select>  
+                        <select id="city_level" name="city_level">
+                            <option th:each="obj,eStat:${cityList}" th:value="${obj.cityID}"
+                                    th:text="${obj.city}"></option>
+                        </select>  
 
-                        <select id="district_level" name="district_level"></select>
+                        <select id="district_level" name="district_level">
+                            <option th:each="obj,eStat:${areaList}" th:value="${obj.areaID}"
+                                    th:text="${obj.area}"></option>
+                        </select>
                     </td>
                 </tr>
                 <tr class="controls">
