@@ -95,8 +95,8 @@
                     <td>
                         <a id="edit" th:data="${obj.id}"
                            th:href="@{/mainStadiumController/edit.html(mainstadiumid=${obj.id})}">编辑</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a name="delete" th:data="${obj.id}">删除</a>
+                        <!--&nbsp;&nbsp;&nbsp;-->
+                        <!--<a name="delete" th:data="${obj.id}">删除</a>-->
                         &nbsp;&nbsp;&nbsp;
                         <span th:switch="${obj.is_special}">
                                                 <a style="color:#666666;" th:case="'1'" href="javascript:;"
