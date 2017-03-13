@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>场地票价格策略新增页面</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+    <script src="../../static/js/siteticket/site_strategy_look.js" th:src="@{/js/siteticket/site_strategy_look.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container-fluid" style="margin-top: 30px;height:120px;">
+            <p class="title">查看策略</p>
+            <form onsubmit="return false;" class="form-horizontal" action="#" id="addSiteTicketStrategyForm">
+                <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                    <tr class="controls">
+                        <td th:rowspan="${timeIntervalList.size() + 1}" width="20%">
+                            <div th:text="${strategy.strategyName}"></div>
+                            <div th:text="${dateValue}"></div>
+                        </td>
+                        <td th:each="field:${fieldList}" th:text="${field.display_name}"></td>
+                    </tr>
+                    <tr th:each="timeInterval:${timeIntervalList}">
+                        <td th:each="field:${fieldList}">
+                            <div th:text="${timeInterval.timeInter}"></div>
+                            <div th:text="'¥' + ${strategy.sellPrice}" style="color: #0ab7ef;"></div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </section>
+    <script th:inline="javascript">
+        $(function(){
+            //取消按钮响应事件
+            $("#cancelBtn").click(function (){
+                window.location.href = "editSiteTicket.html?ticketId=" + [[${ticketId}]];
+            });
+        });
+    </script>
+</body>
+</html>

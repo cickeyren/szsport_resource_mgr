@@ -160,28 +160,7 @@ public class SiteTicketService {
             if ("1".equals(dateType)){
                 dateTypeValue += "每周(";
                 String weekDetails = strategyInfoList.get(i).getWeekDetails();
-                if(weekDetails.indexOf("1") >= 0){
-                    dateTypeValue += "周一、";
-                }
-                if(weekDetails.indexOf("2") >= 0){
-                    dateTypeValue += "周二、";
-                }
-                if(weekDetails.indexOf("3") >= 0){
-                    dateTypeValue += "周三、";
-                }
-                if(weekDetails.indexOf("4") >= 0){
-                    dateTypeValue += "周四、";
-                }
-                if(weekDetails.indexOf("5") >= 0){
-                    dateTypeValue += "周五、";
-                }
-                if(weekDetails.indexOf("6") >= 0){
-                    dateTypeValue += "周六、";
-                }
-                if(weekDetails.indexOf("7") >= 0){
-                    dateTypeValue += "周日、";
-                }
-                dateTypeValue = dateTypeValue.substring(0, dateTypeValue.length() - 1) + ")";
+                dateTypeValue += weekExplain(weekDetails) + ")";
             } else if("3".equals(dateType)){
                 dateTypeValue += "指定日(";
                 String specificDate = strategyInfoList.get(i).getSpecificDate();
@@ -240,5 +219,65 @@ public class SiteTicketService {
      */
     public int updateStrategyInfo(SiteTicketStrategyInfoModel siteTicketStrategyInfoModel) throws Exception{
         return siteTicketDao.updateStrategyInfo(siteTicketStrategyInfoModel);
+    }
+
+    /**
+     * 获取场地票价格策略时段信息
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> getTimeIntervalList(Map<String, Object> map){
+        return siteTicketDao.getTimeIntervalList(map);
+    }
+
+    /**
+     * 日期类型转换成中文注解
+     * @param dateType
+     * @return
+     */
+    public String dateTypeExplain(String dateType){
+        String dateTypeValue = "";
+        if("0".equals(dateType)){
+            dateTypeValue = "每日";
+        } else if("1".equals(dateType)){
+            dateTypeValue = "每周";
+        } else if("2".equals(dateType)){
+            dateTypeValue = "每月";
+        } else if("3".equals(dateType)){
+            dateTypeValue = "指定日";
+        }
+        return dateTypeValue;
+    }
+
+    /**
+     * 数据库保存的每周信息转换成中文信息
+     * @param weekDetails
+     * @return
+     */
+    public String weekExplain(String weekDetails){
+        String dateTypeValue = "";
+        if(weekDetails.indexOf("1") >= 0){
+            dateTypeValue += "周一、";
+        }
+        if(weekDetails.indexOf("2") >= 0){
+            dateTypeValue += "周二、";
+        }
+        if(weekDetails.indexOf("3") >= 0){
+            dateTypeValue += "周三、";
+        }
+        if(weekDetails.indexOf("4") >= 0){
+            dateTypeValue += "周四、";
+        }
+        if(weekDetails.indexOf("5") >= 0){
+            dateTypeValue += "周五、";
+        }
+        if(weekDetails.indexOf("6") >= 0){
+            dateTypeValue += "周六、";
+        }
+        if(weekDetails.indexOf("7") >= 0){
+            dateTypeValue += "周日、";
+        }
+        dateTypeValue = dateTypeValue.substring(0, dateTypeValue.length() - 1);
+        return dateTypeValue;
     }
 }

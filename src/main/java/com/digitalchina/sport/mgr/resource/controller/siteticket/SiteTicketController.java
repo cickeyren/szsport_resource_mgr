@@ -302,4 +302,47 @@ public class SiteTicketController {
         }
         return RtnData.fail("编辑场地票策略信息失败");
     }
+
+    /**
+     * 查看场地票价格策略信息
+     * @param map
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/lookStrategyInfo.html")
+    public String lookStrategyInfo(ModelMap map,HttpServletRequest request){
+        try {
+            //场地票价格策略信息
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("id", request.getParameter("id"));
+            SiteTicketStrategyInfoModel strategyInfo = siteTicketService.getStrategyInfoByParam(paramMap);
+            map.put("strategy", strategyInfo);
+            //日期类型转换成中文注解
+            String dateTypeValue = siteTicketService.dateTypeExplain(strategyInfo.getDateType());
+            if("1".equals(strategyInfo.getDateType())){
+                //每周信息转换成中文注解
+                dateTypeValue += siteTicketService.weekExplain(strategyInfo.getWeekDetails());
+            } else if("2".equals(strategyInfo.getDateType())){
+                //每月暂时没有
+            } else if("3".equals(strategyInfo.getDateType())){
+                //指定日信息转换成中文注解
+            }
+            map.put("dateValue", "日期类型（" + dateTypeValue + "）");
+            //价格策略中场地列表
+            paramMap.put("idList",strategyInfo.getSite().split(","));
+            map.put("fieldList", fieldMapper.getFieldByIds(paramMap));
+            //时段策略中的时间列表
+            String[] timeInterval = strategyInfo.getTimeInterval().split(",");
+            paramMap.put("timeInterval", timeInterval);
+            map.put("timeIntervalList", siteTicketService.getTimeIntervalList(paramMap));
+            map.put("ticketId", request.getParameter("ticketId"));
+        } catch (Exception e){
+            e.printStackTrace();
+            logger.error("========查询场地票价格策略信息失败=========",e);
+            map.put("url",request.getRequestURL());
+            map.put("exception",e);
+            return "error";
+        }
+        return "siteticket/look_site_strategy";
+    }
 }

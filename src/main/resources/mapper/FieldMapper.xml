@@ -56,4 +56,15 @@
         SELECT max(id) from field WHERE 1=1
     </select>
 
+    <!-- 查询id集合中的场地信息 -->
+    <select id="getFieldByIds" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT id,field_name,display_name,(CASE status WHEN '1' THEN '正常' WHEN '0' THEN '闭馆' WHEN '2' THEN '下线' ELSE '其他' END ) AS
+        status,introduction,stadium_id FROM field
+        <where>
+            <foreach collection="idList" index="index" item="item" open="" separator="or" close="">
+                id = #{item}
+            </foreach>
+        </where>
+    </select>
+
 </mapper>

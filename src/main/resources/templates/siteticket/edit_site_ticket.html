@@ -256,7 +256,7 @@
                                 <td th:text="${strategy.fields}"></td>
                                 <td th:text="${strategy.sellPrice}"></td>
                                 <td>
-                                    <a th:href="@{/siteTicket/addSiteTicket.html}">查看</a>
+                                    <a th:href="@{/siteTicket/lookStrategyInfo.html(id=${strategy.id})}">查看</a>
                                     <a th:href="@{/siteTicket/editStrategyInfo.html(id=${strategy.id})}">编辑</a>
                                     <a th:onclick="'javascript:delStrategyInfo(\'' + ${strategy.id} + '\');'">删除</a>
                                 </td>

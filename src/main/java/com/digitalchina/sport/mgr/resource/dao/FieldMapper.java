@@ -39,5 +39,11 @@ public interface FieldMapper extends Mapper<Field> {
      */
     String getMaxId();
 
+    /**
+     * 查询id集合中的场地信息
+     * @param param
+     * @return
+     */
+    public List<Map<String, Object>> getFieldByIds(Map<String, Object> param);
 
 }
