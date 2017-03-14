@@ -280,4 +280,13 @@ public class SiteTicketService {
         dateTypeValue = dateTypeValue.substring(0, dateTypeValue.length() - 1);
         return dateTypeValue;
     }
+
+    /**
+     * 获取下单需要的场地票信息
+     * @param map
+     * @return
+     */
+    public Map<String, Object> getSiteTicketInfoToOrder(Map<String, Object> map){
+        return siteTicketDao.getSiteTicketInfoToOrder(map);
+    }
 }
