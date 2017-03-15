@@ -27,7 +27,7 @@ public class ApiSiteTicketController {
     @Autowired
     private SiteTicketService siteTicketService;
 
-    @RequestMapping(value = "/getSiteTicketInfoToOrder.json", method = RequestMethod.POST)
+    @RequestMapping(value = "/getSiteTicketInfoToOrder.json")
     @ResponseBody
     public RtnData getSiteTicketInfoToOrder(@RequestParam(required = true) String ticketId){
         try {
