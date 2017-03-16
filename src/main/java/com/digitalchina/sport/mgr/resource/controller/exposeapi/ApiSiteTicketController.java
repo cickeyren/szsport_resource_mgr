@@ -27,6 +27,11 @@ public class ApiSiteTicketController {
     @Autowired
     private SiteTicketService siteTicketService;
 
+    /**
+     * 获取下单需要的场地票信息
+     * @param ticketId
+     * @return
+     */
     @RequestMapping(value = "/getSiteTicketInfoToOrder.json", method = RequestMethod.POST)
     @ResponseBody
     public RtnData getSiteTicketInfoToOrder(@RequestParam(required = true) String ticketId){
@@ -39,5 +44,29 @@ public class ApiSiteTicketController {
             logger.error("========根据场地票ID获取场地票详情失败=========",e);
         }
         return RtnData.fail("根据场地票ID获取场地票详情失败");
+    }
+
+    /**
+     * 根据场馆获取生效的场地票列表信息
+     * @param mainStadiumId
+     * @param subStadiumId
+     * @return
+     */
+    @RequestMapping(value = "/getValidSiteTicketList.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData getValidSiteTicketList(@RequestParam(required = false) String mainStadiumId,
+                                          @RequestParam(required = true) String subStadiumId){
+        try {
+            Map<String,Object> paramMap = new HashMap<String,Object>();
+            paramMap.put("mainStadiumId", mainStadiumId);
+            paramMap.put("subStadiumId", subStadiumId);
+            Map<String,Object> rtnMap = new HashMap<String,Object>();
+            rtnMap.put("siteTicketList",siteTicketService.getValidSiteTicketList(paramMap));
+            return RtnData.ok(rtnMap);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("========根据场地获取场地票列表信息失败=========",e);
+        }
+        return RtnData.fail("根据场地获取场地票列表信息失败");
     }
 }

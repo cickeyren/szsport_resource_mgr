@@ -119,4 +119,11 @@ public interface SiteTicketDao {
      * @return
      */
     public Map<String, Object> getSiteTicketInfoToOrder(Map<String, Object> map);
+
+    /**
+     * 根据场馆获取生效的场地票列表信息
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> getValidSiteTicketList(Map<String, Object> map);
 }

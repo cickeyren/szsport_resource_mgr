@@ -289,4 +289,13 @@ public class SiteTicketService {
     public Map<String, Object> getSiteTicketInfoToOrder(Map<String, Object> map){
         return siteTicketDao.getSiteTicketInfoToOrder(map);
     }
+
+    /**
+     * 根据场馆获取生效的场地票列表信息
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> getValidSiteTicketList(Map<String, Object> map){
+        return siteTicketDao.getValidSiteTicketList(map);
+    }
 }

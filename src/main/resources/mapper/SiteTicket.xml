@@ -497,4 +497,48 @@
             </if>
         </where>
     </select>
+
+    <!-- 根据场馆获取生效的场地票列表信息 -->
+    <select id="getValidSiteTicketList" parameterType="HashMap" resultType="HashMap">
+        SELECT
+            b.id,
+            b.ticket_type AS ticketType,
+            b.main_stadium_id AS mainStadiumId,
+            b.sub_stadium_id AS subStadiumId,
+            b.ticket_name AS ticketName,
+            b.merchant_id AS merchantId,
+            b.stop_order_type AS stopOrderType,
+            b.before_open_time AS beforeOpenTime,
+            b.after_open_time AS afterOpenTime,
+            b.before_close_time AS beforeCloseTime,
+            b.reserve_time AS reserveTime,
+            date_format(b.available_start_time, '%Y-%m-%d') AS availableStartTime,
+            date_format(b.available_end_time, '%Y-%m-%d') AS availableEndTime,
+            b.order_refund_rule AS orderRefundRule,
+            b.no_refund_time AS noRefundTime,
+            b.sell_way AS sellWay,
+            b.minimum_time_limit AS minimumTimeLimit,
+            b.site_num_limit AS siteNumLimit,
+            b.check_ticket_type AS checkTicketType,
+            b.check_ticket_way AS checkTicketWay,
+            b.approach_time AS approachTime,
+            b.departure_time AS departureTime,
+            b.people_num_limit AS peopleNumLimit,
+            b.order_description AS orderDescription,
+            b.refund_description AS refundDescription,
+            MIN(IFNULL(s.sell_price, 0)) AS sellPrice
+        FROM
+          site_ticket_basic_info b
+        LEFT JOIN site_ticket_strategy_info s ON b.id = s.ticket_id
+        WHERE
+          b.ticket_state = '1'
+        AND SYSDATE() &gt; b.available_start_time and SYSDATE() &lt; b.available_end_time
+        <if test="mainStadiumId != null and mainStadiumId != ''">
+            AND b.main_stadium_id = #{mainStadiumId}
+        </if>
+        <if test="subStadiumId != null and subStadiumId != ''">
+            AND b.sub_stadium_id = #{subStadiumId}
+        </if>
+        GROUP BY b.id
+    </select>
 </mapper>
