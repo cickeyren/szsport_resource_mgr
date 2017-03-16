@@ -89,19 +89,19 @@
                         <td>订单状态:</td>
                         <td colspan="8" class="alignleft">
                             <div id="status">
-                                <input type="checkbox" name="checkAll" onclick="check_all(this,'status');"/>
+                                <input type="checkbox" name="checkAll" th:checked="${checkAll}" onclick="check_all(this,'status');"/>
                                 <font class="mt25 mr20">全选</font>
-                                <input value="0" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'0')}">
+                                <input value="0" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'0'):null}">
                                 <font class="mt25 mr20">待支付</font>
-                                <input value="1" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'1')}">
+                                <input value="1" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'1'):null}">
                                 <font class="mt25 mr20">待使用</font>
-                                <input value="2" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'2')}">
+                                <input value="2" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'2'):null}">
                                 <font class="mt25 mr20">已使用</font>
-                                <input value="3" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'3')}">
+                                <input value="3" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'3'):null}">
                                 <font class="mt25 mr20">支付失败</font>
-                                <input value="4" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'4')}">
+                                <input value="4" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'4'):null}">
                                 <font class="mt25 mr20">全部退款</font>
-                                <input value="5" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${#strings.contains(status,'5')}">
+                                <input value="5" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'5'):null}">
                                 <font class="mt25 mr10">失效订单</font>
                             </div>
                         </td>

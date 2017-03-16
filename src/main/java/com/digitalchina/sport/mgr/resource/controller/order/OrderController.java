@@ -2,6 +2,7 @@ package com.digitalchina.sport.mgr.resource.controller.order;
 
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
+import com.digitalchina.common.utils.StringUtil;
 import com.digitalchina.sport.mgr.resource.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,25 +53,24 @@ public class OrderController {
     @RequestMapping(value = "/orderList.html")
     public String orderList(@RequestParam(required = false, defaultValue = "10") long pageSize,
                             @RequestParam(required = false, defaultValue = "1") long page,
-                            @RequestParam(required = false) String userTel,
-                            @RequestParam(required = false) String ticketType,
-                            @RequestParam(required = false) String ticketName,
-                            @RequestParam(required = false) String orderChannel,
-                            @RequestParam(required = false) String orderStartDate,
-                            @RequestParam(required = false) String orderEndDate,
                             @RequestParam(required = false) String status,
                             ModelMap map,HttpServletRequest request){
         Map<String, Object> params = new HashMap<String, Object>();
         //String userId = "5eb76ae3dd5246bda465b22aa1fdb0a8";
         //params.put("userId", userId);
+        String checkAll = request.getParameter("checkAll");
         System.out.print(status);
-        params.put("userTel", userTel);
-        params.put("ticketType", ticketType);
-        params.put("ticketName", ticketName);
-        params.put("orderChannel", orderChannel);
-        params.put("orderStartDate", orderStartDate);
-        params.put("orderEndDate", orderEndDate);
-        params.put("status", status);
+        params.put("userTel", request.getParameter("userTel"));
+        params.put("ticketType", request.getParameter("ticketType"));
+        params.put("ticketName", request.getParameter("ticketName"));
+        params.put("orderChannel", request.getParameter("orderChannel"));
+        params.put("orderStartDate", request.getParameter("orderStartDate"));
+        params.put("orderEndDate", request.getParameter("orderEndDate"));
+        if(StringUtil.isEmpty(checkAll)){
+            params.put("status", status);
+        }else{
+            params.put("checkAll", request.getParameter("checkAll"));
+        }
         try {
             int totalSize = orderService.getCountByMap(params);
             Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
@@ -81,13 +81,14 @@ public class OrderController {
             map.put("pageModel", pagination);
             map.put("pageSize",String.valueOf(pageSize));
             map.put("page",String.valueOf(page));
-            map.put("userTel", userTel);
-            map.put("ticketType", ticketType);
-            map.put("ticketName", ticketName);
-            map.put("orderChannel", orderChannel);
+            map.put("userTel", request.getParameter("userTel"));
+            map.put("ticketType", request.getParameter("ticketType"));
+            map.put("ticketName", request.getParameter("ticketName"));
+            map.put("orderChannel", request.getParameter("orderChannel"));
             map.put("status", status);
-            map.put("orderStartDate", orderStartDate);
-            map.put("orderEndDate", orderEndDate);//回到页面,保留搜索关键字
+            map.put("checkAll", request.getParameter("checkAll"));
+            map.put("orderStartDate", request.getParameter("orderStartDate"));
+            map.put("orderEndDate", request.getParameter("orderEndDate"));//回到页面,保留搜索关键字
             map.put("orderList",orderList);
             return "order/myOrder";
         } catch (Exception e) {
