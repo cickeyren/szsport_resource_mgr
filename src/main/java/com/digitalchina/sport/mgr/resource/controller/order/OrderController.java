@@ -65,14 +65,16 @@ public class OrderController {
         params.put("ticketType", request.getParameter("ticketType"));
         params.put("ticketName", request.getParameter("ticketName"));
         params.put("orderChannel", request.getParameter("orderChannel"));
-        String startDate = request.getParameter("orderStartDate");
-        String endDate = request.getParameter("orderEndDate");
-        if(startDate.equals(endDate)){
-            startDate = startDate+" 00:00:00";
-            endDate = endDate+" 23:59:59";
+        if (!StringUtil.isEmpty(request.getParameter("orderStartDate")) && !StringUtil.isEmpty(request.getParameter("orderEndDate"))){
+            String startDate = request.getParameter("orderStartDate");
+            String endDate = request.getParameter("orderEndDate");
+            if(startDate.equals(endDate)){
+                startDate = startDate+" 00:00:00";
+                endDate = endDate+" 23:59:59";
+            }
+            params.put("orderStartDate", startDate);
+            params.put("orderEndDate", endDate);
         }
-        params.put("orderStartDate", startDate);
-        params.put("orderEndDate", endDate);
         if(StringUtil.isEmpty(checkAll)){
             params.put("status", status);
         }else{
