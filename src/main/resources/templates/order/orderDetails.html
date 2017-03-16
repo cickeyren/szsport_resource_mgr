@@ -85,7 +85,7 @@
                 <td th:text="*{subStadiumName}"></td>
                 <td th:text="*{ticketName}"></td>
                 <td th:text="*{ticketType}"></td>
-                <td th:text="*{orderTime}"></td>
+                <td th:text="*{#calendars.format(orderTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td th:text="*{orderChannel}"></td>
                 <td th:text="*{status}"></td>
                 <td th:text="*{costPrice}"></td>
@@ -94,7 +94,7 @@
                 <td th:text="*{userTel}"></td>
                 <td th:text="*{payType}"></td>
                 <td th:text="${payAccount!=null?payAccount:'暂无'}"></td>
-                <td th:text="${payTime!=null?payTime:'暂无'}"></td>
+                <td th:text="${payTime!=null?#calendars.format(payTime,'yyyy-MM-dd HH:mm:ss'):'暂无'}"></td>
                 <td th:text="${payPrice!=null?payPrice:'暂无'}"></td>
                 <td th:text="*{merchantName}"></td>
             </tr>
@@ -128,8 +128,8 @@
                 <tr th:each="obj, objStat: ${orderContentList}">
                     <input type="hidden" th:value="${obj.id}"/>
                     <td th:text="${obj.orderCode}"></td>
-                    <td th:text="${obj.startTime}"></td>
-                    <td th:text="${obj.endTime}"></td>
+                    <td th:text="${#calendars.format(obj.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${#calendars.format(obj.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                     <td th:text="${obj.remainNumber== null?'不限次数':obj.remainNumber}"></td>
                     <td th:text="${obj.everydayNumber==null?'不限次数':obj.everydayNumber}"></td>
                     <td th:text="${obj.costPrice}"></td>

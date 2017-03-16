@@ -54,8 +54,10 @@
                     <tr class="controls">
                         <td>下单时间:</td>
                         <td class="alignleft">
-                            <input type='text' style="float:none" id="orderStartDate" name="orderStartDate" class="inputw100 form-control" readonly="readonly" th:value="${orderStartDate}" onClick="WdatePicker()"/>至
-                            <input type='text' style="float:none" id="orderEndDate" name="orderEndDate" class="inputw100 form-control" readonly="readonly" th:value="${orderEndDate}" onClick="WdatePicker()"/>
+                            <input type='text' style="width: auto; float:none" id="orderStartDate" name="orderStartDate" class="inputw100 form-control" readonly="readonly" th:value="${orderStartDate}"
+                                   onClick="WdatePicker({maxDate:'#F{$dp.$D(\'orderEndDate\')||\'%y-%M-%d\'}'})"/>至
+                            <input type='text' style="width: auto; float:none" id="orderEndDate" name="orderEndDate" class="inputw100 form-control" readonly="readonly" th:value="${orderEndDate}"
+                                   onClick="WdatePicker({minDate:'#F{$dp.$D(\'orderStartDate\')}',maxDate:'%y-%M-%d'})"/>
                         </td>
                         <td>预定手机:</td>
                         <td class="alignleft">
@@ -145,7 +147,7 @@
                                     <td th:text="${obj.ticketType}"></td>
                                     <td th:text="${obj.stadiumName}"></td>
                                     <td th:text="${obj.ticketName}"></td>
-                                    <td th:text="${obj.orderTime}"></td>
+                                    <td th:text="${#calendars.format(obj.orderTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                     <td th:text="${obj.sellPrice}"></td>
                                     <td th:text="${obj.orderChannel}"></td>
                                     <td th:text="${obj.userTel}"></td>

@@ -2,6 +2,7 @@ package com.digitalchina.sport.mgr.resource.controller.order;
 
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
+import com.digitalchina.common.utils.DateUtil;
 import com.digitalchina.common.utils.StringUtil;
 import com.digitalchina.sport.mgr.resource.service.OrderService;
 import org.slf4j.Logger;
@@ -64,8 +65,14 @@ public class OrderController {
         params.put("ticketType", request.getParameter("ticketType"));
         params.put("ticketName", request.getParameter("ticketName"));
         params.put("orderChannel", request.getParameter("orderChannel"));
-        params.put("orderStartDate", request.getParameter("orderStartDate"));
-        params.put("orderEndDate", request.getParameter("orderEndDate"));
+        String startDate = request.getParameter("orderStartDate");
+        String endDate = request.getParameter("orderEndDate");
+        if(startDate.equals(endDate)){
+            startDate = startDate+" 00:00:00";
+            endDate = endDate+" 23:59:59";
+        }
+        params.put("orderStartDate", startDate);
+        params.put("orderEndDate", endDate);
         if(StringUtil.isEmpty(checkAll)){
             params.put("status", status);
         }else{
