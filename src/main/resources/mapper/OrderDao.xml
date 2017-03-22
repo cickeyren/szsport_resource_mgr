@@ -27,17 +27,19 @@
         <if test="userId != null and userId != ''">
             AND user_id = #{userId}
         </if>
-
         <if test="ticketName != null and ticketName != ''">
             AND ob.ticket_name like CONCAT('%',#{ticketName},'%')
         </if>
         <if test="userTel != null and userTel != ''">
             AND ob.user_tel = #{userTel}
         </if>
-        <if test="orderStartDate != null and orderStartDate != '' and orderEndDate != null and orderEndDate != ''">
-        <![CDATA[AND
+        <if test="orderStartDate != null and orderStartDate != ''">
+            <![CDATA[AND
             ob.order_time >=#{orderStartDate}
-            AND
+            ]]>
+        </if>
+        <if test="orderEndDate != null and orderEndDate != ''">
+            <![CDATA[AND
             ob.order_time <= #{orderEndDate}]]>
         </if>
         <if test="ticketType != null and ticketType != ''">
@@ -72,10 +74,13 @@
         <if test="ticketName != null and ticketName != ''">
             AND ob.ticket_name like CONCAT('%',#{ticketName},'%')
         </if>
-        <if test="orderStartDate != null and orderStartDate != '' and orderEndDate != null and orderEndDate != ''">
+        <if test="orderStartDate != null and orderStartDate != ''">
             <![CDATA[AND
             ob.order_time >=#{orderStartDate}
-            AND
+            ]]>
+        </if>
+        <if test="orderEndDate != null and orderEndDate != ''">
+            <![CDATA[AND
             ob.order_time <= #{orderEndDate}]]>
         </if>
         <if test="ticketType != null and ticketType != ''">
