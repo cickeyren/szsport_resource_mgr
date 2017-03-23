@@ -174,7 +174,12 @@ $(function () {
             });
             var sellWay = sellWayArray.toString();//售卖渠道
             var minimumTimeLimit = $.trim($("#minimumTimeLimit").val());//起订时限
-            var siteNumLimit = $.trim($("#siteNumLimit").val());//限订场次数
+            var siteNumLimitValue = $('input:radio[name="siteNumLimitRadio"]:checked').val();
+            //限订场次数，默认不限
+            var siteNumLimit = -1;
+            if(1 == siteNumLimitValue){
+                siteNumLimit = $.trim($("#siteNumLimit").val());
+            }
             var checkTicketTypeArray=[];
             $('input[name="checkTicketType"]:checkbox').each(function(){
                 if ($(this).prop("checked")) {
