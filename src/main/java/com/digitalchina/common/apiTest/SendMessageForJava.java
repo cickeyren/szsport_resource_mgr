@@ -1,7 +1,5 @@
 package com.digitalchina.common.apiTest;
 
-import org.apache.axis.client.Call;
-import org.apache.axis.client.Service;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -12,10 +10,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * （一句话描述）
