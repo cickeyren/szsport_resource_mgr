@@ -233,26 +233,26 @@
             u.used_time AS usedTime,
             (
                 CASE
-                WHEN u.remian_number = '-1' THEN
+                WHEN u.remain_number = '-1' THEN
                     '不限次数'
-                WHEN u.remian_number = '' THEN
+                WHEN u.remain_number = '' THEN
                     '不限次数'
-                WHEN u.remian_number IS NULL THEN
+                WHEN u.remain_number IS NULL THEN
                     '不限次数'
                 ELSE
-                    u.remian_number
+                    u.remain_number
                 END
-            ) AS remianNumber,
+            ) AS remainNumber,
             (
                 CASE
-                WHEN u.everyday_remian_number = '-1' THEN
+                WHEN u.everyday_remain_number = '-1' THEN
                     '不限次数'
-                WHEN u.everyday_remian_number = '' THEN
+                WHEN u.everyday_remain_number = '' THEN
                     '不限次数'
-                WHEN u.everyday_remian_number IS NULL THEN
+                WHEN u.everyday_remain_number IS NULL THEN
                     '不限次数'
                 ELSE
-                    u.everyday_remian_number
+                    u.everyday_remain_number
                 END
             ) AS everydayRemianNumber,
             u.used_number AS usedNumber,
