@@ -26,5 +26,11 @@
         WHERE time_code=#{time_code}
     </select>
 
-
+    <!-- 根据场馆查询状态正常的时间策略 -->
+    <select id="getNormalTimeIntervalByStadiumid" parameterType="HashMap" resultType="HashMap">
+        SELECT id,time_name,status
+        FROM  time_frame
+        WHERE status = '1'
+        AND stadium_id=#{stadium_id}
+    </select>
 </mapper>

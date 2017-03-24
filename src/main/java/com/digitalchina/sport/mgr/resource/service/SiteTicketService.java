@@ -160,7 +160,7 @@ public class SiteTicketService {
             if ("1".equals(dateType)){
                 dateTypeValue += "每周(";
                 String weekDetails = strategyInfoList.get(i).getWeekDetails();
-                dateTypeValue += weekExplain(weekDetails) + ")";
+                dateTypeValue += this.weekExplain(weekDetails) + ")";
             } else if("3".equals(dateType)){
                 dateTypeValue += "指定日(";
                 String specificDate = strategyInfoList.get(i).getSpecificDate();
@@ -176,7 +176,11 @@ public class SiteTicketService {
             for (int j = 0; j < timeIntervalList.size(); j++){
                 intervalStr += timeIntervalList.get(j).get("timeInter") + "、";
             }
-            itemMap.put("timeInterval", intervalStr.substring(0, intervalStr.length() - 1));
+            if(intervalStr.length() > 0) {
+                itemMap.put("timeInterval", intervalStr.substring(0, intervalStr.length() - 1));
+            } else {
+                itemMap.put("timeInterval", intervalStr);
+            }
             //场地信息
             String[] site = strategyInfoList.get(i).getSite().split(",");
             String fields = "";
@@ -277,7 +281,9 @@ public class SiteTicketService {
         if(weekDetails.indexOf("7") >= 0){
             dateTypeValue += "周日、";
         }
-        dateTypeValue = dateTypeValue.substring(0, dateTypeValue.length() - 1);
+        if(dateTypeValue.length() > 0) {
+            dateTypeValue = dateTypeValue.substring(0, dateTypeValue.length() - 1);
+        }
         return dateTypeValue;
     }
 

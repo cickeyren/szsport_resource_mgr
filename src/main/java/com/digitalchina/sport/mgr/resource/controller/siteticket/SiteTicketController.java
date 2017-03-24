@@ -169,8 +169,8 @@ public class SiteTicketController {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("stadium_id",request.getParameter("subStadium"));
         map.put("fieldList", fieldMapper.getAllByid(paramMap));
-        //子场馆中时段策略列表
-        List<Map<String, Object>> timeFrame = timeInteralMapper.getTimeIntervalByStadiumid(paramMap);
+        //子场馆中正常状态时段策略列表
+        List<Map<String, Object>> timeFrame = timeInteralMapper.getNormalTimeIntervalByStadiumid(paramMap);
         map.put("timeFrameList",timeFrame);
         //时段策略中的时间列表
         paramMap.put("time_code", timeFrame.get(0).get("id"));
@@ -267,8 +267,8 @@ public class SiteTicketController {
             //子场馆中场地列表
             paramMap.put("stadium_id",strategyInfo.getSubStadium());
             map.put("fieldList", fieldMapper.getAllByid(paramMap));
-            //子场馆中时段策略列表
-            List<Map<String, Object>> timeFrame = timeInteralMapper.getTimeIntervalByStadiumid(paramMap);
+            //子场馆中正常状态时段策略列表
+            List<Map<String, Object>> timeFrame = timeInteralMapper.getNormalTimeIntervalByStadiumid(paramMap);
             map.put("timeFrameList",timeFrame);
             //时段策略中的时间列表
             paramMap.put("time_code", timeFrame.get(0).get("id"));

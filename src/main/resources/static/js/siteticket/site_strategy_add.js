@@ -73,15 +73,15 @@ $(function () {
             },
             sellPrice: {
                 required: true,
-                digits: true
+                number: true
             },
             costPrice: {
                 required: true,
-                digits: true
+                number: true
             },
             storePrice: {
                 required: true,
-                digits: true
+                number: true
             }
         },
         messages: {
@@ -93,15 +93,15 @@ $(function () {
             },
             sellPrice: {
                 required: "请填写销售价",
-                digits: "请输入有效的数字"
+                number: "请输入有效的数字"
             },
             costPrice: {
                 required: "请填写成本价",
-                digits: "请输入有效的数字"
+                number: "请输入有效的数字"
             },
             storePrice: {
                 required: "请填写门市价",
-                digits: "请输入有效的数字"
+                number: "请输入有效的数字"
             }
         },
         submitHandler: function () {

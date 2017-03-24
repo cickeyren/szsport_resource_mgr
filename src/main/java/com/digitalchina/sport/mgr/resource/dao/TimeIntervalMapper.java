@@ -10,4 +10,11 @@ import java.util.Map;
 public interface TimeIntervalMapper extends Mapper<TimeInterval> {
     List<Map<String,Object>>  getTimeIntervalByStadiumid(Map<String,Object> params);
     List<Map<String,Object>>  getTimeIntervalByTimecode(Map<String,Object> params);
+
+    /**
+     * 根据场馆查询状态正常的时间策略
+     * @param params
+     * @return
+     */
+    List<Map<String,Object>>  getNormalTimeIntervalByStadiumid(Map<String,Object> params);
 }
