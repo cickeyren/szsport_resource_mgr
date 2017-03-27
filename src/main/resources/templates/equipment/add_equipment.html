@@ -60,11 +60,11 @@
                         <tr>
                             <td>子场馆：</td>
                             <td colspan="2">
-                                <select id="subStadium" name="subStadium" th:switch="${#lists.isEmpty(subStadiumList)}">
-                                    <option th:case="true" value="">无子场馆</option>
-                                    <option th:case="false" th:each="subStadium : ${subStadiumList}"
-                                             th:value="${subStadium.id}" th:text="${subStadium.name}"></option>
-                                </select>
+                                <div id="subStadiumDiv" th:switch="${#lists.isEmpty(subStadiumList)}">
+                                    <div th:case="true">无子场馆</div>
+                                    <input th:case="false" type="checkbox" id="subStadium" name="subStadium" th:each="subStadium : ${subStadiumList}"
+                                           th:value="${subStadium.id}" th:text="${subStadium.name}">
+                                </div>
                             </td>
                         </tr>
                         <tr>

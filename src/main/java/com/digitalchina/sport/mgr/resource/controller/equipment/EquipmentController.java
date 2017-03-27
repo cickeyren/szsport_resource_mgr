@@ -58,26 +58,33 @@ public class EquipmentController {
         paramMap.put("equipmentId", request.getParameter("equipmentId"));
         paramMap.put("equipmentType", request.getParameter("equipmentType"));
         paramMap.put("mainStadium", request.getParameter("mainStadium"));
-        paramMap.put("subStadium", request.getParameter("subStadium"));
-        int totalSize = equipmentService.getEquipmentTotalCount(paramMap);
-        Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
-        pagination.setUrl(request.getRequestURI());
-        paramMap.put("pageIndex", pagination.getStartIndex());
-        paramMap.put("pageSize", pageSize);
         try {
+            List<String> subStadiumIdList = new ArrayList<String>();
+            //子场馆模糊查询出所有的子场馆ID列表
+            String stadiumName = request.getParameter("subStadium");
+            if(stadiumName != null && !"".equals(stadiumName)){
+                paramMap.put("subStadium", request.getParameter("subStadium"));
+                subStadiumIdList = equipmentService.getSubStadiumIdList(paramMap);
+            }
+            paramMap.put("subStadiumIdList", subStadiumIdList);
+            int totalSize = equipmentService.getEquipmentTotalCount(paramMap);
+            Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
+            pagination.setUrl(request.getRequestURI());
+            paramMap.put("pageIndex", pagination.getStartIndex());
+            paramMap.put("pageSize", pageSize);
             list = equipmentService.getEquipmentList(paramMap);
+            map.put("equipmentList", list);
+            map.put("equipmentId", request.getParameter("equipmentId"));
+            map.put("equipmentType", request.getParameter("equipmentType"));
+            map.put("mainStadium", request.getParameter("mainStadium"));
+            map.put("subStadium", request.getParameter("subStadium"));
+            map.put("pageModel", pagination);
+            map.put("pageSize",String.valueOf(pageSize));
+            map.put("page",String.valueOf(page));
         }catch (Exception e){
             e.printStackTrace();
             logger.error("========查询设备信息失败=========",e);
         }
-        map.put("equipmentList", list);
-        map.put("equipmentId", request.getParameter("equipmentId"));
-        map.put("equipmentType", request.getParameter("equipmentType"));
-        map.put("mainStadium", request.getParameter("mainStadium"));
-        map.put("subStadium", request.getParameter("subStadium"));
-        map.put("pageModel", pagination);
-        map.put("pageSize",String.valueOf(pageSize));
-        map.put("page",String.valueOf(page));
         return "equipment/equipment_list";
     }
 

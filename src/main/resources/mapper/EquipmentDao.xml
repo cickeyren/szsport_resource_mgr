@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalchina.sport.mgr.resource.dao.EquipmentDao" >
+    <!-- 模糊查询出所有的子场馆ID列表 -->
+    <select id="getSubStadiumIdList" parameterType="HashMap" resultType="String">
+        SELECT
+            s.id
+        FROM
+            sub_stadium s
+        WHERE
+            s. NAME LIKE CONCAT('%', #{subStadium}, '%')
+    </select>
+
     <!-- 根据参数查询设备列表 -->
     <select id="getEquipmentList" resultType="HashMap" parameterType="HashMap">
         SELECT
@@ -8,12 +18,11 @@
             e.equipment_id AS equipmentId,
             e.equipment_name AS equipmentType,
             m.name AS mainStadium,
-            s.name AS subStadium,
+            e.stadium_id AS stadiumId,
             e.status
         FROM
             equipment e
         LEFT JOIN main_stadium m ON e.parent_id = m.id
-        LEFT JOIN sub_stadium s ON e.stadium_id = s.id
         <where>
             <if test="equipmentId != null and equipmentId != ''">
                 e.equipment_id like CONCAT('%',#{equipmentId},'%')
@@ -24,11 +33,28 @@
             <if test="mainStadium != null and mainStadium != ''">
                 and m.name like CONCAT('%',#{mainStadium},'%')
             </if>
-            <if test="subStadium != null and subStadium != ''">
-                and s.name like CONCAT('%',#{subStadium},'%')
+            <if test="subStadiumIdList != null and subStadiumIdList.size() > 0">
+                <foreach collection="subStadiumIdList" index="index" item="item" open="" separator="or" close="">
+                    e.stadium_id like CONCAT('%',#{item},'%')
+                </foreach>
             </if>
         </where>
         LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 获取模糊查询的设备对应的子场馆信息 -->
+    <select id="getSubStadiumNameList" parameterType="HashMap" resultType="String">
+        SELECT
+            s.name
+        FROM
+            sub_stadium s
+        <where>
+            <if test="subStadiumIdList != null">
+                <foreach collection="subStadiumIdList" index="index" item="item" open="" separator="or" close="">
+                    s.id = #{item}
+                </foreach>
+            </if>
+        </where>
     </select>
 
     <!-- 根据参数查询设备列表的总数量 -->
@@ -38,7 +64,6 @@
         FROM
             equipment e
         LEFT JOIN main_stadium m ON e.parent_id = m.id
-        LEFT JOIN sub_stadium s ON e.stadium_id = s.id
         <where>
             <if test="equipmentId != null and equipmentId != ''">
                 e.equipment_id like CONCAT('%',#{equipmentId},'%')
@@ -49,8 +74,10 @@
             <if test="mainStadium != null and mainStadium != ''">
                 and m.name like CONCAT('%',#{mainStadium},'%')
             </if>
-            <if test="subStadium != null and subStadium != ''">
-                and s.name like CONCAT('%',#{subStadium},'%')
+            <if test="subStadiumIdList != null and subStadiumIdList.size() > 0">
+                <foreach collection="subStadiumIdList" index="index" item="item" open="" separator="or" close="">
+                    e.stadium_id like CONCAT('%',#{item},'%')
+                </foreach>
             </if>
         </where>
     </select>

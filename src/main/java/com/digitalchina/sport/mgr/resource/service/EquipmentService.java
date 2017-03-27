@@ -24,13 +24,38 @@ public class EquipmentService {
     private SubStadiumMapper subStadiumMapper;
 
     /**
+     * 模糊查询出所有的子场馆ID列表
+     * @param map
+     * @return
+     * @throws Exception
+     */
+    public List<String> getSubStadiumIdList(Map<String, Object> map) throws Exception{
+        return equipmentDao.getSubStadiumIdList(map);
+    }
+
+    /**
      * 根据参数查询设备列表
      * @param map
      * @return
      * @throws Exception
      */
     public List<Map<String,Object>> getEquipmentList(Map<String, Object> map) throws Exception{
-        return equipmentDao.getEquipmentList(map);
+        List<Map<String,Object>> rtnList = equipmentDao.getEquipmentList(map);
+        for(int i = 0; i < rtnList.size(); i++){
+            String[] subStadiumIdArray = rtnList.get(i).get("stadiumId").toString().split(",");
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("subStadiumIdList", subStadiumIdArray);
+            List<String> subStadiumList = equipmentDao.getSubStadiumNameList(paramMap);
+            StringBuffer subStadium = new StringBuffer();
+            for(int j = 0; j < subStadiumList.size(); j++){
+                subStadium.append(subStadiumList.get(j));
+                if(j < subStadiumList.size() - 1){
+                    subStadium.append(",");
+                }
+            }
+            rtnList.get(i).put("subStadium", subStadium.toString());
+        }
+        return rtnList;
     }
 
     /**

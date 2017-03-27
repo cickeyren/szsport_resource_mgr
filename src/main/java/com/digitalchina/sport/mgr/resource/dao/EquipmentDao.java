@@ -14,12 +14,28 @@ import java.util.Map;
 @Mapper
 public interface EquipmentDao {
     /**
+     * 模糊查询出所有的子场馆ID列表
+     * @param map
+     * @return
+     * @throws Exception
+     */
+    public List<String> getSubStadiumIdList(Map<String, Object> map) throws Exception;
+
+    /**
      * 根据参数查询设备列表
      * @param map
      * @return
      * @throws Exception
      */
     public List<Map<String,Object>> getEquipmentList(Map<String, Object> map) throws Exception;
+
+    /**
+     * 获取模糊查询的设备对应的子场馆信息
+     * @param map
+     * @return
+     * @throws Exception
+     */
+    public List<String> getSubStadiumNameList(Map<String, Object> map) throws Exception;
 
     /**
      * 根据参数查询设备列表的总数量

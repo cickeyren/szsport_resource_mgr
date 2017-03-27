@@ -61,10 +61,10 @@
                         <tr>
                             <td>子场馆：</td>
                             <td colspan="2">
-                                <select id="subStadium" name="subStadium">
-                                    <option  th:each="subStadium : ${subStadiumList}" th:value="${subStadium.id}"
-                                             th:text="${subStadium.name}" th:selected="${equipment.stadium_id eq subStadium.id}"></option>
-                                </select>
+                                <div id="subStadiumDiv">
+                                    <input type="checkbox" id="subStadium" name="subStadium" th:each="subStadium : ${subStadiumList}"
+                                           th:value="${subStadium.id}" th:text="${subStadium.name}" th:checked="${equipment.stadium_id.indexOf(subStadium.id) > -1}">
+                                </div>
                             </td>
                         </tr>
                         <tr>

@@ -21,6 +21,14 @@ $(function () {
         var equipmentId = $("#equipmentId").val();
         var reg  = /^[\d]{11}$/;
         if(reg.test(equipmentId)){
+            //子场馆选择
+            var subStadiumArray = [];//子场馆集合
+            $('input[name="subStadium"]:checkbox').each(function(){
+                if ($(this).prop("checked")) {
+                    subStadiumArray.push($(this).prop('value'));
+                }
+            });
+            var subStadium = subStadiumArray.toString();
             $.ajax({
                 url:'/equipment/addEquipment.json',
                 type:'POST',
@@ -28,7 +36,7 @@ $(function () {
                     "equipmentId":equipmentId,
                     "equipmentType":$("#equipmentType").val(),
                     "mainStadium":$("#mainStadium").val(),
-                    "subStadium":$("#subStadium").val(),
+                    "subStadium":subStadium,
                     "status":$('input[name="status"]:checked').val()
                 },
                 dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
@@ -59,9 +67,18 @@ $(function () {
      * 编辑设备信息
      */
     $("#editEquipmentBtn").on('click', function () {
+        //设备编号必须是11位数字
         var equipmentId = $("#equipmentId").val();
         var reg  = /^[\d]{11}$/;
         if(reg.test(equipmentId)){
+            //子场馆选择
+            var subStadiumArray = [];//子场馆集合
+            $('input[name="subStadium"]:checkbox').each(function(){
+                if ($(this).prop("checked")) {
+                    subStadiumArray.push($(this).prop('value'));
+                }
+            });
+            var subStadium = subStadiumArray.toString();
             $.ajax({
                 url:'/equipment/updateEquipment.json',
                 type:'POST',
@@ -70,7 +87,7 @@ $(function () {
                     "equipmentId":$("#equipmentId").val(),
                     "equipmentType":$("#equipmentType").val(),
                     "mainStadium":$("#mainStadium").val(),
-                    "subStadium":$("#subStadium").val(),
+                    "subStadium":subStadium,
                     "status":$('input[name="status"]:checked').val()
                 },
                 dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
@@ -108,15 +125,14 @@ function updateSubStadiumList(mainStadiumId) {
         success:function(result){
             if("000000" == result.code) {
                 var items = result.result;
-                $("#subStadium").empty();
+                $("#subStadiumDiv").empty();
                 if(0 == items.length){
-                    $("#subStadium").append("<option value=\"\"  value=\"\">无子场馆</option>");
+                    $("#subStadiumDiv").append("无子场馆");
                 } else {
                     $.each(items,function(i,n){
-                        $("#subStadium").append("<option value=\"" + n.id + "\" classify=\""+ n.classify+"\">"+n.name+"</option>");
+                        $("#subStadiumDiv").append("<input type='checkbox' id='subStadium' name='subStadium' value=\"" + n.id + "\" classify=\""+ n.classify+"\">"+n.name);
                     });
                 }
-
                 //alert("添加成功~");
             } else {
                 alert("添加失败~");
