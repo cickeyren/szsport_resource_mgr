@@ -18,12 +18,12 @@ $(function () {
 
     //场地全选控制
     $("#siteCheckAll").click(function(){
-        $("input[name = fieldCheck]:checkbox").attr("checked", $("#siteCheckAll").prop("checked"));
+        $("input[name = fieldCheck]:checkbox").prop("checked", $("#siteCheckAll").prop("checked"));
     })
 
     //日期每月全选控制
     $("#monthCheckAll").click(function(){
-        $("input[name = monthCheck]:checkbox").attr("checked", $("#monthCheckAll").prop("checked"));
+        $("input[name = monthCheck]:checkbox").prop("checked", $("#monthCheckAll").prop("checked"));
     })
 
     var specificDateArray = [];//指定日数组
@@ -58,7 +58,7 @@ $(function () {
 
     //时段全选控制
     $("#timeIntervalCheckAll").click(function(){
-        $("input[name = timeIntervalCheck]:checkbox").attr("checked", $("#timeIntervalCheckAll").prop("checked"));
+        $("input[name = timeIntervalCheck]:checkbox").prop("checked", $("#timeIntervalCheckAll").prop("checked"));
     })
 
     //表单配置
@@ -69,6 +69,9 @@ $(function () {
                 maxlength: 100
             },
             fieldCheck:{
+                required: true
+            },
+            timeIntervalCheck:{
                 required: true
             },
             sellPrice: {
@@ -90,6 +93,9 @@ $(function () {
             },
             fieldCheck:{
                 required: "请选择场地"
+            },
+            timeIntervalCheck:{
+                required: "请选择时段"
             },
             sellPrice: {
                 required: "请填写销售价",
@@ -162,21 +168,29 @@ $(function () {
                 costPrice:costPrice,
                 storePrice:storePrice
             };
-            $.ajax({
-                url:'/siteTicket/addStrategyInfo.json',
-                type:'POST', //GET
-                data:reqParam,
-                dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-                success:function(result){
-                    if("000000" == result.code) {
-                        layer.msg("添加场地票策略成功~");
-                        window.location.reload(true);
+            if(dateType == 1 && weekDetails == ""){
+                layer.msg("请选择日期类型");
+            } else if(dateType == 2 && monthDetails == ""){
+                layer.msg("请选择日期类型")
+            } else if(dateType == 3 && specificDate  == ""){
+                layer.msg("请选择日期类型")
+            } else {
+                $.ajax({
+                    url:'/siteTicket/addStrategyInfo.json',
+                    type:'POST', //GET
+                    data:reqParam,
+                    dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                    success:function(result){
+                        if("000000" == result.code) {
+                            layer.msg("添加场地票策略成功~");
+                            window.location.reload(true);
+                        }
+                    },
+                    error:function(result){
+                        layer.msg("添加场地票策略失败~");
                     }
-                },
-                error:function(result){
-                    layer.msg("添加场地票策略失败~");
-                }
-            });
+                });
+            }
         }
     };
     $("#addSiteTicketStrategyForm").validate(valConfig);
