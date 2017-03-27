@@ -42,6 +42,8 @@ function doSave(field) {
                 setTimeout(function () {
                     window.location.href = "/TimeFrameController/timeFrame.html?stadium_id=" + $('#stadium_id').val();
                 }, 1000);
+            }else {
+                layer.msg(result.result);
             }
         },
         error: function (result) {

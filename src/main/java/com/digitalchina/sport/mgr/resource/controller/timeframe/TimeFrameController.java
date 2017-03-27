@@ -4,6 +4,7 @@ import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
 import com.digitalchina.sport.mgr.resource.dao.TimeFrameMapper;
+import com.digitalchina.sport.mgr.resource.dao.TimeIntervalMapper;
 import com.digitalchina.sport.mgr.resource.model.SubStadium;
 import com.digitalchina.sport.mgr.resource.model.TimeFrame;
 import com.digitalchina.sport.mgr.resource.model.TimeInterval;
@@ -37,6 +38,9 @@ public class TimeFrameController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TimeFrameController.class);
     @Autowired
     private TimeFrameService timeFrameService;
+    @Autowired
+    private TimeIntervalMapper timeIntervalMapper;
+
 
     /**
      * 进入时段管理
@@ -81,6 +85,51 @@ public class TimeFrameController {
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("========查询時段数据失败=========", e);
+            map.put("url", request.getRequestURL());
+            map.put("exception", e);
+            return "error";
+        }
+    }
+
+    /**
+     * 查询所以时段规则
+     *
+     * @param pageSize
+     * @param page
+     * @param map
+     * @param request
+     *
+     * @return
+     */
+    @RequestMapping(value = "/selectAlltimeintreal.html")
+    public String getAllTimeIntrealList(@RequestParam(required = false, defaultValue = "10") long pageSize,
+                                        @RequestParam(required = false, defaultValue = "1") long page,
+                                        ModelMap map, HttpServletRequest request) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        String time_code = request.getParameter("id");
+        params.put("time_code", time_code);
+
+        try {
+
+            int totalSize = timeFrameService.findTotalCountByInterval(params);
+            Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
+            params.put("startIndex", pagination.getStartIndex());
+            params.put("endIndex", pagination.getEndIndex());
+            params.put("time_code", time_code);
+            //分页查询时段规则
+            List<Map<String, Object>> timeFrameList = timeFrameService.getAllTimeIntervalList(params);
+
+            pagination.setUrl(request.getRequestURI());
+            map.put("pageModel", pagination);
+            map.put("pageSize", String.valueOf(pageSize));
+            map.put("page", String.valueOf(page));
+            map.put("time_code",time_code);
+            map.put("timeFrameList", timeFrameList);
+            return "timeframe/timeInterval";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========查询時段规则失败=========", e);
             map.put("url", request.getRequestURL());
             map.put("exception", e);
             return "error";
@@ -210,6 +259,7 @@ public class TimeFrameController {
      */
     @RequestMapping(value = "/updateTimeFrame.do", method = RequestMethod.POST)
     @ResponseBody
+    @Transactional
     public RtnData update(TimeFrame timeFrame, ModelMap map) {
         try {
 
@@ -222,6 +272,55 @@ public class TimeFrameController {
             timeFrame_full.setTimeStart(timeFrame.getTimeStart());
 
             if (timeFrameService.updatetimeFrame(timeFrame_full) > 0) {
+                TimeInterval timeInterval = new TimeInterval();
+                //直接删除数据
+                timeInterval.setTime_code(timeFrame.getId());
+                timeIntervalMapper.delete(timeInterval);
+
+                String time_length = timeFrame.getTimeLength();//每场时间
+                String time_start = timeFrame.getTimeStart();//开始时间
+                String[] time_start1 = time_start.split(":");
+                double timearr;
+                if (time_start1[1].equals("00")) {//开始时间是半个小时为时间间隔
+                    timearr = Double.parseDouble(time_start1[0]);
+                } else {
+                    timearr = Double.parseDouble(time_start1[0]) + 0.5;
+                }
+                Integer num = timeFrame.getNum();//场次
+                String time_lag = timeFrame.getTimeLag();//间隔时间（时间间隔不固定，可能15分钟，可能30分钟。任何情况都有）
+
+                double overTime = 24 - timearr - ((Double.parseDouble(time_length) + (Double.parseDouble(time_lag) / 60)) * num);
+
+                if (overTime > 0){
+                    //重新添加数据
+                    int time_end = getTime_guize(timeFrame.getTimeStart());//获取了总分钟  开始种分钟（开始总分钟）
+                    int time_lags = Integer.parseInt(timeFrame.getTimeLag());//间隔时间
+                    int time_lengths = getTime_length(timeFrame.getTimeLength()); //获取每场时间总分钟
+                    int time_StartA = 0;
+                    for (int i = 0; i < timeFrame.getNum(); i++) {
+                        //与时段进行关联
+                        timeInterval.setId(UUID.randomUUID().toString());
+                        timeInterval.setTime_code(timeFrame.getId());
+                        timeInterval.setSubstadium_id(timeFrame_full.getStadiumId());//子场馆id
+                        timeInterval.setTime_sort(i + 1);
+                        if (time_lags == 0) {  //当无间隔时间时候
+                            time_StartA = time_end;  //1.开始时间等于开始  循环之后开始时间等于结束时间
+                        } else {
+                            if (i == 0) {
+                                time_StartA = time_end;
+                            } else {
+                                time_StartA = time_end + time_lags;
+                            }
+                        }
+                        time_end = time_StartA + time_lengths;  //结束时间等于开始时间+每场时间
+                        timeInterval.setTime_inter(getTimeByint(time_StartA) + "-" + getTimeByint(time_end));
+                        timeInterval.setUpdate_time(new Date());
+                        timeFrameService.insertTimeInterval(timeInterval);
+                    }
+
+                }else {
+                   return  RtnData.fail("场次超过当日时间，请修改场次重新添加!");
+                }
                 return RtnData.ok("保存成功");
             }
         } catch (Exception e) {
@@ -296,11 +395,17 @@ public class TimeFrameController {
     public String getTimeByint(Integer time) {
         Integer timeHore = time / 60;
         Integer timeScend = time % 60;
-        String timeString="";
+        String  timeSeendA ="";
+        if (timeScend<10){
+            timeSeendA = "0"+timeScend;
+        }else {
+            timeSeendA=timeScend.toString();
+        }
+        String timeString = "";
         if (timeScend == 0) {
-            timeString = timeHore.toString() + ":00" ;
+            timeString = timeHore.toString() + ":00";
         } else {
-            timeString = timeHore.toString() + ":" + timeScend;
+            timeString = timeHore.toString() + ":" + timeSeendA;
         }
 
         return timeString;

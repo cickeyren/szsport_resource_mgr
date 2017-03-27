@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>子场馆-时段管理</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <!--<script src="../../static/js/timeframe/timeFrame.js" th:src="@{/js/timeframe/timeFrame.js}"></script>-->
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            margin-top: 20px;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        button {
+            margin-left: 10px;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <p class="title">时段排序规则</p>
+    <form class="form-horizontal" action="/TimeFrameController/selectAlltimeintreal.html" id="searchForm" method="POST">
+        <input type="hidden" id="myPage" name="page" th:value="${page}">
+        <input type="hidden" id="id" name="id" th:value="${time_code}">
+        <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+
+    </form>
+    <div class="container-fluid" style="margin-top: 30px;height:120px;">
+        <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
+            <table id="dataTable" class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>子场馆id</th>
+                    <th>时段间隔</th>
+                    <th>时段排序号</th>
+                </tr>
+                </thead>
+
+                <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(timeFrameList)}">
+                <!-- 一行形式 -->
+                <tr th:each="obj, objStat: ${timeFrameList}">
+
+                    <input type="hidden" th:value="${obj.id}"/>
+
+                    <td th:text="${obj.substadium_id}"></td>
+                    <td th:text="${obj.time_inter}"></td>
+                    <td th:text="${obj.time_sort}"></td>
+                </tr>
+                </tbody>
+
+                <tbody th:if="${#lists.isEmpty(timeFrameList)}">
+                <tr>
+                    <td colspan="12">没有符合查询条件的记录！</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div id="page" class="page" align="right" style="margin-right: 10px;">
+        </div>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+</body>
+<script th:inline="javascript">
+    $(function () {
+        laypage({
+            cont: 'page',
+            pages: [[${pageModel.totalPage}]], //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+            curr: function () { //通过url获取当前页，也可以同上（pages）方式获取
+                var page = [[${pageModel.currentPage}]];
+                return page;
+            }(),
+            jump: function (e, first) { //触发分页后的回调
+                if (!first) { //一定要加此判断，否则初始时会无限刷新
+                    $("#myPage").val(e.curr);
+                    $("#searchForm").submit();//提交进行查询
+                }
+            }
+        });
+    });
+</script>
+</html>

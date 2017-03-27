@@ -177,7 +177,7 @@
                     <!-- 操作栏位部分 -->
                     <td>
                         <a id="edit" th:data="${obj.id}"
-                           th:href="@{/TimeFrameController/editTimeFrame.html(id=${obj.id})}">查看</a>
+                           th:href="@{/TimeFrameController/selectAlltimeintreal.html(id=${obj.id})}">查看</a>
 
                         <a id="edit" th:data="${obj.id}" th:if="${#strings.equals(obj.status,'正常')}"
                            th:href="@{/TimeFrameController/editTimeFrame.html(id=${obj.id})}">&nbsp;&nbsp;&nbsp;编辑</a>
