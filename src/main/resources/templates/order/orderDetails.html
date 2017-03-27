@@ -93,9 +93,9 @@
                 <td th:text="*{userName}"></td>
                 <td th:text="*{userTel}"></td>
                 <td th:text="*{payType}"></td>
-                <td th:text="${orderDetails.payAcount!=null?orderDetails.payAcount:'暂无'}"></td>
-                <td th:text="${orderDetails.payTime!=null?#calendars.format(orderDetails.payTime,'yyyy-MM-dd HH:mm:ss'):'暂无'}"></td>
-                <td th:text="${orderDetails.payPrice!=null?orderDetails.payPrice:'暂无'}"></td>
+                <td th:text="${#strings.isEmpty(orderDetails.payAcount)?'':orderDetails.payAcount}"></td>
+                <td th:text="${orderDetails.payTime}"></td>
+                <td th:text="${#strings.isEmpty(orderDetails.payPrice)?'':orderDetails.payPrice}"></td>
                 <td th:text="*{merchantName}"></td>
             </tr>
             </tbody>
@@ -116,11 +116,14 @@
                     <th>有效截止日期</th>
                     <th>剩余次数</th>
                     <th>每日限次</th>
+                    <th>限用日期</th>
+                    <th>限用时间</th>
+                    <th>使用场地</th>
                     <th>成本价</th>
                     <th>售价</th>
                     <th>取票状态</th>
                     <th>验码状态</th>
-                    <!-- <th>退款状态</th>-->
+                    <th>状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -128,15 +131,19 @@
                 <tr th:each="obj, objStat: ${orderContentList}">
                     <input type="hidden" th:value="${obj.id}"/>
                     <td th:text="${obj.orderCode}"></td>
-                    <td th:text="${obj.startTime== null?'无':#calendars.format(obj.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                    <td th:text="${obj.endTime== null?'无':#calendars.format(obj.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                    <td th:text="${obj.remainNumber== null?'不限次数':obj.remainNumber}"></td>
-                    <td th:text="${obj.everydayNumber==null?'不限次数':obj.everydayNumber}"></td>
-                    <td th:text="${obj.costPrice}"></td>
+                    <td th:text="${obj.startTime}"></td>
+                    <td th:text="${obj.endTime}"></td>
+                    <td th:text="${#strings.isEmpty(obj.remainNumber)?'':obj.remainNumber}"></td>
+                    <td th:text="${#strings.isEmpty(obj.everydayNumber)?'':obj.everydayNumber}"></td>
+                    <td th:if="${orderDetails.ticketType == '场地预定'}" th:text="${#strings.isEmpty(obj.dateLimit)?'':obj.dateLimit}"></td>
+                    <td th:if="${orderDetails.ticketType != '场地预定'}"></td>
+                    <td th:text="${#strings.isEmpty(obj.timeLimit)?'':#strings.replace(obj.timeLimit,'$','-')}"></td>
+                    <td th:text="${#strings.isEmpty(obj.fieldName)?'':obj.fieldName}"></td>
+                    <td th:text="${#strings.isEmpty(obj.costPrice)?'':obj.costPrice}"></td>
                     <td th:text="${obj.sellPrice}"></td>
                     <td th:text="${obj.takeStatus}"></td>
                     <td th:text="${obj.checkStatus}"></td>
-                    <!--<td th:text="${obj.status}"></td>-->
+                    <td th:text="${obj.status}"></td>
                     <td><a th:href="'/order/orderContent.html?orderContentId='+${obj.id}">查看</a></td>
                 </tr>
                 </tbody>
