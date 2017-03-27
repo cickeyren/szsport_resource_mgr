@@ -59,7 +59,7 @@
         </tr>
         <tr th:object="${orderContent}">
             <td th:text="*{takeType}"></td>
-            <td th:text="*{#calendars.format(obj.takeTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${orderContent.takeTime== null?'无':#calendars.format(orderContent.takeTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         </tr>
     </table>
 </div>
@@ -73,7 +73,7 @@
         </tr>
         <tr th:object="${orderContent}">
             <td th:text="*{equipmentName}"></td>
-            <td th:text="*{#calendars.format(checkTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${orderContent.checkTime== null?'无':#calendars.format(orderContent.checkTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         </tr>
     </table>
 </div>
@@ -97,8 +97,8 @@
                 <tr th:each="obj, objStat: ${usedRecordsList}">
                     <td th:text="${#calendars.format(obj.usedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                     <td th:text="${obj.usedNumber}"></td>
-                    <td th:text="${obj.remianNumber}"></td>
-                    <td th:text="${obj.everydayRemianNumber}"></td>
+                    <td th:text="${obj.remainNumber}"></td>
+                    <td th:text="${obj.everydayRemainNumber}"></td>
                     <td th:text="${obj.remarks}"></td>
                 </tr>
                 </tbody>

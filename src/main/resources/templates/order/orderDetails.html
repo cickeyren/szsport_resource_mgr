@@ -93,9 +93,9 @@
                 <td th:text="*{userName}"></td>
                 <td th:text="*{userTel}"></td>
                 <td th:text="*{payType}"></td>
-                <td th:text="${payAccount!=null?payAccount:'暂无'}"></td>
-                <td th:text="${payTime!=null?#calendars.format(payTime,'yyyy-MM-dd HH:mm:ss'):'暂无'}"></td>
-                <td th:text="${payPrice!=null?payPrice:'暂无'}"></td>
+                <td th:text="${orderDetails.payAcount!=null?orderDetails.payAcount:'暂无'}"></td>
+                <td th:text="${orderDetails.payTime!=null?#calendars.format(orderDetails.payTime,'yyyy-MM-dd HH:mm:ss'):'暂无'}"></td>
+                <td th:text="${orderDetails.payPrice!=null?orderDetails.payPrice:'暂无'}"></td>
                 <td th:text="*{merchantName}"></td>
             </tr>
             </tbody>
@@ -128,8 +128,8 @@
                 <tr th:each="obj, objStat: ${orderContentList}">
                     <input type="hidden" th:value="${obj.id}"/>
                     <td th:text="${obj.orderCode}"></td>
-                    <td th:text="${#calendars.format(obj.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                    <td th:text="${#calendars.format(obj.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${obj.startTime== null?'无':#calendars.format(obj.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${obj.endTime== null?'无':#calendars.format(obj.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                     <td th:text="${obj.remainNumber== null?'不限次数':obj.remainNumber}"></td>
                     <td th:text="${obj.everydayNumber==null?'不限次数':obj.everydayNumber}"></td>
                     <td th:text="${obj.costPrice}"></td>

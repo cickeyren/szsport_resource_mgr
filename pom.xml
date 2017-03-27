@@ -189,8 +189,31 @@
 			<version>1.4</version>
 		</dependency>
 
+        <dependency>
+            <groupId>QRCode</groupId>
+            <artifactId>QRCode</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <!--<systemPath>${project.basedir}\src\main\resources\lib\QRCode.jar</systemPath>-->
+            <systemPath>${project.basedir}\lib\QRCode.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>alipay-sdk-java20170307171631</groupId>
+            <artifactId>alipay-sdk-java20170307171631</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}\lib\alipay-sdk-java20170307171631.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>json-lib-2.4-jdk15</groupId>
+            <artifactId>json-lib-2.4-jdk15</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}\lib\json-lib-2.4-jdk15.jar</systemPath>
+        </dependency>
 
-	</dependencies>
+
+    </dependencies>
 
 	<repositories>
 		<repository>
@@ -220,12 +243,19 @@
 	</pluginRepositories>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+<!--            <resource>
+            <targetPath>lib/</targetPath>
+            <directory>lib/</directory>
+            <includes>
+            <include>*</include>
+            </includes>
+            </resource>-->
+        </resources>
 
 		<plugins>
 			<plugin>
@@ -241,8 +271,26 @@
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <warName>${project.artifactId}</warName>
+                    <webResources>
+                        <resource>
+                            <directory>lib/</directory>
+                            <targetPath>WEB-INF/lib</targetPath>
+                            <includes>
+                                <include>**/*.jar</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
+
 
 	<profiles>
 		<profile>
