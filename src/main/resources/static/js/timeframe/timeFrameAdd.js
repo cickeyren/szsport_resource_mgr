@@ -46,8 +46,8 @@ function doSave(field) {
                 setTimeout(function () {
                     window.location.href = "/TimeFrameController/timeFrame.html?stadium_id=" + $('#stadium_id').val();
                 }, 1000);
-            }else if ("999999" == result.code){
-                layer.alert(result.result)
+            }else {
+                layer.alert(result.result);
             }
         },
         error: function (result) {

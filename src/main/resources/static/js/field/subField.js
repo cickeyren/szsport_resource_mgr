@@ -36,6 +36,8 @@ function doDeleteField(field) {
                     setTimeout(function () {
                         window.location.href = "/FieldController/subField.html?subStadiumid=" + $('#subStadiumid').val();
                     }, 1000);
+                }else {
+                    layer.alert(result.result);
                 }
             },
             error: function (result) {

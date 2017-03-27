@@ -87,7 +87,7 @@
                     <td class="alignleft"><input type="text" id="address" name="address"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright"><span class="red">*</span>电话</td>
+                    <td class="alignright">电话</td>
                     <td class="alignleft"><input type="text" id="telephone" name="telephone"/></td>
                 </tr>
                 <tr class="controls">
@@ -95,13 +95,13 @@
                     <td class="alignleft"><input type="text" id="open_time" name="open_time"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright"><span class="red">*</span>简介</td>
+                    <td class="alignright">简介</td>
                     <td class="alignleft">
                         <textarea id="introduction" name="introduction" style="width:500px;height:100px;"></textarea>
                     </td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright"><span class="red">*</span>地理位置</td>
+                    <td class="alignright">地理位置</td>
                     <td class="alignleft">
                         <input type="text" id="lng" name="lng"/>
                         <input type="text" id="lat" name="lat"/>
@@ -109,7 +109,7 @@
                     </td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright"><span class="red">*</span>状态</td>
+                    <td class="alignright">状态</td>
                     <td class="alignleft" id="checkone">
                         <input class="check" value="1" type="checkbox" checked name="status">正常
                         <input class="check" value="0" type="checkbox" name="status">闭馆
@@ -134,13 +134,51 @@
     $(function () {
         var valConfig = {
             rules: {
-                title: {
+                name: {
                     required: true,
-                    minlength: 2
+                }
+                ,
+                provincial_level: {
+                    required: true,
+                }
+                ,
+                city_level: {
+                    required: true,
+                }
+                ,
+                district_level: {
+                    required: true,
+                }
+                ,
+                open_time: {
+                    required: true,
                 }
             },
+            messages: {
+                name: {
+                    required: "请填写主场馆名称"
+                },
+                provincial_level: {
+                    required: "请选择省份"
+                },
+                city_level: {
+                    required: "请选择市",
+                },
+                district_level: {
+                    required: "请选择县",
+                },
+                open_time: {
+                    required: "请填写开发时间",
+                }
+            },
+            submitHandler: function () {
+                doAdd();
+            }
         };
         $('#addForm').validate(valConfig);
+        $('#ditudingwei').on("click",function () {
+            layer.alert("定位失败！请联系管理员！")
+        })
         //场馆状态只能单选
         $('#checkone').find('input[type=checkbox]').bind('click', function () {
             $('#checkone').find('input[type=checkbox]').not(this).attr("checked", false);

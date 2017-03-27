@@ -68,6 +68,8 @@ function doUpdate() {
             if ("000000" == result.code) {
                 layer.msg("编辑数据成功！");
                 window.location.href = "/MerchantController/merchant.html?mainstadium_id=" + $('#mainstadium_id').val();
+            }else {
+                layer.alert(result.result);
             }
             //console.log(result);
         },
@@ -92,8 +94,8 @@ function updateprovinceList(provinceID) {
                 });
                 var cityID = $("#city_level").val();
                 updatecityList(cityID);
-            } else {
-                layer.msg("添加失败")
+            }else {
+                layer.alert(result.result);
             }
         },
     })
@@ -112,8 +114,8 @@ function updatecityList(cityID) {
                 $.each(items,function(i,n){
                     $("#district_level").append("<option value=\"" + n.areaID + "\">"+n.area+"</option>");
                 });
-            } else {
-                layer.msg("添加失败")
+            }else {
+                layer.alert(result.result);
             }
         },
     })

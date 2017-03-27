@@ -6,12 +6,12 @@ $(function () {
         window.location.href = "/mainStadiumController/add.html";
     })
 
-    /**
-     * 主场馆新增保存数据
-     */
-    $("#savemainstaium").on('click', function () {
-        doAdd();
-    })
+    // /**
+    //  * 主场馆新增保存数据
+    //  */
+    // $("#savemainstaium").on('click', function () {
+    //     doAdd();
+    // })
 
     /**
      * 主场馆数据更新
@@ -91,8 +91,8 @@ function updateprovinceList(provinceID) {
                 });
                 var cityID = $("#city_level").val();
                 updatecityList(cityID);
-            } else {
-                layer.msg("添加失败")
+            }else {
+                layer.alert(result.result);
             }
         },
     })
@@ -111,8 +111,8 @@ function updatecityList(cityID) {
                 $.each(items,function(i,n){
                     $("#district_level").append("<option value=\"" + n.areaID + "\">"+n.area+"</option>");
                 });
-            } else {
-                layer.msg("添加失败")
+            }else {
+                layer.alert(result.result);
             }
         },
     })
@@ -130,8 +130,12 @@ function doAdd() {
         success: function (result) {
             if ("000000" == result.code) {
                 layer.msg("添加成功！");
-                window.location.reload(true);
-                window.location.href = "mainstadium.html";
+                setTimeout(function () {
+                    window.location.href = "mainstadium.html";
+                },6000)
+
+            }else {
+                layer.alert(result.result);
             }
             //console.log(result);
         },
@@ -153,6 +157,8 @@ function doUpdate() {
                 layer.msg("编辑数据成功！");
                 window.location.reload(true);
                 window.location.href = "mainstadium.html";
+            }else {
+                layer.alert(result.result);
             }
             //console.log(result);
         },
@@ -182,6 +188,8 @@ function doDelete(filed) {
                     layer.msg("删除成功！");
                     window.location.reload(true);
                     window.location.href = "mainstadium.html";
+                }else {
+                    layer.alert(result.result);
                 }
             },
             error: function (result) {
@@ -194,7 +202,7 @@ function doDelete(filed) {
 //是否精选点击事件
 function selectFist(strategyState, obj) {
     var id = $(obj).attr("data")
-    var tip = "0" == strategyState ? "设为精选" : "取消精选";
+    var tip = "0" == strategyState ? "是否取消精选？" : "是否设为精选？";
     layer.confirm(tip, {
         btn: ['是', '否'] //按钮
     }, function () {
@@ -209,6 +217,8 @@ function selectFist(strategyState, obj) {
                 if ("000000" == result.code) {
                     layer.msg("设为精选成功！");
                     window.location.reload(true);
+                }else {
+                    layer.alert(result.result);
                 }
             },
             error: function (result) {

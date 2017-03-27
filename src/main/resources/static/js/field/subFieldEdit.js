@@ -48,10 +48,8 @@ function doSave() {
                 setTimeout(function () {
                     window.location.href = "/FieldController/subField.html?subStadiumid=" + $('#stadium_id').val();
                 }, 1000);
-            } else {
-                layer.msg('更新失败', {
-                    time: 1000 //20s后自动关闭
-                });
+            }else {
+                layer.alert(result.result);
             }
         },
         error: function (result) {

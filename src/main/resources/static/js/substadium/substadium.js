@@ -78,8 +78,8 @@ function updateSubStadiumList(cid) {
                 $.each(items,function(i,n){
                     $("#classify").append("<option value=\"" + n.cid + "\">"+n.categoryName+"</option>");
                 });
-            } else {
-                layer.msg("添加失败")
+            }else {
+                layer.alert(result.result);
             }
         },
     })
@@ -96,8 +96,11 @@ function doAdd(mainStadiumId) {
         success: function (result) {
             if ("000000" == result.code) {
                 layer.msg("添加成功！");
-                window.location.reload(true);
-                window.location.href = "/subStadiumController/substadium.html?mainStadiumId="+mainStadiumId;
+                setTimeout(function () {
+                    window.location.href = "/subStadiumController/substadium.html?mainStadiumId="+mainStadiumId;
+                },6000)
+            }else {
+                layer.alert(result.result)
             }
             //console.log(result);
         },
@@ -131,6 +134,8 @@ function doUpdate() {
                     //返回到子场馆列表
                     window.location.href = "/subStadiumController/substadium.html?mainStadiumId=" + mainStadiumIdedit;
                 }, 1000);
+            }else {
+                layer.alert(result.result);
             }
         },
         error: function (result) {

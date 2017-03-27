@@ -38,6 +38,8 @@ function doAdd() {
                 setTimeout(function () {
                     window.location.href = "/MerchantUserController/merchantuser.html?mainstadium_id=" + $('#mainstadium_id').val()+"&merchantId="+$("#merchant_id").val();
                 }, 2000);
+            }else {
+                layer.alert(result.result);
             }
         },
         error: function (result) {
