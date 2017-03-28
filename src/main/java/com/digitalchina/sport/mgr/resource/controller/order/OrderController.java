@@ -68,10 +68,8 @@ public class OrderController {
         if (!StringUtil.isEmpty(request.getParameter("orderStartDate")) && !StringUtil.isEmpty(request.getParameter("orderEndDate"))){
             String startDate = request.getParameter("orderStartDate");
             String endDate = request.getParameter("orderEndDate");
-            if(startDate.equals(endDate)){
-                startDate = startDate+" 00:00:00";
-                endDate = endDate+" 23:59:59";
-            }
+            startDate = startDate+" 00:00:00";
+            endDate = endDate+" 23:59:59";
             params.put("orderStartDate", startDate);
             params.put("orderEndDate", endDate);
         }
