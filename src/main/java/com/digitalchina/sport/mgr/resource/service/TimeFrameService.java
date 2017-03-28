@@ -115,4 +115,12 @@ public class TimeFrameService {
     public int insertTimeInterval(TimeInterval timeInterval) {
         return timeIntervalMapper.insert(timeInterval);
     }
+
+    public int findTotalCountByInterval(Map<String, Object> params) {
+        return timeIntervalMapper.findTotalCountByInterval(params);
+    }
+
+    public List<Map<String,Object>> getAllTimeIntervalList(Map<String, Object> params) {
+        return timeIntervalMapper.getAllTimeIntervalList(params);
+    }
 }

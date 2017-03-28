@@ -8,7 +8,18 @@ import java.util.Map;
 
 @org.apache.ibatis.annotations.Mapper
 public interface TimeIntervalMapper extends Mapper<TimeInterval> {
+    /**
+     * 根据场馆查询时间策略
+     * @param params
+     * @return
+     */
     List<Map<String,Object>>  getTimeIntervalByStadiumid(Map<String,Object> params);
+
+    /**
+     * 根据时段编号查询时间策略
+     * @param params
+     * @return
+     */
     List<Map<String,Object>>  getTimeIntervalByTimecode(Map<String,Object> params);
 
     /**
@@ -17,4 +28,18 @@ public interface TimeIntervalMapper extends Mapper<TimeInterval> {
      * @return
      */
     List<Map<String,Object>>  getNormalTimeIntervalByStadiumid(Map<String,Object> params);
+
+    /**
+     * 格局时段编号查询时段策略条数
+     * @param params
+     * @return
+     */
+    int findTotalCountByInterval(Map<String, Object> params);
+
+    /**
+     * 根据时段编号分页查询时间策略
+     * @param params
+     * @return
+     */
+    List<Map<String,Object>> getAllTimeIntervalList(Map<String, Object> params);
 }

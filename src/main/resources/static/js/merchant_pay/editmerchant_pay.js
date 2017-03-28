@@ -48,6 +48,8 @@ function doUpdate() {
                     setTimeout(function () {
                         window.location.href = "/MerchantPayController/merchant_pay.html?mainstadium_id=" + $('#mainstadium_id').val()+"&merchantId="+$('#merchantId').val();
                     }, 3000);
+                }else {
+                    layer.alert(result.result);
                 }
             },
             error: function (result) {

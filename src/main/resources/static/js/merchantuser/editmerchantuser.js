@@ -37,6 +37,8 @@ function doUpdate() {
             if ("000000" == result.code) {
                 layer.msg(result.result);
                 window.location.href = "/MerchantUserController/merchantuser.html?mainstadium_id=" + $('#mainstadium_id').val()+"&merchantId="+$("#merchant_id").val();
+            }else {
+                layer.alert(result.result);
             }
         },
         error: function (result) {

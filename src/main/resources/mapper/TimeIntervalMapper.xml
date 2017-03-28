@@ -25,6 +25,19 @@
         FROM  time_interval
         WHERE time_code=#{time_code}
     </select>
+  <!--根据时段编号分页查询时间策略-->
+    <select id="getAllTimeIntervalList" resultType="java.util.Map" parameterType="HashMap">
+        SELECT id,time_inter,time_sort,substadium_id
+        FROM  time_interval
+        WHERE time_code=#{time_code}
+        limit #{startIndex},#{endIndex}
+    </select>
+    <!--格局时段编号查询时段策略条数-->
+    <select id="findTotalCountByInterval" resultType="java.lang.Integer" parameterType="HashMap">
+        SELECT COUNT(*)
+        FROM  time_interval
+        WHERE time_code=#{time_code}
+    </select>
 
     <!-- 根据场馆查询状态正常的时间策略 -->
     <select id="getNormalTimeIntervalByStadiumid" parameterType="HashMap" resultType="HashMap">

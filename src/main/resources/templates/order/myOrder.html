@@ -71,6 +71,7 @@
                         <td class="alignleft">
                             <input type="hidden" id="ticketType" name="ticketType" th:value="${ticketType}"/>
                             <select id="ticket_type" style="width:150px;" from="getForm" onchange="change(this)">
+                                <option value="">请选择</option>
                                 <option value="0" th:selected="${ticketType eq '0'}">散票/年卡</option>
                                 <option value="1" th:selected="${ticketType eq '1'}">场地预定</option>
                                 <option value="2" th:selected="${ticketType eq '2'}">散客预定</option>
@@ -80,6 +81,7 @@
                         <td class="alignleft">
                             <input type="hidden" id="orderChannel" name="orderChannel" th:value="${orderChannel}"/>
                             <select id="order_channel" style="width:150px;" from="getForm" onchange="change(this)">
+                                <option value="">请选择</option>
                                 <option value="APP" th:selected="${orderChannel eq 'APP'}">APP</option>
                                 <option value="1" th:selected="${orderChannel eq '1'}">售票机</option>
                                 <option value="2" th:selected="${orderChannel eq '2'}">微信</option>
@@ -135,7 +137,7 @@
                                     <th>订单来源</th>
                                     <th>手机</th>
                                     <th>订单状态</th>
-                                    <!-- <th>退款状态</th>-->
+                                    <th>退款状态</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -152,7 +154,7 @@
                                     <td th:text="${obj.orderChannel}"></td>
                                     <td th:text="${obj.userTel}"></td>
                                     <td th:text="${obj.status}"></td>
-                                    <!--<td th:text="${obj.status}"></td>-->
+                                    <td th:text="${obj.refundStatus}"></td>
                                     <td><a th:href="'/order/orderDetails.html?orderId='+${obj.id}">查看</a></td>
                                 </tr>
                                 </tbody>

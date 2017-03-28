@@ -72,6 +72,8 @@ function doAdd() {
                 setTimeout(function () {
                     window.location.href = "/MerchantController/merchant.html?mainstadium_id=" + $('#mainstadium_id').val();
                 }, 1000);
+            }else {
+                layer.alert(result.result);
             }
         },
         error: function (result) {
@@ -95,8 +97,8 @@ function updateprovinceList(provinceID) {
                 });
                 var cityID = $("#city_level").val();
                 updatecityList(cityID);
-            } else {
-                layer.msg("添加失败")
+            }else {
+                layer.alert(result.result);
             }
         },
     })
@@ -115,8 +117,8 @@ function updatecityList(cityID) {
                 $.each(items,function(i,n){
                     $("#district_level").append("<option value=\"" + n.areaID + "\">"+n.area+"</option>");
                 });
-            } else {
-                layer.msg("添加失败")
+            }else {
+                layer.alert(result.result);
             }
         },
     })

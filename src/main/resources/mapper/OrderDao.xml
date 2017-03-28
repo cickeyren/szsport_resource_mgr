@@ -19,7 +19,9 @@
         ob.user_name AS userName,
         ob.user_tel AS userTel,
         (case ob.status  when '0' then '待支付' WHEN '1' THEN '待使用' WHEN '2' THEN '已使用'
-         WHEN '3' THEN '支付失败' WHEN '5' THEN '失效订单' ELSE '其他' END) AS status
+         WHEN '3' THEN '支付失败' WHEN '4' THEN '退款' WHEN '5' THEN '失效订单' ELSE '其他' END) AS status,
+        (case ob.refund_status  when '0' then '待退款' WHEN '1' THEN '已退款' WHEN '2' THEN '退款失败'
+        ELSE '' END) AS refundStatus
         FROM
         order_base_info ob
         LEFT JOIN classify c ON ob.classify = c.cid
@@ -106,7 +108,7 @@
             ob.person_kind AS personKind,
             ob.ticket_id AS ticketId,
             ob.ticket_name AS ticketName,
-            (case ob.ticket_type  when '0' then '散票/年卡' WHEN '1' THEN '场地预定' WHEN '2' THEN '散客预定' ELSE '其他' END) as ticketType,
+            (case ob.ticket_type when '0' then '散票/年卡' WHEN '1' THEN '场地预定' WHEN '2' THEN '散客预定' ELSE '其他' END) as ticketType,
             ob.order_time AS orderTime,
             ob.order_channel AS orderChannel,
             (
@@ -119,6 +121,8 @@
                     '已使用'
                 WHEN '3' THEN
                     '支付失败'
+                WHEN '4' THEN
+                    '待退款'
                 WHEN '5' THEN
                     '失效订单'
                 ELSE
@@ -126,14 +130,14 @@
                 END
             ) AS status,
             ob.sell_price AS sellPrice,
-            ob.cost_price AS costPrice,
+            (case WHEN ob.cost_price IS NULL THEN '' ELSE ob.cost_price END) AS costPrice,
             ob.user_id AS userId,
             ob.user_name AS userName,
             ob.user_tel AS userTel,
-            (case ob.pay_type  when '1' then '支付宝' WHEN '2' THEN '微信' ELSE '无' END) AS payType,
-            ob.pay_acount AS payAcount,
-            ob.pay_time AS payTime,
-            ob.pay_price AS payPrice,
+            (case ob.pay_type  when '1' then '支付宝' WHEN '2' THEN '微信' ELSE '' END) AS payType,
+            (case WHEN ob.pay_acount IS NULL THEN '' ELSE ob.pay_acount END) AS payAcount,
+            (case WHEN ob.pay_time IS NULL THEN '' ELSE ob.pay_time END) AS payTime,
+            (case WHEN ob.pay_price IS NULL THEN '' ELSE ob.pay_price END) AS payPrice,
             m.merchant_name AS merchantName
         FROM
             order_base_info ob
@@ -147,8 +151,8 @@
         SELECT
             oc.id,
             oc.order_code AS orderCode,
-            oc.start_time AS startTime,
-            oc.end_time AS endTime,
+            (case WHEN oc.start_time IS NULL THEN '' ELSE oc.start_time END) AS startTime,
+            (case WHEN oc.end_time IS NULL THEN '' ELSE oc.end_time END) AS endTime,
             (
                 CASE
                 WHEN oc.remain_number = '-1' THEN
@@ -156,7 +160,7 @@
                 WHEN oc.remain_number = '' THEN
                     '不限次数'
                 WHEN oc.remain_number IS NULL THEN
-                    '不限次数'
+                    ''
                 ELSE
                     oc.remain_number
                 END
@@ -168,12 +172,12 @@
                 WHEN oc.everyday_number = '' THEN
                     '不限次数'
                 WHEN oc.everyday_number IS NULL THEN
-                    '不限次数'
+                    ''
                 ELSE
                     oc.everyday_number
                 END
             ) AS everydayNumber,
-            oc.cost_price AS costPrice,
+            (case WHEN oc.cost_price IS NULL THEN '' ELSE oc.cost_price END) AS costPrice,
             oc.sell_price AS sellPrice,
             (
                 CASE oc.take_status
@@ -191,9 +195,35 @@
                     '未验票'
                 END
             ) AS checkStatus,
-            oc.remarks
+            oc.remarks,
+            (case WHEN oc.date_limit IS NULL THEN '' ELSE oc.date_limit END) AS dateLimit,
+            (case WHEN oc.time_limit IS NULL THEN '' ELSE oc.time_limit END) AS timeLimit,
+            (case WHEN f.field_name IS NULL THEN '' ELSE f.field_name END) AS fieldName,
+            (
+                CASE oc.status
+                WHEN '0' THEN
+                    '待支付'
+                WHEN '1' THEN
+                    '待使用'
+                WHEN '2' THEN
+                    '已使用'
+                WHEN '3' THEN
+                    '支付失败'
+                WHEN '4' THEN
+                    '待退款'
+                WHEN '5' THEN
+                    '失效订单'
+                WHEN '6' THEN
+                    '退款成功'
+                WHEN '7' THEN
+                    '退款失败'
+                ELSE
+                    '其他'
+                END
+            ) AS status
         FROM
             order_content_detail oc
+        LEFT JOIN field f ON f.id = oc.field_id
         WHERE
             oc.order_base_id = #{orderId}
     </select>
@@ -254,7 +284,7 @@
                 ELSE
                     u.everyday_remain_number
                 END
-            ) AS everydayRemianNumber,
+            ) AS everydayRemainNumber,
             u.used_number AS usedNumber,
             (
                 CASE
