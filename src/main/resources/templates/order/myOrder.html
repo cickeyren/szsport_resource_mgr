@@ -91,7 +91,7 @@
                     </tr>
                     <tr class="controls">
                         <td>订单状态:</td>
-                        <td colspan="8" class="alignleft">
+                        <td colspan="9" class="alignleft">
                             <div id="status">
                                 <input type="checkbox" name="checkAll" th:checked="${checkAll}" onclick="check_all(this,'status');"/>
                                 <font class="mt25 mr20">全选</font>
@@ -107,6 +107,21 @@
                                 <font class="mt25 mr20">全部退款</font>
                                 <input value="5" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'5'):null}">
                                 <font class="mt25 mr10">失效订单</font>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td>退款状态:</td>
+                        <td colspan="8" class="alignleft">
+                            <div id="status">
+                                <input type="checkbox" name="refundAll" th:checked="${refundAll}" onclick="check_all(this,'refundStatus');"/>
+                                <font class="mt25 mr20">全选</font>
+                                <input value="0" type="checkbox" name="refundStatus" class="checkbox" form="getForm" th:checked="${refundStatus!= null?#strings.contains(refundStatus,'0'):null}">
+                                <font class="mt25 mr20">待退款</font>
+                                <input value="1" type="checkbox" name="refundStatus" class="checkbox" form="getForm" th:checked="${refundStatus!= null?#strings.contains(refundStatus,'1'):null}">
+                                <font class="mt25 mr20">已退款</font>
+                                <input value="2" type="checkbox" name="refundStatus" class="checkbox" form="getForm" th:checked="${refundStatus!= null?#strings.contains(refundStatus,'2'):null}">
+                                <font class="mt25 mr20">退款失败</font>
                             </div>
                         </td>
                         <td>

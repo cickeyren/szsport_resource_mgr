@@ -55,11 +55,13 @@ public class OrderController {
     public String orderList(@RequestParam(required = false, defaultValue = "10") long pageSize,
                             @RequestParam(required = false, defaultValue = "1") long page,
                             @RequestParam(required = false) String status,
+                            @RequestParam(required = false) String refundStatus,
                             ModelMap map,HttpServletRequest request){
         Map<String, Object> params = new HashMap<String, Object>();
         //String userId = "5eb76ae3dd5246bda465b22aa1fdb0a8";
         //params.put("userId", userId);
         String checkAll = request.getParameter("checkAll");
+        String refundAll = request.getParameter("refundAll");
         System.out.print(status);
         params.put("userTel", request.getParameter("userTel"));
         params.put("ticketType", request.getParameter("ticketType"));
@@ -78,6 +80,11 @@ public class OrderController {
         }else{
             params.put("checkAll", request.getParameter("checkAll"));
         }
+        if(StringUtil.isEmpty(refundAll)){
+            params.put("refundStatus", refundStatus);
+        }else{
+            params.put("refundAll", request.getParameter("refundAll"));
+        }
         try {
             int totalSize = orderService.getCountByMap(params);
             Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
@@ -93,7 +100,9 @@ public class OrderController {
             map.put("ticketName", request.getParameter("ticketName"));
             map.put("orderChannel", request.getParameter("orderChannel"));
             map.put("status", status);
+            map.put("refundStatus", refundStatus);
             map.put("checkAll", request.getParameter("checkAll"));
+            map.put("refundAll", request.getParameter("refundAll"));
             map.put("orderStartDate", request.getParameter("orderStartDate"));
             map.put("orderEndDate", request.getParameter("orderEndDate"));//回到页面,保留搜索关键字
             map.put("orderList",orderList);
