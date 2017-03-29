@@ -70,6 +70,41 @@ public class MainStadiumController {
             return "error";
         }
     }
+    /**
+     * 进入主馆场
+     *
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/mainstadiumforyearticket.html")
+    public String getAllStadiumListByTicket(@RequestParam(required = false, defaultValue = "10") long pageSize,
+                                    @RequestParam(required = false, defaultValue = "1") long page,
+                                    ModelMap map, HttpServletRequest request) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("name", request.getParameter("name"));//获取查询条件
+        try {
+            int totalSize = mainStadiumService.findTotalCount(params);
+            Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
+            params.put("startIndex", pagination.getStartIndex());
+            params.put("endIndex", pageSize);
+            List<Map<String, Object>> mainStadiumServiceAllStadiumList = mainStadiumService.getAllStadiumList(params);
+
+            pagination.setUrl(request.getRequestURI());
+            map.put("pageModel", pagination);
+            map.put("pageSize", String.valueOf(pageSize));
+            map.put("page", String.valueOf(page));
+            map.put("name", request.getParameter("name"));//回到页面,保留搜索关键字
+            map.put("mainstadiumlist", mainStadiumServiceAllStadiumList);
+            return "mainstadium/mainstadiumforyearticket";
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========进入门票失败=========", e);
+            map.put("url", request.getRequestURL());
+            map.put("exception", e);
+            return "error";
+        }
+    }
 
     /**
      * 进入新增页面

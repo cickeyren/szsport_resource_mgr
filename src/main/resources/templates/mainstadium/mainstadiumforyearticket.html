@@ -70,9 +70,6 @@
             </table>
         </form>
         <div>
-            <button type="button" class="btn btn-success" id="addNewMainstadium">新增</button>
-        </div>
-        <div>
             <table id="dataTable" class="table table-bordered" >
 
                 <thead>
@@ -93,25 +90,8 @@
                     <td th:text="${obj.address}"></td>
                     <td th:text="${obj.status}"></td>
                     <td>
-                        <a id="edit" th:data="${obj.id}"
-                           th:href="@{/mainStadiumController/edit.html(mainstadiumid=${obj.id})}">编辑</a>
-                        <!--&nbsp;&nbsp;&nbsp;-->
-                        <!--<a name="delete" th:data="${obj.id}">删除</a>-->
-                        &nbsp;&nbsp;&nbsp;
-                        <span th:switch="${obj.is_special}">
-                                                <a style="color:#666666;" th:case="'1'" href="javascript:;"
-                                                   th:data="${obj.id}"
-                                                   onclick="selectFist('0',this);">取消精选</a>
-                                                <a th:case="'0'" href="javascript:;"
-                                                   th:data="${obj.id}"
-                                                   onclick="selectFist('1',this)">设为精选</a>
-                        </span>
-                        &nbsp;&nbsp;&nbsp;
-                        <a th:href="@{/subStadiumController/substadium.html(mainStadiumId=${obj.id})}"
-                           th:data="${obj.id}">子场馆</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a th:href="@{/MerchantController/merchant.html(mainstadium_id=${obj.id})}"
-                           th:data="${obj.id}">合作商家</a>
+                        <a th:href="@{/yearstrategyticket/list.html(mainStadiumId=${obj.id})}"
+                           th:data="${obj.id}">门票</a>
                     </td>
                 </tr>
                 </tbody>
