@@ -333,7 +333,7 @@
                     AND A.sub_stadium_id = #{subStadiumId}
                 </if>
         ) E
-        LEFT JOIN `year_strategy_ticket_basic_info` B ON E.ticket_strategy_id = B.id
+        JOIN `year_strategy_ticket_basic_info` B ON E.ticket_strategy_id = B.id
         LEFT JOIN `sub_stadium` C ON E.sub_stadium_id = C.id
         LEFT JOIN `main_stadium` D ON C.parent_id = D.id
         WHERE 1=1
@@ -368,7 +368,7 @@
             AND A.sub_stadium_id = #{subStadiumId}
         </if>
         ) E
-        LEFT JOIN `year_strategy_ticket_basic_info` B ON E.ticket_strategy_id = B.id
+        JOIN `year_strategy_ticket_basic_info` B ON E.ticket_strategy_id = B.id
         LEFT JOIN `sub_stadium` C ON E.sub_stadium_id = C.id
         LEFT JOIN `main_stadium` D ON C.parent_id = D.id
         WHERE 1=1

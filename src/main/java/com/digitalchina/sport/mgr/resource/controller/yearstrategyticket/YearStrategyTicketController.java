@@ -223,7 +223,7 @@ public class YearStrategyTicketController {
         try {
             if("0".equals(strategyType)){
                 //散客/年卡类型场馆票列表信息
-                int totalSize = siteTicketService.getSiteTicketTotalCount(params);
+                int totalSize = yearStrategyDao.getYearStrategyTicketModelInfoTotalCount(params);
                 Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
                 pagination.setUrl(req.getRequestURI());
                 params.put("pageIndex", pagination.getStartIndex());
