@@ -57,7 +57,7 @@
 <body>
 <section>
     <div class="container-fluid" style="margin-top: 30px;height:120px;">
-        <form onsubmit="return false;" class="form-horizontal" action="#" id="addForm" method="post">
+        <form onsubmit="return false;" class="form-horizontal" action="#" id="addForm" name="addForm" method="post">
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>名称</td>
@@ -138,6 +138,10 @@
                     required: true,
                 }
                 ,
+                address: {
+                    required: true,
+                }
+                ,
                 provincial_level: {
                     required: true,
                 }
@@ -157,6 +161,9 @@
             messages: {
                 name: {
                     required: "请填写主场馆名称"
+                },
+                address: {
+                    required: "请填写主场馆地址"
                 },
                 provincial_level: {
                     required: "请选择省份"
