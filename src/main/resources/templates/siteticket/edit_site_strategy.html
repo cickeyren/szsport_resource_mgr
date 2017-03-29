@@ -124,7 +124,7 @@
                             </div>
                             <div>
                                 <input type="checkbox" id="timeIntervalCheckAll">全选/全不选
-                                <div>
+                                <div id="timeIntervalList">
                                     <input type="checkbox" name="timeIntervalCheck"th:each="timeInterval: ${timeIntervalList}" th:value="${timeInterval.id}" th:text="${timeInterval.time_inter}">
                                 </div>
                             </div>

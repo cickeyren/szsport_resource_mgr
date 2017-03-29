@@ -56,6 +56,11 @@ $(function () {
         //console.log(checkUseableTimeArray);
     });
 
+    //时段策略改变时同时改变时段信息
+    $("#timeCode").change(function(){
+        updateTimeIntervalList($("#timeCode").val());
+    });
+
     //时段全选控制
     $("#timeIntervalCheckAll").click(function(){
         $("input[name = timeIntervalCheck]:checkbox").prop("checked", $("#timeIntervalCheckAll").prop("checked"));
@@ -197,3 +202,33 @@ $(function () {
     };
     $("#editSiteTicketStrategyForm").validate(valConfig);
 });
+
+/**
+ * 更新时段列表信息
+ */
+function updateTimeIntervalList(timeCode) {
+    $.ajax({
+        url:'/siteTicket/getTimeIntervalByTimeCode.json',
+        type:'POST', //GET
+        data:{"timeCode":timeCode},
+        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success:function(result){
+            if("000000" == result.code) {
+                var items = result.result;
+                $("#timeIntervalList").empty();
+                if(0 == items.length){
+                    $("#timeIntervalList").append("");
+                } else {
+                    $.each(items,function(i,n){
+                        $("#timeIntervalList").append("<input type='checkbox' id='timeIntervalCheck' name='timeIntervalCheck' value=\"" + n.id + "\">"+n.time_inter);
+                    });
+                }
+            } else {
+                layer.msg("更新时段信息失败~");
+            }
+        },
+        error:function(result){
+            layer.msg("更新时段信息失败~");
+        }
+    })
+}

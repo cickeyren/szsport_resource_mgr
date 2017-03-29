@@ -180,6 +180,25 @@ public class SiteTicketController {
     }
 
     /**
+     * 根据timeCode查询时段信息
+     * @param timeCode
+     * @return
+     */
+    @RequestMapping(value = "/getTimeIntervalByTimeCode.json",method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData getTimeIntervalByTimeCode(String timeCode){
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("time_code", timeCode);
+        try {
+            return RtnData.ok(timeInteralMapper.getTimeIntervalByTimecode(paramMap));
+        } catch (Exception e){
+            e.printStackTrace();
+            logger.error("========根据timeCode查询时段信息失败=========",e);
+        }
+        return RtnData.fail("根据timeCode查询时段信息失败");
+    }
+
+    /**
      * 新增场地票价格策略
      * @param siteTicketStrategyInfoModel
      * @param request
