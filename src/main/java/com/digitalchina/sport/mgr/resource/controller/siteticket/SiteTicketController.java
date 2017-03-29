@@ -9,6 +9,7 @@ import com.digitalchina.sport.mgr.resource.dao.TimeIntervalMapper;
 import com.digitalchina.sport.mgr.resource.model.SiteTicketBasicInfoModel;
 import com.digitalchina.sport.mgr.resource.model.SiteTicketStrategyInfoModel;
 import com.digitalchina.sport.mgr.resource.service.MainStadiumService;
+import com.digitalchina.sport.mgr.resource.service.MerchantService;
 import com.digitalchina.sport.mgr.resource.service.SiteTicketService;
 import com.digitalchina.sport.mgr.resource.service.YearStrategyService;
 import org.slf4j.Logger;
@@ -43,6 +44,8 @@ public class SiteTicketController {
     @Autowired
     private YearStrategyService yearStrategyService;
     @Autowired
+    private MerchantService merchantService;
+    @Autowired
     private FieldMapper fieldMapper;
     @Autowired
     private TimeIntervalMapper timeInteralMapper;
@@ -54,9 +57,12 @@ public class SiteTicketController {
     @RequestMapping(value = "/addSiteTicket.html")
     public String addSiteTicket(ModelMap map){
         //主场馆信息
-        map.put("mainStadiumList", mainStadiumService.findStadiumModel());
+        List<Map<String, Object>> mainStadiumList = mainStadiumService.findStadiumModel();
+        map.put("mainStadiumList", mainStadiumList);
         //合作商信息
-        map.put("merchantList", yearStrategyService.getAllMerchant());
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("mainStadiumId", mainStadiumList.get(0).get("id"));
+        map.put("merchantList", merchantService.getMerchantListByParam(paramMap));
         return "siteticket/add_site_ticket";
     }
 
@@ -111,12 +117,14 @@ public class SiteTicketController {
                                  ModelMap map, HttpServletRequest request){
         //主场馆信息
         map.put("mainStadiumList", mainStadiumService.findStadiumModel());
-        //合作商信息
-        map.put("merchantList", yearStrategyService.getAllMerchant());
         //场地票基本信息
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("id",request.getParameter("ticketId"));
-        map.put("siteTicket", siteTicketService.getSiteTicketInfoByParam(paramMap));
+        SiteTicketBasicInfoModel siteTicketBasicInfoModel =siteTicketService.getSiteTicketInfoByParam(paramMap);
+        map.put("siteTicket", siteTicketBasicInfoModel);
+        //合作商信息
+        paramMap.put("mainStadiumId", siteTicketBasicInfoModel.getMainStadium());
+        map.put("merchantList", merchantService.getMerchantListByParam(paramMap));
         //场地票策略信息列表
         paramMap.put("ticketId",request.getParameter("ticketId"));
         try {

@@ -65,4 +65,13 @@ public class MerchantService {
     public int updatemerchant(Merchant merchant) {
         return merchantMapper.updateByPrimaryKey(merchant);
     }
+
+    /**
+     * 根据条件查询所有合作商户列表
+     * @param map
+     * @return
+     */
+    public List<Map<String,Object>> getMerchantListByParam(Map<String, Object> map){
+        return merchantMapper.getMerchantListByParam(map);
+    }
 }

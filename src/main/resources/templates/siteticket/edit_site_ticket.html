@@ -276,10 +276,15 @@
         $(function(){
             //获取子场馆
             var subStadiumId = [[${siteTicket.subStadium}]];
+            //获取合作商户
+            var merchantId = [[${siteTicket.merchant}]];
 
             //给主场馆菜单绑定选择改变时同时改变子菜单的内容
             $("#mainStadium").change(function(){
+                //更新子场馆
                 updateSubStadiumList($("#mainStadium").val(), subStadiumId);
+                //更新合作商户
+                updateMerchantList($("#mainStadium").val(), merchantId);
             });
             $('#mainStadium').trigger('change');
 

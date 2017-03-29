@@ -187,8 +187,24 @@ public class MerchantController {
         return RtnData.fail("修改合作商户失败");
     }
 
-
-
+    /**
+     * 根据条件查询所有合作商户列表
+     * @param mainStadiumId
+     * @return
+     */
+    @RequestMapping(value = "/getMerchantListByParam.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData getMerchantListByParam(String mainStadiumId){
+        try {
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("mainStadiumId", mainStadiumId);
+            return RtnData.ok(merchantService.getMerchantListByParam(paramMap));
+        }catch (Exception e){
+            e.printStackTrace();
+            LOGGER.error("========根据条件查询所有合作商户列表失败=========", e);
+        }
+        return RtnData.fail("根据条件查询所有合作商户列表失败");
+    }
 
 
 

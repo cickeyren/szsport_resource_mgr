@@ -272,12 +272,43 @@ function updateSubStadiumList(mainStadiumId, subStadiumId) {
                     $("#subStadium option[value='"+subStadiumId+"']").attr("selected", "selected");
                 }
             } else {
-                alert("添加失败~");
+                layer.msg("更新子场馆列表失败~");
             }
-            //console.log(result);
         },
         error:function(result){
-            alert("添加失败~");
+            layer.msg("更新子场馆列表失败~");
+        }
+    })
+}
+
+/**
+ * 更新合作商户列表
+ */
+function updateMerchantList(mainStadiumId, merchantId) {
+    $.ajax({
+        url:'/MerchantController/getMerchantListByParam.json',
+        type:'POST', //GET
+        data:{"mainStadiumId":mainStadiumId},
+        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success:function(result){
+            if("000000" == result.code) {
+                var items = result.result;
+                $("#merchant").empty();
+                if(0 == items.length){
+                    $("#merchant").append("<option value=\"\"  value=\"\">无合作商户</option>");
+                } else {
+                    $.each(items,function(i,n){
+                        $("#merchant").append("<option value=\"" + n.id + "\">"+n.merchant_name+"</option>");
+                    });
+                    //设置合作商户
+                    $("#merchant option[value='"+merchantId+"']").attr("selected", "selected");
+                }
+            } else {
+                layer.msg("更新合作商户列表失败~");
+            }
+        },
+        error:function(result){
+            layer.msg("更新合作商户列表失败~");
         }
     })
 }
