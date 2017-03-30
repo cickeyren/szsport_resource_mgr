@@ -103,9 +103,9 @@
                 <tr class="controls">
                     <td class="alignright">地理位置</td>
                     <td class="alignleft">
-                        <input type="text" id="lng" name="lng"/>
-                        <input type="text" id="lat" name="lat"/>
-                        <button type="submit" class="btn btn-success" id="ditudingwei">地图定位</button>
+                        经度:<input type="text" id="lng" name="lng"/>
+                        纬度:<input type="text" id="lat" name="lat"/>
+                        <!--<button type="submit" class="btn btn-success" id="ditudingwei">地图定位</button>-->
                     </td>
                 </tr>
                 <tr class="controls">
@@ -183,9 +183,9 @@
             }
         };
         $('#addForm').validate(valConfig);
-        $('#ditudingwei').on("click",function () {
-            layer.alert("定位失败！请联系管理员！")
-        })
+//        $('#ditudingwei').on("click",function () {
+//            layer.alert("定位失败！请联系管理员！")
+//        })
         //场馆状态只能单选
         $('#checkone').find('input[type=checkbox]').bind('click', function () {
             $('#checkone').find('input[type=checkbox]').not(this).attr("checked", false);

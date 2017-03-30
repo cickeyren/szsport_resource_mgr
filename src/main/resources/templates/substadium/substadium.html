@@ -54,8 +54,10 @@
             <input type="hidden" name="substadiumID" id="substadiumID" th:value="${mainStadiumId}">
         </form>
         <div>
-            <button type="button" class="btn btn-success" id="addSubstadium">新增</button>
-            <button type="button" class="btn btn-success" id="projectSort">项目排序</button>
+            <button type="button" class="btn btn-success fr" id="back">返回</button>
+            <button type="button" class="btn btn-success fr" id="addSubstadium">新增</button>
+            <button type="button" class="btn btn-success fr" id="projectSort">项目排序</button>
+
 
         </div>
         <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
@@ -81,10 +83,10 @@
                         <!--&nbsp;&nbsp;&nbsp;-->
                         <!--<a name="delete" th:data="${obj.id}">删除</a>-->
                         &nbsp;&nbsp;&nbsp;
-                        <a th:href="@{/FieldController/subField.html(subStadiumid=${obj.id})}"
+                        <a th:href="@{/FieldController/subField.html(subStadiumid=${obj.id},mainStadiumId=${mainStadiumId})}"
                            th:data="${obj.id}">场地</a>
                         &nbsp;&nbsp;&nbsp;
-                        <a th:href="@{/TimeFrameController/timeFrame.html(stadium_id=${obj.id})}"
+                        <a th:href="@{/TimeFrameController/timeFrame.html(stadium_id=${obj.id},mainStadiumId=${mainStadiumId})}"
                            th:data="${obj.id}">时段</a>
                         &nbsp;&nbsp;&nbsp;
                         <span th:href="@{/yearstrategyticket/list.html(subStadiumid=${obj.id})}"

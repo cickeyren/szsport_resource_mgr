@@ -6,6 +6,9 @@ $(function () {
     $("#addSubField").bind('click', function () {
         window.location.href = "/FieldController/add.html?subStadiumid=" + $('#subStadiumid').val();
     });
+    $("#back").bind('click', function () {
+        window.location.href = "/subStadiumController/substadium.html?mainStadiumId="+$('#mainStadiumId').val();
+    });
 
     $('a[name="operate"]').bind('click', function () {
         doDeleteField(this);

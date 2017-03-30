@@ -55,6 +55,7 @@ public class TimeFrameController {
                                       ModelMap map, HttpServletRequest request) {
         Map<String, Object> params = new HashMap<String, Object>();
         String stadium_id = request.getParameter("stadium_id");//子场馆ID
+        String mainStadiumId = request.getParameter("mainStadiumId");//子场馆ID
 //        stadium_id = "11012";
         //取出相关的查询参数
         String time_length_search = request.getParameter("time_length_search");
@@ -79,6 +80,7 @@ public class TimeFrameController {
             map.put("page", String.valueOf(page));
 
             map.put("stadium_id", stadium_id);
+            map.put("mainStadiumId", mainStadiumId);
             map.put("timeFrameList", timeFrameList);
             return "timeframe/timeFrame";
 

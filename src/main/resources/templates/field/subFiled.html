@@ -51,10 +51,13 @@
         <form class="form-horizontal" action="/FieldController/subField.html" id="searchForm" method="POST">
             <input type="hidden" id="myPage" name="page" th:value="${page}">
             <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+            <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+            <input type="hidden" name="mainStadiumId" id="mainStadiumId" th:value="${mainStadiumId}">
         </form>
         <input type="hidden" id="subStadiumid" name="subStadiumid" th:value="${subStadiumid}"/>
         <div>
-            <button type="button" class="btn btn-success" id="addSubField">新增</button>
+            <button type="button" class="btn btn-success fr" id="back">返回</button>
+            <button type="button" class="btn btn-success fr" id="addSubField">新增</button>
         </div>
         <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
             <table id="dataTable" class="table table-bordered">

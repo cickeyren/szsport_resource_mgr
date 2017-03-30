@@ -5,6 +5,9 @@ $(function () {
     $("#addSubstadium").on('click', function () {
         window.location.href = "/subStadiumController/add.html?substadiumID="+$("#substadiumID").val();
     })
+    $("#back").on('click', function () {
+        window.location.href = "/mainStadiumController/mainstadium.html";
+    })
 
     /**
      * 子场馆新增保存数据
@@ -31,15 +34,15 @@ $(function () {
     /**
      * 取消新增子场馆
      */
-    $("#cancelSubstadium").on('click', function () {
-        window.location.href = "/subStadiumController/substadium.html";
+    $("#canceldd").on('click', function () {
+        window.location.href = "/subStadiumController/substadium.html?mainStadiumId="+$("#mainStadiumadd").val();
     })
 
     /**
      * 取消编辑主场馆
      */
     $("#cancelSubstadium").on('click', function () {
-        window.location.href = "/subStadiumController/substadium.html";
+        window.location.href = "/subStadiumController/substadium.html?mainStadiumId="+$("#mainStadiumIdedit").val();
     })
 
     //给体育项目增加change事件

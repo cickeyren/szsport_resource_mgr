@@ -42,6 +42,7 @@ public class FieldController {
                                      ModelMap map, HttpServletRequest request) {
 
         String subStadiumid = request.getParameter("subStadiumid");
+        String mainStadiumId = request.getParameter("mainStadiumId");
 //        subStadiumid = "11002";
         Map<String, Object> param = new HashMap<>();
         param.put("stadium_id", subStadiumid);
@@ -61,6 +62,7 @@ public class FieldController {
 
 
             map.put("subStadiumid", subStadiumid);
+            map.put("mainStadiumId", mainStadiumId);
             map.put("subFieldList", subFieldList);
 
             return "field/subFiled";
@@ -79,7 +81,7 @@ public class FieldController {
      * <p>
      * 注意：需要携带子场馆的ID
      *
-     * @param subStadiumId 子场地ID
+     * @param
      * @param modelMap
      * @return
      */
@@ -96,7 +98,7 @@ public class FieldController {
      * <p>
      * 注意：需要携带子场馆的ID
      *
-     * @param subStadiumId 子场地ID
+     * @param
      * @param modelMap
      * @return
      */
@@ -165,7 +167,7 @@ public class FieldController {
     /**
      * 删除选中的数据
      *
-     * @param id
+     * @param
      * @param modelMap
      * @return
      */

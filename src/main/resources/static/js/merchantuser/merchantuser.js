@@ -9,4 +9,7 @@ $(function () {
     $("#addMerchant").bind('click', function () {
         window.location.href = "/MerchantUserController/add.html?mainstadium_id=" + $('#mainstadium_id').val()+"&merchant_id="+$('#merchant_id').val();
     });
+    $("#back").bind('click', function () {
+        window.location.href = "/MerchantController/merchant.html?mainstadium_id=" + $('#mainstadium_id').val()+"&merchantId="+$('#merchantId').val();
+    });
 });

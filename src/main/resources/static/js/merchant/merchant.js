@@ -9,4 +9,7 @@ $(function () {
     $("#addMerchant").bind('click', function () {
         window.location.href = "/MerchantController/add.html?mainstadium_id=" + $('#mainstadium_id').val();
     });
+    $("#back").on('click', function () {
+        window.location.href = "/mainStadiumController/mainstadium.html";
+    })
 });

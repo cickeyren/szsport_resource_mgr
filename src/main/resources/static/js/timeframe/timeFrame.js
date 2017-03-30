@@ -9,6 +9,10 @@ $(function () {
         window.location.href = "/TimeFrameController/addTimeFrame.html?stadium_id=" + $("#stadium_id").val();
     });
 
+    $("#back").bind('click', function () {
+        window.location.href = "/subStadiumController/substadium.html?mainStadiumId="+$('#mainStadiumId').val();
+    });
+
     $('a[name="invalid"]').bind('click', function () {
 
         doInvalid(this);
