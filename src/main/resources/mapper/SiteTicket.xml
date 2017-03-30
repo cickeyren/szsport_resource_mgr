@@ -357,10 +357,18 @@
         site_ticket_strategy_info
         <where>
             <if test="ticketId != null and ticketId != ''">
-                ticket_id = #{ticketId}
+                AND ticket_id = #{ticketId}
+            </if>
+            <if test="subStadiumId != null and subStadiumId != ''">
+                AND sub_stadium_id = #{subStadiumId}
+            </if>
+            <if test="dateType != null and dateType != ''">
+                AND date_type = #{dateType}
             </if>
         </where>
-        LIMIT #{pageIndex},#{pageSize}
+        <if test="pageIndex != null and pageIndex != '' and pageSize != null and pageSize != ''">
+            LIMIT #{pageIndex},#{pageSize}
+        </if>
     </select>
 
     <select id="getTimeIntervalList" parameterType="HashMap" resultType="HashMap">

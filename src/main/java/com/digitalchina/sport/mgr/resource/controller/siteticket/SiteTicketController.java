@@ -3,6 +3,7 @@ package com.digitalchina.sport.mgr.resource.controller.siteticket;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
+import com.digitalchina.common.utils.DateUtil;
 import com.digitalchina.common.utils.UUIDUtil;
 import com.digitalchina.sport.mgr.resource.dao.FieldMapper;
 import com.digitalchina.sport.mgr.resource.dao.TimeIntervalMapper;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -216,9 +218,42 @@ public class SiteTicketController {
     @ResponseBody
     public RtnData addStrategyInfo(SiteTicketStrategyInfoModel siteTicketStrategyInfoModel, HttpServletRequest request){
         try{
-            boolean isSuccess = siteTicketService.addStrategyInfo(siteTicketStrategyInfoModel, request);
-            if(isSuccess){
-                return RtnData.ok("新增场地票策略信息成功");
+            //新增价格策略的内容
+            String[] siteArr = siteTicketStrategyInfoModel.getSite().split(",");
+            String[] timeIntervalArr = siteTicketStrategyInfoModel.getTimeInterval().split(",");
+            String weekDetails = siteTicketStrategyInfoModel.getWeekDetails();
+            String specificDate = siteTicketStrategyInfoModel.getSpecificDate();
+            String dateType = siteTicketStrategyInfoModel.getDateType();
+            //子场馆此时间类型已有的策略
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("subStadiumId", siteTicketStrategyInfoModel.getSubStadium());
+            paramMap.put("dateType", dateType);
+            List<SiteTicketStrategyInfoModel> strategyList = siteTicketService.getSiteTicketStrategyList(paramMap);
+            boolean isExist = false;
+            for(int i = 0; i < strategyList.size(); i++){
+                for (int j = 0; j < siteArr.length; j++){
+                    if(strategyList.get(i).getSite().indexOf(siteArr[j]) > -1){
+                        for(int k = 0; k < timeIntervalArr.length; k++){
+                            if(strategyList.get(i).getTimeInterval().indexOf(timeIntervalArr[k]) > -1){
+                                if(dateType.equals("1")){
+                                    //每周比较是否重合
+                                    isExist = compareWeek(weekDetails, strategyList.get(i).getWeekDetails());
+                                } else if(dateType.equals("3")){
+                                    //指定日比较是否重合
+                                    isExist = compareSpecific(specificDate, strategyList.get(i).getSpecificDate());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if(isExist){
+                return RtnData.ok("新增场地票策略信息失败，已包含所选时段");
+            } else {
+                boolean isSuccess = siteTicketService.addStrategyInfo(siteTicketStrategyInfoModel, request);
+                if(isSuccess){
+                    return RtnData.ok("新增场地票策略信息成功");
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -321,8 +356,42 @@ public class SiteTicketController {
     @ResponseBody
     public RtnData editStrategyInfo(SiteTicketStrategyInfoModel siteTicketStrategyInfoModel, HttpServletRequest request){
         try{
-            siteTicketService.updateStrategyInfo(siteTicketStrategyInfoModel);
-            return RtnData.ok("编辑场地票策略信息成功");
+            //编辑价格策略的内容
+            String[] siteArr = siteTicketStrategyInfoModel.getSite().split(",");
+            String[] timeIntervalArr = siteTicketStrategyInfoModel.getTimeInterval().split(",");
+            String weekDetails = siteTicketStrategyInfoModel.getWeekDetails();
+            String specificDate = siteTicketStrategyInfoModel.getSpecificDate();
+            String dateType = siteTicketStrategyInfoModel.getDateType();
+            //子场馆此时间类型已有的策略
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("subStadiumId", siteTicketStrategyInfoModel.getSubStadium());
+            paramMap.put("dateType", dateType);
+            List<SiteTicketStrategyInfoModel> strategyList = siteTicketService.getSiteTicketStrategyList(paramMap);
+            boolean isExist = false;
+            for(int i = 0; i < strategyList.size(); i++){
+                for (int j = 0; j < siteArr.length; j++){
+                    if(strategyList.get(i).getSite().indexOf(siteArr[j]) > -1){
+                        for(int k = 0; k < timeIntervalArr.length; k++){
+                            if(strategyList.get(i).getTimeInterval().indexOf(timeIntervalArr[k]) > -1){
+                                if(dateType.equals("1")){
+                                    //每周比较是否重合
+                                    isExist = compareWeek(weekDetails, strategyList.get(i).getWeekDetails());
+                                } else if(dateType.equals("3")){
+                                    //指定日比较是否重合
+                                    isExist = compareSpecific(specificDate, strategyList.get(i).getSpecificDate());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if(isExist){
+                return RtnData.ok("便捷场地票策略信息失败，已包含所选时段");
+            } else {
+                siteTicketService.updateStrategyInfo(siteTicketStrategyInfoModel);
+                return RtnData.ok("编辑场地票策略信息成功");
+            }
+
         }catch (Exception e){
             e.printStackTrace();
             logger.error("========编辑场地票策略信息失败=========",e);
@@ -371,5 +440,52 @@ public class SiteTicketController {
             return "error";
         }
         return "siteticket/look_site_strategy";
+    }
+
+    /**
+     * 验证新增价格策略的每周类型数据是否存在
+     * @param addWeekStr
+     * @param weekStr
+     * @return
+     */
+    public boolean compareWeek(String addWeekStr, String weekStr){
+        String[] addWeekArr = addWeekStr.split(",");
+        String[] weekArr = weekStr.split(",");
+        boolean isExist = false;
+        for(int i = 0; i < weekArr.length; i++){
+            for (int j = 0; j < addWeekArr.length; j++){
+                if(weekArr[i].equals(addWeekArr[j])){
+                    isExist = true;
+                    break;
+                }
+            }
+        }
+        return isExist;
+    }
+
+    /**
+     * 验证新增价格策略的指定日类型数据是否重合
+     * @param addSpecificStr
+     * @param specificStr
+     * @return
+     */
+    public boolean compareSpecific(String addSpecificStr, String specificStr){
+        boolean isExist = true;
+        String[] addSpecificArr = addSpecificStr.split("\\$");
+        Date addStart = DateUtil.parse(addSpecificArr[0]);
+        Date addEnd = DateUtil.parse(addSpecificArr[1]);
+        String[] specificArr = specificStr.split("\\$");
+        Date start = DateUtil.parse(specificArr[0]);
+        Date end = DateUtil.parse(specificArr[1]);
+        if(addStart.before(start)){
+            if(addEnd.before(start)){
+                isExist = false;
+            }
+        } else {
+            if(addStart.after(end)){
+                isExist = false;
+            }
+        }
+        return isExist;
     }
 }

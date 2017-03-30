@@ -187,7 +187,7 @@ $(function () {
                     dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
                     success:function(result){
                         if("000000" == result.code) {
-                            layer.msg("添加场地票策略成功~");
+                            layer.msg(result.result);
                             window.location.reload(true);
                         }
                     },
