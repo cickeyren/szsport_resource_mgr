@@ -7,9 +7,11 @@ import com.digitalchina.config.PropertyConfig;
 import com.digitalchina.sport.mgr.resource.dao.ClassifyMapper;
 import com.digitalchina.sport.mgr.resource.dao.SubStadiumMapper;
 import com.digitalchina.sport.mgr.resource.dao.YearStrategyDao;
+import com.digitalchina.sport.mgr.resource.model.Merchant;
 import com.digitalchina.sport.mgr.resource.model.TicketStrategyCommonCheckShieldTimeModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketCheckUseableTimeModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketModel;
+import com.digitalchina.sport.mgr.resource.service.MerchantService;
 import com.digitalchina.sport.mgr.resource.service.SiteTicketService;
 import com.digitalchina.sport.mgr.resource.service.YearStrategyService;
 import org.slf4j.Logger;
@@ -50,6 +52,8 @@ public class YearStrategyTicketController {
     private PropertyConfig config;
     @Autowired
     private SiteTicketService siteTicketService;
+    @Autowired
+    private MerchantService merchantService;
     /**
      * 进入新增页面
      *
@@ -59,8 +63,13 @@ public class YearStrategyTicketController {
     @RequestMapping(value = "/add.html")
     public String addIndex(ModelMap map) {
 //        List<Category> categorys = bookService.findCategorys();
-        map.put("mainStadiumList", yearStrategyService.getAllMainStadium());
-        map.put("merchantList", yearStrategyService.getAllMerchant());
+        //主场馆信息
+        List<Map<String, Object>> mainStadiumList = yearStrategyService.getAllMainStadium();
+        map.put("mainStadiumList", mainStadiumList);
+        //合作商信息
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("mainStadiumId", mainStadiumList.get(0).get("id"));
+        map.put("merchantList", merchantService.getMerchantListByParam(paramMap));
         return "yearstrategyticket/add_year_strategy_ticket";
     }
 
@@ -172,8 +181,13 @@ public class YearStrategyTicketController {
         }
         map.put("shieldTimeArrayStr",shieldTimeArrayStr.toString());
         map.put("useableTimeArrayStr",useableTimeArrayStr.toString());
-        map.put("mainStadiumList", yearStrategyService.getAllMainStadium());
-        map.put("merchantList", yearStrategyService.getAllMerchant());
+        //主场馆信息
+        List<Map<String, Object>> mainStadiumList = yearStrategyService.getAllMainStadium();
+        map.put("mainStadiumList", mainStadiumList);
+        //合作商信息
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("mainStadiumId", mainStadiumList.get(0).get("id"));
+        map.put("merchantList", merchantService.getMerchantListByParam(paramMap));
         return "yearstrategyticket/modify_year_strategy_ticket";
     }
 

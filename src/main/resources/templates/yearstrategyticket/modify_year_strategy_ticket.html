@@ -354,6 +354,14 @@
                 $("input[name=checkLimitedHoursR][value=\'1\']").attr("checked", true);
                 $("#checkLimitedHours").val([[${model.checkLimitedHours}]])
             }
+
+            //给主场馆菜单绑定选择改变时同时改变子菜单的内容
+            $("#mainStadiumID").change(function(){
+                //更新子场馆
+                updateSubStadiumList($("#mainStadiumID").val(), subStadiumID);
+                //更新合作商户
+                updateMerchantList($("#mainStadiumID").val(), merchantId);
+            });
         }
     </script>
 </body>
