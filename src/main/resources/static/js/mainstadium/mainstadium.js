@@ -31,14 +31,14 @@ $(function () {
      * 取消新增主场馆
      */
     $("#cancelsavemainstaium").on('click', function () {
-        window.location.href = "mainstadium.html";
+        window.location.href = "/mainStadiumController/mainstadium.html";
     })
 
     /**
      * 取消编辑主场馆
      */
     $("#canceleditmainstaium").on('click', function () {
-        window.location.href = "mainstadium.html";
+        window.location.href = "/mainStadiumController/mainstadium.html";
     })
 
     /**
@@ -46,7 +46,7 @@ $(function () {
      */
     $("#resetBtn").on('click', function () {
         $("#name").val("")
-        window.location.href = "mainstadium.html";
+        window.location.href = "/mainStadiumController/mainstadium.html";
     })
 
     /**
