@@ -122,6 +122,17 @@ public class SiteTicketService {
     }
 
     /**
+     * 获取场地票价格策略列表(排除当前策略,用于编辑价格策略时)
+     * @param map
+     * @return
+     */
+    public List<SiteTicketStrategyInfoModel> getSiteTicketStrategyListOutSelf(Map<String, Object> map) throws Exception{
+        return siteTicketDao.getSiteTicketStrategyInfoListOutSelf(map);
+    }
+
+
+
+    /**
      * 新增场地票价格策略
      * @param siteTicketStrategyInfoModel
      * @param request

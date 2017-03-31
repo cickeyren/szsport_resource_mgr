@@ -371,6 +371,40 @@
         </if>
     </select>
 
+    <!-- 获取场地票价格策略列表(排除当前策略,用于编辑价格策略时) -->
+    <select id="getSiteTicketStrategyInfoListOutSelf" parameterType="HashMap" resultType="SiteTicketStrategyInfoModel">
+        select
+        id,
+        ticket_Id AS ticketId,
+        strategy_name AS strategyName,
+        sub_stadium_id AS subStadium,
+        site AS site,
+        date_type AS dateType,
+        week_details AS weekDetails,
+        month_details AS monthDetails,
+        specific_date AS specificDate,
+        time_code AS timeCode,
+        time_interval_id AS timeInterval,
+        sell_price AS sellPrice,
+        cost_price AS costPrice,
+        store_price AS storePrice,
+        create_time AS createTime,
+        update_time AS updateTime
+        FROM
+        site_ticket_strategy_info
+        <where>
+            <if test="id != null and id != ''">
+                AND id != #{id}
+            </if>
+            <if test="subStadiumId != null and subStadiumId != ''">
+                AND sub_stadium_id = #{subStadiumId}
+            </if>
+            <if test="dateType != null and dateType != ''">
+                AND date_type = #{dateType}
+            </if>
+        </where>
+    </select>
+
     <select id="getTimeIntervalList" parameterType="HashMap" resultType="HashMap">
         SELECT time_inter as timeInter
         FROM time_interval

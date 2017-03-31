@@ -79,6 +79,13 @@ public interface SiteTicketDao {
     public List<SiteTicketStrategyInfoModel> getSiteTicketStrategyInfoList(Map<String, Object> map);
 
     /**
+     * 获取场地票价格策略列表(排除当前策略,用于编辑价格策略时)
+     * @param map
+     * @return
+     */
+    public List<SiteTicketStrategyInfoModel> getSiteTicketStrategyInfoListOutSelf(Map<String, Object> map);
+
+    /**
      * 获取场地列表
      * @param map
      * @return

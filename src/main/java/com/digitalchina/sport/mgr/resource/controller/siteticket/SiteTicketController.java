@@ -364,11 +364,12 @@ public class SiteTicketController {
             String weekDetails = siteTicketStrategyInfoModel.getWeekDetails();
             String specificDate = siteTicketStrategyInfoModel.getSpecificDate();
             String dateType = siteTicketStrategyInfoModel.getDateType();
-            //子场馆此时间类型已有的策略
+            //子场馆此时间类型已有的策略（排除当前策略）
             Map<String, Object> paramMap = new HashMap<String, Object>();
             paramMap.put("subStadiumId", siteTicketStrategyInfoModel.getSubStadium());
             paramMap.put("dateType", dateType);
-            List<SiteTicketStrategyInfoModel> strategyList = siteTicketService.getSiteTicketStrategyList(paramMap);
+            paramMap.put("id", siteTicketStrategyInfoModel.getId());
+            List<SiteTicketStrategyInfoModel> strategyList = siteTicketService.getSiteTicketStrategyListOutSelf(paramMap);
             boolean isExist = false;
             for(int i = 0; i < strategyList.size(); i++){
                 for (int j = 0; j < siteArr.length; j++){
