@@ -225,7 +225,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2"><button type="submit" class="btn btn-success" id="editSiteTicket">保存</button></td>
+                                <td colspan="2">
+                                    <button type="submit" class="btn btn-success" id="editSiteTicket">保存</button>
+                                    <a th:href="${'/yearstrategyticket/list.html?mainStadiumId=' + siteTicket.mainStadium}">
+                                        <button type="button" class="btn btn-success" id="cancelAddSiteTicket">取消</button>
+                                    </a>
+                                </td>
                             </tr>
                         </table>
                     </form>

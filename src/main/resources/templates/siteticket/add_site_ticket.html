@@ -50,7 +50,7 @@
                         <td class="alignright" width="10%"><span class="red">*</span>选择场馆</td>
                         <td class="alignleft">
                             <select id="mainStadium" name="mainStadium">
-                                <option th:each="mainStadium,eStat:${mainStadiumList}" th:value="${mainStadium.id}" th:text="${mainStadium.name}"></option>
+                                <option th:each="mainStadium,eStat:${mainStadiumList}" th:value="${mainStadium.id}" th:text="${mainStadium.name}" th:selected="${mainStadium.id eq mainStadiumId}"></option>
                             </select>
                         </td>
                     </tr>
@@ -206,7 +206,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2"><button type="submit" class="btn btn-success" id="addSiteTicket">保存</button></td>
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-success" id="addSiteTicket">保存</button>
+                            <a th:href="${'/yearstrategyticket/list.html?mainStadiumId=' + mainStadiumId}">
+                                <button type="button" class="btn btn-success" id="cancelAddSiteTicket">取消</button>
+                            </a>
+                        </td>
                     </tr>
                 </table>
             </form>

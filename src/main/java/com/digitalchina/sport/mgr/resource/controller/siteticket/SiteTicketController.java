@@ -54,13 +54,14 @@ public class SiteTicketController {
      * @return
      */
     @RequestMapping(value = "/addSiteTicket.html")
-    public String addSiteTicket(ModelMap map){
+    public String addSiteTicket(ModelMap map, HttpServletRequest request){
+        map.put("mainStadiumId", request.getParameter("mainStadiumId"));
         //主场馆信息
         List<Map<String, Object>> mainStadiumList = mainStadiumService.findStadiumModel();
         map.put("mainStadiumList", mainStadiumList);
         //合作商信息
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("mainStadiumId", mainStadiumList.get(0).get("id"));
+        paramMap.put("mainStadiumId", request.getParameter("mainStadiumId"));
         map.put("merchantList", merchantService.getMerchantListByParam(paramMap));
         return "siteticket/add_site_ticket";
     }

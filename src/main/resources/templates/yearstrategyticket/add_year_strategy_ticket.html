@@ -191,19 +191,19 @@
             <tr class="controls">
                 <th colspan="2">售价</th>
             </tr>
-            <tr>
+            <tr class="controls">
                 <td class="alignright"><span class="red">*</span>销售价:</td>
                 <td class="alignleft">
                     <input style="width:35px;" type="text" id="sellPrice" name="sellPrice">
                 </td>
             </tr>
-            <tr>
+            <tr class="controls">
                 <td class="alignright"><span class="red">*</span>成本价:</td>
                 <td class="alignleft">
                     <input style="width:35px;" type="text" id="costPrice" name="costPrice">
                 </td>
             </tr>
-            <tr>
+            <tr class="controls">
                 <td class="alignright"><span class="red">*</span>门市价:</td>
                 <td class="alignleft">
                     <input style="width:35px;" type="text" id="storePrice" name="storePrice">
@@ -223,11 +223,14 @@
                     <textarea id="refundDescription" name="refundDescription" style="width:500px;height:200px;"></textarea>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2"><button type="submit" class="btn btn-success" id="addYearTicket">增加</button></td>
+            <tr class="controls">
+                <td colspan="2">
+                    <button type="submit" class="btn btn-success" id="addYearTicket">增加</button>
+                    <a th:href="${'/yearstrategyticket/list.html?mainStadiumId=' + mainStadiumId}">
+                        <button type="button" class="btn btn-success" id="cancelAddSiteTicket">取消</button>
+                    </a>
+                </td>
             </tr>
-
-
         </table>
         </form>
     </div>

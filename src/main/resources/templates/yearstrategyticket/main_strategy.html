@@ -96,9 +96,9 @@
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="#">散客预订</a></li>
                     <li class="divider"></li>
-                    <li><a th:href="@{/siteTicket/addSiteTicket.html}">场地票</a></li>
+                    <li><a th:href="@{${'/siteTicket/addSiteTicket.html?mainStadiumId=' + mainStadiumId}}">场地票</a></li>
                     <li class="divider"></li>
-                    <li><a th:href="@{/yearstrategyticket/add.html}">散客/年卡</a></li>
+                    <li><a th:href="@{${'/yearstrategyticket/add.html?mainStadiumId=' + mainStadiumId}}">散客/年卡</a></li>
                 </ul>
             </div>
         </div>

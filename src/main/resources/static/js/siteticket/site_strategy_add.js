@@ -194,7 +194,7 @@ $(function () {
                     success:function(result){
                         if("000000" == result.code) {
                             layer.msg(result.result);
-                            window.location.reload(true);
+                            //window.location.reload(true);
                         }
                     },
                     error:function(result){
