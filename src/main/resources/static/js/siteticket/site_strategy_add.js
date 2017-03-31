@@ -76,6 +76,9 @@ $(function () {
             fieldCheck:{
                 required: true
             },
+            timeCode:{
+                required: true
+            },
             timeIntervalCheck:{
                 required: true
             },
@@ -98,6 +101,9 @@ $(function () {
             },
             fieldCheck:{
                 required: "请选择场地"
+            },
+            timeCode:{
+                required: "请创建时段策略"
             },
             timeIntervalCheck:{
                 required: "请选择时段"

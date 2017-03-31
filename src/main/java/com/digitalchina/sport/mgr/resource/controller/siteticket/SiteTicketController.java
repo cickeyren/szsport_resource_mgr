@@ -24,10 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author:wangw
@@ -182,9 +179,13 @@ public class SiteTicketController {
         //子场馆中正常状态时段策略列表
         List<Map<String, Object>> timeFrame = timeInteralMapper.getNormalTimeIntervalByStadiumid(paramMap);
         map.put("timeFrameList",timeFrame);
-        //时段策略中的时间列表
-        paramMap.put("time_code", timeFrame.get(0).get("id"));
-        map.put("timeIntervalList", timeInteralMapper.getTimeIntervalByTimecode(paramMap));
+        List<Map<String, Object>> timeInterval = new ArrayList<Map<String, Object>>();
+        if (timeFrame.size() > 0) {
+            //时段策略中的时间列表
+            paramMap.put("time_code", timeFrame.get(0).get("id"));
+            timeInterval = timeInteralMapper.getTimeIntervalByTimecode(paramMap);
+        }
+        map.put("timeIntervalList", timeInterval);
         map.put("ticketId", request.getParameter("ticketId"));
         return "siteticket/add_site_strategy";
     }

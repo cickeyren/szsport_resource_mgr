@@ -57,6 +57,7 @@
                             <div>
                                 <input type="checkbox" name="fieldCheck" th:each="field, objStat: ${fieldList}" th:value="${field.id}" th:text="${field.field_name}">
                             </div>
+                            <label id="fieldCheck-error" class="error" for="fieldCheck"></label>
                         </td>
                     </tr>
                     <tr class="controls">
@@ -126,6 +127,7 @@
                                 <div id="timeIntervalList">
                                     <input type="checkbox" name="timeIntervalCheck"th:each="timeInterval: ${timeIntervalList}" th:value="${timeInterval.id}" th:text="${timeInterval.time_inter}">
                                 </div>
+                                <label id="timeIntervalCheck-error" class="error" for="timeIntervalCheck"></label>
                             </div>
                         </td>
                     </tr>
