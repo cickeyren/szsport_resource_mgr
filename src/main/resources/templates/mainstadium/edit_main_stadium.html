@@ -58,7 +58,7 @@
 <section>
     <div class="container-fluid" style="margin-top: 30px;height:120px;">
         <form onsubmit="return false;" class="form-horizontal" action="#" id="updateForm" method="post">
-            <input type="hidden" name="id" th:value="${mainStadiumModel.id}"/>
+            <input type="hidden" id="mainStadiumid" name="mainStadiumid" th:value="${mainStadiumModel.id}"/>
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>名称</td>
@@ -115,12 +115,12 @@
                 </tr>
                 <tr class="controls">
                     <td class="alignright">状态</td>
-                    <td class="alignleft" id="checkone">
-                        <input  value="1" type="radio" name="status"
+                    <td class="alignleft">
+                        <input  value="1" class="check" type="radio"  name="status"
                                th:checked="${mainStadiumModel.status eq '正常'}">正常
-                        <input  value="0" type="radio" name="status"
+                        <input  value="0" class="check" type="radio"   name="status"
                                th:checked="${mainStadiumModel.status eq '闭馆'}">闭馆
-                        <input  value="2" type="radio" name="status"
+                        <input  value="2" class="check" type="radio"   name="status"
                                th:checked="${mainStadiumModel.status eq '下线'}">下线
                     </td>
                 </tr>

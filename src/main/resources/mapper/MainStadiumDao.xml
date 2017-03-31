@@ -82,7 +82,7 @@
         update main_stadium
         set name = #{name}, provincial_level = #{provincial_level}, city_level = #{city_level}, district_level = #{district_level},
         trading_area = #{trading_area},address = #{address},telephone = #{telephone},
-        open_time = #{open_time},introduction = #{introduction},lng = #{lng},lat = #{lat},
+        open_time = #{open_time},introduction = #{introduction},lng = #{lng},lat = #{lat},status=#{status},
         classify = #{classify}
         where id = #{id}
     </update>

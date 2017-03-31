@@ -66,13 +66,15 @@ $(function () {
 
     //初始化富文本编辑器---请放在点击事件之后，预防在html页面渲染失败，导致html页面无法加载
     KindEditor.options.filterMode = false;
-    var orderDescriptionEditor;
+    var fieldDescriptionEditor;
     KindEditor.ready(function (K) {
-        orderDescriptionEditor = K.create('textarea[id="introduction"]', {
+        fieldDescriptionEditor = K.create('textarea[name="introduction"]', {
             resizeType: 1,
             allowPreviewEmoticons: false,
             filterMode: false
         });
+
+        window.introductionEditor = fieldDescriptionEditor;
     });
 });
 
@@ -122,11 +124,27 @@ function updatecityList(cityID) {
 
 //新增页面添加数据
 function doAdd() {
-    var data = $('#addForm').serializeArray();
+    var addJson = {};
+    addJson.mainStadiumid = $("#mainStadiumid").val();
+    addJson.name = $("#name").val();
+    addJson.provincial_level = $("#provincial_level").val();
+    addJson.city_level = $("#city_level").val();
+    addJson.district_level = $("#district_level").val();
+    addJson.address = $("#address").val();
+    addJson.telephone = $("#telephone").val();
+    addJson.open_time = $("#open_time").val();
+    addJson.lng = $("#lng").val();
+    addJson.lat = $("#lat").val();
+
+    window.introductionEditor.sync();
+    addJson.introduction = window.introductionEditor.html();
+
+    addJson.status = $('input[name="status"]:checked').val();
+
     getHtmlByUrl({
         type: 'POST',
         url: '/mainStadiumController/addmainStadiumModel.do',
-        data: data,
+        data: addJson,
         success: function (result) {
             if ("000000" == result.code) {
                 layer.msg("添加成功！");
@@ -147,11 +165,26 @@ function doAdd() {
 
 //编辑更新数据
 function doUpdate() {
-    var data = $("#updateForm").serializeArray();
+    var addJson = {};
+    addJson.id = $('input[id="mainStadiumid"]').val();
+    addJson.name = $("#name").val();
+    addJson.provincial_level = $("#provincial_level").val();
+    addJson.city_level = $("#city_level").val();
+    addJson.district_level = $("#district_level").val();
+    addJson.address = $("#address").val();
+    addJson.telephone = $("#telephone").val();
+    addJson.open_time = $("#open_time").val();
+    addJson.lng = $("#lng").val();
+    addJson.lat = $("#lat").val();
+
+    window.introductionEditor.sync();
+    addJson.introduction = window.introductionEditor.html();
+
+    addJson.status = $('input:radio[name="status"]:checked').val();
     getHtmlByUrl({
         type: 'POST',
         url: '/mainStadiumController/updatemainstadium.do',
-        data: data,
+        data: addJson,
         success: function (result) {
             if ("000000" == result.code) {
                 layer.msg("编辑数据成功！");
