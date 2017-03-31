@@ -32,36 +32,40 @@
             <form class="form-horizontal" action="/equipment/equipmentList.html" id="searchForm" method ="POST">
                 <input type="hidden" id="myPage" name="page" th:value="${page}">
                 <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
-                <div>
-                    <span class="col-lg-4">
-                        设备编号：<input id="equipmentId" name="equipmentId" th:value="${equipmentId}"/>
-                    </span>
-                    <span class="col-lg-4">
-                        设备类型：
-                        <select id="equipmentType" name="equipmentType" >
-                            <option value="">全部</option>
-                            <option value="自助终端" th:selected="${equipmentType eq '自助终端'}">自助终端</option>
-                            <option value="手持终端" th:selected="${equipmentType eq '手持终端'}">手持终端</option>
-                            <option value="闸机" th:selected="${equipmentType eq '闸机'}">闸机</option>
-                        </select>
-                    </span>
-                    <span class="col-lg-4">
-                        主场馆：<input id="mainStadium" name="mainStadium" th:value="${mainStadium}"/>
-                    </span>
-                    <span class="col-lg-4">
-                        子场馆：<input id="subStadium" name="subStadium" th:value="${subStadium}"/>
-                    </span>
-                </div>
-                <div>
-                    <span class="col-lg-4">
-                        <button type="submit" class="btn btn-success" id="searchEquipmentBtn">查询</button>
-                    </span>
-                </div>
+                <table class="table">
+                    <tr>
+                        <td>
+                            设备编号：<input id="equipmentId" name="equipmentId" th:value="${equipmentId}"/>
+                        </td>
+                        <td>
+                            设备类型：
+                            <select id="equipmentType" name="equipmentType" >
+                                <option value="">全部</option>
+                                <option value="自助终端" th:selected="${equipmentType eq '自助终端'}">自助终端</option>
+                                <option value="手持终端" th:selected="${equipmentType eq '手持终端'}">手持终端</option>
+                                <option value="闸机" th:selected="${equipmentType eq '闸机'}">闸机</option>
+                            </select>
+                        </td>
+                        <td>
+                            主场馆：<input id="mainStadium" name="mainStadium" th:value="${mainStadium}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            子场馆：<input id="subStadium" name="subStadium" th:value="${subStadium}"/>
+                        </td>
+                        <td></td>
+                        <td>
+                            <button type="submit" class="btn btn-success" id="searchEquipmentBtn">查询</button>
+                            <button type="reset" class="btn btn-success" id="resetBtn">重置</button>
+                        </td>
+                    </tr>
+                </table>
             </form>
             <div>
                 <button type="submit" class="btn btn-success" id="addEquipmentBtn">新增</button>
             </div>
-            <div>
+            <div class="widget-box">
                 <table class="table table-bordered" th:unless="${#lists.isEmpty(equipmentList)}">
                     <thead>
                     <tr>
@@ -69,7 +73,8 @@
                         <th>设备类型</th>
                         <th>分配主场馆</th>
                         <th>所属子场馆</th>
-                        <th>状态</th>
+                        <th>设备状态</th>
+                        <th>绑定状态</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -80,6 +85,7 @@
                         <td  th:text="${equipment.mainStadium}"></td>
                         <td  th:text="${equipment.subStadium}"></td>
                         <td  th:text="${equipment.status eq '1'}?'启用':'停用'"></td>
+                        <td  th:text="${equipment.isBind eq '1'}?'已绑定':'未绑定'"></td>
                         <td>
                             <a href="editEquipment.html" th:href="@{/equipment/editEquipment.html(id=${equipment.id})}">编辑</a>
                             <a href="#" th:onclick="'javascript:delEquipment(\'' + ${equipment.id} + '\');'">删除</a>
@@ -116,9 +122,15 @@
                 }
             }
         });
+        //表单查询按钮点击
         $("#searchEquipmentBtn").click(function(){
             $("#myPage").val("0");
             $("#searchForm").submit();
+        });
+
+        //表单重置按钮点击
+        $("#resetBtn").click(function(){
+            window.location.href='/equipment/equipmentList.html';
         });
     });
 </script>

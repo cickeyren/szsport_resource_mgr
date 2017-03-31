@@ -19,7 +19,9 @@
             e.equipment_name AS equipmentType,
             m.name AS mainStadium,
             e.stadium_id AS stadiumId,
-            e.status
+            e.status,
+            IFNULL(e.is_bind, 0) as isBind,
+            e.device_number as deviceNum
         FROM
             equipment e
         LEFT JOIN main_stadium m ON e.parent_id = m.id
