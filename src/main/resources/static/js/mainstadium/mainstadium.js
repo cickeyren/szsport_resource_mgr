@@ -149,8 +149,8 @@ function doAdd() {
             if ("000000" == result.code) {
                 layer.msg("添加成功！");
                 setTimeout(function () {
-                    window.location.href = "mainstadium.html";
-                },6000)
+                    window.location.href = "/mainStadiumController/mainstadium.html";
+                },3000)
 
             }else {
                 layer.alert(result.result);
@@ -188,8 +188,9 @@ function doUpdate() {
         success: function (result) {
             if ("000000" == result.code) {
                 layer.msg("编辑数据成功！");
-                window.location.reload(true);
-                window.location.href = "mainstadium.html";
+                setTimeout(function () {
+                    window.location.href = "/mainStadiumController/mainstadium.html";
+                },3000)
             }else {
                 layer.alert(result.result);
             }
@@ -219,8 +220,7 @@ function doDelete(filed) {
             success: function (result) {
                 if ("000000" == result.code) {
                     layer.msg("删除成功！");
-                    window.location.reload(true);
-                    window.location.href = "mainstadium.html";
+                    window.location.href = "/mainStadiumController/mainstadium.html";
                 }else {
                     layer.alert(result.result);
                 }
@@ -249,7 +249,7 @@ function selectFist(strategyState, obj) {
             success: function (result) {
                 if ("000000" == result.code) {
                     layer.msg("设为精选成功！");
-                    window.location.reload(true);
+                    window.location.href = "/mainStadiumController/mainstadium.html";
                 }else {
                     layer.alert(result.result);
                 }
