@@ -195,21 +195,21 @@
             <version>1.0.0</version>
             <scope>system</scope>
             <!--<systemPath>${project.basedir}\src\main\resources\lib\QRCode.jar</systemPath>-->
-            <systemPath>${project.basedir}\lib\QRCode.jar</systemPath>
+            <systemPath>${project.basedir}/lib/QRCode.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>alipay-sdk-java20170307171631</groupId>
             <artifactId>alipay-sdk-java20170307171631</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}\lib\alipay-sdk-java20170307171631.jar</systemPath>
+            <systemPath>${project.basedir}/lib/alipay-sdk-java20170307171631.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>json-lib-2.4-jdk15</groupId>
             <artifactId>json-lib-2.4-jdk15</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}\lib\json-lib-2.4-jdk15.jar</systemPath>
+            <systemPath>${project.basedir}/lib/json-lib-2.4-jdk15.jar</systemPath>
         </dependency>
 
 
