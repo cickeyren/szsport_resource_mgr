@@ -3,9 +3,7 @@ package com.digitalchina.sport.mgr.resource.controller.timeframe;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
-import com.digitalchina.sport.mgr.resource.dao.TimeFrameMapper;
 import com.digitalchina.sport.mgr.resource.dao.TimeIntervalMapper;
-import com.digitalchina.sport.mgr.resource.model.SubStadium;
 import com.digitalchina.sport.mgr.resource.model.TimeFrame;
 import com.digitalchina.sport.mgr.resource.model.TimeInterval;
 import com.digitalchina.sport.mgr.resource.service.TimeFrameService;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Time;
 import java.util.*;
 
 /**

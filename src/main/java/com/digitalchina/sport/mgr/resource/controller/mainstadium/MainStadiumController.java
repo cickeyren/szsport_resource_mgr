@@ -4,7 +4,6 @@ import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
 import com.digitalchina.sport.mgr.resource.model.MainStadiumModel;
-import com.digitalchina.sport.mgr.resource.model.Province;
 import com.digitalchina.sport.mgr.resource.service.MainStadiumService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

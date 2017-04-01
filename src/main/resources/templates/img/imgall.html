@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>主场馆信息</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <!--<script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/mainstadium/mainstadium.js}"></script>-->
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<style>
+    .upload-container {
+        margin-top: 25px;
+        font-size: 14px;
+    }
+
+    .img-container {
+        margin-top: 20px;
+        padding-left: 90px;
+    }
+
+    .img-list {
+        position: relative;
+        width: 160px;
+        height: 110px;
+        float: left;
+        margin-left: 35px;
+    }
+
+    .img-list input[type=file] {
+        position: absolute;
+        width: 160px;
+        height: 110px;
+        top: 0;
+        opacity: 0;
+    }
+
+    .img-list img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .cg-img .cg-img-title i {
+        color: red;
+        padding: 5px;
+    }
+
+    .cg-img .upload {
+        position: relative;
+    }
+
+    .cg-img button {
+        border: 0;
+        background: #169bd5;
+        border-radius: 5px;
+        color: #fff;
+        height: 30px;
+        width: 100px;
+    }
+
+    .cg-img .upload input[type=file] {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        height: 30px;
+        width: 100px;
+    }
+
+    .cg-img span {
+        display: inline-block;
+        width: 120px;
+        text-align: left;
+    }
+
+    .cg-img .img-shuom {
+        width: 300px;
+        text-align: right;
+        color: #a6a3a3;
+    }
+
+    .img-list input[type=radio] {
+        width: 18px;
+        height: 18px;
+        vertical-align: bottom;
+        margin: 0;
+    }
+
+    .operate {
+        margin-top: 8px;
+    }
+
+    .operate span {
+        float: left;
+    }
+
+    .operate a {
+        float: right;
+    }
+</style>
+<body>
+
+<div class="upload-container">
+    <form onsubmit="return false;" method="post" action="#" enctype="multipart/form-data" id="FileForm">
+        <div class="cg-img">
+            <span class="cg-img-title"><i>*</i>场馆图片：</span>
+            <span class="upload">
+              <input type="file" class="fileupload-new" value="file" id="uploadImg">
+              <button>选择图片</button>
+          </span>
+            <input type="submit" id="uploadsub"  name="uploadsub" class="btn btn-success" value="上传">
+            <span class="img-shuom">单张图片大小限制为100k</span>
+        </div>
+    </form>
+    <div class="img-container">
+        <div class="img-list">
+            <img src="#" alt="">
+            <div class="operate">
+                  <span>
+                      <input type="radio" name="setFirst">设为首图
+                  </span>
+                <a href="javascript:;" class="delete">删除</a>
+            </div>
+        </div>
+        <div class="img-list">
+            <img src="#" alt="">
+            <div class="operate">
+                  <span>
+                      <input type="radio" name="setFirst">设为首图
+                  </span>
+                <a href="javascript:;" class="delete">删除</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#uploadImg').on('change', function () {
+//          target.files[0].size
+        var fileName = $('#uploadImg')[0].files[0].name,
+            fileSize = $('#uploadImg')[0].files[0].size;
+        if (!/.(gif|jpg|jpeg|png|GIF|JPG|png)$/.test(fileName)) {
+            layer.alert("图片类型必须是.gif,jpeg,jpg,png中的一种")
+            return false;
+        } else {
+            if (fileSize > 102400) {
+                layer.alert("请上传小于100k的图片")
+                return false;
+            }
+        }
+        $('#uploadsub').bind('click', function () {
+            var form = new FormData($("#FileForm"));
+            form.append("file",$("#uploadImg")[0].files[0]);
+            $.ajax({
+                url:"/upload/imageUpload",
+                type:"post",
+                data:form,
+                processData:false,
+                contentType:"application/json",
+                success:function(data){
+                    layer.alert("上传成功", {icon: 1});
+                },
+                error:function(e){
+                    alert("错误！！");
+                    window.clearInterval(timer);
+                }
+            });
+        });
+    });
+    $('.delete').on('click', function () {
+        $(this).parents('.img-list').remove();
+    })
+
+
+</script>
+</body>
+</html>
+

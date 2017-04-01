@@ -4,7 +4,6 @@ import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
 import com.digitalchina.common.utils.DateUtil;
-import com.digitalchina.common.utils.UUIDUtil;
 import com.digitalchina.sport.mgr.resource.dao.FieldMapper;
 import com.digitalchina.sport.mgr.resource.dao.TimeIntervalMapper;
 import com.digitalchina.sport.mgr.resource.model.SiteTicketBasicInfoModel;

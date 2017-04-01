@@ -2,6 +2,7 @@ package com.digitalchina.sport.mgr.resource.controller;
 
 import java.util.Map;
 
+import com.digitalchina.common.data.RtnData;
 import com.digitalchina.sport.mgr.resource.model.Book;
 import com.digitalchina.sport.mgr.resource.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.digitalchina.common.data.RtnData;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

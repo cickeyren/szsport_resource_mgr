@@ -1,7 +1,6 @@
 package com.digitalchina.sport.mgr.resource.controller.stadium;
 
 import com.digitalchina.common.data.RtnData;
-import com.digitalchina.sport.mgr.resource.controller.exposeapi.ApiYearStrategyTicketController;
 import com.digitalchina.sport.mgr.resource.service.StadiumService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -16,7 +16,7 @@
         <where>
             <choose>
                 <when test="name !=null and name !='' ">
-                    ms.NAME =#{name}
+                    ms.NAME LIKE CONCAT('%', #{name}, '%')
                 </when>
                 <otherwise>
                     1 = 1
@@ -32,7 +32,7 @@
         <where>
             <choose>
                 <when test="name !=null and name !='' ">
-                    ms.NAME =#{name}
+                    ms.NAME LIKE CONCAT('%', #{name}, '%')
                 </when>
                 <otherwise>
                     1 = 1

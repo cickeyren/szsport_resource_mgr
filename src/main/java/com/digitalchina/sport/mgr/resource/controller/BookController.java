@@ -1,9 +1,9 @@
 package com.digitalchina.sport.mgr.resource.controller;
 
+import com.digitalchina.common.data.RtnData;
 import com.digitalchina.sport.mgr.resource.model.Book;
 import com.digitalchina.sport.mgr.resource.model.Category;
 import com.digitalchina.sport.mgr.resource.service.BookService;
-import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
 import org.slf4j.Logger;

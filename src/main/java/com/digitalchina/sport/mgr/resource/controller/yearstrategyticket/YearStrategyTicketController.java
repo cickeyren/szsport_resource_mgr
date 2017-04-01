@@ -7,7 +7,6 @@ import com.digitalchina.config.PropertyConfig;
 import com.digitalchina.sport.mgr.resource.dao.ClassifyMapper;
 import com.digitalchina.sport.mgr.resource.dao.SubStadiumMapper;
 import com.digitalchina.sport.mgr.resource.dao.YearStrategyDao;
-import com.digitalchina.sport.mgr.resource.model.Merchant;
 import com.digitalchina.sport.mgr.resource.model.TicketStrategyCommonCheckShieldTimeModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketCheckUseableTimeModel;
 import com.digitalchina.sport.mgr.resource.model.YearStrategyTicketModel;
@@ -82,7 +81,7 @@ public class YearStrategyTicketController {
      */
     @RequestMapping(value = "/addYearStrategyTicket.json", method = RequestMethod.POST)
     @ResponseBody
-    public RtnData add(YearStrategyTicketModel yearStrategyTicket,HttpServletRequest request) {
+    public RtnData add(YearStrategyTicketModel yearStrategyTicket, HttpServletRequest request) {
         boolean result = false;
         try {
             if(yearStrategyService.doInserYearStrategyTicketAndRelateInfo(yearStrategyTicket,request)) {

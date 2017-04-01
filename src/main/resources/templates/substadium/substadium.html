@@ -57,8 +57,6 @@
             <button type="button" class="btn btn-success fr" id="back">返回</button>
             <button type="button" class="btn btn-success fr" id="addSubstadium">新增</button>
             <button type="button" class="btn btn-success fr" id="projectSort">项目排序</button>
-
-
         </div>
         <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
             <table id="dataTable" class="table table-bordered" >
@@ -123,9 +121,13 @@
             jump: function (e, first) { //触发分页后的回调
                 if (!first) { //一定要加此判断，否则初始时会无限刷新
                     $("#myPage").val(e.curr);
-                    $("#searchForm").submit();//提交进行查询
+                    $("#searchForm").submit();
                 }
             }
+        });
+        $("#findStadiumname").click(function () {
+            $("#myPage").val("0");
+            $("#searchForm").submit();
         });
     });
 </script>

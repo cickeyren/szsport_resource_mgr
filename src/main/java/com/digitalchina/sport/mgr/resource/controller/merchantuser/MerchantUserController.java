@@ -4,7 +4,6 @@ import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
 import com.digitalchina.common.utils.StringUtils;
-import com.digitalchina.sport.mgr.resource.model.MerchantPayAccount;
 import com.digitalchina.sport.mgr.resource.model.MerchantUser;
 import com.digitalchina.sport.mgr.resource.service.MerchantUserService;
 import org.slf4j.Logger;
