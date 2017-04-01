@@ -107,6 +107,8 @@
                                 <font class="mt25 mr20">全部退款</font>
                                 <input value="5" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'5'):null}">
                                 <font class="mt25 mr10">失效订单</font>
+                                <input value="8" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'8'):null}">
+                                <font class="mt25 mr10">已过期</font>
                             </div>
                         </td>
                     </tr>

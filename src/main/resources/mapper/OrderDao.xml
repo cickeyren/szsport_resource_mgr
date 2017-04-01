@@ -19,7 +19,7 @@
         ob.user_name AS userName,
         ob.user_tel AS userTel,
         (case ob.status  when '0' then '待支付' WHEN '1' THEN '待使用' WHEN '2' THEN '已使用'
-         WHEN '3' THEN '支付失败' WHEN '4' THEN '全部退款' WHEN '5' THEN '失效订单' ELSE '其他' END) AS status,
+         WHEN '3' THEN '支付失败' WHEN '4' THEN '全部退款' WHEN '5' THEN '失效订单' WHEN '8' THEN '已过期' ELSE '其他' END) AS status,
         (case ob.refund_status  when '0' then '待退款' WHEN '1' THEN '已退款' WHEN '2' THEN '退款失败'
         ELSE '' END) AS refundStatus
         FROM
@@ -133,6 +133,7 @@
                     '全部退款'
                 WHEN '5' THEN
                     '失效订单'
+                WHEN '8' THEN '已过期'
                 ELSE
                     '其他'
                 END
