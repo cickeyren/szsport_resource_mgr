@@ -62,8 +62,10 @@
                             <td colspan="2">
                                 <div id="subStadiumDiv" th:switch="${#lists.isEmpty(subStadiumList)}">
                                     <div th:case="true">无子场馆</div>
-                                    <input th:case="false" type="checkbox" id="subStadium" name="subStadium" th:each="subStadium : ${subStadiumList}"
-                                           th:value="${subStadium.id}" th:text="${subStadium.name}">
+                                    <div th:case="false">
+                                        <input type="checkbox" id="subStadium" name="subStadium" th:each="subStadium : ${subStadiumList}"
+                                               th:value="${subStadium.id}" th:text="${subStadium.name}">
+                                    </div>
                                 </div>
                             </td>
                         </tr>
