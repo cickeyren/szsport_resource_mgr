@@ -16,6 +16,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<upload.path>/contfiles</upload.path>
+		<upload.file.folder>/files/</upload.file.folder>
+		<upload.image.folder>/images/</upload.image.folder>
+		<project.context.path>/resource</project.context.path>
+		<photo.download.path>http://files.szvenue.com</photo.download.path>
 	</properties>
 
 	<parent>
@@ -47,6 +52,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 			<version>4.2.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
 		</dependency>
 
 
@@ -189,35 +200,6 @@
 			<version>1.4</version>
 		</dependency>
 
-        <dependency>
-            <groupId>QRCode</groupId>
-            <artifactId>QRCode</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <!--<systemPath>${project.basedir}\src\main\resources\lib\QRCode.jar</systemPath>-->
-            <systemPath>${project.basedir}/lib/QRCode.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>alipay-sdk-java20170307171631</groupId>
-            <artifactId>alipay-sdk-java20170307171631</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/alipay-sdk-java20170307171631.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>json-lib-2.4-jdk15</groupId>
-            <artifactId>json-lib-2.4-jdk15</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/json-lib-2.4-jdk15.jar</systemPath>
-        </dependency>
-		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-		</dependency>
-
 
     </dependencies>
 
@@ -299,6 +281,7 @@
 
 
 	<profiles>
+
 		<profile>
 			<id>local</id>
 			<properties>
@@ -306,7 +289,7 @@
 				<jdbc.username>szsport_order</jdbc.username>
 				<jdbc.password>12345678</jdbc.password>
 				<cas.sso.url>http://upms-cas.eastdc.cn:82</cas.sso.url>
-				<app.url>http://localhost:8080/</app.url>
+				<app.url>http://localhost:8082/</app.url>
 				<upms.url>http://upms.eastdc.cn:82</upms.url>
 				<upms.apikey>543df6e9aed348dc85e05593b1c9c24d</upms.apikey>
 
@@ -330,4 +313,6 @@
 			</properties>
 		</profile>
 	</profiles>
+
+
 </project>

@@ -150,7 +150,9 @@
         <div class="cg-img">
             <span class="cg-img-title"><i>*</i>场馆图片：</span>
             <span class="upload">
-              <input type="file" class="fileupload-new" value="file" id="uploadImg">
+              <!--<input type="file" class="fileupload-new" id="uploadImg">-->
+              <input type="file" v-model="editFileFormValues.FILE_NAME" name="uploadImg" id="uploadImg"
+                                               class="form-control" placeholder="请选择文件">
               <button>选择图片</button>
           </span>
             <input type="submit" id="uploadsub"  name="uploadsub" class="btn btn-success" value="上传">
@@ -192,25 +194,30 @@
                 return false;
             }
         }
-        $('#uploadsub').bind('click', function () {
-            var form = new FormData($("#FileForm"));
-            form.append("file",$("#uploadImg")[0].files[0]);
-            $.ajax({
-                url:"/upload/imageUpload",
-                type:"post",
-                data:form,
-                processData:false,
-                contentType:"application/json",
-                success:function(data){
-                    layer.alert("上传成功", {icon: 1});
-                },
-                error:function(e){
-                    alert("错误！！");
-                    window.clearInterval(timer);
+    });
+
+    $('#uploadsub').bind('click', function () {
+        var form = new FormData($("#FileForm"));
+        form.append("file",$("#uploadImg")[0].files[0]);
+        $.ajax({
+            url:"/upload/uploadFile",
+            type:"post",
+            data:form,
+            processData:false,
+            contentType:false,
+            success:function(result){
+                if("000000" == result.code) {
+                    layer.alert("上传成功");
+                } else {
+                    layer.msg(result.result);
                 }
-            });
+            },
+            error:function(e){
+                layer.alert("错误！！");
+            }
         });
     });
+
     $('.delete').on('click', function () {
         $(this).parents('.img-list').remove();
     })

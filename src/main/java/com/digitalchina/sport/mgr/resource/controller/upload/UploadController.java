@@ -10,9 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -53,13 +56,146 @@ public class UploadController {
         return "img/imgall";//进入对应的页面
     }
 
+//    /**
+//     * 上传文件
+//     *
+//     * @param request
+//     * @param response
+//     * @return
+//     */
+//    @RequestMapping(value = "/uploadFile")
+//    public RtnData uploadFile(HttpServletRequest request, HttpServletResponse response) {
+//
+//        //获取文件处理
+//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+//        //判断当前的请求类型是否符合文件传输类型
+//        if (multipartResolver.isMultipart(request)) {
+//            //如果是的话，则转换request对象，这个对象里面包含了从前台传出的文件的具体数据信息
+//            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+//            Iterator<String> iterator = multiRequest.getFileNames();
+//            while (iterator.hasNext()) {
+//                MultipartFile file = multiRequest.getFile(iterator.next());//前台传出的文件数据集合
+//                if (file != null) {
+//                    try {
+//                        byte[] byteArr = file.getBytes();//文件字节码
+//                        String fileName = file.getName();//文件名称
+//
+//                        String filePath = "E:\\WorkDocument";
+//                        createFile(byteArr, filePath, fileName);
+//
+//                        System.out.println("文件:" + fileName + "的字节码长度为:" + byteArr.length);
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                        return  RtnData.fail("文件上传失败");
+//                    }
+//                }
+//            }
+//        }
+//        return RtnData.ok("文件上传成功");
+//    }
+//
+//
+//    /**
+//     * 根据byte数组，生成文件
+//     */
+//    public static void createFile(byte[] bfile, String filePath, String fileName) {
+//        BufferedOutputStream bos = null;
+//        FileOutputStream fos = null;
+//        File file = null;
+//        try {
+//            File dir = new File(filePath);
+//            if (!dir.exists() && dir.isDirectory()) {//判断文件目录是否存在
+//                dir.mkdirs();
+//            }
+//            file = new File(filePath + "\\" + fileName);
+//            fos = new FileOutputStream(file);
+//            bos = new BufferedOutputStream(fos);
+//            bos.write(bfile);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (bos != null) {
+//                try {
+//                    bos.close();
+//                } catch (IOException e1) {
+//                    e1.printStackTrace();
+//                }
+//            }
+//            if (fos != null) {
+//                try {
+//                    fos.close();
+//                } catch (IOException e1) {
+//                    e1.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+//
+//    /**
+//     * 文件上传
+//     * @param request
+//     * @param response
+//     * @return
+//     */
+//    public RtnData uploadContractTempFiles(HttpServletRequest request, HttpServletResponse response) {
+//        //存储文件中的标记位
+//        List<String> docFlags = new ArrayList<>();
+//
+//        //取出额外的两个参数：合同名称、合同类型
+//        Map<String, String[]> requestMap = request.getParameterMap();
+//        String TEMPLATE_NAME = requestMap.get("TEMPLATE_NAME")[0];
+//        String TEMPLATE_TYPE = requestMap.get("TEMPLATE_TYPE")[0];
+//        //实际名称
+//        String fileName = "";
+//        //生成的UUID名称
+//        String uuidFileName = "";
+//        //模版大小
+//        int fileSize = 0;
+//        //模版路径
+//        String filePath = "";
+//        //文件扩展名
+//        String fileExt = "";
+//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+//        if (multipartResolver.isMultipart(request)) {
+//            //如果是的话，则转换request对象，这个对象里面包含了从前台传出的文件的具体数据信息
+//            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+//            Iterator<String> iterator = multiRequest.getFileNames();
+//            while (iterator.hasNext()) {
+//                MultipartFile file = multiRequest.getFile(iterator.next());//前台传出的文件数据集合
+//                if (file != null) {
+//                    try {
+//                        byte[] byteArr = file.getBytes();//文件字节码
+//                        String fileName_old = fileName = file.getOriginalFilename();//上传时候的文件名称
+//                        String extName = fileExt = fileName_old.substring(fileName_old.lastIndexOf(".") + 1);//扩展名
+//                        fileSize = byteArr.length;
+//                        //现在开始先存储word文档，然后再从磁盘读取文件进行分析
+//                        //先构建随机的文件名称，存储到临时文件夹
+//                        uuidFileName = UUID.randomUUID().toString().concat(".").concat(extName);
+//                        //存储文件夹路径
+//                        filePath = request.getSession().getServletContext().getRealPath("/").concat("E:\\WorkDocument");
+//                        //然后存储到临时文件夹路径
+//                        createFile(byteArr, filePath, uuidFileName);
+//                        //存储完毕之后，根据路径和名称，进行POI读取，根据doc/docx进行不同的设计
+//                        InputStream inputStream = new FileInputStream(new File(filePath.concat("\\").concat(uuidFileName)));
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                        return RtnData.fail("文件上传失败");
+//                    }
+//                }
+//            }
+//        }
+//        return  RtnData.ok("文件上传成功");
+//    }
 
 
-    /**
-     * 上传图片
-     *
-     * @throws Exception
-     */
+
+        /**
+         * 上传图片
+         *
+         * @throws Exception
+         */
     @RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
     public RtnData imageUpload(@RequestParam("file") MultipartFile file,
             HttpServletRequest request) throws Exception {
