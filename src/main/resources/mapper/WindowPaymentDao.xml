@@ -76,7 +76,7 @@
     <!-- 编辑窗口支付信息 -->
     <update id="editWindowPayment" parameterType="HashMap">
         UPDATE window_payment
-        SET merchant_id = #{merchantId}, payment_id = #{paymentId}, remark = #{remark}
+        SET merchant_id = #{merchantId}, payment_id = #{paymentId}, remark = #{remark}, update_time = now()
         WHERE id = #{id}
     </update>
 
