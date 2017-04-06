@@ -113,6 +113,9 @@
                         <a th:href="@{/MerchantController/merchant.html(mainstadium_id=${obj.id})}"
                            th:data="${obj.id}">合作商家</a>
                         &nbsp;&nbsp;&nbsp;
+                        <a th:href="@{/windowPayment/windowPaymentList.html(mainstadium_id=${obj.id})}"
+                           th:data="${obj.id}">窗口支付</a>
+                        &nbsp;&nbsp;&nbsp;
                         <a th:href="@{/upload/img.html(mainstadium_id=${obj.id})}"
                            th:data="${obj.id}">图片</a>
                     </td>

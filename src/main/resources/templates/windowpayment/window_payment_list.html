@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>窗口支付列表页面</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container-fluid" style="margin-top: 30px;height:120px;">
+            <div>
+                <button type="submit" class="btn btn-success" id="addWindowPaymentBtn">新增</button>
+                <button type="submit" class="btn btn-success" id="cancelBtn">返回</button>
+            </div>
+            <div class="widget-box">
+                <form class="form-horizontal" action="/windowPayment/windowPaymentList.html" id="searchForm" method ="POST">
+                    <input type="hidden" id="myPage" name="page" th:value="${page}">
+                    <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+                    <input type="hidden" id="mainstadium_id" name="mainstadium_id" th:value="${mainStadiumId}"/>
+                </form>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>合作商户</th>
+                        <th>支付方式</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="windowPaymentBody" th:unless="${#lists.isEmpty(windowPaymentList)}">
+                    <tr th:each="windowPayment:${windowPaymentList}">
+                        <td  th:text="${windowPayment.merchant}"></td>
+                        <td  th:text="${windowPayment.payment}"></td>
+                        <td>
+                            <a href="editWindowPayment.html" th:href="@{/windowPayment/editWindowPayment.html(id=${windowPayment.id})}">编辑</a>
+                            <a href="#" th:onclick="'javascript:delWindowPayment(\'' + ${windowPayment.id} + '\');'">删除</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody th:if="${#lists.isEmpty(windowPaymentList)}">
+                    <tr>
+                        <td colspan="3">没有符合查询条件的记录！</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="page" class="page" align="right" style="margin-right: 10px;">
+            </div>
+        </div>
+    </section>
+    <script th:inline="javascript">
+        $(function(){
+            //返回按钮响应事件
+            $("#cancelBtn").click(function (){
+                window.location.href = "/mainStadiumController/mainstadium.html";
+            });
+
+            //新增按钮响应事件
+            $("#addWindowPaymentBtn").click(function (){
+                window.location.href = "/windowPayment/addWindowPayment.html?mainStadiumId=" + [[${mainStadium}]];
+            });
+
+            laypage({
+                cont: 'page',
+                pages: [[${pageModel.totalPage}]], //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+                curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
+                    var page = [[${pageModel.currentPage}]];
+                    return page;
+                }(),
+                jump: function(e, first){ //触发分页后的回调
+                    if(!first){ //一定要加此判断，否则初始时会无限刷新
+                        $("#myPage").val(e.curr);
+                        $("#searchForm").submit();
+                    }
+                }
+            });
+        });
+
+        /**
+         * 删除窗口支付信息
+         * @param id
+         */
+        function delWindowPayment(id) {
+            /**
+             * 提示是否删除窗口支付信息
+             */
+            layer.confirm('您确认是否删除此窗口支付信息？', {
+                btn: ['删除','取消'], //按钮
+                shade: false //不显示遮罩
+            }, function(){
+                $.ajax({
+                    url:'/windowPayment/delWindowPayment.json',
+                    type:'POST',
+                    data:{
+                        "id":id
+                    },
+                    dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                    success:function(result){
+                        if("000000" == result.code) {
+                            alert(result.result);
+                            //刷新当前页面
+                            location.reload();
+                        } else {
+                            layer.msg(result.message);
+                        }
+                    },
+                    error:function(result){
+                        layer.msg("删除设备失败~");
+                    }
+                })
+            }, function(){
+                //layer.msg('取消成功', {shift: 6});
+            });
+        }
+    </script>
+</body>
+</html>

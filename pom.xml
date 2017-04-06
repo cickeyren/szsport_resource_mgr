@@ -289,7 +289,7 @@
 				<jdbc.username>szsport_order</jdbc.username>
 				<jdbc.password>12345678</jdbc.password>
 				<cas.sso.url>http://upms-cas.eastdc.cn:82</cas.sso.url>
-				<app.url>http://localhost:8082/</app.url>
+				<app.url>http://localhost:8080/</app.url>
 				<upms.url>http://upms.eastdc.cn:82</upms.url>
 				<upms.apikey>543df6e9aed348dc85e05593b1c9c24d</upms.apikey>
 
