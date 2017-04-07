@@ -59,14 +59,6 @@
                             <input type='text' style="float:none" id="orderEndDate" name="orderEndDate" class="inputw100 form-control" readonly="readonly" th:value="${orderEndDate}"
                                    onClick="WdatePicker({minDate:'#F{$dp.$D(\'orderStartDate\')}',maxDate:'%y-%M-%d'})"/>
                         </td>
-                        <td>预定手机:</td>
-                        <td class="alignleft">
-                            <input type="text" id="userTel" name="userTel" th:value="${userTel}"/>
-                        </td>
-                        <td>产品名称:</td>
-                        <td class="alignleft">
-                            <input type="text" id="ticketName" name="ticketName" th:value="${ticketName}"/>
-                        </td>
                         <td>产品类型:</td>
                         <td class="alignleft">
                             <input type="hidden" id="ticketType" name="ticketType" th:value="${ticketType}"/>
@@ -87,6 +79,16 @@
                                 <option value="2" th:selected="${orderChannel eq '2'}">微信</option>
                                 <option value="3" th:selected="${orderChannel eq '3'}">PC端网页</option>
                             </select>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td>预定手机:</td>
+                        <td class="alignleft">
+                            <input type="text" id="userTel" name="userTel" th:value="${userTel}"/>
+                        </td>
+                        <td>产品名称:</td>
+                        <td class="alignleft">
+                            <input type="text" id="ticketName" name="ticketName" th:value="${ticketName}"/>
                         </td>
                     </tr>
                     <tr class="controls">
