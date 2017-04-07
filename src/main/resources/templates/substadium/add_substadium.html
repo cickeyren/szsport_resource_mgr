@@ -29,12 +29,27 @@
         #contentTable td.alignright{text-align: right;}
         .form-horizontal .control-group .controls input {float:none;}
         .form-horizontal .control-group .controls label {float: none;}
+        .border{
+            border-bottom: 1px solid #ddd;
+        }
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 <section>
-    <div class="container-fluid" style="margin-top: 30px;height:120px;">
-        <form onsubmit="return false;" class="form-horizontal" action="#" id="addForm">
+    <div class="container-fluid" style="margin-top: 20px;height:120px;">
+        <div class="pb10 border">
+            当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">子场馆</a> < <a href="javascript:;">新增</a>
+        </div>
+        <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm">
             <input type="hidden" name="mainStadiumadd" id="mainStadiumadd" th:value="${mainStadiumId}">
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">

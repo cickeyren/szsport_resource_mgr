@@ -41,17 +41,38 @@
         .form-horizontal .control-group .controls label {
             float: none;
         }
+        .table td {
+            border-top: none;
+        }
+        .border{
+            border-bottom: 1px solid #ddd;
+        }
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
+        .mr10{
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
-<div>
-    <p class="title ml10 mt10">订单基本信息</p>
+<div class="ml10 mr10">
+    <div class="pb10 border mt20">
+        当前位置：<a href="javascript:;">查看订单</a> < <a href="javascript:;">详情</a>
+    </div>
+    <p class="title ml10 mt20">订单基本信息</p>
     <div th:unless="${orderDetails==null}">
         <div class="ml20">订单流水号：</div><div class="ml20" th:text="${orderDetails.orderNumber}"></div>
     </div>
 </div>
 <hr />
-<div>
+<div class="ml10 mr10">
     <div th:if="${orderDetails==null}">
         <p class="ml20">订单不存在</p>
     </div>
@@ -101,11 +122,10 @@
             </tbody>
         </table>
     </div>
-    <hr />
+
     <div>
         <p class="title ml10 mt10">订单内容（子单）</p>
     </div>
-    <hr />
     <div>
         <div th:unless="${#lists.isEmpty(orderContentList)}">
             <table class="table table-bordered table-hover definewidth m10">

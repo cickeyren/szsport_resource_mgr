@@ -141,12 +141,29 @@
 
     .operate a {
         float: right;
+    }.border{
+         border-bottom: 1px solid #ddd;
+     }
+    .pb10{
+        padding-bottom: 10px;
+    }
+    .mt15{
+        margin-top: 15px;
+    }
+    .mb20{
+        margin-bottom: 20px;
+    }
+    .mr10{
+        margin-right: 10px;
     }
 </style>
 <body>
 
 <div class="upload-container">
-    <form onsubmit="return false;" method="post" action="#" enctype="multipart/form-data" id="FileForm">
+    <div class="pb10 border mt20 mr10 ml10">
+        当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">图片</a>
+    </div>
+    <form class="mt10" onsubmit="return false;" method="post" action="#" enctype="multipart/form-data" id="FileForm">
         <div class="cg-img">
             <span class="cg-img-title"><i>*</i>场馆图片：</span>
             <span class="upload">

@@ -23,13 +23,30 @@
         #contentTable td.alignright{text-align: right;}
         .form-horizontal .control-group .controls input {float:none;}
         .form-horizontal .control-group .controls label {float: none;}
+        .table td {
+            border-top: none;
+        }
+        .border{
+            border-bottom: 1px solid #ddd;
+        }
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <section>
-        <div class="container-fluid" style="margin-top: 30px;height:120px;">
-            <p class="title">设备信息</p>
-            <form class="form-horizontal" action="/equipment/equipmentList.html" id="searchForm" method ="POST">
+        <div class="container-fluid" style="margin-top: 20px;height:120px;">
+            <div class="pb10 border">
+                当前位置：<a href="javascript:;">设备</a>
+            </div>
+            <form class="form-horizontal mt15" action="/equipment/equipmentList.html" id="searchForm" method ="POST">
                 <input type="hidden" id="myPage" name="page" th:value="${page}">
                 <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
                 <table class="table">
@@ -63,7 +80,7 @@
                 </table>
             </form>
             <div>
-                <button type="submit" class="btn btn-success" id="addEquipmentBtn">新增</button>
+                <button type="submit" class="btn btn-success mb20" id="addEquipmentBtn">新增</button>
             </div>
             <div class="widget-box">
                 <table class="table table-bordered" th:unless="${#lists.isEmpty(equipmentList)}">

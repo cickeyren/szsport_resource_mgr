@@ -52,19 +52,35 @@
         .form-horizontal .control-group .controls label {
             float: none;
         }
+        .border{
+            border-bottom: 1px solid #ddd;
+        }
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 <section>
     <div class="container-fluid">
+        <div class="pb10 border mt20">
+            当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a>
+        </div>
         <form class="form-horizontal" action="/MerchantController/merchant.html" id="searchForm" method="POST">
             <input type="hidden" id="myPage" name="page" th:value="${page}">
             <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
             <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
         </form>
         <div>
-            <button type="button" class="btn btn-success fr" id="back">返回</button>
-            <button type="button" class="btn btn-success fr" id="addMerchant">新增</button>
+            <button type="button" class="btn btn-success fl mb20" id="addMerchant">新增</button>
+            <button type="button" class="btn btn-success fr mb20" id="back">返回</button>
+
         </div>
         <div>
             <table id="dataTable" class="table table-bordered" >

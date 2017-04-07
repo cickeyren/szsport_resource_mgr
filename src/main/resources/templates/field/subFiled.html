@@ -43,11 +43,27 @@
         .form-horizontal .control-group .controls label {
             float: none;
         }
+        .border{
+            border-bottom: 1px solid #ddd;
+        }
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
+
     </style>
 </head>
 <body>
 <section>
-    <div class="container-fluid" style="margin-top: 30px;height:120px;">
+    <div class="container-fluid" style="margin-top: 20px;height:120px;">
+        <div class="pb10 border">
+            当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">子场馆</a> < <a href="javascript:;">场地</a>
+        </div>
         <form class="form-horizontal" action="/FieldController/subField.html" id="searchForm" method="POST">
             <input type="hidden" id="myPage" name="page" th:value="${page}">
             <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
@@ -55,9 +71,9 @@
             <input type="hidden" name="mainStadiumId" id="mainStadiumId" th:value="${mainStadiumId}">
         </form>
         <input type="hidden" id="subStadiumid" name="subStadiumid" th:value="${subStadiumid}"/>
-        <div>
-            <button type="button" class="btn btn-success fr" id="back">返回</button>
-            <button type="button" class="btn btn-success fr" id="addSubField">新增</button>
+        <div class="">
+            <button type="button" class="btn btn-success fr mb20" id="back">返回</button>
+            <button type="button" class="btn btn-success fl mb20" id="addSubField">新增</button>
         </div>
         <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
             <table id="dataTable" class="table table-bordered">

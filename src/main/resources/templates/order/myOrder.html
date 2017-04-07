@@ -39,6 +39,24 @@
         .form-horizontal .control-group .controls label {
             float: none;
         }
+        .table_style tr td.with150 {
+            width: 65px;
+        }
+        .border{
+            border-bottom: 1px solid #ddd;
+        }
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
+        .mt5{
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -46,96 +64,98 @@
 <!-- 内容区域 -->
 <div>
     <div class="container-fluid pt20">
-        <div>
-            <form action="/order/orderList.html" id="getForm" method="get">
-                <input type="hidden" id="myPage" name="page" th:value="${page}">
-                <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
-                <table class="table_style">
-                    <tr class="controls">
-                        <td>下单时间:</td>
-                        <td class="alignleft">
-                            <input type='text' style="float:none" id="orderStartDate" name="orderStartDate" class="inputw100 form-control" readonly="readonly" th:value="${orderStartDate}"
-                                   onClick="WdatePicker({maxDate:'#F{$dp.$D(\'orderEndDate\')||\'%y-%M-%d\'}'})"/>至
-                            <input type='text' style="float:none" id="orderEndDate" name="orderEndDate" class="inputw100 form-control" readonly="readonly" th:value="${orderEndDate}"
-                                   onClick="WdatePicker({minDate:'#F{$dp.$D(\'orderStartDate\')}',maxDate:'%y-%M-%d'})"/>
-                        </td>
-                        <td>产品类型:</td>
-                        <td class="alignleft">
-                            <input type="hidden" id="ticketType" name="ticketType" th:value="${ticketType}"/>
-                            <select id="ticket_type" style="width:150px;" from="getForm" onchange="change(this)">
-                                <option value="">请选择</option>
-                                <option value="0" th:selected="${ticketType eq '0'}">散票/年卡</option>
-                                <option value="1" th:selected="${ticketType eq '1'}">场地预定</option>
-                                <option value="2" th:selected="${ticketType eq '2'}">散客预定</option>
-                            </select>
-                        </td>
-                        <td>订单来源:</td>
-                        <td class="alignleft">
-                            <input type="hidden" id="orderChannel" name="orderChannel" th:value="${orderChannel}"/>
-                            <select id="order_channel" style="width:150px;" from="getForm" onchange="change(this)">
-                                <option value="">请选择</option>
-                                <option value="APP" th:selected="${orderChannel eq 'APP'}">APP</option>
-                                <option value="1" th:selected="${orderChannel eq '1'}">售票机</option>
-                                <option value="2" th:selected="${orderChannel eq '2'}">微信</option>
-                                <option value="3" th:selected="${orderChannel eq '3'}">PC端网页</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr class="controls">
-                        <td>预定手机:</td>
-                        <td class="alignleft">
-                            <input type="text" id="userTel" name="userTel" th:value="${userTel}"/>
-                        </td>
-                        <td>产品名称:</td>
-                        <td class="alignleft">
-                            <input type="text" id="ticketName" name="ticketName" th:value="${ticketName}"/>
-                        </td>
-                    </tr>
-                    <tr class="controls">
-                        <td>订单状态:</td>
-                        <td colspan="9" class="alignleft">
-                            <div id="status">
-                                <input type="checkbox" name="checkAll" th:checked="${checkAll}" onclick="check_all(this,'status');"/>
-                                <font class="mt25 mr20">全选</font>
-                                <input value="0" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'0'):null}">
-                                <font class="mt25 mr20">待支付</font>
-                                <input value="1" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'1'):null}">
-                                <font class="mt25 mr20">待使用</font>
-                                <input value="2" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'2'):null}">
-                                <font class="mt25 mr20">已使用</font>
-                                <input value="3" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'3'):null}">
-                                <font class="mt25 mr20">支付失败</font>
-                                <input value="4" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'4'):null}">
-                                <font class="mt25 mr20">全部退款</font>
-                                <input value="5" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'5'):null}">
-                                <font class="mt25 mr10">失效订单</font>
-                                <input value="8" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'8'):null}">
-                                <font class="mt25 mr10">已过期</font>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="controls">
-                        <td>退款状态:</td>
-                        <td colspan="8" class="alignleft">
-                            <div id="status">
-                                <input type="checkbox" name="refundAll" th:checked="${refundAll}" onclick="check_all(this,'refundStatus');"/>
-                                <font class="mt25 mr20">全选</font>
-                                <input value="0" type="checkbox" name="refundStatus" class="checkbox" form="getForm" th:checked="${refundStatus!= null?#strings.contains(refundStatus,'0'):null}">
-                                <font class="mt25 mr20">待退款</font>
-                                <input value="1" type="checkbox" name="refundStatus" class="checkbox" form="getForm" th:checked="${refundStatus!= null?#strings.contains(refundStatus,'1'):null}">
-                                <font class="mt25 mr20">已退款</font>
-                                <input value="2" type="checkbox" name="refundStatus" class="checkbox" form="getForm" th:checked="${refundStatus!= null?#strings.contains(refundStatus,'2'):null}">
-                                <font class="mt25 mr20">退款失败</font>
-                            </div>
-                        </td>
-                        <td>
-                            <button type="submit" class="btn btn-success" id="search">查询</button>
-                            <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
-                        </td>
-                    </tr>
-                </table>
-            </form>
+        <div class="pb10 border">
+            当前位置：<a href="javascript:;">查看订单</a>
         </div>
+        <form class="mt20" action="/order/orderList.html" id="getForm" method="get">
+            <input type="hidden" id="myPage" name="page" th:value="${page}">
+            <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+            <table class="table_style">
+                <tr class="controls">
+                    <td class="with150">预定手机:</td>
+                    <td class="alignleft">
+                        <input type="text" class="mt5" id="userTel" name="userTel" th:value="${userTel}"/>
+                    </td>
+                    <td class="with150">产品名称:</td>
+                    <td class="alignleft">
+                        <input type="text" class="mt5" id="ticketName" name="ticketName" th:value="${ticketName}"/>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="with150">下单时间:</td>
+                    <td class="alignleft">
+                        <input type='text' style="float:none" id="orderStartDate" name="orderStartDate" class="inputw100 form-control mt5" readonly="readonly" th:value="${orderStartDate}"
+                               onClick="WdatePicker({maxDate:'#F{$dp.$D(\'orderEndDate\')||\'%y-%M-%d\'}'})"/>至
+                        <input type='text' style="float:none" id="orderEndDate" name="orderEndDate" class="inputw100 form-control mt5" readonly="readonly" th:value="${orderEndDate}"
+                               onClick="WdatePicker({minDate:'#F{$dp.$D(\'orderStartDate\')}',maxDate:'%y-%M-%d'})"/>
+                    </td>
+                    <td class="with150">产品类型:</td>
+                    <td class="alignleft">
+                        <input class="mt5" type="hidden" id="ticketType" name="ticketType" th:value="${ticketType}"/>
+                        <select id="ticket_type" style="width:150px;" from="getForm" onchange="change(this)">
+                            <option value="">请选择</option>
+                            <option value="0" th:selected="${ticketType eq '0'}">散票/年卡</option>
+                            <option value="1" th:selected="${ticketType eq '1'}">场地预定</option>
+                            <option value="2" th:selected="${ticketType eq '2'}">散客预定</option>
+                        </select>
+                    </td>
+                    <td class="with150">订单来源:</td>
+                    <td class="alignleft">
+                        <input type="hidden" class="mt5" id="orderChannel" name="orderChannel" th:value="${orderChannel}"/>
+                        <select id="order_channel" style="width:150px;" from="getForm" onchange="change(this)">
+                            <option value="">请选择</option>
+                            <option value="APP" th:selected="${orderChannel eq 'APP'}">APP</option>
+                            <option value="1" th:selected="${orderChannel eq '1'}">售票机</option>
+                            <option value="2" th:selected="${orderChannel eq '2'}">微信</option>
+                            <option value="3" th:selected="${orderChannel eq '3'}">PC端网页</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="with150">订单状态:</td>
+                    <td colspan="9" class="alignleft">
+                        <div id="status">
+                            <input type="checkbox" name="checkAll" th:checked="${checkAll}" onclick="check_all(this,'status');"/>
+                            <font class="mt25 mr20">全选</font>
+                            <input value="0" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'0'):null}">
+                            <font class="mt25 mr20">待支付</font>
+                            <input value="1" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'1'):null}">
+                            <font class="mt25 mr20">待使用</font>
+                            <input value="2" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'2'):null}">
+                            <font class="mt25 mr20">已使用</font>
+                            <input value="3" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'3'):null}">
+                            <font class="mt25 mr20">支付失败</font>
+                            <input value="4" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'4'):null}">
+                            <font class="mt25 mr20">全部退款</font>
+                            <input value="5" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'5'):null}">
+                            <font class="mt25 mr10">失效订单</font>
+                            <input value="8" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'8'):null}">
+                            <font class="mt25 mr10">已过期</font>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="with150">退款状态:</td>
+                    <td colspan="8" class="alignleft">
+                        <div id="status">
+                            <input type="checkbox" name="refundAll" th:checked="${refundAll}" onclick="check_all(this,'refundStatus');"/>
+                            <font class="mt25 mr20">全选</font>
+                            <input value="0" type="checkbox" name="refundStatus" class="checkbox" form="getForm" th:checked="${refundStatus!= null?#strings.contains(refundStatus,'0'):null}">
+                            <font class="mt25 mr20">待退款</font>
+                            <input value="1" type="checkbox" name="refundStatus" class="checkbox" form="getForm" th:checked="${refundStatus!= null?#strings.contains(refundStatus,'1'):null}">
+                            <font class="mt25 mr20">已退款</font>
+                            <input value="2" type="checkbox" name="refundStatus" class="checkbox" form="getForm" th:checked="${refundStatus!= null?#strings.contains(refundStatus,'2'):null}">
+                            <font class="mt25 mr20">退款失败</font>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" id="search">查询</button>
+                        <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
