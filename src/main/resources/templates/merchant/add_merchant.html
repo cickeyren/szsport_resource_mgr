@@ -27,6 +27,8 @@
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
     <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <style>
         p.title {
             font-size: 18px;
@@ -126,6 +128,13 @@
                                                                                                       name="tarm"/>
                         <input class="check" value="3" type="radio" name="settlement_way">按成本结算
                         <input class="check" value="4" type="radio" name="settlement_way">银行卡
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">结算时间</td>
+                    <td class="alignleft" id="checkone">
+                        <input type='text' style="float:none" id="checkDate" name="checkDate" class="inputw100 form-control mt5" readonly="readonly" th:value="${checkDate}"
+                               onClick="WdatePicker({dateFmt:'HH-mm'})"/>
                     </td>
                 </tr>
                 <tr class="controls">
