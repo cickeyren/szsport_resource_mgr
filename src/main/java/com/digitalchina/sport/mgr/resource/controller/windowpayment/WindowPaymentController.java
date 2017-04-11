@@ -135,6 +135,7 @@ public class WindowPaymentController {
             map.put("windowPayment", windowPayment);
             String mainStadiumId = windowPayment.get("mainStadium").toString();
             paramMap.put("mainStadiumId", mainStadiumId);
+            map.put("mainStadium", mainStadiumId);
             merchantList = merchantService.getMerchantListByParam(paramMap);
             paymentList = windowPaymentService.getAllPaymentList();
         }catch (Exception e){
