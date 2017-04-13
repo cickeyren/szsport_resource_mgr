@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增优惠配置</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+    <script src="../../static/js/discount/discount.js" th:src="@{/js/discount/discount.js}"></script>
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+        .border{
+            border-bottom: 1px solid #ddd;
+        }
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="container-fluid" style="margin-top: 20px;height:120px;">
+        <div class="pb10 border">
+            当前位置：<a href="javascript:;">优惠配置</a> < <a href="javascript:;">新增</a>
+        </div>
+        <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" name="addForm" method="post">
+            <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>优惠类型</td>
+                    <td class="alignleft">
+                        <select id="discountType" name="discountType">
+                            <option th:each="obj,eStat:${discountType}" th:value="${obj.id}"
+                                    th:text="${obj.name}"></option>
+                        </select> 
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>场馆选择</td>
+                    <td class="alignleft">
+                        <select id="mainStadium_id" name="mainStadium_id">
+                            <option th:each="obj,eStat:${mainStadium}" th:value="${obj.id}"
+                                    th:text="${obj.name}"></option>
+                        </select>  
+                        子馆
+                        <select id="subStadium_id" name="subStadium_id">
+                            <option value="">全部</option>
+                            <option th:each="obj,eStat:${subStadium}" th:value="${obj.id}"
+                                    th:text="${obj.name}"></option>
+                        </select>
+
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>优惠渠道</td>
+                    <td class="alignleft">
+                        <select id="discountChannel" name="discountChannel">
+                            <option value="0">线下窗口</option>
+                            <option value="1">线上支付</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>支付方式</td>
+                    <td class="alignleft">
+                        <select id="payType" name="payType">
+                            <option th:each="obj,eStat:${payType}" th:value="${obj.id}"
+                                    th:text="${obj.payment}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td width="10%" class="alignright"><span class="red">*</span>折扣额度</td>
+                    <td class="alignleft"><input type="text" id="discountLimit" name="discountLimit" th:placeholder="两位小数"/></td>
+                </tr>
+                <tr class="controls">
+                    <td width="10%" class="alignright"><span class="red">*</span>有效时间</td>
+                    <td class="alignleft">
+                        <input class="Wdate" type='text' style="float:none" id="startTime" name="startTime" class="inputw100 form-control mt5" readonly="readonly"
+                               onClick="WdatePicker({minDate:'%y-%M-%d',maxDate:'#F{$dp.$D(\'endTime\')||\'%y-%M-%d\'}'})"/>至
+                        <input class="Wdate" type='text' style="float:none" id="endTime" name="endTime" class="inputw100 form-control mt5" readonly="readonly"
+                               onClick="WdatePicker({minDate:'#F{$dp.$D(\'startTime\')}'})"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="text-right" colspan="2">
+                        <button type="submit" class="btn btn-success" id="save">保存</button>
+                        <button type="submit" class="btn btn-success" id="cancel">取消</button>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        var valConfig = {
+            rules: {
+                discountLimit: {
+                    required: true,
+                },
+                startTime: {
+                    required: true,
+                },
+                endTime: {
+                    required: true,
+                }
+            },
+            messages: {
+                discountLimit: {
+                    required: "折扣额度不能为空！"
+                },
+                startTime: {
+                    required: "开始时间不能为空！"
+                },
+                endTime: {
+                    required: "结束时间不能为空！"
+                }
+            },
+            submitHandler: function () {
+                doAdd();
+            }
+        };
+        $('#addForm').validate(valConfig);
+    });
+</script>
+</html>
