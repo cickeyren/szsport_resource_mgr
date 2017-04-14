@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * Created by 凌小云 on 2017/4/13.
- * 定时器模板
+ * 定时器模板使用
  */
 
 @Component//组件注释
@@ -29,7 +29,7 @@ public class ScheduledTasks {
     //定时任务1,每五秒执行一次（时间按照任务一，即多久查询一次checkDate是否等于设定值，查到之后执行任务2，并且任务一继续在执行）
     @Scheduled(fixedRate = 5000)//通过@Scheduled声明该方法是计划任务，使用fixedRate属性每隔固定时间执行
     public void reportCurrentTime() {
-        //int a = 1;//查到为1没查到为2
+
         if (a !=1){
             log.info(DateUtil.now()+" 每隔5秒执行一次,没有到达指定时间checkDate继续查询", DateUtil.now());
            // System.out.println("每隔5秒执行一次 "+dateFormat.format(new Date()));
@@ -45,7 +45,7 @@ public class ScheduledTasks {
     @Scheduled(cron = "0 07 20 ? * *" ) //使用cron属性可按照指定时间执行，本例指的是每天20点07分执行；
     //cron是UNIX和类UNIX(Linux)系统下的定时任务
     public void fixTimeExecution(){
-        //int a = 1;
+
       if(a == 1){
             //System.out.println("在指定时间 "+dateFormat.format(new Date())+" 执行");
             log.info(DateUtil.now()+"到达指定时间,汇总报表", DateUtil.now());
