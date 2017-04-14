@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.DiscountDao" >
+    <select id="getListByMap" parameterType="java.util.Map" resultType="java.util.HashMap">
+        SELECT
+        d.id AS id,
+        dt.`name` AS discountType,
+        m.`name` AS mainStadium,
+        (
+        CASE
+        WHEN s.`name` = '' THEN
+        '全部'
+        WHEN s.`name` IS NULL THEN
+        '全部'
+        ELSE
+        s.`name`
+        END
+        ) AS subStadium,
+        (
+        CASE d.discount_channel
+        WHEN '0' THEN
+        '线下窗口'
+        WHEN '1' THEN
+        '线上支付'
+        ELSE
+        ''
+        END
+        ) AS discountChannel,
+        p.payment AS payType,
+        (
+        CASE d.`status`
+        WHEN '0' THEN
+        '未使用'
+        WHEN '1' THEN
+        '使用中'
+        WHEN '2' THEN
+        '已过期'
+        ELSE
+        ''
+        END
+        ) AS status
+        FROM
+        discount_configure d
+        LEFT JOIN discount_type dt ON d.discount_type = dt.id
+        LEFT JOIN main_stadium m ON m.id = d.main_stadium_id
+        LEFT JOIN sub_stadium s ON s.id = d.sub_stadium_id
+        LEFT JOIN payment p ON p.id = d.pay_type
+        WHERE
+        1 = 1
+        <if test="mainStadiumId != null and mainStadiumId != ''">
+            AND d.main_stadium_id = #{mainStadiumId}
+        </if>
+        <if test="subStadiumId != null and subStadiumId != ''">
+            AND d.sub_stadium_id = #{subStadiumId}
+        </if>
+        <if test="status != null and status != ''">
+            AND d.status = #{status}
+        </if>
+        ORDER BY
+        d.create_time DESC
+        LIMIT #{startIndex},#{pageSize}
+    </select>
+
+    <select id="getCountByMap" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        COUNT(0)
+        FROM
+        discount_configure d
+        LEFT JOIN discount_type dt ON d.discount_type = dt.id
+        LEFT JOIN main_stadium m ON m.id = d.main_stadium_id
+        LEFT JOIN sub_stadium s ON s.id = d.sub_stadium_id
+        LEFT JOIN payment p ON p.id = d.pay_type
+        WHERE
+        1 = 1
+        <if test="mainStadiumId != null and mainStadiumId != ''">
+            AND d.main_stadium_id = #{mainStadiumId}
+        </if>
+        <if test="subStadiumId != null and subStadiumId != ''">
+            AND d.sub_stadium_id = #{subStadiumId}
+        </if>
+        <if test="status != null and status != ''">
+            AND d.status = #{status}
+        </if>
+    </select>
+
+    <select id="getPayType" resultType="java.util.HashMap">
+        SELECT
+        id,
+        payment
+        FROM
+        payment
+    </select>
+
+    <select id="getMainStadium" resultType="java.util.HashMap">
+        SELECT
+        id,
+        `name`
+        FROM
+        main_stadium
+        WHERE
+        `status` = '1'
+    </select>
+
+    <select id="getSubStadium" resultType="java.util.HashMap" parameterType="String">
+        SELECT
+        s.id,
+        s.`name`
+        FROM
+        sub_stadium s
+        WHERE
+        s.parent_id = #{mainStadium}
+        AND s.`status` = '1'
+    </select>
+
+    <select id="getDiscountType" resultType="java.util.HashMap">
+        SELECT
+        id,
+        name
+        FROM
+        discount_type
+    </select>
+
+    <insert id="insert" parameterType="DiscountConfigure" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO `szsport_order_mgr`.`discount_configure` (
+            `id`,
+            `discount_type`,
+            `main_stadium_id`,
+            `sub_stadium_id`,
+            `discount_channel`,
+            `pay_type`,
+            `discount_limit`,
+            `start_time`,
+            `end_time`,
+            `status`,
+            `create_time`,
+            `update_time`
+        )
+        VALUES
+            (
+                #{id},
+                #{discountType},
+                #{mainStadiumId},
+                #{subStadiumId},
+                #{discountChannel},
+                #{payType},
+                #{discountLimit},
+                #{startTime},
+                #{endTime},
+                #{status},
+                NOW(),
+                NULL
+            )
+    </insert>
+
+    <update id="zuofei" parameterType="String">
+        UPDATE `szsport_order_mgr`.`discount_configure`
+        SET `status` = '2',
+        `update_time` = NOW()
+        WHERE
+        (
+        `id` = #{id}
+        )
+    </update>
+
+    <update id="update" parameterType="DiscountConfigure">
+        UPDATE `szsport_order_mgr`.`discount_configure`
+        SET `discount_type` = #{discountType},
+         `main_stadium_id` = #{mainStadiumId},
+         `sub_stadium_id` = #{subStadiumId},
+         `discount_channel` = #{discountChannel},
+         `pay_type` = #{payType},
+         `discount_limit` = #{discountLimit},
+         `start_time` = #{startTime},
+         `end_time` = #{endTime},
+         `update_time` = NOW()
+        WHERE
+            (
+                `id` = #{id}
+            )
+    </update>
+
+    <select id="getDiscountById" parameterType="String" resultType="DiscountConfigure">
+        SELECT
+            id,
+            discount_type AS discountType,
+            main_stadium_id AS mainStadiumId,
+            sub_stadium_id AS subStadiumId,
+            discount_channel AS discountChannel,
+            pay_type AS payType,
+            discount_limit AS discountLimit,
+            start_time AS startTime,
+            end_time AS endTime
+        FROM
+            discount_configure
+        WHERE
+            id = #{id}
+    </select>
+
+    <select id="getSameCountByParams" parameterType="java.util.Map" resultType="int">
+        SELECT
+        count(0)
+        FROM
+        discount_configure d
+        WHERE
+        1 = 1
+        <if test="mainStadiumId != null and mainStadiumId != ''">
+            AND d.main_stadium_id = #{mainStadiumId}
+        </if>
+        <if test="subStadiumId != null and subStadiumId != ''">
+            AND d.sub_stadium_id = #{subStadiumId}
+        </if>
+        <![CDATA[AND (
+        (
+        d.start_time > #{startTime}
+        AND d.start_time < #{endTime}
+        )
+        OR (
+        d.start_time < #{startTime}
+        AND d.end_time > #{endTime}
+        )
+        OR (
+        d.end_time > #{startTime}
+        AND d.end_time < #{endTime}
+        )
+        )]]>
+    </select>
+
+    <update id="updateOverTimeStatus" parameterType="String">
+        <![CDATA[UPDATE discount_configure d
+        SET d.`status` = #{status}
+        WHERE
+        d.end_time < NOW()
+        AND d.`status` != '2']]>
+    </update>
+</mapper>

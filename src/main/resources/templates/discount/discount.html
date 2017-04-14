@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>优惠配置</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <script src="../../static/js/discount/discount.js" th:src="@{/js/discount/discount.js}"></script>
+
+    <style>
+
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .inputw100 {
+            width: 100px;
+        }
+        .table_style{width: 100%;height: auto;}
+        .table_style tr td{text-align: center;height: 30px;line-height: 30px;}
+        .table_style td.alignleft {
+            text-align: left;
+        }
+        .table_style td.alignright {
+            text-align: right;
+        }
+        .table_style td.aligncenter {
+            text-align: center;
+        }
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+        .table_style tr td.with150 {
+            width: 65px;
+        }
+        .border{
+            border-bottom: 1px solid #ddd;
+        }
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
+        .mt5{
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 内容区域 -->
+<div>
+    <div class="container-fluid pt20">
+        <div class="pb10 border">
+            当前位置：<a href="javascript:;">优惠配置</a>
+        </div>
+        <form class="mt20" action="/discount/discountList.html" id="getForm" method="get">
+            <input type="hidden" id="myPage" name="page" th:value="${page}">
+            <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+            <table class="table_style">
+                <tr class="controls">
+                    <td class="with150">场馆选择:</td>
+                    <td class="alignleft">
+                        <select id="mainStadiumId" name="mainStadiumId">
+                            <option th:each="obj,eStat:${mainStadium}" th:value="${obj.id}"
+                                    th:text="${obj.name}"></option>
+                        </select>
+                    </td>
+                    <td class="with150">子场馆:</td>
+                    <td class="alignleft">
+                        <select id="subStadiumId" name="subStadiumId">
+                            <option value="">全部</option>
+                            <option th:each="obj,eStat:${subStadium}" th:value="${obj.id}"
+                                    th:text="${obj.name}"></option>
+                        </select>
+                    </td>
+                    <td class="with150">优惠状态:</td>
+                    <td class="alignleft">
+                        <input class="mt5" type="hidden" id="status" name="status" th:value="${status}"/>
+                        <select id="discountstatus" style="width:150px;" from="getForm" onchange="change(this)">
+                            <option value="">全部</option>
+                            <option value="0" th:selected="${status eq '0'}">未使用</option>
+                            <option value="1" th:selected="${status eq '1'}">使用中</option>
+                            <option value="2" th:selected="${status eq '2'}">已过期</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" id="search">查询</button>
+                        <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div>
+            <button type="button" class="btn btn-success mb20 ml10" id="add">新增</button>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-content no-padding" id="c">
+                    </div>
+                    <div id="div2">
+                        <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
+                            <table id="dataTable" class="table table-bordered" th:unless="${#lists.isEmpty(list)}">
+                                <thead>
+                                <tr>
+                                    <th>优惠类型</th>
+                                    <th>场馆名称</th>
+                                    <th>子场馆</th>
+                                    <th>优惠渠道</th>
+                                    <th>支付方式</th>
+                                    <th>优惠状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody th:remove="all-but-first">
+                                <tr th:each="obj, objStat: ${list}">
+                                    <input type="hidden" th:value="${obj.id}"/>
+                                    <td th:text="${obj.discountType}"></td>
+                                    <td th:text="${obj.mainStadium}"></td>
+                                    <td th:text="${obj.subStadium}"></td>
+                                    <td th:text="${obj.discountChannel}"></td>
+                                    <td th:text="${obj.payType}"></td>
+                                    <td th:text="${obj.status}"></td>
+                                    <td>
+                                        <a name="edit" th:if="${obj.status=='使用中' || obj.status=='未使用'}" th:data="${obj.id}"
+                                           th:href="@{/discount/edit.html(id=${obj.id})}">编辑</a>
+                                        <a th:if="${obj.status=='使用中' || obj.status=='未使用'}" name="delete" th:data="${obj.id}">作废</a>
+                                        <a th:if="${obj.status=='已过期'}">查看</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div th:if="${#lists.isEmpty(list)}">
+                                <p class="ml20">没有符合查询条件的记录！</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="page" class="page" align="right" style="margin-right: 10px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    //好像很实用的样子，后端的同学再也不用写分页逻辑了。
+    $(function(){
+        laypage({
+            cont: 'page',
+            pages: [[${pageModel.totalPage}]], //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+            curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
+                var page = location.search.match(/page=(\d+)/);
+                return page ? page[1] : 1;
+            }(),
+            jump: function(e, first){ //触发分页后的回调
+                if(!first){ //一定要加此判断，否则初始时会无限刷新
+                    //console.log(location.href);
+                    $("#myPage").val(e.curr);
+                    $("#getForm").submit();
+                }
+            }
+        });
+        $("#search").click(function(){
+            $("#myPage").val("0");
+            $("#getForm").submit();
+        });
+    })
+    initForm();
+    function initForm() {
+        $("#discountstatus option[value='" + [[${status}]] + "']").attr("selected", "selected");
+        $("#mainStadiumId option[value='" + [[${mainStadiumId}]] + "']").attr("selected", "selected");
+    }
+    function change() {
+        $("#status").val($('#discountstatus option:selected').val());
+    }
+    /*全选*/
+    function check_all(obj, cName) {
+        var checkboxs = document.getElementsByName(cName);
+        for ( var i = 0; i < checkboxs.length; i+=1) {
+            checkboxs[i].checked = obj.checked;
+        }
+    }
+</script>
+</body>
+</html>
