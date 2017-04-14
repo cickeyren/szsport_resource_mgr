@@ -62,4 +62,8 @@ public class DiscountService {
     public int updateOverTimeStatus()throws Exception{
         return discountDao.updateOverTimeStatus("2");
     };
+
+    public DiscountConfigure getDetailById(String id) throws Exception{
+        return discountDao.getDetailById(id);
+    };
 }
