@@ -1,4 +1,4 @@
-package com.digitalchina.common.tasks;
+/*package com.digitalchina.common.tasks;
 
 import com.digitalchina.common.utils.DateUtil;
 import org.slf4j.Logger;
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 
 
-/**
+*//**
  * Created by 凌小云 on 2017/4/13.
  * 定时器模板使用
- */
+ *//*
 
 @Component//组件注释
 @Configurable//自动装备配bean对象（暂做这么理解）
@@ -56,7 +56,7 @@ public class ScheduledTasks {
     }
 
 
-}
+}*/
 /*
 a为测试的取值，即为checkDate
 1.如果执行从数据库查询checkDate是否等于指定值，即此处为a=1，每五秒查询一次，判断是否查到，没查到的话继续查询
