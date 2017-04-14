@@ -31,4 +31,6 @@ public interface DiscountDao {
     int getSameCountByParams(Map<String, Object> param) throws Exception;
 
     int updateOverTimeStatus(String status) throws Exception;
+
+    DiscountConfigure getDetailById(String id) throws Exception;
 }

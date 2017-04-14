@@ -142,7 +142,7 @@
                                         <a name="edit" th:if="${obj.status=='使用中' || obj.status=='未使用'}" th:data="${obj.id}"
                                            th:href="@{/discount/edit.html(id=${obj.id})}">编辑</a>
                                         <a th:if="${obj.status=='使用中' || obj.status=='未使用'}" name="delete" th:data="${obj.id}">作废</a>
-                                        <a th:if="${obj.status=='已过期'}">查看</a>
+                                        <a th:if="${obj.status=='已过期'}" th:href="@{/discount/view.html(id=${obj.id})}">查看</a>
                                     </td>
                                 </tr>
                                 </tbody>

@@ -43,7 +43,7 @@ public class DiscountController {
      * @return
      */
     @RequestMapping(value = "/discount.html")
-    public String myOrder(ModelMap map) {
+    public String discount(ModelMap map) {
         return "discount/discount";
     }
 
@@ -240,5 +240,24 @@ public class DiscountController {
             logger.error("修改优惠配置失败", e);
             return RtnData.fail("修改优惠配置");
         }
+    }
+
+    /**
+     * 进入查看页面
+     * @return
+     */
+    @RequestMapping(value = "/view.html", method = RequestMethod.GET)
+    public String toView(ModelMap map,@RequestParam(required = true) String id,HttpServletRequest req){
+        try {
+            DiscountConfigure discount = discountService.getDetailById(id);
+
+            map.put("discount",discount);
+            return "discount/view";
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("进入查看页面失败", e);
+            return "error";
+        }
+
     }
 }

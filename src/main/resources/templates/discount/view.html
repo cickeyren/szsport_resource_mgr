@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>查看优惠配置</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+    <script src="../../static/js/discount/discount.js" th:src="@{/js/discount/discount.js}"></script>
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+        .border{
+            border-bottom: 1px solid #ddd;
+        }
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="container-fluid" style="margin-top: 20px;height:120px;">
+        <div class="pb10 border">
+            当前位置：<a href="javascript:;">优惠配置</a> < <a href="javascript:;">查看</a>
+        </div>
+        <form onsubmit="return false;" class="form-horizontal mt15" action="#">
+            <input type="hidden" id="id" name="id" th:value="${discount.id}"/>
+            <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>优惠类型</td>
+                    <td class="alignleft" colspan="3" th:text="${discount.discountType}"></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>场馆选择</td>
+                    <td class="alignleft" th:text="${discount.mainStadiumId}"></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>子馆</td>
+                    <td class="alignleft" th:text="${discount.subStadiumId}"></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>优惠渠道</td>
+                    <td class="alignleft" colspan="3" th:text="${discount.discountChannel}"></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>支付方式</td>
+                    <td class="alignleft" colspan="3" th:text="${discount.payType}">
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td width="10%" class="alignright"><span class="red">*</span>折扣额度</td>
+                    <td class="alignleft" colspan="3" th:text="${discount.discountLimit}"></td>
+                </tr>
+                <tr class="controls">
+                    <td width="10%" class="alignright"><span class="red">*</span>有效时间</td>
+                    <td class="alignleft">
+                        <input type='text' id="startTime" name="startTime" readonly="readonly" th:value="${#strings.replace(discount.startTime,'.0','')}"/>至
+                        <input type='text' id="endTime" name="endTime" readonly="readonly" th:value="${#strings.replace(discount.endTime,'.0','')}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="2">
+                        <button type="submit" class="btn btn-success" id="cancelEdit">返回</button>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</section>
+</body>
+</html>
