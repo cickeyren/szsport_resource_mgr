@@ -65,6 +65,7 @@
     <div class="pb10 border mt20">
         当前位置：<a href="javascript:;">查看订单</a> < <a href="javascript:;">详情</a> < <a href="javascript:;">子单详情</a>
     </div>
+    <div align="right"><button type="button" class="btn btn-success fr" id="back">返回</button></div>
     <p class="title mt20 p_1">取票状态:</p>
     <label class="ml20 lab_1" th:text="${orderContent.takeStatus}"></label>
     <table class="tab_1 table-bordered table-hover definewidth m10 ml20" th:if="${#strings.equals(orderContent.takeStatus,'已取票')}">
