@@ -38,6 +38,13 @@ public class MerchantService {
     public List<Map<String,Object>> getmerchantList(Map<String, Object> params) {
         return  merchantMapper.getmerchantList(params);
     }
+    /**
+     * 查询所有合作商户
+     * @return
+     */
+    public List<Map<String,String>> getMerchants() {
+        return  merchantMapper.getMerchants(null);
+    }
 
     /**
      * 添加数据

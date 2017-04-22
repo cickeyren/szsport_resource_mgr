@@ -54,6 +54,7 @@ function doAdd() {
     addJson.address = $("#address").val();
     addJson.contacts = $("#contacts").val();
     addJson.telephone = $("#telephone").val();
+    addJson.settlementTime = $("#settlementTime").val();
     addJson.cooperationWay = $('input[name="cooperation_way"]:checked').val();
     addJson.settlementWay = $('input[name="settlement_way"]:checked').val();
     addJson.status = $('input[name="status"]:checked').val();

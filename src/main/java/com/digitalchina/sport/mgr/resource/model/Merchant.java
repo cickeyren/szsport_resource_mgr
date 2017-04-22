@@ -82,6 +82,11 @@ public class Merchant {
      */
     @Column(name = "settlement_way")
     private String settlementWay;
+    /**
+     * 结算时间
+     */
+    @Column(name = "settlement_time")
+    private String settlementTime;
 
     /**
      * 状态(0:营业中1:关闭)
@@ -369,5 +374,13 @@ public class Merchant {
 
     public void setMainstadiumId(String mainstadiumId) {
         this.mainstadiumId = mainstadiumId;
+    }
+
+    public void setSettlementTime(String settlementTime) {
+        this.settlementTime = settlementTime;
+    }
+
+    public String getSettlementTime() {
+        return settlementTime;
     }
 }

@@ -23,6 +23,12 @@ public interface MerchantMapper extends Mapper<Merchant> {
     List<Map<String,Object>> getmerchantList(Map<String, Object> params);
 
     /**
+     * 查询所有合作商户
+     * @return
+     */
+    List<Map<String,String>> getMerchants(Map<String,Object> args);
+
+    /**
      * 根据条件查询所有合作商户列表
      * @param map
      * @return

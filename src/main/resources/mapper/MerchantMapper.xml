@@ -94,4 +94,14 @@
             </if>
         </where>
     </select>
+
+    <select id="getMerchants" parameterType="HashMap" resultType="java.util.HashMap">
+        SELECT m.id,m.mainstadium_id as mainStadiumId,settlement_time as settlementTime FROM merchant m WHERE 1=1
+        <if test="userId!=null and userId != ''">
+            AND m.id=#{userId}
+        </if>
+        <if test="userId!=null and userId != ''">
+            AND m.mainstadium_id=#{stadiumId}
+        </if>
+    </select>
 </mapper>
