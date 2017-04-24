@@ -123,4 +123,12 @@ public class TimeFrameService {
     public List<Map<String,Object>> getAllTimeIntervalList(Map<String, Object> params) {
         return timeIntervalMapper.getAllTimeIntervalList(params);
     }
+
+    public int getAllTimeFramebyID(Map<String, Object> param) {
+        return timeFrameMapper.getAllTimeFramebyID(param);
+    }
+
+    public int selectticketById(Map<String, Object> params) {
+        return timeFrameMapper.selectticketById(params);
+    }
 }

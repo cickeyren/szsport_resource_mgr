@@ -74,6 +74,7 @@
         </div>
         <form onsubmit="return false;" class="form-horizontal" action="#" id="addForm">
             <input type="hidden" id="id" name="id" th:value="${fieldEntity.id}"/>
+            <input type="hidden" id="mainStadiumId" name="mainStadiumId" th:value="${mainStadiumId}"/>
             <input type="hidden" id="stadium_id" name="stadium_id" th:value="${fieldEntity.stadiumId}"/>
             <table id="contentTable" class="mt20 table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">

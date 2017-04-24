@@ -53,4 +53,13 @@
         SELECT MAX(id) from time_frame where 1=1
     </select>
 
+    <select id="getAllTimeFramebyID" resultType="java.lang.Integer" parameterType="HashMap">
+        SELECT count(0) FROM time_frame WHERE stadium_id=#{stadium_id} AND status='1'
+    </select>
+
+
+    <select id="selectticketById" resultType="java.lang.Integer" parameterType="HashMap">
+        SELECT count(0) FROM site_ticket_strategy_info WHERE time_code=#{time_code}
+    </select>
+
 </mapper>

@@ -9,7 +9,9 @@ $(function () {
     $("#back").bind('click', function () {
         window.location.href = "/subStadiumController/substadium.html?mainStadiumId="+$('#mainStadiumId').val();
     });
-
+    // $("#back").bind('click', function () {
+    //     window.location.href = "/FieldController/subField.html?mainStadiumId="+$('#mainStadiumId').val()+"&subStadiumid="+$('#subStadiumid').val();
+    // });
     $('a[name="operate"]').bind('click', function () {
         doDeleteField(this);
     });

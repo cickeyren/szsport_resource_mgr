@@ -111,6 +111,7 @@ public class FieldController {
         field = fieldService.getFieldById(field);
         //然后查询出该条信息
         modelMap.put("fieldEntity", field);
+        modelMap.put("mainStadiumId", request.getParameter("mainStadiumId"));
 
         return "field/subFieldEdit";
     }
