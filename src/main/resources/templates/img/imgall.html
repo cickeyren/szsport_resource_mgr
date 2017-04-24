@@ -8,25 +8,12 @@
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
     <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
-    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
-            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
-    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
-    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
-          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
-    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
-            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
-    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
-            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
-
-
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
-    <!--<script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/mainstadium/mainstadium.js}"></script>-->
-
-    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script src="../../static/lib/js/jquery.form.js" th:src="@{/lib/js/jquery.form.js}"></script>
+    <script src="../../static/js/upload/imguploadFile.js" th:src="@{/js/upload/imguploadFile.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
-    <script th:src="@{/lib/js/jquery.validate.js}"></script>
     <style>
         p.title {
             font-size: 18px;
@@ -141,19 +128,25 @@
 
     .operate a {
         float: right;
-    }.border{
-         border-bottom: 1px solid #ddd;
-     }
-    .pb10{
+    }
+
+    .border {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .pb10 {
         padding-bottom: 10px;
     }
-    .mt15{
+
+    .mt15 {
         margin-top: 15px;
     }
-    .mb20{
+
+    .mb20 {
         margin-bottom: 20px;
     }
-    .mr10{
+
+    .mr10 {
         margin-right: 10px;
     }
 </style>
@@ -167,12 +160,11 @@
         <div class="cg-img">
             <span class="cg-img-title"><i>*</i>场馆图片：</span>
             <span class="upload">
-              <!--<input type="file" class="fileupload-new" id="uploadImg">-->
-              <input type="file" v-model="editFileFormValues.FILE_NAME" name="uploadImg" id="uploadImg"
-                                               class="form-control" placeholder="请选择文件">
-              <button>选择图片</button>
-          </span>
-            <input type="submit" id="uploadsub"  name="uploadsub" class="btn btn-success" value="上传">
+                <input enctype="multipart/form-data" name="file" id="uploadImg" type="file">
+                <button>选择图片</button>
+            </span>
+            <input type="text" id="imgUrl" readonly="true">
+            <input type="submit" id="uploadsub" name="uploadsub" class="btn btn-success" value="上传">
             <span class="img-shuom">单张图片大小限制为100k</span>
         </div>
     </form>
@@ -198,48 +190,7 @@
     </div>
 </div>
 <script>
-    $('#uploadImg').on('change', function () {
-//          target.files[0].size
-        var fileName = $('#uploadImg')[0].files[0].name,
-            fileSize = $('#uploadImg')[0].files[0].size;
-        if (!/.(gif|jpg|jpeg|png|GIF|JPG|png)$/.test(fileName)) {
-            layer.alert("图片类型必须是.gif,jpeg,jpg,png中的一种")
-            return false;
-        } else {
-            if (fileSize > 102400) {
-                layer.alert("请上传小于100k的图片")
-                return false;
-            }
-        }
-    });
-
-    $('#uploadsub').bind('click', function () {
-        var form = new FormData($("#FileForm"));
-        form.append("file",$("#uploadImg")[0].files[0]);
-        $.ajax({
-            url:"/upload/uploadFile",
-            type:"post",
-            data:form,
-            processData:false,
-            contentType:false,
-            success:function(result){
-                if("000000" == result.code) {
-                    layer.alert("上传成功");
-                } else {
-                    layer.msg(result.result);
-                }
-            },
-            error:function(e){
-                layer.alert("错误！！");
-            }
-        });
-    });
-
-    $('.delete').on('click', function () {
-        $(this).parents('.img-list').remove();
-    })
-
-
+    imguploadFile()
 </script>
 </body>
 </html>
