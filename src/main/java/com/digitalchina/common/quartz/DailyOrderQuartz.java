@@ -1,7 +1,6 @@
 package com.digitalchina.common.quartz;
 
 import com.digitalchina.common.quartz.util.DailyTime;
-import com.digitalchina.sport.mgr.resource.dao.MerchantMapper;
 import com.digitalchina.sport.mgr.resource.service.MerchantService;
 import com.digitalchina.sport.mgr.resource.service.StatisticsService;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,7 @@ public class DailyOrderQuartz {
     /**
      * 每分钟执行 查看商户统计时间，统计
      */
-    @Scheduled(cron = "0 0/1 * * * ? ")
+//    @Scheduled(cron = "0 0/1 * * * ? ")
     public void daily() {
         Calendar calendar=Calendar.getInstance();
         Date daily = calendar.getTime();
