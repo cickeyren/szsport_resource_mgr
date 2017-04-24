@@ -12,12 +12,13 @@
         ob.stadium_name AS stadiumName,
         ob.sub_stadium_name AS subStadiumName,
         ob.order_time AS orderTime,
-        ob.sell_price AS sellPrice,
-        ob.cost_price AS costPrice,
+        (case WHEN ob.store_price IS NULL THEN '' ELSE ob.store_price END) AS storePrice,
+        (case WHEN ob.sell_price IS NULL THEN '' ELSE ob.sell_price END) AS sellPrice,
+        (case WHEN ob.cost_price IS NULL THEN '' ELSE ob.cost_price END) AS costPrice,
         ob.order_channel AS orderChannel,
-        ob.user_id AS userId,
-        ob.user_name AS userName,
-        ob.user_tel AS userTel,
+        (case WHEN ob.user_id IS NULL THEN '' ELSE ob.user_id END) AS userId,
+        (case WHEN ob.user_name IS NULL THEN '' ELSE ob.user_name END) AS userName,
+        (case WHEN ob.user_tel IS NULL THEN '' ELSE ob.user_tel END) AS userTel,
         (case ob.status  when '0' then '待支付' WHEN '1' THEN '待使用' WHEN '2' THEN '已使用'
          WHEN '3' THEN '支付失败' WHEN '4' THEN '全部退款' WHEN '5' THEN '失效订单' WHEN '8' THEN '已过期' ELSE '其他' END) AS status,
         (case ob.refund_status  when '0' then '待退款' WHEN '1' THEN '已退款' WHEN '2' THEN '退款失败'
@@ -138,11 +139,12 @@
                     '其他'
                 END
             ) AS status,
-            ob.sell_price AS sellPrice,
+            (case WHEN ob.store_price IS NULL THEN '' ELSE ob.store_price END) AS storePrice,
+            (case WHEN ob.sell_price IS NULL THEN '' ELSE ob.sell_price END) AS sellPrice,
             (case WHEN ob.cost_price IS NULL THEN '' ELSE ob.cost_price END) AS costPrice,
-            ob.user_id AS userId,
-            ob.user_name AS userName,
-            ob.user_tel AS userTel,
+            (case WHEN ob.user_id IS NULL THEN '' ELSE ob.user_id END) AS userId,
+            (case WHEN ob.user_name IS NULL THEN '' ELSE ob.user_name END) AS userName,
+            (case WHEN ob.user_tel IS NULL THEN '' ELSE ob.user_tel END) AS userTel,
             (case ob.pay_type  when '1' then '支付宝' WHEN '2' THEN '微信' ELSE '' END) AS payType,
             (case WHEN ob.pay_acount IS NULL THEN '' ELSE ob.pay_acount END) AS payAcount,
             (case WHEN ob.pay_time IS NULL THEN '' ELSE ob.pay_time END) AS payTime,
@@ -186,8 +188,9 @@
                     oc.everyday_number
                 END
             ) AS everydayNumber,
+            (case WHEN oc.store_price IS NULL THEN '' ELSE oc.store_price END) AS storePrice,
+            (case WHEN oc.sell_price IS NULL THEN '' ELSE oc.sell_price END) AS sellPrice,
             (case WHEN oc.cost_price IS NULL THEN '' ELSE oc.cost_price END) AS costPrice,
-            oc.sell_price AS sellPrice,
             (
                 CASE oc.take_status
                 WHEN '1' THEN

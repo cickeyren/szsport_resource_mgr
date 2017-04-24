@@ -14,6 +14,7 @@
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script src="../../static/js/order/order.js" th:src="@{/js/order/order.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
     <script th:src="@{/lib/js/jquery.validate.js}"></script>
     <style>
@@ -69,8 +70,8 @@
     <p class="title ml10 mt20">订单基本信息</p>
     <div th:unless="${orderDetails==null}">
         <div class="ml20">订单流水号：</div><div class="ml20" th:text="${orderDetails.orderNumber}"></div>
+        <div align="right"><button type="button" class="btn btn-success fr" id="back">返回</button></div>
     </div>
-    <div align="right"><button type="button" class="btn btn-success fr" id="back">返回</button></div>
 </div>
 <hr />
 <div class="ml10 mr10">
@@ -91,6 +92,7 @@
                 <th>订单状态</th>
                 <th>订单成本</th>
                 <th>订单售价</th>
+                <th>订单门市价</th>
                 <th>用户昵称</th>
                 <th>用户手机</th>
                 <th>支付方式</th>
@@ -112,6 +114,7 @@
                 <td th:text="*{status}"></td>
                 <td th:text="*{costPrice}"></td>
                 <td th:text="*{sellPrice}"></td>
+                <td th:text="*{storePrice}"></td>
                 <td th:text="*{userName}"></td>
                 <td th:text="*{userTel}"></td>
                 <td th:text="*{payType}"></td>
@@ -142,6 +145,7 @@
                     <th>使用场地</th>
                     <th>成本价</th>
                     <th>售价</th>
+                    <th>门市价</th>
                     <th>取票状态</th>
                     <th>验码状态</th>
                     <th>子单状态</th>
@@ -161,7 +165,8 @@
                     <td th:text="${#strings.isEmpty(obj.timeLimit)?'':#strings.replace(obj.timeLimit,'$','-')}"></td>
                     <td th:text="${#strings.isEmpty(obj.fieldName)?'':obj.fieldName}"></td>
                     <td th:text="${#strings.isEmpty(obj.costPrice)?'':obj.costPrice}"></td>
-                    <td th:text="${obj.sellPrice}"></td>
+                    <td th:text="${#strings.isEmpty(obj.sellPrice)?'':obj.sellPrice}"></td>
+                    <td th:text="${#strings.isEmpty(obj.storePrice)?'':obj.storePrice}"></td>
                     <td th:text="${obj.takeStatus}"></td>
                     <td th:text="${obj.checkStatus}"></td>
                     <td th:text="${obj.status}"></td>
