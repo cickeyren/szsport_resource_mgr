@@ -91,4 +91,16 @@
         FROM sub_stadium su WHERE id = #{subStadiumid}
     </select>
 
+    <!-- 查询id集合中的子场馆信息 -->
+    <select id="getSubStadiumByIds" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM sub_stadium
+        <where>
+            <foreach collection="idList" index="index" item="item" open="" separator="or" close="">
+                id = #{item}
+            </foreach>
+        </where>
+    </select>
+
 </mapper>

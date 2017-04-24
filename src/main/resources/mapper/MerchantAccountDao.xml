@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.MerchantAccountDao" >
+    <!-- 获取合作商户账户信息总数量 -->
+    <select id="getMerchantAccountTotalCount" parameterType="HashMap" resultType="Int">
+        SELECT
+        count(a.id)
+        FROM
+            merchant_account_info a
+        LEFT JOIN main_stadium m ON a.main_stadium_id = m.id
+        LEFT JOIN sub_stadium s ON a.sub_stadium_id = s.id
+        <where>
+            <if test="merchantId != null and merchantId != ''">
+                a.merchant_id = #{merchantId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取合作商户账户信息列表 -->
+    <select id="getMerchantAccountList" resultType="HashMap" parameterType="HashMap">
+        SELECT
+            a.id,
+            a.account,
+            a.name,
+            a.role,
+            DATE_FORMAT(a.create_time, '%Y-%m-%d %T') AS createTime,
+            a.main_stadium_id AS mainStadiumId,
+            m.name AS mainStadium,
+            a.sub_stadium_id AS subStadiumId
+        FROM
+            merchant_account_info a
+        LEFT JOIN main_stadium m ON a.main_stadium_id = m.id
+        <where>
+            <if test="merchantId != null and merchantId != ''">
+                a.merchant_id = #{merchantId}
+            </if>
+        </where>
+        LIMIT #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 添加合作商家账户信息 -->
+    <insert id="addMerchantAccount" parameterType="HashMap">
+        INSERT INTO merchant_account_info (
+            id,
+            main_stadium_id,
+            merchant_id,
+            account,
+            name,
+            role,
+            sub_stadium_id
+        )
+        VALUES
+        (
+            #{id},
+            #{mainStadiumId},
+            #{merchantId},
+            #{account},
+            #{name},
+            #{role},
+            #{subStadiumId}
+        )
+    </insert>
+
+    <!-- 查询合作商家账户信息 -->
+    <select id="getMerchantAccountById" parameterType="HashMap" resultType="HashMap">
+        SELECT
+            m.id,
+            m.main_stadium_id AS mainStadiumId,
+            m.merchant_id AS merchantId,
+            m.account,
+            m.name,
+            m.role,
+            m.sub_stadium_id AS subStadiumId,
+            m.create_time AS createTime
+            FROM merchant_account_info m
+        <where>
+            <if test="id != null and id != ''">
+                m.id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <!-- 编辑合作商户账户信息 -->
+    <update id="editMerchantAccount" parameterType="HashMap">
+        UPDATE merchant_account_info
+        SET
+        <if test="account != null and account != ''">
+            account = #{account},
+        </if>
+        <if test="name != null and name != ''">
+            name = #{name},
+        </if>
+        <if test="role != null and role != ''">
+            role = #{role},
+        </if>
+        <if test="subStadiumId != null and subStadiumId != ''">
+            sub_stadium_id = #{subStadiumId},
+        </if>
+        update_time = now()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除合作商户账户信息 -->
+    <delete id="delMerchantAccount" parameterType="HashMap">
+        DELETE from merchant_account_info
+        <where>
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
+        </where>
+    </delete>
+</mapper>

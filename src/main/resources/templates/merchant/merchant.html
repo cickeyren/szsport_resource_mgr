@@ -112,7 +112,7 @@
                            th:href="@{/MerchantPayController/merchant_pay.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">支付方式</a>
                         &nbsp;&nbsp;&nbsp;
                         <a id="edit" th:data="${obj.id}"
-                           th:href="@{/MerchantUserController/merchantuser.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">账户</a>
+                           th:href="@{/merchantAccount/merchantAccountList.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">账户</a>
                         &nbsp;&nbsp;&nbsp;
                         <span id="edit" th:data="${obj.id}"
                            th:href="@{/MerchantController/edit.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">合同</span>
