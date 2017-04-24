@@ -16,4 +16,11 @@ public class PropertyConfig {
     @Value("${pageSize}")
     public  String pageSize;
 
+    /**
+     * 窗口系统UPMS用户权限接口地址
+     */
+    @Value("${window.upms.url}")
+    public String WINDOW_UPMS_URL;
+    @Value("${window.api.key}")
+    public String WINDOW_API_KEY;
 }

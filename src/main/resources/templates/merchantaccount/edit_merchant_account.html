@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>合作商户账户编辑页面</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <script src="../../static/js/merchantaccount/merchant_account_edit.js" th:src="@{/js/merchantaccount/merchant_account_edit.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container-fluid" style="margin-top: 30px;height:120px;">
+            <p class="title">编辑</p>
+            <form onsubmit="return false;" class="form-horizontal" action="#" id="editMerchantAccountForm">
+                <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                    <tr class="controls" hidden>
+                        <td width="10%" class="alignright"><span class="red">*</span>主场馆</td>
+                        <td class="alignleft">
+                            <input type="text" id="id" name="id" th:value="${merchantAccount.id}">
+                            <input type="text" id="mainStadium" th:value="${merchantAccount.mainStadiumId}">
+                        </td>
+                    </tr>
+                    <tr class="controls" hidden>
+                        <td width="10%" class="alignright"><span class="red">*</span>合作商户</td>
+                        <td class="alignleft">
+                            <input type="text" id="merchantId" th:value="${merchantAccount.merchantId}">
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td width="10%" class="alignright"><span class="red">*</span>用户名</td>
+                        <td class="alignleft">
+                            <lable id="account" th:text="${merchantAccount.account}" th:value="${merchantAccount.account}"/>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright" width="10%"><span class="red">*</span>子场馆</td>
+                        <td class="alignleft">
+                            <div>
+                                <input type="checkbox" id="subStadiumCheckAll">全选/全不选
+                            </div>
+                            <div>
+                                <input type="checkbox" name="subStadiumCheck" th:each="subStadium, objStat: ${subStadiumList}" th:value="${subStadium.id}" th:text="${subStadium.name}">
+                            </div>
+                            <label id="fieldCheck-error" class="error" for="subStadiumCheck"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-success" id="editMerchantAccountBtn">保存</button>
+                            <a th:href="@{/merchantAccount/merchantAccountList.html(mainstadium_id=${mainStadiumId},merchantId=${merchantId})}">
+                                <button type="button" class="btn btn-success" id="cancelBtn">返回</button>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </section>
+    <script th:inline="javascript">
+        $(function(){
+            //获取到子场馆并设置checkbox
+            var subStadiumIds =  [[${merchantAccount.subStadiumId}]];
+            var subStadiumArray = subStadiumIds.split(",");
+            $('input[name="subStadiumCheck"]:checkbox').each(function(){
+                if (subStadiumArray.contains($(this).val())) {
+                    $(this).attr("checked","checked");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

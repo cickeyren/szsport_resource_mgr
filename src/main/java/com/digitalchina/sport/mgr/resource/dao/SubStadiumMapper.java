@@ -22,4 +22,11 @@ public interface SubStadiumMapper extends Mapper<SubStadium> {
 
     //根据id查询子场馆信息
     Map<String,Object> selectsubStadiumId(Map<String, Object> param);
+
+    /**
+     * 查询id集合中的子场馆信息
+     * @param param
+     * @return
+     */
+    public List<Map<String, Object>> getSubStadiumByIds(Map<String, Object> param);
 }
