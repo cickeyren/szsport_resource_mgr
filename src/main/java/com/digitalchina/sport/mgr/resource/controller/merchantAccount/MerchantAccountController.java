@@ -104,12 +104,16 @@ public class MerchantAccountController {
      */
     @RequestMapping(value = "/addMerchantAccount.json", method = RequestMethod.POST)
     @ResponseBody
-    public RtnData addMerchantAccount(SiteTicketBasicInfoModel siteTicketBasicInfoModel, HttpServletRequest request){
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+    public RtnData addMerchantAccount(String mainStadiumId,String merchantId, String loginId, String subStadiumId, HttpServletRequest request){
         try {
-            int isSuccess = merchantAccountService.addMerchantAccount(paramMap);
-            if (isSuccess > 0){
-                return RtnData.ok("添加合作商家账户信息成功");
+            boolean isExist = merchantAccountService.verifyMerchantAccount(mainStadiumId, merchantId, loginId);
+            if(isExist){
+                return RtnData.ok("账户已被添加");
+            }else{
+                int isSuccess = merchantAccountService.addMerchantAccount(mainStadiumId, merchantId, loginId, subStadiumId);
+                if (isSuccess > 0){
+                    return RtnData.ok("添加合作商家账户信息成功");
+                }
             }
         } catch (Exception e){
             e.printStackTrace();

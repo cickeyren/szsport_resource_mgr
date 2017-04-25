@@ -15,13 +15,13 @@ $(function () {
             var mainStadiumId = $.trim($("#mainStadiumId").val());//主场馆编号
             var merchantId = $.trim($("#merchantId").val());//合作商户编号
 
-            var accountArray = [];//选择用户
-            $('input[name="account"]:checkbox').each(function(){
+            var loginIdArray = [];//选择用户
+            $('input[name="loginIdCheck"]:checkbox').each(function(){
                 if ($(this).prop("checked")) {
-                    accountArray.push($(this).prop('value'));
+                    loginIdArray.push($(this).prop('value'));
                 }
             });
-            var account = accountArray.toString();//选择用户
+            var loginId = loginIdArray.toString();//选择用户
 
             var subStadiumArray = [];//选择子场馆
             $('input[name="subStadiumCheck"]:checkbox').each(function(){
@@ -29,17 +29,17 @@ $(function () {
                     subStadiumArray.push($(this).prop('value'));
                 }
             });
-            var subStadium = subStadiumArray.toString();//选择子场馆
+            var subStadiumId = subStadiumArray.toString();//选择子场馆
 
             var reqParam = {
                 mainStadiumId:mainStadiumId,
                 merchantId:merchantId,
-                account:account,
-                subStadium:subStadium
+                loginId:loginId,
+                subStadiumId:subStadiumId
             };
-            if(account == ""){
+            if(loginId == ""){
                 layer.msg("请选择用户");
-            }else if(subStadium == ""){
+            }else if(subStadiumId == ""){
                 layer.msg("请选择子场馆")
             } else {
                 $.ajax({

@@ -99,7 +99,7 @@
                 var str = '', last = curr*nums - 1;
                 last = last >= accountList.length ? (accountList.length-1) : last;
                 for(var i = (curr*nums - nums); i <= last; i++){
-                    str += '<tr><td>'+ accountList[i].id + '</td>';
+                    str += '<tr><td><input type="checkbox" name="loginIdCheck" value="'+ accountList[i].id + '"></td>';
                     str += '<td>'+ accountList[i].account + '</td>';
                     str += '<td>'+ accountList[i].name + '</td>';
                     str += '<td>'+ accountList[i].id + '</td></tr>';

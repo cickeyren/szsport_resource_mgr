@@ -32,6 +32,14 @@ public interface MerchantAccountDao {
     public List<Map<String, Object>> getMerchantAccountList(Map<String, Object> map) throws Exception;
 
     /**
+     * 查询使用账户的合作商户
+     * @param map
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String, Object>> getMerchantByAccount(Map<String, Object> map) throws Exception;
+
+    /**
      * 添加合作商家账户信息
      * @param map
      * @return

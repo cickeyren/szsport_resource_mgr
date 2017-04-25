@@ -38,27 +38,45 @@
         LIMIT #{pageIndex},#{pageSize}
     </select>
 
+    <!-- 查询使用账户的合作商户 -->
+    <select id="getMerchantByAccount" parameterType="HashMap" resultType="HashMap">
+        SELECT
+            m.main_stadium_id AS mainStadiumId,
+            m.merchant_id AS merchantId,
+            m.login_id AS loginId
+        FROM merchant_account_info m
+        <where>
+            <if test="loginId != null and loginId != ''">
+                m.login_id = #{loginId}
+            </if>
+        </where>
+    </select>
+
     <!-- 添加合作商家账户信息 -->
     <insert id="addMerchantAccount" parameterType="HashMap">
         INSERT INTO merchant_account_info (
             id,
             main_stadium_id,
             merchant_id,
+            login_id,
             account,
             name,
             role,
             sub_stadium_id
         )
         VALUES
+        <foreach collection="list" index="index" item="item" open="" separator="," close="">
         (
-            #{id},
-            #{mainStadiumId},
-            #{merchantId},
-            #{account},
-            #{name},
-            #{role},
-            #{subStadiumId}
+            #{item.id},
+            #{item.mainStadiumId},
+            #{item.merchantId},
+            #{item.loginId},
+            #{item.account},
+            #{item.name},
+            #{item.role},
+            #{item.subStadiumId}
         )
+        </foreach>
     </insert>
 
     <!-- 查询合作商家账户信息 -->
