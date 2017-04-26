@@ -263,6 +263,7 @@
                     '未验票'
                 END
             ) AS checkStatus,
+            oc.check_type AS checkType,
             oc.check_time AS checkTime,
             e.equipment_name AS equipmentName
         FROM

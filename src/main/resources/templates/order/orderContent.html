@@ -89,7 +89,7 @@
             <th>验票时间</th>
         </tr>
         <tr th:object="${orderContent}">
-            <td th:text="*{equipmentName}"></td>
+            <td th:text="*{takeType}"></td>
             <td th:text="${orderContent.checkTime== null?'无':#calendars.format(orderContent.checkTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         </tr>
     </table>
