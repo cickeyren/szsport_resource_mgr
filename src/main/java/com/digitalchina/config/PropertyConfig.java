@@ -23,4 +23,6 @@ public class PropertyConfig {
     public String WINDOW_UPMS_URL;
     @Value("${window.api.key}")
     public String WINDOW_API_KEY;
+    @Value("${window.ext1}")
+    public String WINDOW_EXT1;
 }

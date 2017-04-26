@@ -102,7 +102,11 @@
                     str += '<tr><td><input type="checkbox" name="loginIdCheck" value="'+ accountList[i].id + '"></td>';
                     str += '<td>'+ accountList[i].account + '</td>';
                     str += '<td>'+ accountList[i].name + '</td>';
-                    str += '<td>'+ accountList[i].id + '</td></tr>';
+                    var roleList = "";
+                    if(accountList[i].hasOwnProperty("roleList")){
+                        roleList = accountList[i].roleList;
+                    }
+                    str += '<td>'+ roleList + '</td></tr>';
                 }
                 return str;
             };

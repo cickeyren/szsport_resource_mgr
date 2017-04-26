@@ -82,7 +82,7 @@ public class MerchantAccountService {
      * @throws Exception
      */
     public List<Map<String, Object>> getAllValidUser() throws Exception{
-        String win_UPMS_url = proConfig.WINDOW_UPMS_URL + "?apiKey=" + proConfig.WINDOW_API_KEY;
+        String win_UPMS_url = proConfig.WINDOW_UPMS_URL + "?apiKey=" + proConfig.WINDOW_API_KEY +"&ext1=" + proConfig.WINDOW_EXT1;
         List<Map<String, Object>> rtnList = null;
         String result = null;
         try {
