@@ -254,7 +254,18 @@
                 END
             ) AS takeStatus,
             oc.take_time AS takeTime,
-            oc.take_type AS takeType,
+            (
+                CASE
+                WHEN oc.take_type='1' THEN
+                    '自助取票'
+                WHEN oc.take_type='window' THEN
+                    '窗口取票'
+                WHEN oc.take_type IS NULL THEN
+                    ''
+                ELSE
+                    oc.take_type
+                END
+            ) AS takeType,
             (
                 CASE
                 WHEN oc.check_status='1' THEN
@@ -263,9 +274,17 @@
                     '未验票'
                 END
             ) AS checkStatus,
-            oc.check_type AS checkType,
-            oc.check_time AS checkTime,
-            e.equipment_name AS equipmentName
+            (
+                CASE
+                WHEN oc.check_type='window' THEN
+                    '窗口验票'
+                WHEN oc.check_type IS NULL THEN
+                    ''
+                ELSE
+                    e.equipment_name
+                END
+            ) AS checkType,
+            oc.check_time AS checkTime
         FROM
             order_content_detail oc
         LEFT JOIN equipment e ON e.equipment_id = oc.check_type
