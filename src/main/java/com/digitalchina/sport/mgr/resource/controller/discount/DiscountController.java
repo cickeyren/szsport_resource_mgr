@@ -151,6 +151,7 @@ public class DiscountController {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("mainStadiumId",discount.getMainStadiumId());
+            params.put("payType",discount.getPayType());
             params.put("subStadiumId",discount.getSubStadiumId());
             params.put("startTime",discount.getStartTime()+"00:00:00");
             params.put("endTime",discount.getEndTime()+"23:59:59");
@@ -235,6 +236,7 @@ public class DiscountController {
             params.put("subStadiumId",discount.getSubStadiumId());
             params.put("startTime",discount.getStartTime()+"00:00:00");
             params.put("endTime",discount.getEndTime()+"23:59:59");
+            params.put("payType",discount.getPayType());
             if (discountService.getSameCountByParams(params) >0){
                 return RtnData.fail("同一场馆有效期内只能有一个优惠策略!");
             }else {
