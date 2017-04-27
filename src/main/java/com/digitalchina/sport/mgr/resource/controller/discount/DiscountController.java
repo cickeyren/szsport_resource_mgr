@@ -103,11 +103,17 @@ public class DiscountController {
     @ResponseBody
     public RtnData getSubStadiumList(ModelMap map, HttpServletRequest request) {
         try {
-            String mainStadiumId = request.getParameter("mainStadiumId");
-            //根据选择的主场馆获取子场馆
-            List<Map<String,String>> subStadiumList = discountService.getSubStadium(mainStadiumId);
-            map.put("subStadiumList",subStadiumList);
-            return RtnData.ok(subStadiumList);
+            if (!StringUtil.isEmpty(request.getParameter("mainStadiumId"))) {
+                String mainStadiumId = request.getParameter("mainStadiumId");
+                //根据选择的主场馆获取子场馆
+                List<Map<String,String>> subStadiumList = discountService.getSubStadium(mainStadiumId);
+                map.put("subStadiumList",subStadiumList);
+                return RtnData.ok(subStadiumList);
+            }else {
+                map.put("subStadiumList","");
+                return RtnData.ok(map);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取子场馆列表失败",e);
