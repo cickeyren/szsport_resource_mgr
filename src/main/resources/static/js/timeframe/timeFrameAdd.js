@@ -42,16 +42,16 @@ function doSave(field) {
         dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
         success: function (result) {
             if ("000000" == result.code) {
-                layer.msg(result.result);
+                layer.msg(result.message);
                 setTimeout(function () {
                     window.location.href = "/TimeFrameController/timeFrame.html?stadium_id=" + $('#stadium_id').val();
                 }, 1000);
             }else {
-                layer.alert(result.result);
+                layer.msg(result.message);
             }
         },
         error: function (result) {
-            layer.msg(result.result);
+            layer.msg(result.message);
         }
     });
 }

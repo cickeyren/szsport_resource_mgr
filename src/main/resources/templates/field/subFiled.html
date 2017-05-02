@@ -67,12 +67,11 @@
         <form class="form-horizontal" action="/FieldController/subField.html" id="searchForm" method="POST">
             <input type="hidden" id="myPage" name="page" th:value="${page}">
             <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
-            <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
             <input type="hidden" name="mainStadiumId" id="mainStadiumId" th:value="${mainStadiumId}">
+            <input type="hidden" id="subStadiumid" name="subStadiumid" th:value="${subStadiumid}"/>
         </form>
-        <input type="hidden" id="subStadiumid" name="subStadiumid" th:value="${subStadiumid}"/>
         <div class="">
-            <button type="button" class="btn btn-success fr mb20" id="back">返回</button>
+            <button type="button" class="btn btn-success fr mb20" id="back" >返回</button>
             <button type="button" class="btn btn-success fl mb20" id="addSubField">新增</button>
         </div>
         <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
@@ -94,7 +93,7 @@
                     <td th:text="${obj.status}"></td>
                     <td>
                         <a id="edit" th:data="${obj.id}"
-                           th:href="@{/FieldController/edit.html(id=${obj.id})}">编辑</a>
+                           th:href="@{/FieldController/edit.html(id=${obj.id},mainStadiumId=${mainStadiumId})}">编辑</a>
 <!--                        &nbsp;&nbsp;&nbsp;
                         <a name="operate">删除</a>-->
                     </td>

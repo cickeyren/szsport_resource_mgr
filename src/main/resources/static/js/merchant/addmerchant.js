@@ -11,7 +11,7 @@ $(function () {
 
     //新增界面保存按钮点击事件 ---  返回主界面
     $("#cancelMerchant").on("click", function () {
-        window.location.href = "/MerchantController/add.html?mainstadium_id=" + $('#mainstadium_id').val();
+        window.location.href = "/MerchantController/merchant.html?mainstadium_id=" + $('#mainstadium_id').val();
     });
 
     /**

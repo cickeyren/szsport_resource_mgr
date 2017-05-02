@@ -14,6 +14,7 @@
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script src="../../static/js/order/order.js" th:src="@{/js/order/order.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
     <script th:src="@{/lib/js/jquery.validate.js}"></script>
     <style>
@@ -64,8 +65,8 @@
 <div class="ml10 mr10">
     <div class="pb10 border mt20">
         当前位置：<a href="javascript:;">查看订单</a> < <a href="javascript:;">详情</a> < <a href="javascript:;">子单详情</a>
+        <div align="right"><button type="button" class="btn btn-success fr" id="back">返回</button></div>
     </div>
-    <div align="right"><button type="button" class="btn btn-success fr" id="back">返回</button></div>
     <p class="title mt20 p_1">取票状态:</p>
     <label class="ml20 lab_1" th:text="${orderContent.takeStatus}"></label>
     <table class="tab_1 table-bordered table-hover definewidth m10 ml20" th:if="${#strings.equals(orderContent.takeStatus,'已取票')}">
@@ -88,7 +89,7 @@
             <th>验票时间</th>
         </tr>
         <tr th:object="${orderContent}">
-            <td th:text="*{equipmentName}"></td>
+            <td th:text="*{checkType}"></td>
             <td th:text="${orderContent.checkTime== null?'无':#calendars.format(orderContent.checkTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         </tr>
     </table>

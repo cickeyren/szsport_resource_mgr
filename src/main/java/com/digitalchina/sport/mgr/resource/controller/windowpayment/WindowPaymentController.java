@@ -44,7 +44,7 @@ public class WindowPaymentController {
                                 HttpServletRequest request, ModelMap map){
         Map<String, Object> paramMap = new HashMap<String, Object>();
         List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
-        paramMap.put("mainStadium", request.getParameter("mainstadium_id"));
+        paramMap.put("mainStadiumId", request.getParameter("mainstadium_id"));
         try {
             int totalSize = windowPaymentService.getWindowPaymentTotalCount(paramMap);
             Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引

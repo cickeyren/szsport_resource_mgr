@@ -47,7 +47,7 @@ function doInvalid(field) {
                         window.location.href = "/TimeFrameController/timeFrame.html?stadium_id=" + $('#stadium_id').val();
                     }, 1000);
                 }else {
-                    layer.alert(result.result);
+                    layer.msg(result.message);
                 }
             },
             error: function (result) {

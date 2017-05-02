@@ -26,4 +26,7 @@ public interface TimeFrameMapper extends Mapper<TimeFrame> {
      */
     String getMaxId();
 
+    int getAllTimeFramebyID(Map<String, Object> param);
+
+    int selectticketById(Map<String, Object> params);
 }

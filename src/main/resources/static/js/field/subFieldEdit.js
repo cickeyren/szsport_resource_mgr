@@ -4,7 +4,7 @@ $(function () {
         doSave();
     });
 
-    //编辑界面保存按钮点击事件 ---  返回主界面
+    //编辑界面取消按钮点击事件 ---  返回主界面
     $("#cancelSubField").bind("click", function () {
         window.location.href = "/FieldController/subField.html?subStadiumid=" + $('#stadium_id').val();
     });

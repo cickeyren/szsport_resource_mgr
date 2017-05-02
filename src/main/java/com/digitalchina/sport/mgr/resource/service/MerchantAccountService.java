@@ -82,7 +82,7 @@ public class MerchantAccountService {
      * @throws Exception
      */
     public List<Map<String, Object>> getAllValidUser() throws Exception{
-        String win_UPMS_url = proConfig.WINDOW_UPMS_URL + "?apiKey=" + proConfig.WINDOW_API_KEY;
+        String win_UPMS_url = proConfig.WINDOW_UPMS_URL + "?apiKey=" + proConfig.WINDOW_API_KEY +"&ext1=" + proConfig.WINDOW_EXT1;
         List<Map<String, Object>> rtnList = null;
         String result = null;
         try {
@@ -103,13 +103,99 @@ public class MerchantAccountService {
     }
 
     /**
+     * 验证账户是否在其他合作商户下使用
+     * @param mainstadiumId
+     * @param merchantId
+     * @param loginId
+     * @return
+     */
+    public boolean verifyMerchantAccount(String mainstadiumId, String merchantId, String loginId) throws Exception{
+        boolean isExist = false;
+        String[] loginIdArr = loginId.split(",");
+        for (int i = 0; i < loginIdArr.length; i++){
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("loginId", loginIdArr[i]);
+            List<Map<String, Object>> merchantIds = merchantAccountDao.getMerchantByAccount(paramMap);
+            for (int j = 0; j < merchantIds.size(); j++){
+                if(merchantId.equals(merchantIds.get(j).get("merchantId"))){
+                    if(mainstadiumId.equals(merchantIds.get(j).get("mainStadiumId"))){
+                        //同一场馆下合作商户中账户只能添加一次
+                        isExist = true;
+                        break;
+                    }
+                } else {
+                    //一个账户只能对应一个合作商户
+                    isExist = true;
+                    break;
+                }
+            }
+        }
+        return isExist;
+    }
+
+    /**
      * 添加合作商家账户信息
-     * @param map
+     * @param mainStadiumId
+     * @param merchantId
+     * @param loginId
+     * @param subStadiumId
      * @return
      * @throws Exception
      */
-    public int addMerchantAccount(Map<String, Object> map) throws Exception{
-        return merchantAccountDao.addMerchantAccount(map);
+    public int addMerchantAccount(String mainStadiumId, String merchantId, String loginId, String subStadiumId) throws Exception{
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        String[] loginArr = loginId.split(",");
+        for(int i = 0; i < loginArr.length; i++){
+            Map<String, Object> itemMap = new HashMap<String, Object>();
+            String id = UUIDUtil.generateUUID();
+            itemMap.put("id", id);
+            itemMap.put("mainStadiumId", mainStadiumId);
+            itemMap.put("merchantId", merchantId);
+            itemMap.put("subStadiumId", subStadiumId);
+            itemMap.put("loginId", loginArr[i]);
+            Map<String, Object> accountMap = getUserInfoById(loginArr[i]);
+            itemMap.put("account", accountMap.get("account"));
+            itemMap.put("name", accountMap.get("name"));
+            if(accountMap.containsKey("roleList")){
+                itemMap.put("role", accountMap.get("roleList"));
+            } else {
+                itemMap.put("role", "");
+            }
+            list.add(itemMap);
+        }
+        paramMap.put("list",list);
+        return merchantAccountDao.addMerchantAccount(paramMap);
+    }
+
+    /**
+     * 根据loginId查询账户信息
+     * @return
+     * @throws Exception
+     */
+    public Map<String, Object> getUserInfoById(String loginId) throws Exception{
+        String win_UPMS_url = proConfig.WINDOW_UPMS_URL + "?apiKey=" + proConfig.WINDOW_API_KEY +"&loginId=" + loginId;
+        List<Map<String, Object>> rtnList = null;
+        String result = null;
+        Map<String, Object> rtnMap = new HashMap<String, Object>();
+        try {
+            result = HttpClientUtil.doGet(win_UPMS_url, 30000, null, null);
+            Gson gson = new Gson();
+            Map<String,Object> gsonMap =  gson.fromJson(result,Map.class);
+            if(null != gsonMap && gsonMap.containsKey("status")) {
+                if("OK".equals((String)gsonMap.get("status"))) {
+                    Map<String,Object> resultMap = (Map<String,Object>)gsonMap;
+                    rtnList = (List<Map<String, Object>>) resultMap.get("result");
+                    if(rtnList != null){
+                        rtnMap = rtnList.get(0);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("=========调用" + win_UPMS_url + "接口时发生错误===========",e);
+        }
+        return rtnMap;
     }
 
     /**

@@ -209,6 +209,10 @@
         <if test="subStadiumId != null and subStadiumId != ''">
             AND d.sub_stadium_id = #{subStadiumId}
         </if>
+        <if test="payType != null and payType != ''">
+            AND d.pay_type = #{payType}
+        </if>
+        AND d.`status` = '1'
         <![CDATA[AND (
         (
         d.start_time > #{startTime}

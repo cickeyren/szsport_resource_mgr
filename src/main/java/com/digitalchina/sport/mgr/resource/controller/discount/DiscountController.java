@@ -103,11 +103,17 @@ public class DiscountController {
     @ResponseBody
     public RtnData getSubStadiumList(ModelMap map, HttpServletRequest request) {
         try {
-            String mainStadiumId = request.getParameter("mainStadiumId");
-            //根据选择的主场馆获取子场馆
-            List<Map<String,String>> subStadiumList = discountService.getSubStadium(mainStadiumId);
-            map.put("subStadiumList",subStadiumList);
-            return RtnData.ok(subStadiumList);
+            if (!StringUtil.isEmpty(request.getParameter("mainStadiumId"))) {
+                String mainStadiumId = request.getParameter("mainStadiumId");
+                //根据选择的主场馆获取子场馆
+                List<Map<String,String>> subStadiumList = discountService.getSubStadium(mainStadiumId);
+                map.put("subStadiumList",subStadiumList);
+                return RtnData.ok(subStadiumList);
+            }else {
+                map.put("subStadiumList","");
+                return RtnData.ok(map);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取子场馆列表失败",e);
@@ -151,9 +157,10 @@ public class DiscountController {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("mainStadiumId",discount.getMainStadiumId());
+            params.put("payType",discount.getPayType());
             params.put("subStadiumId",discount.getSubStadiumId());
-            params.put("startTime",discount.getStartTime());
-            params.put("endTime",discount.getEndTime());
+            params.put("startTime",discount.getStartTime()+"00:00:00");
+            params.put("endTime",discount.getEndTime()+"23:59:59");
             if (discountService.getSameCountByParams(params) >0){
                 return RtnData.fail("同一场馆有效期内只能有一个优惠策略!");
             }else {
@@ -230,10 +237,20 @@ public class DiscountController {
     @ResponseBody
     public RtnData update(DiscountConfigure discount, ModelMap map) {
         try {
-            if (discountService.update(discount) > 0) {
-                return RtnData.ok("修改优惠配置成功");
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("mainStadiumId",discount.getMainStadiumId());
+            params.put("subStadiumId",discount.getSubStadiumId());
+            params.put("startTime",discount.getStartTime()+"00:00:00");
+            params.put("endTime",discount.getEndTime()+"23:59:59");
+            params.put("payType",discount.getPayType());
+            if (discountService.getSameCountByParams(params) >0){
+                return RtnData.fail("同一场馆有效期内只能有一个优惠策略!");
             }else {
-                return RtnData.fail("修改优惠配置失败");
+                if (discountService.update(discount) > 0) {
+                    return RtnData.ok("修改优惠配置成功");
+                }else {
+                    return RtnData.fail("修改优惠配置失败");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

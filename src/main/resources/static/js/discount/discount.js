@@ -146,7 +146,7 @@ function doUpdate() {
                     window.location.href = "/discount/discountList.html";
                 },3000)
             }else {
-                layer.alert(result.result);
+                layer.alert(result.message);
             }
             console.log(result);
         },

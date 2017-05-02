@@ -105,9 +105,9 @@
                         <select id="order_channel" style="width:150px;" from="getForm" onchange="change(this)">
                             <option value="">请选择</option>
                             <option value="APP" th:selected="${orderChannel eq 'APP'}">APP</option>
+                            <option value="window" th:selected="${orderChannel eq 'window'}">window</option>
                             <option value="1" th:selected="${orderChannel eq '1'}">售票机</option>
                             <option value="2" th:selected="${orderChannel eq '2'}">微信</option>
-                            <option value="3" th:selected="${orderChannel eq '3'}">PC端网页</option>
                         </select>
                     </td>
                 </tr>
@@ -172,7 +172,8 @@
                                     <th>场馆</th>
                                     <th>产品名称</th>
                                     <th>下单时间</th>
-                                    <th>订单金额</th>
+                                    <th>订单售价</th>
+                                    <th>门市价</th>
                                     <th>订单来源</th>
                                     <th>手机</th>
                                     <th>订单状态</th>
@@ -190,6 +191,7 @@
                                     <td th:text="${obj.ticketName}"></td>
                                     <td th:text="${#calendars.format(obj.orderTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                     <td th:text="${obj.sellPrice}"></td>
+                                    <td th:text="${obj.storePrice}"></td>
                                     <td th:text="${obj.orderChannel}"></td>
                                     <td th:text="${obj.userTel}"></td>
                                     <td th:text="${obj.status}"></td>

@@ -122,7 +122,7 @@ public class TimeFrameController {
             map.put("pageModel", pagination);
             map.put("pageSize", String.valueOf(pageSize));
             map.put("page", String.valueOf(page));
-            map.put("time_code",time_code);
+            map.put("time_code", time_code);
             map.put("timeFrameList", timeFrameList);
             return "timeframe/timeInterval";
 
@@ -164,64 +164,72 @@ public class TimeFrameController {
     @RequestMapping(value = "/addTimeFrame.do", method = RequestMethod.POST)
     @ResponseBody
     public RtnData add(TimeFrame timeFrame, ModelMap map) {
-        String time_length = timeFrame.getTimeLength();//每场时间
-        String time_start = timeFrame.getTimeStart();//开始时间
-        String[] time_start1 = time_start.split(":");
-        double timearr;
-        if (time_start1[1].equals("00")) {//开始时间是半个小时为时间间隔
-            timearr = Double.parseDouble(time_start1[0]);
+        String stadium_id = timeFrame.getStadiumId();
+        Map<String, Object> param = new HashMap<>();
+        param.put("stadium_id", stadium_id);
+        int numTotal = timeFrameService.getAllTimeFramebyID(param);
+        if (numTotal >=1) {
+            return RtnData.fail("一个场馆只能有一个时段！");
         } else {
-            timearr = Double.parseDouble(time_start1[0]) + 0.5;
-        }
-        Integer num = timeFrame.getNum();//场次
-        String time_lag = timeFrame.getTimeLag();//间隔时间（时间间隔不固定，可能15分钟，可能30分钟。任何情况都有）
-
-        double overTime = 24 - timearr - ((Double.parseDouble(time_length) + (Double.parseDouble(time_lag) / 60)) * num);
-        if (overTime > 0) {
-            try {
-                String maxId = timeFrameService.getMaxId();
-                timeFrame.setStatus("1");//状态默认为正常
-                timeFrame.setCreatTime(new Date());
-                timeFrame.setUpdateTime(new Date());
-                timeFrame.setId((maxId == null || maxId.equals("")) ? "1000001" : String.valueOf(Long.parseLong(maxId) + 1));
-
-                TimeInterval timeInterval = new TimeInterval();
-                int time_end = getTime_guize(time_start);//获取了总分钟  开始种分钟（开始总分钟）
-                int time_lags = Integer.parseInt(time_lag);//间隔时间
-                int time_lengths = getTime_length(time_length); //获取每场时间总分钟
-                int time_StartA = 0;
-                for (int i = 0; i < num; i++) {
-                    //与时段进行关联
-                    timeInterval.setId(UUID.randomUUID().toString());
-                    timeInterval.setTime_code((maxId == null || maxId.equals("")) ? "1000001" : String.valueOf(Long.parseLong(maxId) + 1));
-                    timeInterval.setSubstadium_id(timeFrame.getStadiumId());//子场馆id
-                    timeInterval.setTime_sort(i + 1);
-                    if (time_lags == 0) {  //当无间隔时间时候
-                        time_StartA = time_end;  //1.开始时间等于开始  循环之后开始时间等于结束时间
-                    } else {
-                        if (i == 0) {
-                            time_StartA = time_end;
-                        } else {
-                            time_StartA = time_end + time_lags;
-                        }
-                    }
-                    time_end = time_StartA + time_lengths;  //结束时间等于开始时间+每场时间
-                    timeInterval.setTime_inter(getTimeByint(time_StartA) + "-" + getTimeByint(time_end));
-                    timeInterval.setCreat_time(new Date());
-                    timeFrameService.insertTimeInterval(timeInterval);
-                }
-
-                if (timeFrameService.inserttimeFrame(timeFrame) > 0) {
-                    return RtnData.ok("新增時段成功");
-                }
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                LOGGER.error("========新增時段失败=========", e);
+            String time_length = timeFrame.getTimeLength();//每场时间
+            String time_start = timeFrame.getTimeStart();//开始时间
+            String[] time_start1 = time_start.split(":");
+            double timearr;
+            if (time_start1[1].equals("00")) {//开始时间是半个小时为时间间隔
+                timearr = Double.parseDouble(time_start1[0]);
+            } else {
+                timearr = Double.parseDouble(time_start1[0]) + 0.5;
             }
-        } else {
-            return RtnData.fail("场次超过当日时间，请修改场次重新添加!");
+            Integer num = timeFrame.getNum();//场次
+            String time_lag = timeFrame.getTimeLag();//间隔时间（时间间隔不固定，可能15分钟，可能30分钟。任何情况都有）
+
+            double overTime = 24 - timearr - ((Double.parseDouble(time_length) + (Double.parseDouble(time_lag) / 60)) * num);
+            if (overTime > 0) {
+                try {
+                    String maxId = timeFrameService.getMaxId();
+                    timeFrame.setStatus("1");//状态默认为正常
+                    timeFrame.setCreatTime(new Date());
+                    timeFrame.setUpdateTime(new Date());
+                    timeFrame.setId((maxId == null || maxId.equals("")) ? "1000001" : String.valueOf(Long.parseLong(maxId) + 1));
+
+                    TimeInterval timeInterval = new TimeInterval();
+                    int time_end = getTime_guize(time_start);//获取了总分钟  开始种分钟（开始总分钟）
+                    int time_lags = Integer.parseInt(time_lag);//间隔时间
+                    int time_lengths = getTime_length(time_length); //获取每场时间总分钟
+                    int time_StartA = 0;
+                    for (int i = 0; i < num; i++) {
+                        //与时段进行关联
+                        timeInterval.setId(UUID.randomUUID().toString());
+                        timeInterval.setTime_code((maxId == null || maxId.equals("")) ? "1000001" : String.valueOf(Long.parseLong(maxId) + 1));
+                        timeInterval.setSubstadium_id(timeFrame.getStadiumId());//子场馆id
+                        timeInterval.setTime_sort(i + 1);
+                        if (time_lags == 0) {  //当无间隔时间时候
+                            time_StartA = time_end;  //1.开始时间等于开始  循环之后开始时间等于结束时间
+                        } else {
+                            if (i == 0) {
+                                time_StartA = time_end;
+                            } else {
+                                time_StartA = time_end + time_lags;
+                            }
+                        }
+                        time_end = time_StartA + time_lengths;  //结束时间等于开始时间+每场时间
+                        timeInterval.setTime_inter(getTimeByint(time_StartA) + "-" + getTimeByint(time_end));
+                        timeInterval.setCreat_time(new Date());
+                        timeFrameService.insertTimeInterval(timeInterval);
+                    }
+
+                    if (timeFrameService.inserttimeFrame(timeFrame) > 0) {
+                        return RtnData.ok("新增時段成功");
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LOGGER.error("========新增時段失败=========", e);
+                }
+            } else {
+                return RtnData.fail("场次超过当日时间，请修改场次重新添加!");
+            }
         }
         return RtnData.fail("新增時段失败");
     }
@@ -260,71 +268,78 @@ public class TimeFrameController {
     @ResponseBody
     @Transactional
     public RtnData update(TimeFrame timeFrame, ModelMap map) {
-        try {
+        Map<String, Object> params = new HashMap<>();
+        params.put("time_code", timeFrame.getId());
 
-            TimeFrame timeFrame_full = timeFrameService.selectTimeFrameById(timeFrame);
-            timeFrame_full.setUpdateTime(new Date());
-            timeFrame_full.setNum(timeFrame.getNum());
-            timeFrame_full.setTimeLag(timeFrame.getTimeLag());
-            timeFrame_full.setTimeLength(timeFrame.getTimeLength());
-            timeFrame_full.setTimeName(timeFrame.getTimeName());
-            timeFrame_full.setTimeStart(timeFrame.getTimeStart());
+        int numtotal = timeFrameService.selectticketById(params);
+        if (numtotal >= 1) {
+            return RtnData.fail("该时段正在被场地票使用，无法编辑！");
+        } else {
+            try {
+                TimeFrame timeFrame_full = timeFrameService.selectTimeFrameById(timeFrame);
+                timeFrame_full.setUpdateTime(new Date());
+                timeFrame_full.setNum(timeFrame.getNum());
+                timeFrame_full.setTimeLag(timeFrame.getTimeLag());
+                timeFrame_full.setTimeLength(timeFrame.getTimeLength());
+                timeFrame_full.setTimeName(timeFrame.getTimeName());
+                timeFrame_full.setTimeStart(timeFrame.getTimeStart());
 
-            if (timeFrameService.updatetimeFrame(timeFrame_full) > 0) {
-                TimeInterval timeInterval = new TimeInterval();
-                //直接删除数据
-                timeInterval.setTime_code(timeFrame.getId());
-                timeIntervalMapper.delete(timeInterval);
+                if (timeFrameService.updatetimeFrame(timeFrame_full) > 0) {
+                    TimeInterval timeInterval = new TimeInterval();
+                    //直接删除数据
+                    timeInterval.setTime_code(timeFrame.getId());
+                    timeIntervalMapper.delete(timeInterval);
 
-                String time_length = timeFrame.getTimeLength();//每场时间
-                String time_start = timeFrame.getTimeStart();//开始时间
-                String[] time_start1 = time_start.split(":");
-                double timearr;
-                if (time_start1[1].equals("00")) {//开始时间是半个小时为时间间隔
-                    timearr = Double.parseDouble(time_start1[0]);
-                } else {
-                    timearr = Double.parseDouble(time_start1[0]) + 0.5;
-                }
-                Integer num = timeFrame.getNum();//场次
-                String time_lag = timeFrame.getTimeLag();//间隔时间（时间间隔不固定，可能15分钟，可能30分钟。任何情况都有）
-
-                double overTime = 24 - timearr - ((Double.parseDouble(time_length) + (Double.parseDouble(time_lag) / 60)) * num);
-
-                if (overTime > 0){
-                    //重新添加数据
-                    int time_end = getTime_guize(timeFrame.getTimeStart());//获取了总分钟  开始种分钟（开始总分钟）
-                    int time_lags = Integer.parseInt(timeFrame.getTimeLag());//间隔时间
-                    int time_lengths = getTime_length(timeFrame.getTimeLength()); //获取每场时间总分钟
-                    int time_StartA = 0;
-                    for (int i = 0; i < timeFrame.getNum(); i++) {
-                        //与时段进行关联
-                        timeInterval.setId(UUID.randomUUID().toString());
-                        timeInterval.setTime_code(timeFrame.getId());
-                        timeInterval.setSubstadium_id(timeFrame_full.getStadiumId());//子场馆id
-                        timeInterval.setTime_sort(i + 1);
-                        if (time_lags == 0) {  //当无间隔时间时候
-                            time_StartA = time_end;  //1.开始时间等于开始  循环之后开始时间等于结束时间
-                        } else {
-                            if (i == 0) {
-                                time_StartA = time_end;
-                            } else {
-                                time_StartA = time_end + time_lags;
-                            }
-                        }
-                        time_end = time_StartA + time_lengths;  //结束时间等于开始时间+每场时间
-                        timeInterval.setTime_inter(getTimeByint(time_StartA) + "-" + getTimeByint(time_end));
-                        timeInterval.setUpdate_time(new Date());
-                        timeFrameService.insertTimeInterval(timeInterval);
+                    String time_length = timeFrame.getTimeLength();//每场时间
+                    String time_start = timeFrame.getTimeStart();//开始时间
+                    String[] time_start1 = time_start.split(":");
+                    double timearr;
+                    if (time_start1[1].equals("00")) {//开始时间是半个小时为时间间隔
+                        timearr = Double.parseDouble(time_start1[0]);
+                    } else {
+                        timearr = Double.parseDouble(time_start1[0]) + 0.5;
                     }
+                    Integer num = timeFrame.getNum();//场次
+                    String time_lag = timeFrame.getTimeLag();//间隔时间（时间间隔不固定，可能15分钟，可能30分钟。任何情况都有）
 
-                }else {
-                   return  RtnData.fail("场次超过当日时间，请修改场次重新添加!");
+                    double overTime = 24 - timearr - ((Double.parseDouble(time_length) + (Double.parseDouble(time_lag) / 60)) * num);
+
+                    if (overTime > 0) {
+                        //重新添加数据
+                        int time_end = getTime_guize(timeFrame.getTimeStart());//获取了总分钟  开始种分钟（开始总分钟）
+                        int time_lags = Integer.parseInt(timeFrame.getTimeLag());//间隔时间
+                        int time_lengths = getTime_length(timeFrame.getTimeLength()); //获取每场时间总分钟
+                        int time_StartA = 0;
+                        for (int i = 0; i < timeFrame.getNum(); i++) {
+                            //与时段进行关联
+                            timeInterval.setId(UUID.randomUUID().toString());
+                            timeInterval.setTime_code(timeFrame.getId());
+                            timeInterval.setSubstadium_id(timeFrame_full.getStadiumId());//子场馆id
+                            timeInterval.setTime_sort(i + 1);
+                            if (time_lags == 0) {  //当无间隔时间时候
+                                time_StartA = time_end;  //1.开始时间等于开始  循环之后开始时间等于结束时间
+                            } else {
+                                if (i == 0) {
+                                    time_StartA = time_end;
+                                } else {
+                                    time_StartA = time_end + time_lags;
+                                }
+                            }
+                            time_end = time_StartA + time_lengths;  //结束时间等于开始时间+每场时间
+                            timeInterval.setTime_inter(getTimeByint(time_StartA) + "-" + getTimeByint(time_end));
+                            timeInterval.setUpdate_time(new Date());
+                            timeFrameService.insertTimeInterval(timeInterval);
+                        }
+
+                    } else {
+                        return RtnData.fail("场次超过当日时间，请修改场次重新添加!");
+                    }
+                    return RtnData.ok("保存成功");
                 }
-                return RtnData.ok("保存成功");
+            } catch (Exception e) {
+                e.printStackTrace();
+                LOGGER.error("========保存失败=========", e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("========保存失败=========", e);
         }
         return RtnData.fail("保存失败");
     }
@@ -340,17 +355,25 @@ public class TimeFrameController {
     @RequestMapping(value = "/invalid.do", method = RequestMethod.POST)
     @ResponseBody
     public RtnData invalid(TimeFrame timeFrame, ModelMap map) {
-        try {
+        Map<String, Object> params = new HashMap<>();
+        params.put("time_code", timeFrame.getId());
 
-            TimeFrame timeFrame_full = timeFrameService.selectTimeFrameById(timeFrame);
-            timeFrame_full.setStatus("0");
-            timeFrame_full.setUpdateTime(new Date());
-            if (timeFrameService.updatetimeFrame(timeFrame_full) > 0) {
-                return RtnData.ok("作废成功");
+        int numtotal = timeFrameService.selectticketById(params);
+        if (numtotal >= 1) {
+            return RtnData.fail("该时段正在被场地票使用，无法作废！");
+        } else {
+            try {
+
+                TimeFrame timeFrame_full = timeFrameService.selectTimeFrameById(timeFrame);
+                timeFrame_full.setStatus("0");
+                timeFrame_full.setUpdateTime(new Date());
+                if (timeFrameService.updatetimeFrame(timeFrame_full) > 0) {
+                    return RtnData.ok("作废成功");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                LOGGER.error("========作废失败=========", e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("========作废失败=========", e);
         }
         return RtnData.fail("作废失败");
     }
@@ -363,6 +386,7 @@ public class TimeFrameController {
      *
      * @return
      */
+
     public Integer getTime_guize(String time) {
         Integer timeALL = 0;
         String[] timeARR = time.split(":");
@@ -394,11 +418,11 @@ public class TimeFrameController {
     public String getTimeByint(Integer time) {
         Integer timeHore = time / 60;
         Integer timeScend = time % 60;
-        String  timeSeendA ="";
-        if (timeScend<10){
-            timeSeendA = "0"+timeScend;
-        }else {
-            timeSeendA=timeScend.toString();
+        String timeSeendA = "";
+        if (timeScend < 10) {
+            timeSeendA = "0" + timeScend;
+        } else {
+            timeSeendA = timeScend.toString();
         }
         String timeString = "";
         if (timeScend == 0) {

@@ -1,7 +1,6 @@
 /**
  * Created by wanggw
  */
-var layer;
 var appId;
 var hostUrl = '@app.url@';
 var hostUrl = 'http://moms.eastdc.cn:82/';
