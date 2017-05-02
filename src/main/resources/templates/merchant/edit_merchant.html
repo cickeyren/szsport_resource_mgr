@@ -123,6 +123,13 @@
                     </td>
                 </tr>
                 <tr class="controls">
+                    <td class="alignright">结算时间</td>
+                    <td class="alignleft" id="checkone">
+                        <input type='text' style="float:none" id="settlementTime" th:value="${merchant.settlementTime}" name="settlementTime" class="inputw100 form-control mt5" readonly="readonly"
+                               onClick="WdatePicker({dateFmt:'HH:mm'})"/>
+                    </td>
+                </tr>
+                <tr class="controls">
                     <td class="alignright">状态</td>
                     <td class="alignleft" id="checkone">
                         <input class="check" value="1" type="radio" name="status" th:checked="${merchant.status eq '1'}">正常
