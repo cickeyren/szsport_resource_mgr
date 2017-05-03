@@ -1,0 +1,254 @@
+2017/02/20T14:10:27 [main] DEBUG com.digitalchina.BootApplication - ============ Application Starting ===========
+2017/02/20T14:10:28 [main] INFO  com.digitalchina.BootApplication - Starting BootApplication on USER-N0LUGM962K with PID 11328 (started by Administrator in G:\神州数码有限公司\苏州体育局\源码\szsport_resource_mgr)
+2017/02/20T14:10:28 [main] INFO  com.digitalchina.BootApplication - No active profile set, falling back to default profiles: default
+2017/02/20T14:10:28 [main] INFO  o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext - Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@56c9bbd8: startup date [Mon Feb 20 14:10:28 GMT+08:00 2017]; root of context hierarchy
+2017/02/20T14:10:32 [main] ERROR o.s.boot.SpringApplication - Application startup failed
+java.lang.IllegalStateException: Could not evaluate condition on org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration$WebMvcAutoConfigurationAdapter#requestContextFilter due to javax/servlet/ServletRequestListener not found. Make sure your own configuration does not rely on that class. This can also happen if you are @ComponentScanning a springframework package (e.g. if you put a @ComponentScan in the default package by mistake)
+	at org.springframework.boot.autoconfigure.condition.SpringBootCondition.matches(SpringBootCondition.java:55)
+	at org.springframework.context.annotation.ConditionEvaluator.shouldSkip(ConditionEvaluator.java:102)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForBeanMethod(ConfigurationClassBeanDefinitionReader.java:178)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:140)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:116)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:336)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:246)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:270)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:93)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:686)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:524)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:761)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:371)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:315)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1186)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1175)
+	at com.digitalchina.BootApplication.main(BootApplication.java:28)
+Caused by: java.lang.NoClassDefFoundError: javax/servlet/ServletRequestListener
+	at java.lang.ClassLoader.defineClass1(Native Method)
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:760)
+	at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+	at java.net.URLClassLoader.defineClass(URLClassLoader.java:467)
+	at java.net.URLClassLoader.access$100(URLClassLoader.java:73)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:368)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:362)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:361)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:331)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.springframework.core.type.classreading.AnnotationReadingVisitorUtils.convertClassValues(AnnotationReadingVisitorUtils.java:78)
+	at org.springframework.core.type.classreading.MethodMetadataReadingVisitor.getAnnotationAttributes(MethodMetadataReadingVisitor.java:125)
+	at org.springframework.core.type.classreading.MethodMetadataReadingVisitor.getAnnotationAttributes(MethodMetadataReadingVisitor.java:118)
+	at org.springframework.core.type.classreading.MethodMetadataReadingVisitor.getAnnotationAttributes(MethodMetadataReadingVisitor.java:45)
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition$BeanSearchSpec.<init>(OnBeanCondition.java:290)
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition.getMatchOutcome(OnBeanCondition.java:112)
+	at org.springframework.boot.autoconfigure.condition.SpringBootCondition.matches(SpringBootCondition.java:47)
+	... 17 common frames omitted
+Caused by: java.lang.ClassNotFoundException: javax.servlet.ServletRequestListener
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:331)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	... 36 common frames omitted
+2017/02/20T14:10:32 [main] INFO  o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext - Closing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@56c9bbd8: startup date [Mon Feb 20 14:10:28 GMT+08:00 2017]; root of context hierarchy
+2017/02/20T14:10:32 [main] WARN  o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext - Exception thrown from LifecycleProcessor on context close
+java.lang.IllegalStateException: LifecycleProcessor not initialized - call 'refresh' before invoking lifecycle methods via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@56c9bbd8: startup date [Mon Feb 20 14:10:28 GMT+08:00 2017]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getLifecycleProcessor(AbstractApplicationContext.java:417)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1002)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:961)
+	at org.springframework.boot.SpringApplication.handleRunFailure(SpringApplication.java:818)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:326)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1186)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1175)
+	at com.digitalchina.BootApplication.main(BootApplication.java:28)
+2017/02/20T14:10:32 [main] ERROR o.s.b.f.s.DefaultListableBeanFactory - Destroy method on bean with name 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory' threw an exception
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@56c9bbd8: startup date [Mon Feb 20 14:10:28 GMT+08:00 2017]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:404)
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97)
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:954)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:961)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1033)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1009)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:961)
+	at org.springframework.boot.SpringApplication.handleRunFailure(SpringApplication.java:818)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:326)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1186)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1175)
+	at com.digitalchina.BootApplication.main(BootApplication.java:28)
+2017/02/20T14:11:09 [main] DEBUG com.digitalchina.BootApplication - ============ Application Starting ===========
+2017/02/20T14:11:11 [main] INFO  com.digitalchina.BootApplication - Starting BootApplication on USER-N0LUGM962K with PID 13664 (started by Administrator in G:\神州数码有限公司\苏州体育局\源码\szsport_resource_mgr)
+2017/02/20T14:11:11 [main] INFO  com.digitalchina.BootApplication - No active profile set, falling back to default profiles: default
+2017/02/20T14:11:11 [main] INFO  o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext - Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@25748410: startup date [Mon Feb 20 14:11:11 GMT+08:00 2017]; root of context hierarchy
+2017/02/20T14:11:13 [main] INFO  o.s.b.f.s.DefaultListableBeanFactory - Overriding bean definition for bean 'dataSource' with a different definition: replacing [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Generic; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Generic.class]] with [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari; factoryMethodName=dataSource; initMethodName=null; destroyMethodName=(inferred); defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class]]
+2017/02/20T14:11:14 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.cache.annotation.ProxyCachingConfiguration' of type [class org.springframework.cache.annotation.ProxyCachingConfiguration$$EnhancerBySpringCGLIB$$e643a5ac] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017/02/20T14:11:14 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [class org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$9d316f8e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017/02/20T14:11:14 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration' of type [class org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration$$EnhancerBySpringCGLIB$$dab76a50] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017/02/20T14:11:14 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'spring.cache-org.springframework.boot.autoconfigure.cache.CacheProperties' of type [class org.springframework.boot.autoconfigure.cache.CacheProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017/02/20T14:11:14 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.boot.autoconfigure.cache.CacheManagerCustomizers' of type [class org.springframework.boot.autoconfigure.cache.CacheManagerCustomizers] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017/02/20T14:11:14 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.boot.autoconfigure.cache.EhCacheCacheConfiguration' of type [class org.springframework.boot.autoconfigure.cache.EhCacheCacheConfiguration$$EnhancerBySpringCGLIB$$7556374e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017/02/20T14:11:15 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'ehCacheCacheManager' of type [class net.sf.ehcache.CacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017/02/20T14:11:15 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'cacheManager' of type [class org.springframework.cache.ehcache.EhCacheCacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017/02/20T14:11:15 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'cacheAutoConfigurationValidator' of type [class org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration$CacheManagerValidator] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017/02/20T14:11:16 [main] INFO  o.s.b.c.e.t.TomcatEmbeddedServletContainer - Tomcat initialized with port(s): 9080 (http)
+2017/02/20T14:11:16 [main] INFO  o.a.catalina.core.StandardService - Starting service Tomcat
+2017/02/20T14:11:16 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet Engine: Apache Tomcat/8.5.6
+2017/02/20T14:11:17 [localhost-startStop-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2017/02/20T14:11:17 [localhost-startStop-1] INFO  o.s.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 6053 ms
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'metricsFilter' to: [/*]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'characterEncodingFilter' to: [/*]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'requestContextFilter' to: [/*]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.s.b.w.s.DelegatingFilterProxyRegistrationBean - Mapping filter: 'springSecurityFilterChain' to: [/*]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'webRequestLoggingFilter' to: [/*]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'casLogoutFilter' to: [/*]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'requestCasLogoutFilter' to: [/*]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'applicationContextIdFilter' to: [/*]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.s.b.w.s.ServletRegistrationBean - Mapping servlet: 'dispatcherServlet' to [/]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.j.c.c.session.SingleSignOutFilter - Property [artifactParameterName] not found.  Using default value [ticket]
+2017/02/20T14:11:18 [localhost-startStop-1] INFO  o.j.c.c.session.SingleSignOutFilter - Property [logoutParameterName] not found.  Using default value [logoutRequest]
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/queryPost],methods=[POST],produces=[application/json;charset=utf-8]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.ApiController.selectBookByIdOfPost(java.util.Map<java.lang.String, java.lang.String>)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/query],methods=[GET]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.ApiController.selectBookById(java.lang.String)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/addbook.do],methods=[POST]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.BookController.add(com.digitalchina.sport.mgr.resource.model.Book,org.springframework.ui.ModelMap)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/add.html]}" onto public java.lang.String com.digitalchina.sport.mgr.resource.controller.BookController.add(org.springframework.ui.ModelMap)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/updatebook.do],methods=[POST]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.BookController.update(com.digitalchina.sport.mgr.resource.model.Book,org.springframework.ui.ModelMap)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/delete.do]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.BookController.delete(java.lang.String)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/main.html],methods=[GET]}" onto public java.lang.String com.digitalchina.sport.mgr.resource.controller.BookController.list()
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/list.html],methods=[GET]}" onto public java.lang.String com.digitalchina.sport.mgr.resource.controller.BookController.booklist(long,long,java.lang.String,org.springframework.ui.ModelMap,javax.servlet.http.HttpServletRequest)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/edit.html]}" onto public java.lang.String com.digitalchina.sport.mgr.resource.controller.BookController.edit(java.lang.String,org.springframework.ui.ModelMap)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/listBooks.do]}" onto public java.util.List<com.digitalchina.sport.mgr.resource.model.Book> com.digitalchina.sport.mgr.resource.controller.BookController.listBooks(long,long)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/yearstrategyticket/api/getYearStrategyTicketModelInfoList.json]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.exposeapi.ApiYearStrategyTicketController.getYearStrategyTicketModelInfoList(java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/yearstrategyticket/api/getYearStrategyTicketModelInfo.json]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.exposeapi.ApiYearStrategyTicketController.getYearStrategyTicketModelInfo(java.lang.String)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/],methods=[GET]}" onto public java.lang.String com.digitalchina.sport.mgr.resource.controller.IndexController.index(org.springframework.ui.ModelMap)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/login]}" onto public java.lang.String com.digitalchina.sport.mgr.resource.controller.IndexController.login()
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/addMainStadiumInfo/api/insertMainStadiumInfo.json]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.stadium.StadiumController.insertMainStadiumInfo(java.util.Map)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/addMainStadiumInfo/api/getZoneList.json]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.stadium.StadiumController.getZoneList(java.lang.String)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/user/currentUserInfo.json]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.UserController.userInfo(javax.servlet.http.HttpServletRequest)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/yearstrategyticket/add.html]}" onto public java.lang.String com.digitalchina.sport.mgr.resource.controller.yearstrategyticket.YearStrategyTicketController.add(org.springframework.ui.ModelMap)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/yearstrategyticket/addYearStrategyTicket.json],methods=[POST]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.yearstrategyticket.YearStrategyTicketController.add(com.digitalchina.sport.mgr.resource.model.YearStrategyTicketModel,javax.servlet.http.HttpServletRequest)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/yearstrategyticket/getSubStadiumListByMainId.json],methods=[POST]}" onto public com.digitalchina.common.data.RtnData com.digitalchina.sport.mgr.resource.controller.yearstrategyticket.YearStrategyTicketController.getSubStadiumListByMainId(java.lang.String)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/v2/api-docs],methods=[GET],produces=[application/json || application/hal+json]}" onto public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/swagger-resources/configuration/security]}" onto org.springframework.http.ResponseEntity<springfox.documentation.swagger.web.SecurityConfiguration> springfox.documentation.swagger.web.ApiResourceController.securityConfiguration()
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/swagger-resources/configuration/ui]}" onto org.springframework.http.ResponseEntity<springfox.documentation.swagger.web.UiConfiguration> springfox.documentation.swagger.web.ApiResourceController.uiConfiguration()
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/swagger-resources]}" onto org.springframework.http.ResponseEntity<java.util.List<springfox.documentation.swagger.web.SwaggerResource>> springfox.documentation.swagger.web.ApiResourceController.swaggerResources()
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2017/02/20T14:11:22 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/heapdump || /heapdump.json],methods=[GET],produces=[application/octet-stream]}" onto public void org.springframework.boot.actuate.endpoint.mvc.HeapdumpMvcEndpoint.invoke(boolean,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) throws java.io.IOException,javax.servlet.ServletException
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/beans || /beans.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/configprops || /configprops.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/mappings || /mappings.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/autoconfig || /autoconfig.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/trace || /trace.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/metrics/{name:.*}],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.MetricsMvcEndpoint.value(java.lang.String)
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/metrics || /metrics.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/info || /info.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/health || /health.json],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.HealthMvcEndpoint.invoke(java.security.Principal)
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/env/{name:.*}],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EnvironmentMvcEndpoint.value(java.lang.String)
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/env || /env.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2017/02/20T14:11:23 [main] INFO  o.s.b.a.e.mvc.EndpointHandlerMapping - Mapped "{[/dump || /dump.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2017/02/20T14:11:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: OrRequestMatcher [requestMatchers=[Ant [pattern='/css/**'], Ant [pattern='/js/**'], Ant [pattern='/images/**'], Ant [pattern='/webjars/**'], Ant [pattern='/**/favicon.ico'], Ant [pattern='/error']]], []
+2017/02/20T14:11:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: Ant [pattern='/css/**'], []
+2017/02/20T14:11:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: Ant [pattern='/js/**'], []
+2017/02/20T14:11:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: Ant [pattern='/layer/**'], []
+2017/02/20T14:11:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: Ant [pattern='/img/**'], []
+2017/02/20T14:11:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: Ant [pattern='/'], []
+2017/02/20T14:11:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: Ant [pattern='/favicon.ico'], []
+2017/02/20T14:11:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: Ant [pattern='/images/**'], []
+2017/02/20T14:11:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: Ant [pattern='/lib/**'], []
+2017/02/20T14:11:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@18dbc1b, com.digitalchina.platform.security.auth.CustomSecurityContextPersistenceFilter@2a510e0e, org.springframework.security.web.context.SecurityContextPersistenceFilter@4ebd8d2, org.springframework.security.web.header.HeaderWriterFilter@13f36d75, org.springframework.security.web.authentication.logout.LogoutFilter@64d35cd3, org.springframework.security.web.authentication.logout.LogoutFilter@124ff64d, org.jasig.cas.client.session.SingleSignOutFilter@1482efc2, com.digitalchina.platform.security.auth.CustomCasAuthenticationFilter@8315e4a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5a63fa71, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7e9a836, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4efe014f, org.springframework.security.web.session.SessionManagementFilter@3155f190, org.springframework.security.web.access.ExceptionTranslationFilter@4c4215d7, com.digitalchina.platform.security.auth.ExceptionHandlerFilter@22ff11ef, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@575d48db]
+2017/02/20T14:11:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration$LazyEndpointPathRequestMatcher@729d6ee2, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4adcc981, org.springframework.security.web.context.SecurityContextPersistenceFilter@c677d7e, org.springframework.security.web.header.HeaderWriterFilter@3a3bc0da, org.springframework.security.web.authentication.logout.LogoutFilter@ab4d2ba, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@5c7c75fb, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@215a0264, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@45832b85, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@73aae7a, org.springframework.security.web.session.SessionManagementFilter@2d2f09a4, org.springframework.security.web.access.ExceptionTranslationFilter@3063be68, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4efed0e0]
+2017/02/20T14:11:24 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@25748410: startup date [Mon Feb 20 14:11:11 GMT+08:00 2017]; root of context hierarchy
+2017/02/20T14:11:24 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping - Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017/02/20T14:11:24 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping - Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017/02/20T14:11:24 [main] INFO  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Detected @ExceptionHandler methods in globalExceptionHandler
+2017/02/20T14:11:24 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping - Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017/02/20T14:11:25 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter - Registering beans for JMX exposure on startup
+2017/02/20T14:11:25 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter - Bean with name 'dataSource' has been autodetected for JMX exposure
+2017/02/20T14:11:25 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter - Located MBean 'dataSource': registering with JMX server as MBean [com.zaxxer.hikari:name=dataSource,type=HikariDataSource]
+2017/02/20T14:11:25 [main] INFO  o.s.b.a.e.jmx.EndpointMBeanExporter - Registering beans for JMX exposure on startup
+2017/02/20T14:11:25 [main] INFO  o.s.c.s.DefaultLifecycleProcessor - Starting beans in phase 0
+2017/02/20T14:11:25 [main] INFO  o.s.b.a.e.jmx.EndpointMBeanExporter - Located managed bean 'requestMappingEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=requestMappingEndpoint]
+2017/02/20T14:11:25 [main] INFO  o.s.b.a.e.jmx.EndpointMBeanExporter - Located managed bean 'environmentEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=environmentEndpoint]
+2017/02/20T14:11:25 [main] INFO  o.s.b.a.e.jmx.EndpointMBeanExporter - Located managed bean 'healthEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=healthEndpoint]
+2017/02/20T14:11:25 [main] INFO  o.s.b.a.e.jmx.EndpointMBeanExporter - Located managed bean 'beansEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=beansEndpoint]
+2017/02/20T14:11:25 [main] INFO  o.s.b.a.e.jmx.EndpointMBeanExporter - Located managed bean 'infoEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=infoEndpoint]
+2017/02/20T14:11:25 [main] INFO  o.s.b.a.e.jmx.EndpointMBeanExporter - Located managed bean 'metricsEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=metricsEndpoint]
+2017/02/20T14:11:25 [main] INFO  o.s.b.a.e.jmx.EndpointMBeanExporter - Located managed bean 'traceEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=traceEndpoint]
+2017/02/20T14:11:25 [main] INFO  o.s.b.a.e.jmx.EndpointMBeanExporter - Located managed bean 'dumpEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=dumpEndpoint]
+2017/02/20T14:11:25 [main] INFO  o.s.b.a.e.jmx.EndpointMBeanExporter - Located managed bean 'autoConfigurationReportEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=autoConfigurationReportEndpoint]
+2017/02/20T14:11:25 [main] INFO  o.s.b.a.e.jmx.EndpointMBeanExporter - Located managed bean 'configurationPropertiesReportEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=configurationPropertiesReportEndpoint]
+2017/02/20T14:11:25 [main] INFO  o.s.c.s.DefaultLifecycleProcessor - Starting beans in phase 2147483647
+2017/02/20T14:11:25 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+2017/02/20T14:11:25 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+2017/02/20T14:11:25 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addUsingPOST_1
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addUsingGET_1
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addUsingHEAD_1
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addUsingPOST_2
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addUsingPUT_1
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addUsingPATCH_1
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addUsingDELETE_1
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addUsingOPTIONS_1
+2017/02/20T14:11:26 [main] WARN  s.d.s.w.r.p.ParameterDataTypeReader - Trying to infer dataType org.springframework.ui.ModelMap
+2017/02/20T14:11:26 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addUsingTRACE_1
+2017/02/20T14:11:26 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addUsingPOST_3
+2017/02/20T14:11:26 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9080"]
+2017/02/20T14:11:26 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler [http-nio-9080]
+2017/02/20T14:11:26 [main] INFO  o.a.tomcat.util.net.NioSelectorPool - Using a shared selector for servlet write/read
+2017/02/20T14:11:26 [main] INFO  o.s.b.c.e.t.TomcatEmbeddedServletContainer - Tomcat started on port(s): 9080 (http)
+2017/02/20T14:11:26 [main] INFO  com.digitalchina.BootApplication - Started BootApplication in 16.772 seconds (JVM running for 18.609)
+2017/02/20T14:11:38 [http-nio-9080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring FrameworkServlet 'dispatcherServlet'
+2017/02/20T14:11:38 [http-nio-9080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - FrameworkServlet 'dispatcherServlet': initialization started
+2017/02/20T14:11:38 [http-nio-9080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - FrameworkServlet 'dispatcherServlet': initialization completed in 50 ms
+2017/02/20T14:11:38 [http-nio-9080-exec-1] INFO  org.thymeleaf.TemplateEngine - [THYMELEAF] INITIALIZING TEMPLATE ENGINE
+2017/02/20T14:11:38 [http-nio-9080-exec-1] INFO  o.t.t.AbstractTemplateResolver - [THYMELEAF] INITIALIZING TEMPLATE RESOLVER: org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver
+2017/02/20T14:11:38 [http-nio-9080-exec-1] INFO  o.t.t.AbstractTemplateResolver - [THYMELEAF] TEMPLATE RESOLVER INITIALIZED OK
+2017/02/20T14:11:38 [http-nio-9080-exec-1] INFO  o.t.m.AbstractMessageResolver - [THYMELEAF] INITIALIZING MESSAGE RESOLVER: org.thymeleaf.spring4.messageresolver.SpringMessageResolver
+2017/02/20T14:11:38 [http-nio-9080-exec-1] INFO  o.t.m.AbstractMessageResolver - [THYMELEAF] MESSAGE RESOLVER INITIALIZED OK
+2017/02/20T14:11:38 [http-nio-9080-exec-1] INFO  org.thymeleaf.TemplateEngine.CONFIG - [THYMELEAF] TEMPLATE ENGINE CONFIGURATION:
+[THYMELEAF] * Cache Factory implementation: org.thymeleaf.cache.StandardCacheManager
+[THYMELEAF] * Template modes:
+[THYMELEAF]     * HTML5
+[THYMELEAF]     * XHTML
+[THYMELEAF]     * XML
+[THYMELEAF]     * VALIDXML
+[THYMELEAF]     * VALIDXHTML
+[THYMELEAF]     * LEGACYHTML5
+[THYMELEAF] * Template resolvers (in order):
+[THYMELEAF]     * org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver
+[THYMELEAF] * Message resolvers (in order):
+[THYMELEAF]     * org.thymeleaf.spring4.messageresolver.SpringMessageResolver
+[THYMELEAF] * Dialect: org.thymeleaf.spring4.dialect.SpringStandardDialect
+[THYMELEAF]     * Prefix: "th"
+[THYMELEAF] TEMPLATE ENGINE CONFIGURED OK
+2017/02/20T14:11:38 [http-nio-9080-exec-1] INFO  org.thymeleaf.TemplateEngine - [THYMELEAF] TEMPLATE ENGINE INITIALIZED

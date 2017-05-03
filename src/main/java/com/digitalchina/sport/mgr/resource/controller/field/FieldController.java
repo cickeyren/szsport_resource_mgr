@@ -87,7 +87,7 @@ public class FieldController {
      */
     @RequestMapping(value = "/add.html", method = RequestMethod.GET)
     public String add(HttpServletRequest request, ModelMap modelMap) {
-
+        modelMap.put("mainStadiumId", request.getParameter("mainStadiumId"));
         modelMap.put("subStadiumId", request.getParameter("subStadiumid"));
         return "field/subFieldAdd";
 

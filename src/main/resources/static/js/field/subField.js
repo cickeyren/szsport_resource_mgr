@@ -4,7 +4,7 @@ $(function () {
      * 进入子场馆场地新增页面
      */
     $("#addSubField").bind('click', function () {
-        window.location.href = "/FieldController/add.html?subStadiumid=" + $('#subStadiumid').val();
+        window.location.href = "/FieldController/add.html?subStadiumid=" + $('#subStadiumid').val() + "&mainStadiumId="+$('#mainStadiumId').val();
     });
     $("#back").bind('click', function () {
         window.location.href = "/subStadiumController/substadium.html?mainStadiumId="+$('#mainStadiumId').val();
