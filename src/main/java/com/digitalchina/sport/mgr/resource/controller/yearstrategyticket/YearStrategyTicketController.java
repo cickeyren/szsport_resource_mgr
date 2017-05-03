@@ -186,7 +186,11 @@ public class YearStrategyTicketController {
         map.put("mainStadiumList", mainStadiumList);
         //合作商信息
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("mainStadiumId", mainStadiumList.get(0).get("id"));
+        if(map.containsKey("mainStadiumSelected")){
+            paramMap.put("mainStadiumId", map.get("mainStadiumSelected"));
+        }else {
+            paramMap.put("mainStadiumId", mainStadiumList.get(0).get("id"));
+        }
         map.put("merchantList", merchantService.getMerchantListByParam(paramMap));
         return "yearstrategyticket/modify_year_strategy_ticket";
     }

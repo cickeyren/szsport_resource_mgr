@@ -312,7 +312,7 @@ $(function () {
                 success:function(result){
                     if("000000" == result.code) {
                         alert("更新成功~");
-                        window.location.reload(true);
+                        //window.location.reload(true);
                     }
                 },
                 error:function(result){
