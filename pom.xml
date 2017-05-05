@@ -312,6 +312,19 @@
 
 			</properties>
 		</profile>
+		<profile>
+			<id>dev85</id>
+			<properties>
+				<jdbc.url>jdbc:mysql://221.178.232.93:3307/szsport_order_mgr?useSSL=false</jdbc.url>
+				<jdbc.username>szsport_order</jdbc.username>
+				<jdbc.password>12345678</jdbc.password>
+				<cas.sso.url>http://upmssso.eastdc.cn:85</cas.sso.url>
+				<app.url>http://szsportmgr.eastdc.cn:85/</app.url>
+				<upms.url>http://upms.eastdc.cn:85</upms.url>
+				<upms.apikey>543df6e9aed348dc85e05593b1c9c24d</upms.apikey>
+
+			</properties>
+		</profile>
 	</profiles>
 
 
