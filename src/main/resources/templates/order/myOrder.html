@@ -80,6 +80,15 @@
                     <td class="alignleft">
                         <input type="text" class="mt5" id="ticketName" name="ticketName" th:value="${ticketName}"/>
                     </td>
+                    <td class="with150">场馆选择:</td>
+                    <td class="alignleft">
+                        <select id="mainStadiumId" name="mainStadiumId">
+                            <option value="">全部</option>
+                            <option th:each="obj,eStat:${mainStadiumList}" th:value="${obj.id}"
+                                    th:selected="${mainStadiumId eq obj.id}"
+                                    th:text="${obj.name}"></option>
+                        </select>
+                    </td>
                 </tr>
                 <tr class="controls">
                     <td class="with150">下单时间:</td>

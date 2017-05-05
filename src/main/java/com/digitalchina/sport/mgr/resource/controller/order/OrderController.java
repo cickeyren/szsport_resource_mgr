@@ -63,6 +63,8 @@ public class OrderController {
         String checkAll = request.getParameter("checkAll");
         String refundAll = request.getParameter("refundAll");
         System.out.print(status);
+        params.put("mainStadiumId", request.getParameter("mainStadiumId"));
+        //params.put("subStadiumId", request.getParameter("subStadiumId"));
         params.put("userTel", request.getParameter("userTel"));
         params.put("ticketType", request.getParameter("ticketType"));
         params.put("ticketName", request.getParameter("ticketName"));
@@ -104,7 +106,11 @@ public class OrderController {
             map.put("checkAll", request.getParameter("checkAll"));
             map.put("refundAll", request.getParameter("refundAll"));
             map.put("orderStartDate", request.getParameter("orderStartDate"));
+            map.put("mainStadiumId", request.getParameter("mainStadiumId"));
             map.put("orderEndDate", request.getParameter("orderEndDate"));//回到页面,保留搜索关键字
+            //所有开放场馆
+            List<Map<String,String>> mainStadiumList = orderService.getMainStadium(map);
+            map.put("mainStadiumList",mainStadiumList);
             map.put("orderList",orderList);
             return "order/myOrder";
         } catch (Exception e) {

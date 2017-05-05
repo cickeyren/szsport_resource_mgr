@@ -97,4 +97,7 @@ public class OrderService {
             return null;
         }
     }
+    public List<Map<String, String>> getMainStadium(Map<String,Object> map) throws Exception{
+        return orderDao.getMainStadium(map);
+    };
 }
