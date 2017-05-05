@@ -122,7 +122,7 @@
                     <td width="10%" class="alignright"><span class="red">*</span>有效时间</td>
                     <td class="alignleft">
                         <input class="Wdate" type='text' style="float:none" id="startTime" name="startTime" class="inputw100 form-control mt5" readonly="readonly" th:value="${discount.startTime}"
-                               onClick="WdatePicker({minDate:'%y-%M-%d',maxDate:'#F{$dp.$D(\'endTime\')||\'%y-%M-%d\'}'})"/>至
+                               onClick="WdatePicker({minDate:'%y-%M-%d'})"/>至
                         <input class="Wdate" type='text' style="float:none" id="endTime" name="endTime" class="inputw100 form-control mt5" readonly="readonly" th:value="${discount.endTime}"
                                onClick="WdatePicker({minDate:'#F{$dp.$D(\'startTime\')}'})"/>
                     </td>

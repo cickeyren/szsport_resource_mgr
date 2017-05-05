@@ -6,6 +6,7 @@
         d.id AS id,
         dt.`name` AS discountType,
         m.`name` AS mainStadium,
+        CONCAT(DATE(d.start_time),'—',DATE(d.end_time)) AS timeToTime,
         (
         CASE
         WHEN s.`name` = '' THEN
@@ -188,8 +189,8 @@
             discount_channel AS discountChannel,
             pay_type AS payType,
             discount_limit AS discountLimit,
-            start_time AS startTime,
-            end_time AS endTime
+            DATE(start_time) AS startTime,
+            DATE(end_time) AS endTime
         FROM
             discount_configure
         WHERE
@@ -264,8 +265,8 @@
             ) AS discountChannel,
             p.payment AS payType,
             d.discount_limit AS discountLimit,
-            d.start_time AS startTime,
-            d.end_time AS endTime
+            DATE(d.start_time) AS startTime,
+            DATE(d.end_time) AS endTime,
         FROM
             discount_configure d
         LEFT JOIN discount_type dt ON d.discount_type = dt.id

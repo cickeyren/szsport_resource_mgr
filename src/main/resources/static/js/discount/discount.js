@@ -92,68 +92,80 @@ function updateSubStadium_Id(mainStadiumId) {
 
 //新增页面添加数据
 function doAdd() {
-    var addJson = {};
-    addJson.discountType = $("#discountType").val();
-    addJson.mainStadiumId = $("#mainStadium_id").val();
-    addJson.subStadiumId = $("#subStadium_id").val();
-    addJson.discountChannel = $("#discountChannel").val();
-    addJson.payType = $("#payType").val();
-    addJson.discountLimit = $("#discountLimit").val();
-    addJson.startTime = $("#startTime").val();
-    addJson.endTime = $("#endTime").val();
-    getHtmlByUrl({
-        type: 'POST',
-        url: '/discount/add.do',
-        data: addJson,
-        success: function (result) {
-            if ("000000" == result.code) {
-                layer.msg("添加成功！");
-                setTimeout(function () {
-                    window.location.href = "/discount/discountList.html";
-                },3000)
-            }else {
-                layer.alert(result.message);
+    var startTime = $("#startTime").val();
+    var endTime = $("#endTime").val();
+    if (startTime > endTime){
+        layer.alert("开始时间不能大于截止时间!");
+    }else {
+        var addJson = {};
+        addJson.discountType = $("#discountType").val();
+        addJson.mainStadiumId = $("#mainStadium_id").val();
+        addJson.subStadiumId = $("#subStadium_id").val();
+        addJson.discountChannel = $("#discountChannel").val();
+        addJson.payType = $("#payType").val();
+        addJson.discountLimit = $("#discountLimit").val();
+        addJson.startTime = $("#startTime").val();
+        addJson.endTime = $("#endTime").val();
+        getHtmlByUrl({
+            type: 'POST',
+            url: '/discount/add.do',
+            data: addJson,
+            success: function (result) {
+                if ("000000" == result.code) {
+                    layer.msg("添加成功！");
+                    setTimeout(function () {
+                        window.location.href = "/discount/discountList.html";
+                    },3000)
+                }else {
+                    layer.alert(result.message);
+                }
+                console.log(result);
+            },
+            error: function (result) {
+                layer.msg("添加失败！");
             }
-            console.log(result);
-        },
-        error: function (result) {
-            layer.msg("添加失败！");
-        }
-    });
+        });
+    }
 }
 
 //编辑更新数据
 function doUpdate() {
-    var addJson = {};
-    addJson.id = $('input[id="id"]').val();
-    addJson.discountType = $("#discountType").val();
-    addJson.mainStadiumId = $("#mainStadium_id").val();
-    addJson.subStadiumId = $("#subStadium_id").val();
-    addJson.discountChannel = $("#discountChannel").val();
-    addJson.payType = $("#payType").val();
-    addJson.discountLimit = $("#discountLimit").val();
-    addJson.startTime = $("#startTime").val();
-    addJson.endTime = $("#endTime").val();
+    var startTime = $("#startTime").val();
+    var endTime = $("#endTime").val();
+    if (startTime > endTime){
+        layer.alert("开始时间不能大于截止时间!");
+    }else {
+        var addJson = {};
+        addJson.id = $('input[id="id"]').val();
+        addJson.discountType = $("#discountType").val();
+        addJson.mainStadiumId = $("#mainStadium_id").val();
+        addJson.subStadiumId = $("#subStadium_id").val();
+        addJson.discountChannel = $("#discountChannel").val();
+        addJson.payType = $("#payType").val();
+        addJson.discountLimit = $("#discountLimit").val();
+        addJson.startTime = $("#startTime").val();
+        addJson.endTime = $("#endTime").val();
 
-    getHtmlByUrl({
-        type: 'POST',
-        url: '/discount/update.do',
-        data: addJson,
-        success: function (result) {
-            if ("000000" == result.code) {
-                layer.msg("编辑成功！");
-                setTimeout(function () {
-                    window.location.href = "/discount/discountList.html";
-                },3000)
-            }else {
-                layer.alert(result.message);
+        getHtmlByUrl({
+            type: 'POST',
+            url: '/discount/update.do',
+            data: addJson,
+            success: function (result) {
+                if ("000000" == result.code) {
+                    layer.msg("编辑成功！");
+                    setTimeout(function () {
+                        window.location.href = "/discount/discountList.html";
+                    },3000)
+                }else {
+                    layer.alert(result.message);
+                }
+                console.log(result);
+            },
+            error: function (result) {
+                layer.msg("编辑失败！");
             }
-            console.log(result);
-        },
-        error: function (result) {
-            layer.msg("编辑失败！");
-        }
-    });
+        });
+    }
 }
 
 //删除数据
