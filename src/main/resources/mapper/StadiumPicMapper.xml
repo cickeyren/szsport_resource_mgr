@@ -17,4 +17,70 @@
     -->
     id, pic_address, is_first, stadium_id, create_time
   </sql>
+
+  <!-- 添加主场馆图片信息 -->
+  <insert id="addMainStaiumPic" parameterType="HashMap">
+    INSERT INTO stadium_pic (
+      id,
+      pic_address,
+      is_first,
+      stadium_id
+    ) VALUES (
+      #{id},
+      #{picAddress},
+      #{isFirst},
+      #{stadiumId}
+    )
+  </insert>
+
+  <!-- 查询主场馆图片列表 -->
+  <select id="getMainStadiumPicList" parameterType="HashMap" resultType="HashMap">
+    SELECT
+      id,
+      pic_address AS picAddress,
+      is_first AS isFirst
+    FROM stadium_pic
+    <where>
+      <if test="stadiumId != null and stadiumId != ''">
+        AND stadium_id = #{stadiumId}
+      </if>
+    </where>
+    ORDER BY is_first DESC
+  </select>
+
+  <!-- 查询主场馆图片信息 -->
+  <select id="getMainStadiumPic" parameterType="HashMap" resultType="HashMap">
+    SELECT
+    id,
+    pic_address AS picAddress,
+    is_first AS isFirst
+    FROM stadium_pic
+    <where>
+      <if test="isFirst != null and isFirst != ''">
+        AND is_first = #{isFirst}
+      </if>
+      <if test="stadiumId != null and stadiumId != ''">
+        AND stadium_id = #{stadiumId}
+      </if>
+    </where>
+  </select>
+
+  <!-- 修改主场馆图片信息 -->
+  <update id="updateMainStadiumPic" parameterType="HashMap">
+      UPDATE stadium_pic SET
+      <if test="isFirst != null and isFirst != ''">
+          is_first = #{isFirst}
+      </if>
+      WHERE id = #{id}
+  </update>
+
+  <!-- 删除主场馆图片信息 -->
+  <delete id="delMainStadiumPic" parameterType="HashMap">
+    DELETE FROM stadium_pic
+    <where>
+      <if test="id != null and id != ''">
+        id = #{id}
+      </if>
+    </where>
+  </delete>
 </mapper>

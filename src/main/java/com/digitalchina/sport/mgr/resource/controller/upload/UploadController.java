@@ -3,6 +3,7 @@ package com.digitalchina.sport.mgr.resource.controller.upload;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.utils.StringUtil;
 import com.digitalchina.config.Config;
+import com.digitalchina.sport.mgr.resource.service.StadiumPicService;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class UploadController {
 
     public String uploadType_image = "0"; // 上传文件类型 图片型
 
+    @Autowired
+    private StadiumPicService stadiumPicService;
+
 
     /**
      * 进入新增页面
@@ -52,7 +56,14 @@ public class UploadController {
     public String add(ModelMap map,HttpServletRequest request) {
         Map<String, Object> params = new HashMap<>();
         String mainstadium_id = request.getParameter("mainstadium_id");
+        params.put("stadiumId", mainstadium_id);
         map.put("mainstadium_id", mainstadium_id);
+        List<Map<String, Object>> picList = new ArrayList<Map<String, Object>>();
+        try {
+            picList = stadiumPicService.getMainStadiumPicList(params);
+        } catch (Exception e){
+        }
+        map.put("picList", picList);
         return "img/imgall";//进入对应的页面
     }
 
@@ -196,7 +207,8 @@ public class UploadController {
          *
          * @throws Exception
          */
-    @RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
+    @RequestMapping(value = "/imageUpload.json", method = RequestMethod.POST)
+    @ResponseBody
     public RtnData imageUpload(@RequestParam("file") MultipartFile file,
             HttpServletRequest request) throws Exception {
         return doUpload(file, request, uploadType_image);
@@ -244,10 +256,10 @@ public class UploadController {
             filePath.mkdirs();
         }
         File targetFile = new File(path, uniquefileName);
-        return this.uploadFile(file, targetFile, returnUrl);
+        return this.uploadFile(file, targetFile, returnUrl, request);
     }
 
-    public RtnData uploadFile(MultipartFile file, File targetFile, String returnUrl) {
+    public RtnData uploadFile(MultipartFile file, File targetFile, String returnUrl, HttpServletRequest request) {
         // 保存至项目文件夹
         try {
             //file.transferTo(targetFile);
@@ -257,7 +269,16 @@ public class UploadController {
         }
 
         if (StringUtil.isNotEmpty(returnUrl)) {
-            return RtnData.ok(returnUrl, "上传成功");
+            //数据库添加图片信息
+            String photoDownloadPath = config.photoDownloadPath;
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("picAddress", photoDownloadPath + returnUrl);
+            paramMap.put("stadiumId", request.getParameter("mainstadium_id"));
+            if(stadiumPicService.addMainStaiumPic(paramMap) > 0){
+                return RtnData.ok(returnUrl, "上传成功");
+            } else {
+                return RtnData.fail("上传失败","");
+            }
         } else {
             return RtnData.fail("上传失败","");
         }
@@ -283,5 +304,46 @@ public class UploadController {
         DateFormat format = new SimpleDateFormat("yyyy/MM/dd/");
         String time = format.format(date);
         return time;
+    }
+
+    /**
+     * 场馆图片设为首图
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/setPicIsFirst.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData setPicIsFirst(String id, String stadiumId){
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("id", id);
+        paramMap.put("stadiumId", stadiumId);
+        try {
+            stadiumPicService.setPicIsFirst(paramMap);
+            return RtnData.ok("场馆图片设为首图成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("========场馆图片设为首图失败=========",e);
+        }
+        return RtnData.fail("场馆图片设为首图失败");
+    }
+
+    /**
+     * 删除场馆图片
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/delMainStadiumPic.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData delMainStadiumPic(String id){
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("id", id);
+        try {
+            stadiumPicService.delMainStadiumPic(paramMap);
+            return RtnData.ok("删除场馆图片成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("========删除场馆图片失败=========",e);
+        }
+        return RtnData.fail("删除场馆图片失败");
     }
 }

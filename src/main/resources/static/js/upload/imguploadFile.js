@@ -9,8 +9,7 @@ var imguploadFile = function () {
     var descEditor;
     /*页面初始化和事件绑定*/
     function bindEvents() {
-        $(el).undelegate()
-            .delegate('#uploadImg', 'change', uploadImg)
+        $(el).undelegate().delegate('#uploadImg', 'change', uploadImg)
 
     }
 
@@ -33,20 +32,23 @@ var imguploadFile = function () {
             layer.msg("最多上传1M图片,请重新上传！");
             return;
         }
-        var $form = $('<form enctype="multipart/form-data" style="display:none"></form>').append($field);
-        $('body').append($form);
+        //var $form = $('<form enctype="multipart/form-data" style="display:none"></form>').append($field);
+        $('#fileDiv').append($field);
+        var $form = $("#fileForm");
+        //$('body').append($form);
         $form.ajaxSubmit({
             type: 'POST',
-            url: '/upload/imageUpload',
+            url: '/upload/imageUpload.json',
             dataType: "json",
             success: function (t) {
                 $form.remove();
-                if ("000000" == result.code) {
+                if ("000000" == t.code) {
                     layer.alert("上传成功");
-                    $parent.find('img').attr('src', t.returnUrl);
-                    $parent.find("img").before($field);
+                    window.location.reload();
+                    //$parent.find('img').attr('src', t.returnUrl);
+                    //$parent.find("img").before($field);
                 } else {
-                    layer.msg(result.result);
+                    layer.msg(t.result);
                     $parent.append($field);
                 }
             },
@@ -54,7 +56,6 @@ var imguploadFile = function () {
                 $parent.prepend(field);
             }
         });
-
     }
 
     /*页面初始化*/
