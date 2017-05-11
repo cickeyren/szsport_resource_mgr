@@ -63,7 +63,7 @@ function updateSubStadiumId(mainStadiumId) {
                     $("#subStadiumId").append("<option value=\"" + n.id + "\">"+n.name+"</option>");
                 });
             }else {
-                layer.alert(result.result);
+                layer.alert(result.message);
             }
         },
     })
@@ -78,13 +78,14 @@ function updateSubStadium_Id(mainStadiumId) {
         success:function(result){
             if("000000" == result.code) {
                 var items = result.result;
-                $("#subStadium_id").empty();
-                $("#subStadium_id").append("<option value=''>全部</option>");
+                $("#div_subStadium").empty();
                 $.each(items,function(i,n){
-                    $("#subStadium_id").append("<option value=\"" + n.id + "\">"+n.name+"</option>");
+                    //<input type="checkbox" name="subStadium_id" th:each="subStadium, objStat: ${subStadiumList}" th:value="${subStadium.id}" th:text="${subStadium.name}">
+                    $("#div_subStadium").append("<input style='margin-left: 10px;' name='subStadium_id' value="+n.id+" type='checkbox'>"
+                        + "<font class='mt25'>"+ n.name+ "</font>");
                 });
             }else {
-                layer.alert(result.result);
+                layer.alert(result.message);
             }
         },
     })
@@ -100,12 +101,18 @@ function doAdd() {
         var addJson = {};
         addJson.discountType = $("#discountType").val();
         addJson.mainStadiumId = $("#mainStadium_id").val();
-        addJson.subStadiumId = $("#subStadium_id").val();
         addJson.discountChannel = $("#discountChannel").val();
         addJson.payType = $("#payType").val();
         addJson.discountLimit = $("#discountLimit").val();
         addJson.startTime = $("#startTime").val();
         addJson.endTime = $("#endTime").val();
+        obj = document.getElementsByName("subStadium_id");
+        var subStadiumId = [];
+        for(var k in obj){
+            if(obj[k].checked)
+                subStadiumId.push(obj[k].value);
+        }
+        addJson.subStadiumId = subStadiumId.toString();
         getHtmlByUrl({
             type: 'POST',
             url: '/discount/add.do',
@@ -139,32 +146,41 @@ function doUpdate() {
         addJson.id = $('input[id="id"]').val();
         addJson.discountType = $("#discountType").val();
         addJson.mainStadiumId = $("#mainStadium_id").val();
-        addJson.subStadiumId = $("#subStadium_id").val();
         addJson.discountChannel = $("#discountChannel").val();
         addJson.payType = $("#payType").val();
         addJson.discountLimit = $("#discountLimit").val();
         addJson.startTime = $("#startTime").val();
         addJson.endTime = $("#endTime").val();
-
-        getHtmlByUrl({
-            type: 'POST',
-            url: '/discount/update.do',
-            data: addJson,
-            success: function (result) {
-                if ("000000" == result.code) {
-                    layer.msg("编辑成功！");
-                    setTimeout(function () {
-                        window.location.href = "/discount/discountList.html";
-                    },3000)
-                }else {
-                    layer.alert(result.message);
+        obj = document.getElementsByName("subStadium_id");
+        var subStadiumId = [];
+        for(var k in obj){
+            if(obj[k].checked)
+                subStadiumId.push(obj[k].value);
+        }
+        if(subStadiumId.length>0){
+            addJson.subStadiumId = subStadiumId.toString();
+            getHtmlByUrl({
+                type: 'POST',
+                url: '/discount/update.do',
+                data: addJson,
+                success: function (result) {
+                    if ("000000" == result.code) {
+                        layer.msg("编辑成功！");
+                        setTimeout(function () {
+                            window.location.href = "/discount/discountList.html";
+                        },3000)
+                    }else {
+                        layer.alert(result.message);
+                    }
+                    console.log(result);
+                },
+                error: function (result) {
+                    layer.msg("编辑失败！");
                 }
-                console.log(result);
-            },
-            error: function (result) {
-                layer.msg("编辑失败！");
-            }
-        });
+            });
+        }else {
+            layer.alert("子场馆不能为空!");
+        }
     }
 }
 
@@ -188,7 +204,7 @@ function doDelete(filed) {
                     layer.msg("作废成功！");
                     window.location.href = "/discount/discountList.html";
                 }else {
-                    layer.alert(result.result);
+                    layer.alert(result.message);
                 }
             },
             error: function (result) {
@@ -198,5 +214,11 @@ function doDelete(filed) {
     });
 }
 
-
+/*全选*/
+function check_all(obj, cName) {
+    var checkboxs = document.getElementsByName(cName);
+    for ( var i = 0; i < checkboxs.length; i+=1) {
+        checkboxs[i].checked = obj.checked;
+    }
+}
 

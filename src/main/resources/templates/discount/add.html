@@ -86,13 +86,18 @@
                             <option th:each="obj,eStat:${mainStadium}" th:value="${obj.id}"
                                     th:text="${obj.name}"></option>
                         </select>  
-                        子馆
-                        <select id="subStadium_id" name="subStadium_id">
-                            <option value="">全部</option>
-                            <option th:each="obj,eStat:${subStadium}" th:value="${obj.id}"
-                                    th:text="${obj.name}"></option>
-                        </select>
-
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>子场馆</td>
+                    <td class="alignleft">
+                        <div>
+                            <input style="margin-left: 10px;" type="checkbox" name="checkAll" id="subStadiumCheckAll" onclick="check_all(this,'subStadium_id');">全选/全不选
+                        </div>
+                        <div id="div_subStadium">
+                            <input style="margin-left: 10px;" type="checkbox" name="subStadium_id" th:each="subStadium, objStat: ${subStadiumList}" th:value="${subStadium.id}" th:text="${subStadium.name}">
+                        </div>
+                        <label id="subStadium_id-error" class="error" for="subStadium_id"></label>
                     </td>
                 </tr>
                 <tr class="controls">
@@ -153,6 +158,9 @@
                 },
                 endTime: {
                     required: true,
+                },
+                subStadium_id:{
+                    required: true,
                 }
             },
             messages: {
@@ -164,6 +172,9 @@
                 },
                 endTime: {
                     required: "结束时间不能为空！"
+                },
+                subStadium_id:{
+                    required: "子场馆不能为空！",
                 }
             },
             submitHandler: function () {

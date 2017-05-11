@@ -28,7 +28,13 @@ public final class StringUtil {
 		
 		return false;
 	}
-	
+	public static boolean isEmpty(Object str){
+		if(str==null || "".equals(str)){
+			return true;
+		}
+
+		return false;
+	}
 	/**
 	 * 校验字符串是否不为空
 	 * @param str
