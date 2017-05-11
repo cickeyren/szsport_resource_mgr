@@ -19,8 +19,7 @@
 		<upload.path>/contfiles</upload.path>
 		<upload.file.folder>/files/</upload.file.folder>
 		<upload.image.folder>/images/</upload.image.folder>
-		<project.context.path>/resource</project.context.path>
-		<photo.download.path>http://files.szvenue.com</photo.download.path>
+		<project.context.path>/szsportmgr</project.context.path>
 	</properties>
 
 	<parent>
@@ -288,11 +287,11 @@
 				<jdbc.url>jdbc:mysql://221.178.232.93:3307/szsport_order_mgr?useSSL=false</jdbc.url>
 				<jdbc.username>szsport_order</jdbc.username>
 				<jdbc.password>12345678</jdbc.password>
-				<cas.sso.url>http://upms-cas.eastdc.cn:82</cas.sso.url>
+				<cas.sso.url>http://upmssso.eastdc.cn:85</cas.sso.url>
 				<app.url>http://localhost:8080/</app.url>
-				<upms.url>http://upms.eastdc.cn:82</upms.url>
+				<upms.url>http://upms.eastdc.cn:85</upms.url>
 				<upms.apikey>543df6e9aed348dc85e05593b1c9c24d</upms.apikey>
-
+				<photo.download.path>http://files.eastdc.cn:85</photo.download.path>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -309,7 +308,7 @@
 				<app.url>http://szsportmgr.eastdc.cn:82/</app.url>
 				<upms.url>http://upms.eastdc.cn:82</upms.url>
 				<upms.apikey>543df6e9aed348dc85e05593b1c9c24d</upms.apikey>
-
+				<photo.download.path>http://files.szvenue.com</photo.download.path>
 			</properties>
 		</profile>
 		<profile>
@@ -322,7 +321,7 @@
 				<app.url>http://szsportmgr.eastdc.cn:85/</app.url>
 				<upms.url>http://upms.eastdc.cn:85</upms.url>
 				<upms.apikey>543df6e9aed348dc85e05593b1c9c24d</upms.apikey>
-
+				<photo.download.path>http://files.eastdc.cn:85</photo.download.path>
 			</properties>
 		</profile>
 	</profiles>
