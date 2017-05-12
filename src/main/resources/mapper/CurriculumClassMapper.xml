@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.CurriculumClassMapper">
+    <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.CurriculumClass">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="curriculum_id" property="curriculum_id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="class_long" property="class_long" jdbcType="VARCHAR"/>
+        <result column="class_times" property="class_times" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="student_num" property="student_num" jdbcType="INTEGER"/>
+        <result column="max_num" property="max_num" jdbcType="INTEGER"/>
+        <result column="lean_time" property="lean_time" jdbcType="VARCHAR"/>
+        <result column="bm_time" property="bm_time" jdbcType="VARCHAR"/>
+        <result column="bm_end" property="bm_end" jdbcType="VARCHAR"/>
+        <result column="target" property="target" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="fee_code" property="fee_code" jdbcType="VARCHAR"/>
+        <result column="fee" property="fee" jdbcType="DECIMAL"/>
+        <result column="fee_mark" property="fee_mark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="curriculumClassTimes" type="com.digitalchina.sport.mgr.resource.model.CurriculumClassTimes">
+        <result column="class_id" property="class_id" jdbcType="VARCHAR"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        id, curriculum_id, name, class_long, class_times, student_num, max_num, lean_time,
+        bm_time, bm_end, target, content, fee_code, fee, fee_mark
+    </sql>
+    <select id="getCurriculumClasses" parameterType="String" resultMap="curriculumClassTimes">
+      SELECT cc.*,
+            cct.class_id,
+            GROUP_CONCAT(cct.time SEPARATOR '&lt;br>') as time
+      FROM curriculum_class cc,
+	      curriculum_class_times cct
+	  where cc.id = cct.class_id
+	  AND cc.curriculum_id = #{VALUE}
+	  AND cct.status = 1
+	  GROUP BY cc.id
+  </select>
+    <select id="getCurriculumClassesByKey" parameterType="String" resultMap="curriculumClassTimes">
+      SELECT cc.*,
+            cct.class_id,
+            GROUP_CONCAT(cct.time SEPARATOR ' &lt;br> ') as time
+      FROM curriculum_class cc,
+	      curriculum_class_times cct
+	  where cc.id = cct.class_id
+	  AND cc.id = #{VALUE}
+	  AND cct.status = 1
+	  GROUP BY cc.id
+  </select>
+    <insert id="addCurriculumClassesTimes" parameterType="java.util.Map">
+      INSERT INTO curriculum_class_times(class_id,time) VALUES (#{class_id},#{time});
+  </insert>
+    <select id="getClassTimes" resultType="java.util.Map" parameterType="String">
+      SELECT id ,time FROM curriculum_class_times cct where cct.class_id = #{VALUE} AND cct.status = 1
+    </select>
+    <update id="delTimess" parameterType="String">
+        UPDATE curriculum_class_times cct SET cct.status = 2 where cct.id=#{VALUE}
+    </update>
+</mapper>

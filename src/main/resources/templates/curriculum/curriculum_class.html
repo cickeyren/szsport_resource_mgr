@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/js/curriculum/curriculumClass.js" th:src="@{/js/curriculum/curriculumClass.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+
+        .border {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .pb10 {
+            padding-bottom: 10px;
+        }
+
+        .mt15 {
+            margin-top: 15px;
+        }
+
+        .mb20 {
+            margin-bottom: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="pb10 border mt20">
+        当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a>
+    </div>
+    <form class="form-horizontal" action="/MerchantController/merchant.html" id="searchForm" method="POST">
+        <input type="hidden" id="myPage" name="page" th:value="${page}">
+        <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+        <input type="hidden" name="curriculumId" id="curriculumId" th:value="${curriculumId}">
+    </form>
+    <div>
+        <button type="button" class="btn btn-success fl mb20" id="addClass">新增</button>
+        <button type="button" class="btn btn-success fr mb20" id="back">返回</button>
+
+    </div>
+    <div>
+        <table id="dataTable" class="table table-bordered">
+
+            <thead>
+            <tr>
+                <th>
+                    班名
+                </th>
+                <th>上课日期</th>
+                <th>
+                    上课时段
+                </th>
+                <th>费用类型</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+
+            <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(list)}">
+            <tr th:each="obj, objStat: ${list}">
+                <input type="hidden" th:value="${obj.id}"/>
+                <td th:text="${obj.name}"></td>
+                <td th:text="${obj.lean_time}"></td>
+                <td th:utext ="${obj.time}"></td>
+                <td th:text="${obj.fee_code}"></td>
+                <td th:if="${obj.status==1}">停用</td>
+                <td th:if="${obj.status==2}">启用</td>
+                <td>
+                    <a id="edit" th:data="${obj.id}"
+                       th:href="@{/curriculumController/edit_curriculum_class.html(id=${obj.id})}">编辑 </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a id="edit" th:data="${obj.id}"
+                       th:href="@{/curriculumController/editClassStatus(id=${obj.id},status=2,curriculumId=${curriculumId})}" th:if="${obj.status==1}">启用</a>
+                    <a id="edit" th:data="${obj.id}"
+                       th:href="@{/curriculumController/editClassStatus(id=${obj.id},status=1,curriculumId=${curriculumId})}" th:if="${obj.status==2}">停用</a>
+                    &nbsp;&nbsp;&nbsp;
+            </tr>
+            </tbody>
+            <tbody th:if="${#lists.isEmpty(list)}">
+            <tr>
+                <td colspan="12">没有符合查询条件的记录！</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="page" class="page" align="right" style="margin-right: 10px;">
+    </div>
+</div>
+</body>
+</html>
