@@ -6,6 +6,7 @@
         d.id AS id,
         dt.`name` AS discountType,
         m.`name` AS mainStadium,
+        CONCAT(DATE(d.start_time),'—',DATE(d.end_time)) AS timeToTime,
         (
         CASE
         WHEN s.`name` = '' THEN
@@ -188,17 +189,17 @@
             discount_channel AS discountChannel,
             pay_type AS payType,
             discount_limit AS discountLimit,
-            start_time AS startTime,
-            end_time AS endTime
+            DATE(start_time) AS startTime,
+            DATE(end_time) AS endTime
         FROM
             discount_configure
         WHERE
             id = #{id}
     </select>
 
-    <select id="getSameCountByParams" parameterType="java.util.Map" resultType="int">
+    <select id="getSameCountByParams" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
-        count(0)
+        d.id,count(0) AS count
         FROM
         discount_configure d
         WHERE
@@ -207,7 +208,7 @@
             AND d.main_stadium_id = #{mainStadiumId}
         </if>
         <if test="subStadiumId != null and subStadiumId != ''">
-            AND d.sub_stadium_id = #{subStadiumId}
+            AND FIND_IN_SET(#{subStadiumId},d.sub_stadium_id)
         </if>
         <if test="payType != null and payType != ''">
             AND d.pay_type = #{payType}
@@ -241,17 +242,8 @@
         SELECT
             d.id AS id,
             dt.`name` AS discountType,
-            m.`name` AS mainStadiumId,
-            (
-                CASE
-                WHEN s.`name` = '' THEN
-                    '全部'
-                WHEN s.`name` IS NULL THEN
-                    '全部'
-                ELSE
-                    s.`name`
-                END
-            ) AS subStadiumId,
+            d.main_stadium_id AS mainStadiumId,
+            d.sub_stadium_id AS subStadiumId,
             (
                 CASE d.discount_channel
                 WHEN '0' THEN
@@ -264,15 +256,35 @@
             ) AS discountChannel,
             p.payment AS payType,
             d.discount_limit AS discountLimit,
-            d.start_time AS startTime,
-            d.end_time AS endTime
+            DATE(d.start_time) AS startTime,
+            DATE(d.end_time) AS endTime
         FROM
             discount_configure d
         LEFT JOIN discount_type dt ON d.discount_type = dt.id
-        LEFT JOIN main_stadium m ON m.id = d.main_stadium_id
-        LEFT JOIN sub_stadium s ON s.id = d.sub_stadium_id
         LEFT JOIN payment p ON p.id = d.pay_type
         WHERE
             d.id = #{id}
+    </select>
+
+    <select id="getMainStadiumById" resultType="java.util.HashMap" parameterType="String">
+        SELECT
+        id,
+        `name` AS name
+        FROM
+        main_stadium
+        WHERE
+        id = #{id}
+        AND `status` = '1'
+    </select>
+
+    <select id="getSubStadiumById" resultType="java.util.HashMap" parameterType="String">
+        SELECT
+        s.id,
+        s.`name` AS name
+        FROM
+        sub_stadium s
+        WHERE
+        s.id = #{id}
+        AND s.`status` = '1'
     </select>
 </mapper>

@@ -28,9 +28,13 @@ public interface DiscountDao {
 
     DiscountConfigure getDiscountById(String id) throws Exception;
 
-    int getSameCountByParams(Map<String, Object> param) throws Exception;
+    Map<String, Object> getSameCountByParams(Map<String, Object> param) throws Exception;
 
     int updateOverTimeStatus(String status) throws Exception;
 
     DiscountConfigure getDetailById(String id) throws Exception;
+
+    Map<String, Object> getMainStadiumById(String id) throws Exception;
+
+    Map<String, Object> getSubStadiumById(String id) throws Exception;
 }

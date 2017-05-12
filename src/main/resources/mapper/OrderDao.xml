@@ -4,7 +4,7 @@
     <!-- 订单列表 -->
     <select id="getOrderListByMap" resultType="java.util.HashMap" parameterType="java.util.Map">
         SELECT
-        id,
+        ob.id,
         ob.order_number AS orderNumber,
         c.categoryName,
         (case ob.ticket_type  when '0' then '散票/年卡' WHEN '1' THEN '场地预定' WHEN '2' THEN '散客预定' ELSE '其他' END) as ticketType,
@@ -26,6 +26,7 @@
         FROM
         order_base_info ob
         LEFT JOIN classify c ON ob.classify = c.cid
+        LEFT JOIN sub_stadium s ON s.id = ob.sub_stadium_id
         WHERE 1=1
         <if test="userId != null and userId != ''">
             AND user_id = #{userId}
@@ -60,6 +61,14 @@
         <if test="refundStatus != null and refundStatus != ''">
             AND
             ob.refund_status IN (#{refundStatus})
+        </if>
+        <if test="mainStadiumId != null and mainStadiumId != ''">
+            AND
+            s.parent_id =#{mainStadiumId}
+        </if>
+        <if test="subStadiumId != null and subStadiumId != ''">
+            AND
+            ob.sub_stadium_id =#{subStadiumId}
         </if>
         ORDER BY
         order_time DESC
@@ -71,6 +80,7 @@
           COUNT(0)
         FROM
           order_base_info ob
+        LEFT JOIN sub_stadium s ON s.id = ob.sub_stadium_id
         WHERE 1=1
         <if test="userId != null and userId != ''">
             AND user_id = #{userId}
@@ -105,6 +115,14 @@
         <if test="refundStatus != null and refundStatus != ''">
             AND
             ob.refund_status IN (#{refundStatus})
+        </if>
+        <if test="mainStadiumId != null and mainStadiumId != ''">
+            AND
+            s.parent_id =#{mainStadiumId}
+        </if>
+        <if test="subStadiumId != null and subStadiumId != ''">
+            AND
+            ob.sub_stadium_id =#{subStadiumId}
         </if>
     </select>
     <!-- 订单详情 -->
@@ -345,5 +363,20 @@
         LEFT JOIN order_base_info ob ON oc.order_base_id = ob.id
         WHERE
             oc.id = #{orderContentId}
+    </select>
+
+    <select id="getMainStadium" resultType="java.util.HashMap">
+        SELECT
+        s.id,
+        `name`,
+        m.merchant_name
+        FROM
+        main_stadium s
+        LEFT JOIN merchant m ON m.mainstadium_id = s.id
+        WHERE
+        s.`status` = '1'
+        <if test="merchantId !=null and merchantId != ''">
+            AND m.id=#{merchantId}
+        </if>
     </select>
 </mapper>

@@ -156,7 +156,7 @@
     <div class="pb10 border mt20 mr10 ml10">
         当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">图片</a>
     </div>
-    <form class="mt10" onsubmit="return false;" method="post" action="#" enctype="multipart/form-data" id="FileForm">
+    <form class="mt10" onsubmit="return false;" method="post" action="#" enctype="multipart/form-data" id="fileForm" name="fileForm">
         <div class="cg-img">
             <span class="cg-img-title"><i>*</i>场馆图片：</span>
             <span class="upload">
@@ -164,33 +164,92 @@
                 <button>选择图片</button>
             </span>
             <input type="text" id="imgUrl" readonly="true">
+            <input type="hidden" id="mainstadium_id" name="mainstadium_id" th:value="${mainstadium_id}">
             <input type="submit" id="uploadsub" name="uploadsub" class="btn btn-success" value="上传">
             <span class="img-shuom">单张图片大小限制为100k</span>
         </div>
+        <div id="fileDiv" hidden></div>
     </form>
-    <div class="img-container">
-        <div class="img-list">
-            <img src="#" alt="">
+    <div class="img-container" th:unless="${#lists.isEmpty(picList)}">
+        <div class="img-list" th:each="pic:${picList}">
+            <img th:src="${pic.picAddress}" alt="">
             <div class="operate">
                   <span>
-                      <input type="radio" name="setFirst">设为首图
+                      <input type="radio" name="setFirst" th:checked="${pic.isFirst eq '1'}"
+                             th:onclick="'javascript:setPicIsFirst(\'' + ${pic.id} + '\',\'' + ${mainstadium_id} + '\');'">设为首图
                   </span>
-                <a href="javascript:;" class="delete">删除</a>
-            </div>
-        </div>
-        <div class="img-list">
-            <img src="#" alt="">
-            <div class="operate">
-                  <span>
-                      <input type="radio" name="setFirst">设为首图
-                  </span>
-                <a href="javascript:;" class="delete">删除</a>
+                <a href="javascript:;" class="delete" th:onclick="'javascript:delMainStadiumPic(\'' + ${pic.id} + '\');'">删除</a>
             </div>
         </div>
     </div>
 </div>
 <script>
-    imguploadFile()
+    imguploadFile();
+
+    /**
+     * 设置场馆图片首图
+     * @param id
+     */
+    function setPicIsFirst(id, stadiumId) {
+        $.ajax({
+            url:'/upload/setPicIsFirst.json',
+            type:'POST',
+            data:{
+                "id":id,
+                "stadiumId":stadiumId
+            },
+            dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+            success:function(result){
+                if("000000" == result.code) {
+                    alert(result.result);
+                    //刷新当前页面
+                    window.location.reload();
+                } else {
+                    layer.msg(result.message);
+                }
+            },
+            error:function(result){
+                layer.msg("设置场馆图片首图失败~");
+            }
+        });
+    }
+
+    /**
+     * 删除场馆图片
+     * @param id
+     */
+    function delMainStadiumPic(id) {
+        /**
+         * 提示是否删除场馆图片
+         */
+        layer.confirm('您确认是否删除此场馆图片？', {
+            btn: ['删除','取消'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            $.ajax({
+                url:'/upload/delMainStadiumPic.json',
+                type:'POST',
+                data:{
+                    "id":id
+                },
+                dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success:function(result){
+                    if("000000" == result.code) {
+                        alert(result.result);
+                        //刷新当前页面
+                        window.location.reload();
+                    } else {
+                        layer.msg(result.message);
+                    }
+                },
+                error:function(result){
+                    layer.msg("删除场馆图片失败~");
+                }
+            })
+        }, function(){
+            //layer.msg('取消成功', {shift: 6});
+        });
+    }
 </script>
 </body>
 </html>

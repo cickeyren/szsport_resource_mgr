@@ -65,4 +65,6 @@ public interface OrderDao {
      * @throws Exception
      */
     Map<String,Object> getOrderContentCountAndType(Map<String,Object> param) throws Exception;
+
+    List<Map<String, String>> getMainStadium(Map<String,Object> map) throws Exception;
 }

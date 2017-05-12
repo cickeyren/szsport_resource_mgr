@@ -1,6 +1,7 @@
 package com.digitalchina.sport.mgr.resource.service;
 
 
+import com.digitalchina.common.utils.StringUtil;
 import com.digitalchina.sport.mgr.resource.dao.DiscountDao;
 import com.digitalchina.sport.mgr.resource.model.DiscountConfigure;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +56,34 @@ public class DiscountService {
         return discountDao.getDiscountById(id);
     };
 
-    public int getSameCountByParams(Map<String, Object> param) throws Exception{
-        return discountDao.getSameCountByParams(param);
+    public boolean getSameCountByParams(Map<String, Object> param) throws Exception{
+        boolean flag = true;
+        if (!StringUtil.isEmpty(param.get("subStadiumId"))){
+            String subStadiumIds[] = param.get("subStadiumId").toString().split(",");
+            if (subStadiumIds.length>0){
+                for (int i=0;i<subStadiumIds.length;i++){
+                    param.put("subStadiumId",subStadiumIds[i]);
+                    Map<String, Object> sameMap = discountDao.getSameCountByParams(param);
+                    String strcount = sameMap.get("count").toString();
+                    int count = Integer.parseInt(strcount);
+                    if (count>0){
+                        if (!StringUtil.isEmpty(param.get("id"))){
+                            String id = param.get("id").toString();
+                            if (!id.equals(sameMap.get("id"))){
+                                flag=false;
+                                break;
+                            }
+                        }else {
+                            flag=false;
+                            break;
+                        }
+                    }
+                }
+            }else
+                flag=false;
+        }else
+            flag=false;
+        return flag;
     };
 
     public int updateOverTimeStatus()throws Exception{
@@ -65,5 +92,12 @@ public class DiscountService {
 
     public DiscountConfigure getDetailById(String id) throws Exception{
         return discountDao.getDetailById(id);
+    };
+
+    public Map<String, Object> getMainStadiumById(String id) throws Exception{
+        return discountDao.getMainStadiumById(id);
+    };
+    public Map<String, Object> getSubStadiumById(String id) throws Exception{
+        return discountDao.getSubStadiumById(id);
     };
 }
