@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增合作商户信息</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+    <script src="../../static/js/curriculum/editcurriculum.js" th:src="@{/js/curriculum/editcurriculum.js}"></script>
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <!--<script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>-->
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+
+        .border {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .pb10 {
+            padding-bottom: 10px;
+        }
+
+        .mt15 {
+            margin-top: 15px;
+        }
+
+        .mb20 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="container-fluid" style="margin-top: 20px;height:120px;">
+        <div class="pb10 border">
+            当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a> < <a href="javascript:;">新增</a>
+        </div>
+        <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" method="post">
+            <input type="hidden" name="id" id="id" th:value="${curriculum.id}">
+            <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                <tr class="controls" style="background-color: #ededed"><td class="alignright" width="10%">基本信息</td><td></td></tr>
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>课程名称</td>
+                    <td class="alignleft"><input type="text" id="name" name="name" th:value="${curriculum.name}"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>课程图片</td>
+                    <td class="alignleft"><input type="text" id="img_url" name="img_url" th:value="${curriculum.img_url}"/></td>
+                </tr>
+                <tr>
+                    <td class="alignright" width="10%">培训机构</td>
+                    <td class="alignleft">
+                        <select id="training_institutions_id" name="training_institutions_id">
+                            <option th:each="obj,eStat:${trainingInstitutions}" th:value="${obj.value}"
+                                    th:text="${obj.text}" th:selected="${#strings.contains(curriculum.training_institutions_id,obj.value)}"></option>
+                        </select>  
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="alignright" width="10%">合作商家</td>
+                    <td class="alignleft">
+                        <select id="cooperative_merchant_id" name="cooperative_merchant_id">
+                            <option></option>
+                        </select>  
+                    </td>
+                </tr>
+                <tr class="controls" style="background-color: #ededed"> <td class="alignright" width="10%">课程详情</td><td></td></tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>教师</td>
+                    <td class="alignleft">
+                        <select multiple="multiple" size="5" id="teachers" name="teachers">
+                            <option th:each="obj,eStat:${allTeacherList}" th:value="${obj.id}"
+                                    th:text="${obj.value}"></option>
+                        </select>
+                        <div style="width: 60px ;display: inline-block;">
+                            <button style="height: 30px" class="btn" id="addteacher">添加</button>
+                            <button style="height: 30px; margin-top: 10px" class="btn" id="delteacher">删除</button>
+                        </div>
+                        <select multiple="multiple" size="5" id="Rteachers">
+                            <option th:each="obj,eStat:${teacherList}" th:value="${obj.id}"
+                                    th:text="${obj.value}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%">培训分类</td>
+                    <td class="alignleft">
+                        <select id="train_type" name="train_type">
+                            <option>信息</option>
+                        </select>  
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">课程介绍</td>
+                    <td class="alignleft">
+                        <textarea id="m_content" name="content" style="width:500px;height:200px;" th:text="${curriculum.content}"></textarea>
+                    </td>
+                </tr>
+                <tr style="background-color: #ededed" class="controls"><td class="alignright" width="10%">报名设置</td><td></td></tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%">课程地点</td>
+                    <td class="alignleft"><input type="text" id="address" name="address" th:value="${curriculum.address}"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>咨询电话</td>
+                    <td class="alignleft"><input type="text" id="phone" name="phone" th:value="${curriculum.phone}"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>报名必填</td>
+                    <td class="alignleft">
+                        <select multiple="multiple" size="5" id="enrollment_required" name="enrollment_required">
+                            <!--<option value="volvo">Volvo</option>-->
+                            <!--<option value="saab">Saab</option>-->
+                            <!--<option value="opel">Opel</option>-->
+                            <!--<option value="audi">Audi</option>-->
+                            <!--<option th:each="obj,eStat:${allTeacherList}" th:value="${obj.id}"-->
+                                    <!--th:text="${obj.value}"></option>-->
+                        </select>
+                        <div style="width: 60px ;display: inline-block;">
+                            <button style="height: 30px" class="btn" id="add">添加</button>
+                            <button style="height: 30px; margin-top: 10px" class="btn" id="del">删除</button>
+                        </div>
+                        <select multiple="multiple" size="5" id="Renrollment_required">
+                            <!--<option th:each="obj,eStat:${teacherList}" th:value="${obj.id}"-->
+                                    <!--th:text="${obj.value}"></option>-->
+                        </select>
+                    </td>
+                </tr>
+                <tr class="controls" style="background-color: #ededed"><td class="alignright" width="10%">报名须知</td><td></td></tr>
+                <tr class="controls">
+                    <td class="alignright">报名须知</td>
+                    <td class="alignleft">
+                        <textarea id="enrollment_read" name="enrollment_read"
+                                  style="width:500px;height:200px;" th:text="${curriculum.enrollment_read}"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="2">
+                        <button type="submit" class="btn btn-success" id="saveMerchant">保存</button>
+                        <button type="submit" class="btn btn-success" id="cancelMerchant">取消</button>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        var valConfig = {
+            rules: {
+                title: {
+                    required: true,
+                    minlength: 2
+                }
+            },
+        };
+//        $('#addForm').validate(valConfig);
+        //场馆状态只能单选
+    });
+</script>
+</html>

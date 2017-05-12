@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/js/curriculum/curriculum.js" th:src="@{/js/curriculum/curriculum.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+
+        .border {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .pb10 {
+            padding-bottom: 10px;
+        }
+
+        .mt15 {
+            margin-top: 15px;
+        }
+
+        .mb20 {
+            margin-bottom: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="pb10 border mt20">
+        当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a>
+    </div>
+    <form class="form-horizontal" action="/MerchantController/merchant.html" id="searchForm" method="POST">
+        <input type="hidden" id="myPage" name="page" th:value="${page}">
+        <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+        <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
+    </form>
+    <div>
+        <button type="button" class="btn btn-success fl mb20" id="addMerchant">新增</button>
+        <button type="button" class="btn btn-success fr mb20" id="back">返回</button>
+
+    </div>
+    <div>
+        <table id="dataTable" class="table table-bordered">
+
+            <thead>
+            <tr>
+                <th>
+                    课程名称
+                </th>
+                <th>机构</th>
+                <th>商家</th>
+                <th>
+                    培训分类
+                </th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(curriculums)}">
+            <tr th:each="obj, objStat: ${curriculums}">
+                <input type="hidden" th:value="${obj.id}"/>
+                <td th:text="${obj.name}"></td>
+                <td th:text="${obj.training_institutions_id}"></td>
+                <td th:text="${obj.cooperative_merchant_id}"></td>
+                <td th:text="${obj.train_type}"></td>
+                <td th:if="${obj.status==1}">下线</td>
+                <td th:if="${obj.status==2}">在线</td>
+                <td>
+                    <a  th:data="${obj.id}"
+                       th:href="@{/curriculumController/recommend.html(curriculumId=${obj.id},recommend=${obj.recommend})}" th:if="${obj.recommend==1}">设为推荐 </a>
+                    <a  th:data="${obj.id}"
+                        th:href="@{/curriculumController/recommend.html(curriculumId=${obj.id},recommend=${obj.recommend})}" th:if="${obj.recommend==2}">取消推荐 </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a  th:data="${obj.id}"
+                       th:href="@{/curriculumController/editCurriculum.html(curriculumId=${obj.id})}">编辑</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a  th:data="${obj.id}"
+                       th:href="@{/curriculumController/curriculumUpline.html(curriculumId=${obj.id},status=${obj.status})}" th:if="${obj.status==1}">上线</a>
+                    <a  th:data="${obj.id}"
+                       th:href="@{/curriculumController/curriculumUpline.html(curriculumId=${obj.id},status=${obj.status})}" th:if="${obj.status==2}">下线</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a  th:data="${obj.id}"
+                       th:href="@{/MerchantController/edit.html(curriculumId=${obj.id})}">查看报名</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a  th:data="${obj.id}"
+                       th:href="@{/curriculumController/curriculumClass.html(curriculumId=${obj.id})}">班次</a>
+            </tr>
+            </tbody>
+            <tbody th:if="${#lists.isEmpty(curriculums)}">
+            <tr>
+                <td colspan="12">没有符合查询条件的记录！</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="page" class="page" align="right" style="margin-right: 10px;">
+    </div>
+</div>
+</body>
+</html>
