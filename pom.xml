@@ -248,19 +248,19 @@
 
 	<build>
         <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-<!--            <resource>
-            <targetPath>lib/</targetPath>
-            <directory>lib/</directory>
-            <includes>
-            <include>*</include>
-            </includes>
-            </resource>-->
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<!-- 资源根目录排除各环境的配置，使用单独的资源目录来指定 -->
+				<excludes>
+					<exclude>dev85/*</exclude>
+					<exclude>product/*</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources/${profiles.active}</directory>
+			</resource>
         </resources>
-
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -314,6 +314,7 @@
 		<profile>
 			<id>dev85</id>
 			<properties>
+				<profiles.active>dev85</profiles.active>
 				<jdbc.url>jdbc:mysql://221.178.232.93:3307/szsport_order_mgr?useSSL=false</jdbc.url>
 				<jdbc.username>szsport_order</jdbc.username>
 				<jdbc.password>12345678</jdbc.password>
@@ -322,6 +323,20 @@
 				<upms.url>http://upms.eastdc.cn:85</upms.url>
 				<upms.apikey>543df6e9aed348dc85e05593b1c9c24d</upms.apikey>
 				<photo.download.path>http://files.eastdc.cn:85</photo.download.path>
+			</properties>
+		</profile>
+		<profile>
+			<id>porduct</id>
+			<properties>
+				<profiles.active>product</profiles.active>
+				<jdbc.url>jdbc:mysql://10.1.101.82:3306/szsport_order_mgr?useSSL=false</jdbc.url>
+				<jdbc.username>root</jdbc.username>
+				<jdbc.password>1q2w3e4r</jdbc.password>
+				<cas.sso.url>http://upms-sso.szvenue.com</cas.sso.url>
+				<app.url>http://szsportmgr.szvenue.com/</app.url>
+				<upms.url>http://upms.szvenue.com</upms.url>
+				<upms.apikey>543df6e9aed348dc85e05593b1c9c24d</upms.apikey>
+				<photo.download.path>http://files.szvenue.com</photo.download.path>
 			</properties>
 		</profile>
 	</profiles>
