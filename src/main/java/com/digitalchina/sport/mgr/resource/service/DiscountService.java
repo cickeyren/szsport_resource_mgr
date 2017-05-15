@@ -21,9 +21,9 @@ public class DiscountService {
 
     public List<Map<String,Object>> getListByMap(Map<String, Object> param) throws Exception{
         List<Map<String,Object>> list = discountDao.getListByMap(param);
-        String subStadiumNames="";
         if (list.size()>0) {
             for(int i=0;i<list.size();i++){
+                String subStadiumNames="";
                 if (!StringUtil.isEmpty(list.get(i).get("subStadiumId"))){
                     String subStadiumIds = list.get(i).get("subStadiumId").toString();
                     String subStadiums[] = subStadiumIds.split(",");
