@@ -156,6 +156,9 @@
     <div class="pb10 border mt20 mr10 ml10">
         当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">图片</a>
     </div>
+    <div style="margin-top: 15px;padding-left: 20px;">
+        <button type="submit" class="btn btn-success" id="cancelBtn">返回</button>
+    </div>
     <form class="mt10" onsubmit="return false;" method="post" action="#" enctype="multipart/form-data" id="fileForm" name="fileForm">
         <div class="cg-img">
             <span class="cg-img-title"><i>*</i>场馆图片：</span>
@@ -185,6 +188,11 @@
 </div>
 <script>
     imguploadFile();
+
+    //返回按钮响应事件
+    $("#cancelBtn").click(function (){
+        window.location.href = "/mainStadiumController/mainstadium.html";
+    });
 
     /**
      * 设置场馆图片首图
