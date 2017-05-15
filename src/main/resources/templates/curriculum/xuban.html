@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>续班设置</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+    <script src="../../static/js/curriculum/xuban.js" th:src="@{/js/curriculum/xuban.js}"></script>
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <!--<script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>-->
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
+            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+
+        .border {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .pb10 {
+            padding-bottom: 10px;
+        }
+
+        .mt15 {
+            margin-top: 15px;
+        }
+
+        .mb20 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="container-fluid" style="margin-top: 20px;height:120px;">
+        <div class="pb10 border">
+            当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a> < <a href="javascript:;">新增</a>
+        </div>
+        <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" method="post">
+            <input type="hidden" name="class_id" id="class_id" th:value="${class_id}">
+            <input type="hidden" name="curriculumId" id="curriculumId" th:value="${curriculumId}">
+            <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                <tr class="controls">
+                    <td class="alignright">续班价格</td>
+                    <td class="alignleft"><input type="text" id="discount_fee" name="discount_fee" th:value="${discount_fee}"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">选择课程 </td>
+                    <td class="alignleft"><input type="text" id="classname" name="name"/><button  class="btn" id="queryClass">查询</button></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"></td>
+                    <td class="alignleft">
+                        <select multiple="multiple" size="5" id="curriculum" name="curriculum">
+                            <option th:each="obj,eStat:${alllist}" th:value="${obj.id}"
+                                    th:text="${obj.name}"></option>
+                        </select>
+                        <div style="width: 60px ;display: inline-block;">
+                            <button style="height: 30px" class="btn" id="addteacher">添加</button>
+                            <button style="height: 30px; margin-top: 10px" class="btn" id="delteacher">删除</button>
+                        </div>
+                        <select multiple="multiple" size="5" id="Rcurriculum">
+                            <option th:each="obj,eStat:${haslist}" th:value="${obj.id}"
+                                    th:text="${obj.name}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="2">
+                        <button type="submit" class="btn btn-success" id="saveXuban">保存</button>
+                        <button type="submit" class="btn btn-success" id="cancelMerchant">取消</button>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        var valConfig = {
+            rules: {
+                title: {
+                    required: true,
+                    minlength: 2
+                }
+            },
+        };
+//        $('#addForm').validate(valConfig);
+        //场馆状态只能单选
+    });
+</script>
+</html>

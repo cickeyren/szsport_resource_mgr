@@ -82,6 +82,10 @@ public class CurriculumClass {
      * 费用备注
      */
     private String fee_mark;
+    /**
+     * 享受续班优惠课程id
+     */
+    private String xuban_curriculum;
 
     /**
      * @return id
@@ -371,5 +375,13 @@ public class CurriculumClass {
 
     public void setDiscount_fee(BigDecimal discount_fee) {
         this.discount_fee = discount_fee;
+    }
+
+    public String getXuban_curriculum() {
+        return xuban_curriculum;
+    }
+
+    public void setXuban_curriculum(String xuban_curriculum) {
+        this.xuban_curriculum = xuban_curriculum;
     }
 }

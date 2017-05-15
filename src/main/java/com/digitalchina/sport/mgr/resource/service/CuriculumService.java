@@ -11,6 +11,7 @@ import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -53,14 +54,14 @@ public class CuriculumService {
      * @return
      */
     @Transactional
-    public int insertCurrriculumClass(CurriculumClass currriculumClass,List<String> classTimes){
+    public int insertCurrriculumClass(CurriculumClass currriculumClass,List<Object> classTimes){
         int ret = 0;
         ret = curriculumClassMapper.insert(currriculumClass);
         String id = currriculumClass.getId();
-        Map<String,Object> temp = Maps.newHashMap();
-        temp.put("class_id",id);
+        Map<String,Object> temp = null;
         for (int i=0;i<classTimes.size();i++){
-            temp.put("time",classTimes.get(i));
+            temp = (Map<String,Object>) classTimes.get(i);
+            temp.put("class_id",id);
             ret = curriculumClassMapper.addCurriculumClassesTimes(temp);
         }
         return ret;
@@ -73,20 +74,31 @@ public class CuriculumService {
      * @return
      */
     @Transactional
-    public int doUpdataCurriculumClass(CurriculumClass currriculumClass,List<String> classTimes){
+    public int doUpdataCurriculumClass(CurriculumClass currriculumClass,List<Object> classTimes){
         int ret = 0;
         ret = curriculumClassMapper.updateByPrimaryKeySelective(currriculumClass);
         String id = currriculumClass.getId();
-        Map<String,Object> temp = Maps.newHashMap();
-        temp.put("class_id",id);
+
         for (int i=0;i<classTimes.size();i++){//新增时间段
-            temp.put("time",classTimes.get(i));
-            ret = curriculumClassMapper.addCurriculumClassesTimes(temp);
+            Map<String,Object> temp = (Map<String,Object>)classTimes.get(i);
+            if (StringUtils.isEmpty(temp.get("id"))){
+                temp.put("class_id",id);
+                ret = curriculumClassMapper.addCurriculumClassesTimes(temp);
+            }
         }
         return ret;
     }
-    public List<Curriculum> getCurriculum(){
-        return curriculumMapper.getCurriculum();
+    public int doUpdataCurriculumClassTime(Map<String,Object> args){
+        return curriculumClassMapper.updateCurriculumClassesTimes(args);
+    }
+    public List<Curriculum> getCurriculum(Map<String,Object> args){
+        return curriculumMapper.getCurriculum(args);
+    }
+    public List<Curriculum> getCurriculumByIds(Map<String,Object> args){
+        return curriculumMapper.getCurriculumByIds(args);
+    }
+    public List<Curriculum> getCurriculumByIdsNot(Map<String,Object> args){
+        return curriculumMapper.getCurriculumByIdsNot(args);
     }
     public Curriculum getCurriculumByKey(Integer key){
         return curriculumMapper.selectByPrimaryKey(key);

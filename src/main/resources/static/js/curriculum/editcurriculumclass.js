@@ -14,20 +14,88 @@ $(function () {
         window.history.back();
     });
     $("#addtime").on("click", function () {
-        var tt = $("#time").val();
-        $("#timess").append('<option value="">' + tt + '</option>');
-    })
-    //删除时间段（状态变化）
-    $("#deltimess").on("click", function () {
-        var contentValue = $("#timess").val()[0];
-        if (!contentValue) {
-            $("#timess").find("option:selected").remove();
-        } else {
-            delTimess(contentValue)
-        }
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-demo', //样式类名
+            shift: 2,
+            title: '上课时间段',
+            shade: false,
+            closeBtn: 0,
+            area: ['400px', '290px'], //宽高
+            content: $('#addTimeDialogs'),
+            btn: ['确定', '取消'],
+            btn1: function () {
+                var temp = "";
+                temp += '<tr>' +
+                    '<td>' + $("#time").val() + '</td>' +
+                    '<td>' + $("#max_people").val() + '</td>' +
+                    '<td>' + $("#reserve_people").val() + '</td>' +
+                    '<td width="80px"><a onclick="editTime(this)">编辑</a>&nbsp;<a onclick="delTime(this)">删除</a></td>' +
+                    '</tr>'
+                $("#class_time_table_body").append(temp);
+                layer.closeAll();
+            }
+        });
     })
 })
-function delTimess(id) {
+
+function editTime(a) {
+    var tds = $(a).parent().prevAll();
+    $("#time").val($(tds[2]).text())
+    $("#max_people").val($(tds[1]).text())
+    $("#reserve_people").val($(tds[0]).text())
+    var id = $(a).parent().parent("tr").attr("value");
+    layer.open({
+        type: 1,
+        skin: 'layui-layer-demo', //样式类名
+        shift: 2,
+        title: '上课时间段',
+        shade: false,
+        closeBtn: 0,
+        area: ['400px', '290px'], //宽高
+        content: $('#addTimeDialogs'),
+        btn: ['确定', '取消'],
+        btn1: function () {
+            var re_time = $("#time").val();
+            var re_max_people = $("#max_people").val();
+            var re_reserve_people = $("#reserve_people").val();
+            $(tds[2]).text(re_time);
+            $(tds[1]).text(re_max_people);
+            $(tds[0]).text(re_reserve_people);
+            $.ajax({
+                url: '/curriculumController/doUpdataCurriculumClassTime.do',
+                type: 'POST', //GET
+                data: {
+                    id:id,
+                    time:$("#time").val(),
+                    max_people: $("#max_people").val(),
+                    reserve_people:$("#reserve_people").val()
+                },
+                dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success: function (result) {
+                    layer.closeAll();
+                    if ("000000" == result.code) {
+                        layer.msg("修改成功！");
+                    } else {
+                        layer.alert(result.result);
+                    }
+                },
+                error: function (result) {
+                    layer.msg("添加失败！");
+                }
+            });
+        }
+    });
+}
+function delTime(a) {
+    var id =$(a).parent().parent("tr").attr("value")
+    if (!id) {
+        $(a).parent().parent("tr").remove()
+    } else {
+        delTimess(id,a)
+    }
+}
+function delTimess(id,a) {
     $.ajax({
         url: '/curriculumController/delTimess.do',
         type: 'POST', //GET
@@ -38,7 +106,7 @@ function delTimess(id) {
             if ("000000" == result.code) {
                 if(result.result){
                     layer.msg("删除成功！");
-                    $("#timess").find("option:selected").remove();
+                    $(a).parent().parent("tr").remove();
                 }else {
                     layer.msg("删除失败！");
                 }
@@ -53,12 +121,23 @@ function delTimess(id) {
 }
 //新增页面添加数据
 function doUpdate() {
-    var timessOp = $("#timess").find("option");
-    var timess = [];
+    // var timessOp = $("#timess").find("option");
+    // var timess = [];
+    // for (var i = 0; i < timessOp.length; i++) {
+    //     if (!$(timessOp[i]).attr("value")) {
+    //         timess.push($(timessOp[i]).text());
+    //     }
+    // }
+    var timessOp = $("#class_time_table_body").find("tr");
+    var timess = [];//上课时段
     for (var i = 0; i < timessOp.length; i++) {
-        if (!$(timessOp[i]).attr("value")) {
-            timess.push($(timessOp[i]).text());
-        }
+        var times = {};
+        var tds = $(timessOp[i]).find("td");
+        times.id = $(timessOp[i]).attr("value");
+        times.time=$(tds[0]).text();//上课时段
+        times.max_people=$(tds[1]).text();//时段最大人数
+        times.reserve_people=$(tds[2]).text();//时段预留人数
+        timess.push(times);
     }
     console.log(timess);
     //准备json数据

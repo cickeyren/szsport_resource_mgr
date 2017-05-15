@@ -56,10 +56,13 @@
 	  GROUP BY cc.id
   </select>
     <insert id="addCurriculumClassesTimes" parameterType="java.util.Map">
-      INSERT INTO curriculum_class_times(class_id,time) VALUES (#{class_id},#{time});
+      INSERT INTO curriculum_class_times(class_id,time,max_people,reserve_people) VALUES (#{class_id},#{time},#{max_people},#{reserve_people});
   </insert>
+    <update id="updateCurriculumClassesTimes" parameterType="java.util.Map">
+          UPDATE curriculum_class_times cct SET cct.time = #{time},cct.max_people = #{max_people},cct.reserve_people = #{reserve_people} where cct.id=#{id}
+    </update>
     <select id="getClassTimes" resultType="java.util.Map" parameterType="String">
-      SELECT id ,time FROM curriculum_class_times cct where cct.class_id = #{VALUE} AND cct.status = 1
+      SELECT * FROM curriculum_class_times cct where cct.class_id = #{VALUE} AND cct.status = 1
     </select>
     <update id="delTimess" parameterType="String">
         UPDATE curriculum_class_times cct SET cct.status = 2 where cct.id=#{VALUE}

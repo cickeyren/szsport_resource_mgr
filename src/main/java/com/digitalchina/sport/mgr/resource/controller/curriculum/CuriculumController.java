@@ -33,7 +33,8 @@ public class CuriculumController {
 
     @RequestMapping(value = "/curriculum.html")
     public String getCurriculumList(ModelMap map) {
-        List<Curriculum> list = curiculumService.getCurriculum();
+        Map<String,Object> args = Maps.newHashMap();
+        List<Curriculum> list = curiculumService.getCurriculum(args);
         map.put("curriculums",list);
         return "curriculum/curriculum";
     }
@@ -47,7 +48,8 @@ public class CuriculumController {
             curriculum.setStatus(1);
         }
         curiculumService.updataCurrriculum(curriculum);
-        List<Curriculum> list = curiculumService.getCurriculum();
+        Map<String,Object> args = Maps.newHashMap();
+        List<Curriculum> list = curiculumService.getCurriculum(args);
         map.put("curriculums",list);
         return "curriculum/curriculum";
     }
@@ -62,7 +64,8 @@ public class CuriculumController {
         }
         curriculum.setRecommend_time(new Date());
         curiculumService.updataCurrriculum(curriculum);
-        List<Curriculum> list = curiculumService.getCurriculum();
+        Map<String,Object> args = Maps.newHashMap();
+        List<Curriculum> list = curiculumService.getCurriculum(args);
         map.put("curriculums",list);
         return "curriculum/curriculum";
     }
@@ -162,11 +165,55 @@ public class CuriculumController {
         map.put("curriculumClass",curriculumClass);
         return "curriculum/edit_curriculum_class";
     }
+    @RequestMapping(value = "/xuban")
+    public String xuban(ModelMap map,String id,Integer curriculumId) {
+        Map<String,Object> args = Maps.newHashMap();//数据库查询
+        try {
+            //获取当前班次信息
+            CurriculumClass curriculumClass =curiculumService.getCurriculumClassByKey(id);
+            //当前班次产于续班优惠的课程id
+            String xuban_curriculum = curriculumClass.getXuban_curriculum();
+            Gson gson = new Gson();
+            //当前班次产于续班优惠的课程id List
+            List<Integer> xuban_curriculums_id = gson.fromJson(xuban_curriculum,List.class);
+//            List<Integer> xuban_curriculums_id = new ArrayList<>();
+//            xuban_curriculums_id.add(14);
+            //获取当前班次所属的课程
+            Curriculum curriculum =curiculumService.getCurriculumByKey(curriculumId);
+            //获取当前班次所属的课程的所属机构id
+            String training_institutions_id = curriculum.getTraining_institutions_id();
+            args.put("training_institutions_id",training_institutions_id);
+            args.put("ids",xuban_curriculums_id);
+            //获取未参加该班次续报优惠本机构的课程列表
+            List<Curriculum> alllist = curiculumService.getCurriculumByIdsNot(args);
+            //获取以参加该班次续报优惠本机构的课程列表
+            List<Curriculum> haslist = new ArrayList<>();
+            if (xuban_curriculums_id!=null&&xuban_curriculums_id.size()>0){
+                haslist = curiculumService.getCurriculumByIds(args);
+            }
+            map.put("class_id",id);
+            map.put("curriculumId",curriculumId);
+            map.put("alllist",alllist);
+            map.put("haslist",haslist);
+            map.put("discount_fee",curriculumClass.getDiscount_fee());
+            return "curriculum/xuban";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "error";
+        }
+
+    }
     @RequestMapping(value = "/doAddCurriculum")
     @ResponseBody
     public RtnData doAddCurriculum(Curriculum curriculum) {
         System.out.println(curriculum);
         curiculumService.insertCurrriculum(curriculum);
+        return RtnData.ok("");
+    }
+    @RequestMapping(value = "/xubanCurriculum")
+    @ResponseBody
+    public RtnData xubanCurriculum(CurriculumClass curriculumClass) {
+        curiculumService.updataCurrriculumClass(curriculumClass);
         return RtnData.ok("");
     }
     @RequestMapping(value = "/doUpdataCurriculum")
@@ -181,8 +228,19 @@ public class CuriculumController {
     public RtnData doUpdataCurriculumClass(CurriculumClass curriculumClass,String timess) {
         System.out.println(curriculumClass);
         Gson gson = new Gson();
-        List<String> classTimes =gson.fromJson(timess,List.class);
+        List<Object> classTimes =gson.fromJson(timess,List.class);
         curiculumService.doUpdataCurriculumClass(curriculumClass,classTimes);
+        return RtnData.ok("");
+    }
+    @RequestMapping(value = "/doUpdataCurriculumClassTime")
+    @ResponseBody
+    public RtnData doUpdataCurriculumClassTime(String id,String time,String max_people,String reserve_people) {
+        Map<String,Object> args = Maps.newHashMap();
+        args.put("id",id);
+        args.put("time",time);
+        args.put("max_people",max_people);
+        args.put("reserve_people",reserve_people);
+        curiculumService.doUpdataCurriculumClassTime(args);
         return RtnData.ok("");
     }
     @RequestMapping(value = "/delTimess")
@@ -200,7 +258,7 @@ public class CuriculumController {
         curriculumClass.setStatus(1);
         Gson gson = new Gson();
 
-        List<String> classTimes =gson.fromJson(timess,List.class);
+        List<Object> classTimes =gson.fromJson(timess,List.class);
         curiculumService.insertCurrriculumClass(curriculumClass,classTimes);
         return RtnData.ok("");
     }

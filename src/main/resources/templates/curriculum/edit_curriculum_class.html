@@ -19,7 +19,8 @@
     <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
             th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
 
-    <script src="../../static/js/curriculum/editcurriculumclass.js" th:src="@{/js/curriculum/editcurriculumclass.js}"></script>
+    <script src="../../static/js/curriculum/editcurriculumclass.js"
+            th:src="@{/js/curriculum/editcurriculumclass.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
     <!--<script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>-->
@@ -71,6 +72,21 @@
         .mb20 {
             margin-bottom: 20px;
         }
+        .class_time_table_head tr{
+            border-top:1px solid #ddd;
+            border-bottom:1px solid #ddd;
+            border-right:1px solid #ddd;
+        }
+        .class_time_table_head tr td{
+
+        }
+        .class_time_table_body tr{
+            border-bottom:1px solid #ddd;
+            border-right:1px solid #ddd;
+        }
+        .class_time_table_body tr td{
+
+        }
     </style>
 </head>
 <body>
@@ -89,28 +105,36 @@
                 </tr>
                 <tr class="controls">
                     <td class="alignright">*班名</td>
-                    <td class="alignleft"><input type="text" id="name" name="name" th:value="${curriculumClass.name}"/></td>
+                    <td class="alignleft"><input type="text" id="name" name="name" th:value="${curriculumClass.name}"/>
+                    </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">课时</td>
-                    <td class="alignleft"><input type="text" id="class_long" name="class_long" th:value="${curriculumClass.class_long}"/></td>
+                    <td class="alignleft"><input type="text" id="class_long" name="class_long"
+                                                 th:value="${curriculumClass.class_long}"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">上课次数</td>
-                    <td class="alignleft"><input type="text" id="class_times" name="class_times" th:value="${curriculumClass.class_times}"/></td>
+                    <td class="alignleft"><input type="text" id="class_times" name="class_times"
+                                                 th:value="${curriculumClass.class_times}"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">每班人数</td>
-                    <td class="alignleft"><input type="text" id="student_num" name="student_num" th:value="${curriculumClass.student_num}"/></td>
+                    <td class="alignleft"><input type="text" id="student_num" name="student_num"
+                                                 th:value="${curriculumClass.student_num}"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">限报人数</td>
-                    <td class="alignleft"><input type="text" id="max_num" name="max_num" th:value="${curriculumClass.max_num}"/></td>
+                    <td class="alignleft"><input type="text" id="max_num" name="max_num"
+                                                 th:value="${curriculumClass.max_num}"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">上课日期</td>
                     <td class="alignleft">
-                        <input class="check" value="1" type="radio" name="leantime_type">固定 <input type="text" id="lean_time" name="lean_time" th:value="${curriculumClass.lean_time}"/>
+                        <input class="check" value="1" type="radio" name="leantime_type">固定 <input type="text"
+                                                                                                   id="lean_time"
+                                                                                                   name="lean_time"
+                                                                                                   th:value="${curriculumClass.lean_time}"/>
                         <input class="check" value="2" type="radio" name="leantime_type">常年
                         <input class="check" value="3" type="radio" name="leantime_type">需预约
 
@@ -118,45 +142,65 @@
                 </tr>
                 <tr class="controls">
                     <td class="alignright">上课时段</td>
-                    <td class="alignleft"><input type="text" id="time" name="time"/> <button type="submit" class="btn" id="addtime">添加</button></td>
+                    <td class="alignleft">
+                        <button type="submit" class="btn" id="addtime">添加</button>
+                    </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"></td>
                     <td class="alignleft" style="border-top: none">
-                        <select multiple="multiple" size="5" id="timess">
-                            <option th:each="obj,eStat:${classTimes}" th:value="${obj.id}"
-                                    th:text="${obj.time}"></option>
-                        </select>
-                        <button type="submit" class="btn" id="deltimess">删除</button>
+                        <table class="class_time_table">
+                            <thead class="class_time_table_head">
+                            <td width="150px">时间段</td>
+                            <td width="60px">人数</td>
+                            <td width="60px">预留名额</td>
+                            <td width="80px">操作</td>
+                            </thead>
+                            <tbody class="class_time_table_body" id="class_time_table_body">
+                                <tr th:each="obj,eStat:${classTimes}" th:value="${obj.id}">
+                                    <td th:text="${obj.time}"></td>
+                                    <td th:text="${obj.max_people}"></td>
+                                    <td th:text="${obj.reserve_people}"></td>
+                                    <td width="80px"><a onclick="editTime(this)">编辑</a>&nbsp;<a onclick="delTime(this)">删除</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">报名开始时间</td>
-                    <td class="alignleft"><input type="text" id="bm_time" name="bm_time" th:value="${curriculumClass.bm_time}"/></td>
+                    <td class="alignleft"><input type="text" id="bm_time" name="bm_time"
+                                                 th:value="${curriculumClass.bm_time}"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">报名截止时间</td>
-                    <td class="alignleft"><input type="text" id="bm_end" name="bm_end" th:value="${curriculumClass.bm_end}"/></td>
+                    <td class="alignleft"><input type="text" id="bm_end" name="bm_end"
+                                                 th:value="${curriculumClass.bm_end}"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">招生对象</td>
-                    <td class="alignleft"><input type="text" id="target" name="target" th:value="${curriculumClass.target}"/></td>
+                    <td class="alignleft"><input type="text" id="target" name="target"
+                                                 th:value="${curriculumClass.target}"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">授课内容</td>
-                    <td class="alignleft"><input type="text" id="m_content" name="content" th:value="${curriculumClass.content}"/></td>
+                    <td class="alignleft"><input type="text" id="m_content" name="content"
+                                                 th:value="${curriculumClass.content}"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">费用项</td>
-                    <td class="alignleft"><input type="text" id="fee_code" name="fee_code" th:value="${curriculumClass.fee_code}"/></td>
+                    <td class="alignleft"><input type="text" id="fee_code" name="fee_code"
+                                                 th:value="${curriculumClass.fee_code}"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">费用金额</td>
-                    <td class="alignleft"><input type="text" id="fee" name="fee" th:value="${curriculumClass.fee}"/></td>
+                    <td class="alignleft"><input type="text" id="fee" name="fee" th:value="${curriculumClass.fee}"/>
+                    </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">费用备注</td>
-                    <td class="alignleft"><input type="text" id="fee_mark" name="fee_mark" th:value="${curriculumClass.fee_mark}"/></td>
+                    <td class="alignleft"><input type="text" id="fee_mark" name="fee_mark"
+                                                 th:value="${curriculumClass.fee_mark}"/></td>
                 </tr>
 
 
@@ -171,7 +215,21 @@
         </form>
     </div>
 </section>
-<div id="addDialogs">
+<div id="addTimeDialogs" style="display: none">
+    <table  class="table table-bordered table-hover definewidth m10 control-group">
+        <tr class="controls" style="background-color: #ededed">
+            <td class="alignright" width="30%">时间段</td>
+            <td width="70%"><input type="text" id="time"></td>
+        </tr>
+        <tr class="controls" style="background-color: #ededed">
+            <td class="alignright" width="30%">人数</td>
+            <td width="70%"><input type="text" id="max_people"></td>
+        </tr>
+        <tr class="controls" style="background-color: #ededed">
+            <td class="alignright" width="10%">预留名额</td>
+            <td width="70%"><input type="text" id="reserve_people"></td>
+        </tr>
+    </table>
 </div>
 </body>
 <script type="text/javascript">

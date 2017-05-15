@@ -12,6 +12,7 @@ public interface CurriculumClassMapper extends Mapper<CurriculumClass> {
     List<CurriculumClassTimes> getCurriculumClasses(String curriculumId);
     CurriculumClassTimes getCurriculumClassesByKey(String id);
     int addCurriculumClassesTimes(Map<String,Object> args);
+    int updateCurriculumClassesTimes(Map<String,Object> args);
 //    int deleteTimes(Map<String,Object> args);
     int delTimess(String id);
     List<Map<String,Object>> getClassTimes(String classId);
