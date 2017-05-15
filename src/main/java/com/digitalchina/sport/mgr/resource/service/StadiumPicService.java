@@ -65,18 +65,16 @@ public class StadiumPicService {
         paramMap.put("stadiumId", map.get("stadiumId"));
         paramMap.put("isFirst", IS_FIRST);
         Map<String, Object> oldFirst = stadiumPicDao.getMainStadiumPic(paramMap);
-        oldFirst.put("isFirst", IS_NOT_FIRST);
         boolean isSuccess = false;
-        if(stadiumPicDao.updateMainStadiumPic(oldFirst) > 0){
-            isSuccess = true;
+        if(oldFirst != null && !oldFirst.isEmpty()){
+            oldFirst.put("isFirst", IS_NOT_FIRST);
+            stadiumPicDao.updateMainStadiumPic(oldFirst);
         }
-        if(isSuccess){
-            map.put("isFirst", IS_FIRST);
-            if(stadiumPicDao.updateMainStadiumPic(map) > 0){
-                isSuccess = true;
-            } else {
-                isSuccess = false;
-            }
+        map.put("isFirst", IS_FIRST);
+        if(stadiumPicDao.updateMainStadiumPic(map) > 0){
+            isSuccess = true;
+        } else {
+            isSuccess = false;
         }
         return isSuccess;
     }
