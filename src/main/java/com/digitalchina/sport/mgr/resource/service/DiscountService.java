@@ -20,7 +20,24 @@ public class DiscountService {
     private DiscountDao discountDao;
 
     public List<Map<String,Object>> getListByMap(Map<String, Object> param) throws Exception{
-        return discountDao.getListByMap(param);
+        List<Map<String,Object>> list = discountDao.getListByMap(param);
+        if (list.size()>0) {
+            for(int i=0;i<list.size();i++){
+                String subStadiumNames="";
+                if (!StringUtil.isEmpty(list.get(i).get("subStadiumId"))){
+                    String subStadiumIds = list.get(i).get("subStadiumId").toString();
+                    String subStadiums[] = subStadiumIds.split(",");
+                    for (int j=0;j<subStadiums.length;j++){
+                        subStadiumNames += discountDao.getSubStadiumById(subStadiums[j]).get("name")+",";
+                    }
+                    subStadiumNames = subStadiumNames.substring(0, subStadiumNames.length() - 1);
+                }else {
+                    subStadiumNames = "全部";
+                }
+                list.get(i).put("subStadium",subStadiumNames);
+            }
+        }
+        return list;
     };
 
     public int getCountByMap(Map<String, Object> param) throws Exception{

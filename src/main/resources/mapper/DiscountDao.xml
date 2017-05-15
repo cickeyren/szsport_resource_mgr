@@ -7,16 +7,7 @@
         dt.`name` AS discountType,
         m.`name` AS mainStadium,
         CONCAT(DATE(d.start_time),'—',DATE(d.end_time)) AS timeToTime,
-        (
-        CASE
-        WHEN s.`name` = '' THEN
-        '全部'
-        WHEN s.`name` IS NULL THEN
-        '全部'
-        ELSE
-        s.`name`
-        END
-        ) AS subStadium,
+        d.sub_stadium_id AS subStadiumId,
         (
         CASE d.discount_channel
         WHEN '0' THEN
