@@ -53,10 +53,6 @@
             float: none;
         }
 
-        .table td {
-            border-top: none;
-        }
-
         .border {
             border-bottom: 1px solid #ddd;
         }
@@ -77,7 +73,7 @@
 <body>
 <section>
     <div class="container-fluid">
-        <div class="pb10 border mt20">
+        <div class="mt20">
             当前位置：<a href="javascript:;">场馆预订</a>
         </div>
         <form class="form-horizontal mt10" action="/mainStadiumController/mainstadiumforyearticket.html" id="searchForm"
@@ -93,7 +89,7 @@
                 </tr>
             </table>
         </form>
-        <div>
+        <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
             <table id="dataTable" class="table table-bordered">
 
                 <thead>
