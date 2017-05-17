@@ -203,6 +203,27 @@ public class CuriculumController {
         }
 
     }
+    @RequestMapping(value = "/getCurriculumByNameExHas")
+    @ResponseBody
+    public RtnData getCurriculumByNameExHas(String name,Integer curriculumId,String id) {
+        //获取当前班次信息
+        CurriculumClass curriculumClass =curiculumService.getCurriculumClassByKey(id);
+        //当前班次产于续班优惠的课程id
+        String xuban_curriculum = curriculumClass.getXuban_curriculum();
+        Gson gson = new Gson();
+        //当前班次产于续班优惠的课程id List
+        List<Integer> xuban_curriculums_id = gson.fromJson(xuban_curriculum,List.class);
+        //获取当前班次所属的课程
+        Curriculum curriculum =curiculumService.getCurriculumByKey(curriculumId);
+        //获取当前班次所属的课程的所属机构id
+        String training_institutions_id = curriculum.getTraining_institutions_id();
+        Map<String,Object> args = Maps.newHashMap();
+        args.put("training_institutions_id",training_institutions_id);
+        args.put("name",name);
+        args.put("ids",xuban_curriculums_id);
+        List<Curriculum> curriculumList =curiculumService.getCurriculumByNameExHas(args);
+        return RtnData.ok(curriculumList);
+    }
     @RequestMapping(value = "/doAddCurriculum")
     @ResponseBody
     public RtnData doAddCurriculum(Curriculum curriculum) {

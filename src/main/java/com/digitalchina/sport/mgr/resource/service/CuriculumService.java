@@ -44,7 +44,7 @@ public class CuriculumService {
      * @return
      */
     public int doUpdataCurriculum(Curriculum currriculum){
-        return curriculumMapper.updateByPrimaryKey(currriculum);
+        return curriculumMapper.updateByPrimaryKeySelective(currriculum);
     }
 
     /**
@@ -93,6 +93,9 @@ public class CuriculumService {
     }
     public List<Curriculum> getCurriculum(Map<String,Object> args){
         return curriculumMapper.getCurriculum(args);
+    }
+    public List<Curriculum> getCurriculumByNameExHas(Map<String,Object> args){
+        return curriculumMapper.getCurriculumByNameExHas(args);
     }
     public List<Curriculum> getCurriculumByIds(Map<String,Object> args){
         return curriculumMapper.getCurriculumByIds(args);

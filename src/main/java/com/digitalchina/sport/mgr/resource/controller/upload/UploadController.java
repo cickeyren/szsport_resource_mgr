@@ -256,6 +256,17 @@ public class UploadController {
             filePath.mkdirs();
         }
         File targetFile = new File(path, uniquefileName);
+        String ttp1 = targetFile.getPath();
+        String ttp2 = targetFile.getAbsolutePath();
+        try {
+            String ttp3 = targetFile.getCanonicalPath();
+            System.out.println("=============="+ttp1);
+            System.out.println("=============="+ttp2);
+            System.out.println("======"+ttp3);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         return this.uploadFile(file, targetFile, returnUrl, request);
     }
 

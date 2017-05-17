@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/jquery.form.js" th:src="@{/lib/js/jquery.form.js}"></script>
     <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
     <script src="../../static/lib/My97DatePicker/WdatePicker.js"
             th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
@@ -20,6 +21,7 @@
             th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
 
     <script src="../../static/js/curriculum/editcurriculum.js" th:src="@{/js/curriculum/editcurriculum.js}"></script>
+    <script src="../../static/js/curriculum/photo.js" th:src="@{/js/curriculum/photo.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
     <!--<script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>-->
@@ -71,6 +73,9 @@
         .mb20 {
             margin-bottom: 20px;
         }
+        .big-photo img {
+            border: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
@@ -79,7 +84,7 @@
         <div class="pb10 border">
             当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a> < <a href="javascript:;">新增</a>
         </div>
-        <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" method="post">
+        <!--<form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" method="post">-->
             <input type="hidden" name="id" id="id" th:value="${curriculum.id}">
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls" style="background-color: #ededed"><td class="alignright" width="10%">基本信息</td><td></td></tr>
@@ -89,7 +94,21 @@
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>课程图片</td>
-                    <td class="alignleft"><input type="text" id="img_url" name="img_url" th:value="${curriculum.img_url}"/></td>
+                    <td class="alignleft">
+                        <div class="big-photo">
+                            <div id="preview">
+                                <img id="imghead" border="0"  th:src="${curriculum.img_url}" width="90" height="90"
+                                     onclick="$('#previewImg').click();">
+                            </div>
+                            <form id="addImg" method="post" enctype="multipart/form-data">
+                                <input type="file" onchange="previewImage(this,'preview','previewImg','imghead')"
+                                       style="display: none;" id="previewImg" name="previewImg">
+                                <!--<input type="text" id="ddd" name="ddd" value="123">-->
+                                <!--<input type="submit">-->
+                            </form>
+                            <input type="hidden" id="img_url" name="img_url" th:value="${curriculum.img_url}"/>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td class="alignright" width="10%">培训机构</td>
@@ -187,7 +206,7 @@
                     </td>
                 </tr>
             </table>
-        </form>
+        <!--</form>-->
     </div>
 </section>
 <div id="addDialogs">

@@ -58,6 +58,44 @@
             AND   c.training_institutions_id = #{training_institutions_id}
         </if>
     </select>
+    <select id="getCurriculumByNameExHas" resultMap="BaseResultMap">
+        SELECT
+        c.id,
+        c.training_institutions_id,
+        c.cooperative_merchant_id,
+        c.img_url,
+        c.`name`,
+        c.teachers,
+        ct.`name` AS train_type,
+        c.content,
+        c.address,
+        c.enrollment_required,
+        c.phone,
+        c.enrollment_read,
+        c.create_date,
+        c.recommend_time,
+        c.recommend,
+        c.recommend_level,
+        c.`status`
+        FROM
+        curriculum c,
+        curriculum_type ct
+        WHERE
+        c.train_type = ct.`code`
+        <if test="training_institutions_id != null and training_institutions_id != ''">
+            AND   c.training_institutions_id = #{training_institutions_id}
+        </if>
+        <if test="name != null and name != ''">
+            AND c.name  LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="ids!= null">
+            AND c.id NOT IN
+            <foreach collection="ids" item="item"
+                     index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
     <select id="getCurriculumByIds" resultMap="BaseResultMap">
         SELECT
         c.id,

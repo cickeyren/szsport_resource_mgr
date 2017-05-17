@@ -8,6 +8,9 @@ $(function () {
     $("#saveXuban").on("click", function () {
         doAdd();
     });
+    $("#queryClass").on("click", function () {
+        queryClass();
+    });
 
     //新增界面保存按钮点击事件 ---  返回主界面
     $("#cancelMerchant").on("click", function () {
@@ -29,6 +32,35 @@ $(function () {
 })
 function addOption(content,id,contentValue) {
     $("#"+id).append('<option value="'+contentValue+'">'+content+'</option>');
+}
+//查询课程
+function queryClass() {
+    var addJson = {};
+    addJson.id = $("#class_id").val();
+    addJson.curriculumId = $("#curriculumId").val();
+    addJson.name = $("#classname").val();
+    $.ajax({
+        url: '/curriculumController/getCurriculumByNameExHas.do',
+        type: 'POST', //GET
+        data: addJson,
+        dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success: function (result) {
+            if ("000000" == result.code) {
+                $("#curriculum").html("")
+                var list = result.result;
+                var temp=""
+                for (var i=0;i<list.length;i++){
+                    temp+='<option value="'+list[i].id+'">'+list[i].name+'</option>'
+                }
+                $("#curriculum").append(temp);
+            }else {
+                layer.alert(result.result);
+            }
+        },
+        error: function (result) {
+            layer.msg("添加失败！");
+        }
+    });
 }
 //新增页面添加数据
 function doAdd() {
