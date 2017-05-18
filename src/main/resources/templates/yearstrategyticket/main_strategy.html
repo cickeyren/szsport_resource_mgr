@@ -36,13 +36,17 @@
         .form-horizontal .control-group .controls label {
             float: none;
         }
+        .pb10{padding-bottom: 10px;}
     </style>
 </head>
 <body>
 
 <!-- 内容区域 -->
 <div>
-    <div class="container-fluid pt20">
+    <div class="container-fluid">
+        <div class="pb10 mt20">
+            当前位置：<a href="javascript:;">场馆预订</a> < <a href="javascript:;">门票</a>
+        </div>
         <div>
             <form action="/yearstrategyticket/list.html" id="getForm" method="get">
                 <input type="hidden" id="mainStadiumId" name="mainStadiumId" th:value="${mainStadiumId}">

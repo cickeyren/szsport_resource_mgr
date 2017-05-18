@@ -27,11 +27,16 @@
         #contentTable td.alignright{text-align: right;}
         .form-horizontal .control-group .controls input {float:none;}
         .form-horizontal .control-group .controls label {float: none;}
+        .border{border-bottom: 1px solid #ddd;}
+        .pb10{padding-bottom: 10px;}
     </style>
 </head>
 <body>
     <section>
-        <div class="container-fluid" style="margin-top: 30px;height:120px;">
+        <div class="container-fluid">
+            <div class="pb10 border mt20">
+                当前位置：<a href="javascript:;">场馆预订</a> < <a href="javascript:;">门票</a> < <a href="javascript:;">编辑场地票</a> < <a href="javascript:;">新增价格策略</a>
+            </div>
             <p class="title">新增价格策略</p>
             <form onsubmit="return false;" class="form-horizontal" action="#" id="addSiteTicketStrategyForm">
                 <input type="hidden" id="subStadium" name="subStadium" th:value="${subStadium}">
