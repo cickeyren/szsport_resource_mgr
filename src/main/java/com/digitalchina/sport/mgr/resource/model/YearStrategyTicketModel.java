@@ -92,6 +92,10 @@ public class YearStrategyTicketModel {
      */
     private String storePrice;
     /**
+     * 是否参与折扣
+     */
+    private String discount;
+    /**
      * 预订说明
      */
     private String orderDescription;
@@ -258,6 +262,14 @@ public class YearStrategyTicketModel {
 
     public void setStorePrice(String storePrice) {
         this.storePrice = storePrice;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
     }
 
     public String getOrderDescription() {

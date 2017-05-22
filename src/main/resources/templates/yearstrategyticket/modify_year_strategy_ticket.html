@@ -215,6 +215,13 @@
                 </td>
             </tr>
             <tr class="controls">
+                <td class="alignright"><span class="red">*</span>是否参与折扣:</td>
+                <td class="alignleft">
+                    <input type="radio" th:checked="${model.discount eq '1'}" name="discount" id="discount0" value="1"><label style="display:inline">参与</label>
+                    <input type="radio" th:checked="${model.discount eq '0'}" name="discount" id="discount1" value="0"><label style="display:inline">不参与</label>
+                </td>
+            </tr>
+            <tr class="controls">
                 <th colspan="2">门票须知</th>
             </tr>
             <tr class="controls">

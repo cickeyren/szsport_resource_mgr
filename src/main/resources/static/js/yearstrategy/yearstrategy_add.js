@@ -274,6 +274,7 @@ $(function () {
             var sellPrice = $.trim($("#sellPrice").val());
             var costPrice = $.trim($("#costPrice").val());
             var storePrice = $.trim($("#storePrice").val());
+            var discount = $('input:radio[name="discount"]:checked').val();//是否参与折扣 0：不参与 1：参与
             var reqParam = {
                 "ticketType":ticketType,
                 mainStadiumID:mainStadiumID,
@@ -300,6 +301,7 @@ $(function () {
                 sellPrice:sellPrice,
                 costPrice:costPrice,
                 storePrice:storePrice,
+                discount:discount,
                 classify:classify
             };
             $.ajax({
