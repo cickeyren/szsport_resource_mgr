@@ -94,6 +94,9 @@ public class CuriculumService {
     public List<Curriculum> getCurriculum(Map<String,Object> args){
         return curriculumMapper.getCurriculum(args);
     }
+    public int getCurriculumCount(Map<String,Object> args){
+        return curriculumMapper.getCurriculumCount(args);
+    }
     public List<Curriculum> getCurriculumByNameExHas(Map<String,Object> args){
         return curriculumMapper.getCurriculumByNameExHas(args);
     }
@@ -143,5 +146,12 @@ public class CuriculumService {
      */
     public List<CurriculumType> getCurriculumType(){
         return curriculumTypeMapper.selectAll();
+    }
+
+    public List<Map<String,Object>> getCurriculumOrderHasPay(Map<String,Object> args){
+        return curriculumMapper.getCurriculumOrderHasPay(args);
+    }
+    public int getCurriculumOrderHasPayCount(Map<String,Object> args){
+        return curriculumMapper.getCurriculumOrderHasPayCount(args);
     }
 }

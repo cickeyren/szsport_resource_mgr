@@ -3,11 +3,67 @@
  */
 
 $(function () {
+    var valConfig = {
+        onsubmit:true,// 是否在提交是验证
+        onfocusout:true,// 是否在获取焦点时验证
+        rules: {
+            name: {　　//要对应相对应的input中的name属性
+                required: true
+            },
+            class_long: {
+                required: true,
+                number:true
+            },
+            class_times: {
+                required: true,
+                number:true
+            },
+            student_num: {
+                required: true,
+                number:true
+            },
+            leantime_type: {
+                required: true
+            },
+            fee: {
+                required: true,
+                number:true
+            }
+        },
+        messages:{　　　　//验证错误信息
+            name: {
+                required: "请输入班次"
+            },
+            class_long: {
+                required: "请输入课时",
+                number:"请输入合法数字"
+            },
+            class_times: {
+                required: "请输入上课次数",
+                number:"请输入合法数字"
+            },
+            student_num: {
+                required: "请输入每班人数",
+                number:"请输入合法数字"
+            },
+            leantime_type: {
+                required: "请选择上课时间"
+            },
+            fee: {
+                required: "请输入费用",
+                number:"请输入合法数字"
+            }
+        },
+        submitHandler: function(form){
+            doAdd();
+        }
+    };
+    $('#addForm').validate(valConfig);
 
     //新增界面保存按钮点击事件 ---  执行保存
-    $("#saveMerchant").on("click", function () {
-        doAdd();
-    });
+    // $("#saveMerchant").on("click", function () {
+    //     doAdd();
+    // });
 
     //新增界面保存按钮点击事件 ---  返回主界面
     $("#cancelMerchant").on("click", function () {
@@ -100,8 +156,6 @@ function doAdd() {
     addJson.fee_mark = $("#fee_mark").val();
     addJson.curriculum_id = $("#curriculumId").val();
     addJson.timess = JSON.stringify(timess);
-    // window.introductionEditor.sync();
-    // addJson.remark = window.introductionEditor.html();
     $.ajax({
         url: '/curriculumController/doAddCurriculumClass.do',
         type: 'POST', //GET

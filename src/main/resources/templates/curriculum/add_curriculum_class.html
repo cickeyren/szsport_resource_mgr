@@ -119,10 +119,6 @@
                     <td class="alignleft"><input type="text" id="student_num" name="student_num"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright">限报人数</td>
-                    <td class="alignleft"><input type="text" id="max_num" name="max_num"/></td>
-                </tr>
-                <tr class="controls">
                     <td class="alignright">上课日期</td>
                     <td class="alignleft">
                         <input class="check" value="1" type="radio" name="leantime_type">固定 <input type="text"
@@ -189,7 +185,6 @@
                     <td class="text-right" colspan="2">
                         <button type="submit" class="btn btn-success" id="saveMerchant">保存</button>
                         <button type="submit" class="btn btn-success" id="cancelMerchant">取消</button>
-
                     </td>
                 </tr>
             </table>
@@ -215,15 +210,7 @@
 </body>
 <script type="text/javascript">
     $(function () {
-        var valConfig = {
-            rules: {
-                title: {
-                    required: true,
-                    minlength: 2
-                }
-            },
-        };
-//        $('#addForm').validate(valConfig);
+
         //场馆状态只能单选
     });
 </script>

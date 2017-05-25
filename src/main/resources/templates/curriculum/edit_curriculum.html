@@ -150,7 +150,8 @@
                     <td class="alignright" width="10%">培训分类</td>
                     <td class="alignleft">
                         <select id="train_type" name="train_type">
-                            <option>信息</option>
+                            <option th:each="obj,eStat:${curiculumTypes}" th:value="${obj.code}"
+                                    th:text="${obj.name}" th:selected="${#strings.contains(curriculum.train_type,obj.code)}"></option>
                         </select>  
                     </td>
                 </tr>
@@ -200,8 +201,8 @@
                 </tr>
                 <tr>
                     <td class="text-right" colspan="2">
-                        <button type="submit" class="btn btn-success" id="saveMerchant">保存</button>
-                        <button type="submit" class="btn btn-success" id="cancelMerchant">取消</button>
+                        <button class="btn btn-success" id="saveMerchant">保存</button>
+                        <button  class="btn btn-success" id="cancelMerchant">取消</button>
 
                     </td>
                 </tr>

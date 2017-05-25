@@ -7,9 +7,7 @@ $(function () {
     $("#saveMerchant").bind("click", function () {
         doUpdate();
     });
-
-    //编辑界面保存按钮点击事件 ---  返回主界面
-    $("#cancelEditMerchant").bind("click", function () {
+    $("#cancelMerchant").bind("click", function () {
         window.history.back();
     });
     $("#teachers").on("dblclick",function () {
@@ -60,6 +58,35 @@ function doUpdate() {
     console.log(JSON.stringify(enrollment_required));
 
     //准备json数据
+    var name = $("#name").val();
+    if (!name){
+        layer.confirm('课程名称不能为空',{icon: 2,skin: 'layer-ext-moon'});
+        return;
+    }
+    var img_url = $("#img_url").val();
+    if (!img_url){
+        layer.confirm('课程图片不能为空',{icon: 2,skin: 'layer-ext-moon'});
+        return;
+    }
+    var enrollment_required = $("#enrollment_required").val();
+    if (!enrollment_required){
+        layer.confirm('报名必填不能为空',{icon: 2,skin: 'layer-ext-moon'});
+        return;
+    }
+    var address = $("#address").val();
+    if (!address){
+        layer.confirm('地址不能为空',{icon: 2,skin: 'layer-ext-moon'});
+        return;
+    }
+    var phone = $("#phone").val();
+    if (!phone){
+        layer.confirm('电话不能为空',{icon: 2,skin: 'layer-ext-moon'});
+        return;
+    }
+    if(!isPhone(phone)){
+        layer.confirm('请输入正确的联系方式',{icon: 2,skin: 'layer-ext-moon'});
+        return;
+    }
     var addJson = {};
     addJson.id = $("#id").val();
     addJson.training_institutions_id = $("#training_institutions_id").val();
@@ -94,4 +121,13 @@ function doUpdate() {
             layer.msg("添加失败！");
         }
     });
+}
+function isPhone(obj){
+    var reg=/^(\d{3,4}\-)?[1-9]\d{6,7}$/;
+    var reg2=/^(\+\d{2,3}\-)?\d{11}$/;
+    if(reg.test(obj)||reg2.test(obj)){
+        return true;
+    }else {
+        return false;
+    }
 }

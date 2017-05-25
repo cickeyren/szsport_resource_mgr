@@ -20,7 +20,8 @@
 
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
-    <script src="../../static/js/curriculum/curriculum.js" th:src="@{/js/curriculum/curriculum.js}"></script>
+    <script src="../../static/js/curriculum/sign_up_view.js" th:src="@{/js/curriculum/sign_up_view.js}"></script>
+    <script src="../../static/js/curriculum/dateformat.js" th:src="@{/js/curriculum/dateformat.js}"></script>
 
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
@@ -75,32 +76,47 @@
     <div class="pb10 border mt20">
         当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a>
     </div>
-    <form class="form-horizontal" action="/curriculumController/curriculum.html" id="searchForm" method="POST">
-        <input type="hidden" id="myPage" name="pageNum" th:value="${pageNum}">
-        <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
-        <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
         <table class="table">
             <tr class="controls">
-                <td class="pt20">机构名称:
-                    <input type="text" id="training_institutions_name" name="training_institutions_name" th:value="${training_institutions_name}"/>
-                </td>
                 <td class="pt20">课程名称
-                    <input type="text" id="classname" name="name" th:value="${name}"/>
+                    <input type="text" id="name" name="name"/>
                 </td>
-                <td class="pt20">培训分类:
+                <td class="pt20">培训机构
+                    <select id="training_institutions_id" name="training_institutions_id">
+                        <option value="">全部</option>
+                        <option value="jg1">jg1</option>
+                        <option value="jg2">jg2</option>
+
+                        <!--<option th:each="obj,eStat:${curiculumTypes}" th:value="${obj.code}"-->
+                        <!--th:text="${obj.name}"></option>-->
+                    </select>
+                </td>
+                <td class="pt20">班次名称:
+                    <select id="class_name" name="class_name">
+                        <option value="">全部</option>
+                    </select>
+                </td>
+                <td class="pt20">培训类型:
                     <select id="train_type" name="train_type">
                         <option value="">全部</option>
                         <option th:each="obj,eStat:${curiculumTypes}" th:value="${obj.code}"
                                 th:text="${obj.name}"></option>
                     </select>
                 </td>
+            </tr>
+            <tr>
+                <td class="pt20">手机号
+                    <input type="text" id="phone" name="phone"/>
+                </td>
+                <td class="pt20">姓名
+                    <input type="text" id="student_name" name="student_name"/>
+                </td>
                 <td class="pt20">
-                    <button type="submit" class="btn btn-success" id="findStadiumname">查询</button>
+                    <button class="btn btn-success" id="query">查询</button>
                     <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
                 </td>
             </tr>
         </table>
-    </form>
     <div>
         <button type="button" class="btn btn-success fl mb20" id="addMerchant">新增</button>
         <button type="button" class="btn btn-success fr mb20" id="back">返回</button>
@@ -114,53 +130,21 @@
                 <th>
                     课程名称
                 </th>
-                <th>机构</th>
-                <th>商家</th>
+                <th>培训机构</th>
+                <th>培训类型</th>
                 <th>
-                    培训分类
+                    班次
                 </th>
-                <th>状态</th>
-                <th>操作</th>
+                <th>开课日期</th>
+                <th>上课时间</th>
+                <th>学员</th>
+                <th>手机</th>
+                <th>报名时间</th>
+                <th>缴费金额</th>
             </tr>
             </thead>
-            <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(curriculums)}">
-            <tr th:each="obj, objStat: ${curriculums}">
-                <input type="hidden" th:value="${obj.id}"/>
-                <td th:text="${obj.name}"></td>
-                <td th:text="${obj.training_institutions_id}"></td>
-                <td th:text="${obj.cooperative_merchant_id}"></td>
-                <td th:text="${obj.train_type}"></td>
-                <td th:if="${obj.status==1}">下线</td>
-                <td th:if="${obj.status==2}">在线</td>
-                <td>
-                    <a th:data="${obj.id}" class="recommend"
-                       href="javascript:;" recommend="1"
-                       th:if="${obj.recommend==1}">设为推荐 </a>
-                    <a th:data="${obj.id}" class="recommend"
-                       href="javascript:;" recommend="2"
-                       th:if="${obj.recommend==2}">取消推荐 </a>
-                    &nbsp;&nbsp;&nbsp;
-                    <a th:data="${obj.id}"
-                       th:href="@{/curriculumController/editCurriculum.html(curriculumId=${obj.id})}">编辑</a>
-                    &nbsp;&nbsp;&nbsp;
-                    <a th:data="${obj.id}" class="online"
-                       href="javascript:;" status="1"
-                       th:if="${obj.status==1}">上线</a>
-                    <a th:data="${obj.id}"
-                       href="javascript:;" status="2" class="online"
-                       th:if="${obj.status==2}">下线</a>
-                    &nbsp;&nbsp;&nbsp;
-                    <a th:data="${obj.id}"
-                       th:href="@{/MerchantController/edit.html(curriculumId=${obj.id})}">查看报名</a>
-                    &nbsp;&nbsp;&nbsp;
-                    <a th:data="${obj.id}"
-                       th:href="@{/curriculumController/curriculumClass.html(curriculumId=${obj.id})}">班次</a>
-            </tr>
-            </tbody>
-            <tbody th:if="${#lists.isEmpty(curriculums)}">
-            <tr>
-                <td colspan="12">没有符合查询条件的记录！</td>
-            </tr>
+            <tbody id="tbody">
+
             </tbody>
         </table>
     </div>
@@ -168,22 +152,4 @@
     </div>
 </div>
 </body>
-<script th:inline="javascript">
-    $(function () {
-        laypage({
-            cont: 'page',
-            pages: [[${totalPage}]], //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
-            curr: function () { //通过url获取当前页，也可以同上（pages）方式获取
-                var page = [[${currentPage}]];
-                return page;
-            }(),
-            jump: function (e, first) { //触发分页后的回调
-                if (!first) { //一定要加此判断，否则初始时会无限刷新
-                    $("#myPage").val(e.curr);
-                    $("#searchForm").submit();
-                }
-            }
-        });
-    });
-</script>
 </html>

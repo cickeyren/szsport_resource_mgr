@@ -89,11 +89,11 @@
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls" style="background-color: #ededed"><td class="alignright" width="10%">基本信息</td><td></td></tr>
                 <tr class="controls">
-                    <td class="alignright">课程名称</td>
-                    <td class="alignleft"><input type="text" id="name" name="name"/></td>
+                    <td class="alignright"><span class="red">*</span>课程名称</td>
+                    <td class="alignleft"><input type="text" id="name" name="name" required="required"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright">课程图片</td>
+                    <td class="alignright"><span class="red">*</span>课程图片</td>
                     <td class="alignleft">
                         <div class="big-photo">
                             <div id="preview">
@@ -106,14 +106,14 @@
                                 <!--<input type="text" id="ddd" name="ddd" value="123">-->
                                 <!--<input type="submit">-->
                             </form>
-                            <input id="img_url" name="img_url" type="hidden">
+                            <input id="img_url" name="img_url" type="hidden" required="required">
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <td class="alignright" width="10%">培训机构</td>
+                    <td class="alignright" width="10%"><span class="red">*</span>培训机构</td>
                     <td class="alignleft">
-                        <select id="training_institutions_id" name="training_institutions_id">
+                        <select id="training_institutions_id" name="training_institutions_id" required="required">
                             <option th:each="obj,eStat:${trainingInstitutions}" th:value="${obj.value}"
                                     th:text="${obj.text}"></option>
                         </select>  
@@ -121,7 +121,7 @@
                 </tr>
 
                 <tr>
-                    <td class="alignright" width="10%">合作商家</td>
+                    <td class="alignright" width="10%"><span class="red">*</span>合作商家</td>
                     <td class="alignleft">
                         <select id="cooperative_merchant_id" name="cooperative_merchant_id">
                             <option></option>
@@ -130,7 +130,7 @@
                 </tr>
                 <tr class="controls" style="background-color: #ededed"> <td class="alignright" width="10%">课程详情</td><td></td></tr>
                 <tr class="controls">
-                    <td class="alignright" width="10%"><span class="red">*</span>教师</td>
+                    <td class="alignright" width="10%">教师</td>
                     <td class="alignleft">
                         <select multiple="multiple" size="5" id="teachers" name="teachers">
                             <option value="volvo">Volvo</option>
@@ -148,7 +148,7 @@
                     </td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright" width="10%">培训分类</td>
+                    <td class="alignright" width="10%"><span class="red">*</span>培训分类</td>
                     <td class="alignleft">
                         <select id="train_type" name="train_type">
                             <option th:each="obj,eStat:${curiculumTypes}" th:value="${obj.code}"
@@ -165,11 +165,11 @@
                 <tr style="background-color: #ededed" class="controls"><td class="alignright" width="10%">报名设置</td><td></td></tr>
                 <tr class="controls">
                     <td class="alignright" width="10%"><span class="red">*</span>课程地点</td>
-                    <td class="alignleft"><input type="text" id="address" name="address"/></td>
+                    <td class="alignleft"><input type="text" id="address" name="address" required="required"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright" width="10%"><span class="red">*</span>咨询电话</td>
-                    <td class="alignleft"><input type="text" id="phone" name="phone"/></td>
+                    <td class="alignleft"><input type="text" id="phone" name="phone" required="required"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright" width="10%"><span class="red">*</span>报名必填</td>
