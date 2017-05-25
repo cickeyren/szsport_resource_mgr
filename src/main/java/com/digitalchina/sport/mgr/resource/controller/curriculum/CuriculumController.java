@@ -32,6 +32,16 @@ public class CuriculumController {
     @Autowired
     private CuriculumService curiculumService;
 
+    /**
+     * 课程列表界面
+     * @param map
+     * @param training_institutions_name
+     * @param name
+     * @param train_type
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @RequestMapping(value = "/curriculum.html")
     public String getCurriculumList(ModelMap map, String training_institutions_name, String name,
                                     String train_type, @RequestParam(required = false, defaultValue = "1") long pageNum, @RequestParam(required = false, defaultValue = "5") long pageSize) {
@@ -61,6 +71,12 @@ public class CuriculumController {
         return "curriculum/curriculum";
     }
 
+    /**
+     * 课程上线下线
+     * @param curriculumId
+     * @param status
+     * @return
+     */
     @RequestMapping(value = "/curriculumUpline.do")
     @ResponseBody
     public RtnData curriculumUpAndDownline(Integer curriculumId, Integer status) {
@@ -78,6 +94,12 @@ public class CuriculumController {
         return RtnData.ok("");
     }
 
+    /**
+     * 课程设为推荐取消推荐
+     * @param curriculumId
+     * @param recommend
+     * @return
+     */
     @RequestMapping(value = "/recommend.do")
     @ResponseBody
     public RtnData recommend(Integer curriculumId, Integer recommend) {
@@ -93,6 +115,14 @@ public class CuriculumController {
         return RtnData.ok("");
     }
 
+    /**
+     *班次状态修改
+     * @param map
+     * @param id
+     * @param status
+     * @param curriculumId
+     * @return
+     */
     @RequestMapping(value = "/editClassStatus")
     public String editClassStatus(ModelMap map, String id, Integer status, String curriculumId) {
         CurriculumClass curriculumClass = new CurriculumClass();
@@ -105,6 +135,11 @@ public class CuriculumController {
         return "curriculum/curriculum_class";
     }
 
+    /**
+     * 添加课程
+     * @param map
+     * @return
+     */
     @RequestMapping(value = "/addCurriculum.html")
     public String addCurriculum(ModelMap map) {
         List<Map<String, Object>> list = new ArrayList<>();
@@ -122,12 +157,24 @@ public class CuriculumController {
         return "curriculum/add_curriculum";
     }
 
+    /**
+     * 添加班次
+     * @param curriculumId
+     * @param map
+     * @return
+     */
     @RequestMapping(value = "/addCurriculumClass.html")
     public String addCurriculumClass(String curriculumId, ModelMap map) {
         map.put("curriculumId", curriculumId);
         return "curriculum/add_curriculum_class";
     }
 
+    /**
+     * 班次列表
+     * @param map
+     * @param curriculumId
+     * @return
+     */
     @RequestMapping(value = "/curriculumClass.html")
     public String curriculumClass(ModelMap map, String curriculumId) {
         try {
@@ -141,6 +188,12 @@ public class CuriculumController {
         return "curriculum/curriculum_class";
     }
 
+    /**
+     * 编辑课程页面
+     * @param map
+     * @param curriculumId
+     * @return
+     */
     @RequestMapping(value = "/editCurriculum.html")
     public String editCurriculum(ModelMap map, Integer curriculumId) {
         Curriculum curriculum = curiculumService.getCurriculumByKey(curriculumId);
@@ -187,6 +240,12 @@ public class CuriculumController {
         return "curriculum/edit_curriculum";
     }
 
+    /**
+     * 编辑班次页面
+     * @param map
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/edit_curriculum_class.html")
     public String editCurriculumClass(ModelMap map, String id) {
         CurriculumClass curriculumClass = curiculumService.getCurriculumClassByKey(id);
@@ -196,6 +255,13 @@ public class CuriculumController {
         return "curriculum/edit_curriculum_class";
     }
 
+    /**
+     * 续报设置页面
+     * @param map
+     * @param id
+     * @param curriculumId
+     * @return
+     */
     @RequestMapping(value = "/xuban")
     public String xuban(ModelMap map, String id, Integer curriculumId) {
         Map<String, Object> args = Maps.newHashMap();//数据库查询
@@ -235,6 +301,13 @@ public class CuriculumController {
 
     }
 
+    /**
+     * 续班设置获取已参加有课程
+     * @param name
+     * @param curriculumId
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/getCurriculumByNameExHas")
     @ResponseBody
     public RtnData getCurriculumByNameExHas(String name, Integer curriculumId, String id) {
@@ -257,6 +330,11 @@ public class CuriculumController {
         return RtnData.ok(curriculumList);
     }
 
+    /**
+     * 添加课程
+     * @param curriculum
+     * @return
+     */
     @RequestMapping(value = "/doAddCurriculum")
     @ResponseBody
     public RtnData doAddCurriculum(Curriculum curriculum) {
@@ -265,6 +343,11 @@ public class CuriculumController {
         return RtnData.ok("");
     }
 
+    /**
+     * 续班保存
+     * @param curriculumClass
+     * @return
+     */
     @RequestMapping(value = "/xubanCurriculum")
     @ResponseBody
     public RtnData xubanCurriculum(CurriculumClass curriculumClass) {
@@ -272,6 +355,11 @@ public class CuriculumController {
         return RtnData.ok("");
     }
 
+    /**
+     * 跟新课程
+     * @param curriculum
+     * @return
+     */
     @RequestMapping(value = "/doUpdataCurriculum")
     @ResponseBody
     public RtnData doUpdataCurriculum(Curriculum curriculum) {
@@ -280,6 +368,12 @@ public class CuriculumController {
         return RtnData.ok("");
     }
 
+    /**
+     * 跟新班次
+     * @param curriculumClass
+     * @param timess
+     * @return
+     */
     @RequestMapping(value = "/doUpdataCurriculumClass")
     @ResponseBody
     public RtnData doUpdataCurriculumClass(CurriculumClass curriculumClass, String timess) {
@@ -290,6 +384,14 @@ public class CuriculumController {
         return RtnData.ok("");
     }
 
+    /**
+     * 跟新班次时间段
+     * @param id
+     * @param time
+     * @param max_people
+     * @param reserve_people
+     * @return
+     */
     @RequestMapping(value = "/doUpdataCurriculumClassTime")
     @ResponseBody
     public RtnData doUpdataCurriculumClassTime(String id, String time, String max_people, String reserve_people) {
@@ -302,12 +404,23 @@ public class CuriculumController {
         return RtnData.ok("");
     }
 
+    /**
+     * 删除班次时间段
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/delTimess")
     @ResponseBody
     public RtnData delTimess(String id) {
         return RtnData.ok(curiculumService.delTimess(id));
     }
 
+    /**
+     * 添加班次
+     * @param curriculumClass
+     * @param timess
+     * @return
+     */
     @RequestMapping(value = "/doAddCurriculumClass")
     @ResponseBody
     public RtnData doAddCurriculumClass(CurriculumClass curriculumClass, String timess) {
@@ -363,6 +476,11 @@ public class CuriculumController {
         }
     }
 
+    /**
+     * 查看报名界面
+     * @param map
+     * @return
+     */
     @RequestMapping(value = "/signUpView.html")
     public String signUpView(ModelMap map) {
         List<CurriculumType> types = curiculumService.getCurriculumType();
