@@ -23,6 +23,7 @@
             `sell_price`,
             `cost_price`,
             `store_price`,
+            `discount`,
             `order_description`,
             `refund_description`,
               `order_fix_day`
@@ -47,6 +48,7 @@
                 #{sellPrice},
                 #{costPrice},
                 #{storePrice},
+                #{discount},
                 #{orderDescription},
                 #{refundDescription},
                 #{orderFixDay}
@@ -118,6 +120,7 @@
         `sell_price` AS sellPrice,
         `cost_price` AS costPrice,
         `store_price` AS storePrice,
+        `discount` AS discount,
         `order_description` AS orderDescription,
         `refund_description` AS refundDescription,
         `order_fix_day` AS orderFixDay,
@@ -280,6 +283,9 @@
             </if>
             <if test="storePrice!=null">
                 `store_price` = #{storePrice},
+            </if>
+            <if test="discount != null and discount != ''">
+                `discount` = #{discount},
             </if>
             <if test="orderDescription!=null">
                 `order_description` = #{orderDescription},
