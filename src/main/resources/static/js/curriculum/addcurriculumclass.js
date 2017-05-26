@@ -32,7 +32,7 @@ $(function () {
         },
         messages:{　　　　//验证错误信息
             name: {
-                required: "请输入班次"
+                required: "请输入班名"
             },
             class_long: {
                 required: "请输入课时",

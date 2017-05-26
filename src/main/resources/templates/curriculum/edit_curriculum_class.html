@@ -104,17 +104,17 @@
                     <td></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright">*班名</td>
+                    <td class="alignright"><span class="red">*</span>班名</td>
                     <td class="alignleft"><input type="text" id="name" name="name" th:value="${curriculumClass.name}"/>
                     </td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright">课时</td>
+                    <td class="alignright"><span class="red">*</span>课时</td>
                     <td class="alignleft"><input type="text" id="class_long" name="class_long"
                                                  th:value="${curriculumClass.class_long}"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright">上课次数</td>
+                    <td class="alignright"><span class="red">*</span>上课次数</td>
                     <td class="alignleft"><input type="text" id="class_times" name="class_times"
                                                  th:value="${curriculumClass.class_times}"/></td>
                 </tr>
@@ -131,19 +131,16 @@
                 <tr class="controls">
                     <td class="alignright">上课日期</td>
                     <td class="alignleft">
-                        <input class="check" value="1" type="radio" name="leantime_type">固定 <input type="text"
-                                                                                                   id="lean_time"
-                                                                                                   name="lean_time"
-                                                                                                   th:value="${curriculumClass.lean_time}"/>
-                        <input class="check" value="2" type="radio" name="leantime_type">常年
-                        <input class="check" value="3" type="radio" name="leantime_type">需预约
-
+                        <span><input class="check" value="1" type="radio" name="leantime_type">固定</span>
+                        <input type="text" id="lean_time" name="lean_time" th:value="${curriculumClass.lean_time}"/>
+                        <span><input class="check" value="2" type="radio" name="leantime_type">常年</span>
+                        <span><input class="check" value="3" type="radio" name="leantime_type">需预约</span>
                     </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">上课时段</td>
                     <td class="alignleft">
-                        <button type="submit" class="btn" id="addtime">添加</button>
+                        <button type="button" class="btn" id="addtime">添加</button>
                     </td>
                 </tr>
                 <tr class="controls">
@@ -234,16 +231,7 @@
 </body>
 <script type="text/javascript">
     $(function () {
-        var valConfig = {
-            rules: {
-                title: {
-                    required: true,
-                    minlength: 2
-                }
-            },
-        };
-//        $('#addForm').validate(valConfig);
-        //场馆状态只能单选
+
     });
 </script>
 </html>
