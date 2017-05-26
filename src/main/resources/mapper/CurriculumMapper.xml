@@ -58,7 +58,7 @@
             AND c.training_institutions_id = #{training_institutions_id}
         </if>
         <if test="name != null and name != ''">
-            AND c.name = #{name}
+            AND c.name like concat('%',#{name},'%')
         </if>
         <if test="train_type != null and train_type != ''">
             AND ct.code = #{train_type}
