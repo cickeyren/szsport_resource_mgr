@@ -13,7 +13,7 @@ $(function () {
      * 子场馆新增保存数据
      */
     $("#saveSubstadium").on('click', function () {
-        var mainStadiumId = $.trim($("#substadiumAdd").val());
+        var mainStadiumId = $.trim($("#mainStadiumadd").val());
         doAdd(mainStadiumId);
     })
 
@@ -103,7 +103,7 @@ function doAdd(mainStadiumId) {
                     window.location.href = "/subStadiumController/substadium.html?mainStadiumId="+mainStadiumId;
                 },6000)
             }else {
-                layer.alert(result.result)
+                layer.alert(result.message);
             }
             //console.log(result);
         },
