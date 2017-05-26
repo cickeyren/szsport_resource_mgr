@@ -152,7 +152,7 @@
                        th:if="${obj.status==2}">下线</a>
                     &nbsp;&nbsp;&nbsp;
                     <a th:data="${obj.id}"
-                       th:href="@{/MerchantController/edit.html(curriculumId=${obj.id})}">查看报名</a>
+                       th:href="@{/curriculumController/signUpView.html(curriculumId=${obj.id})}">查看报名</a>
                     &nbsp;&nbsp;&nbsp;
                     <a th:data="${obj.id}"
                        th:href="@{/curriculumController/curriculumClass.html(curriculumId=${obj.id})}">班次</a>

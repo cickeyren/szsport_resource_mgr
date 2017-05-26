@@ -484,7 +484,7 @@ public class CuriculumController {
     @RequestMapping(value = "/signUpView.html")
     public String signUpView(ModelMap map) {
         List<CurriculumType> types = curiculumService.getCurriculumType();
-        map.put("curiculumTypes", types);
+        map.put("curriculumTypes", types);
         return "curriculum/sign_up_view";
     }
 }

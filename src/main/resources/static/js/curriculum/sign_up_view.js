@@ -19,7 +19,7 @@ $(function () {
 });
 
 function query(curr) {
-    var pageSize = 1;
+    var pageSize = 10;
     var data = {};
     data.name = $("#name").val();
     data.training_institutions_id = $("#training_institutions_id").val();
@@ -53,7 +53,7 @@ function query(curr) {
                             '<td>' + order[i].time + '</td>' +
                             '<td>' + order[i].student_name + '</td>' +
                             '<td>' + order[i].phone + '</td>' +
-                            '<td>' + formitDate(order[i].pay_time) + '</td>' +
+                            '<td>' + formatDate(order[i].pay_time) + '</td>' +
                             '<td>' + order[i].pay_fee + '</td>' +
                             '</tr>';
                     }
@@ -86,7 +86,7 @@ function query(curr) {
         }
     });
 }
-function formitDate(date) {
+function formatDate(date) {
     var newDate = new Date();
     if (date) {
         newDate.setTime(date);
