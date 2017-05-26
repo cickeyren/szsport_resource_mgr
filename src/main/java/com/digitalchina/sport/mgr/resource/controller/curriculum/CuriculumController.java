@@ -63,7 +63,7 @@ public class CuriculumController {
 
         List<CurriculumType> types = curiculumService.getCurriculumType();
         int total = curiculumService.getCurriculumCount(args);
-        map.put("curiculumTypes", types);
+        map.put("curriculumTypes", types);
         map.put("totalPage", total % pageSize > 0 ? (total / pageSize) + 1 : total / pageSize);
         map.put("currentPage", pageNum);
         map.put("pageSize", pageSize);
@@ -232,7 +232,7 @@ public class CuriculumController {
             allTeacherList.add(temp);
         }
         List<CurriculumType> types = curiculumService.getCurriculumType();
-        map.put("curiculumTypes", types);
+        map.put("curriculumTypes", types);
         map.put("trainingInstitutions", list);
         map.put("curriculum", curriculum);
         map.put("teacherList", teacherList);

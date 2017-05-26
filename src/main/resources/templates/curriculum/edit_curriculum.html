@@ -150,7 +150,7 @@
                     <td class="alignright" width="10%">培训分类</td>
                     <td class="alignleft">
                         <select id="train_type" name="train_type">
-                            <option th:each="obj,eStat:${curiculumTypes}" th:value="${obj.code}"
+                            <option th:each="obj,eStat:${curriculumTypes}" th:value="${obj.code}"
                                     th:text="${obj.name}" th:selected="${#strings.contains(curriculum.train_type,obj.code)}"></option>
                         </select>  
                     </td>

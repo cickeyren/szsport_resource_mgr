@@ -5,12 +5,10 @@
 //添加课程和编辑课程公共操作
 $(function(){
     $("#teachers").on("dblclick",function () {
-        var result = dbClickOper("teachers");
-        addOption(result.text,'Rteachers',result.value);
+        dbClickOper("teachers","Rteachers");
     });
     $("#Rteachers").on("dblclick",function () {
-        var result = dbClickOper("Rteachers");
-        addOption(result.text,'teachers',result.value);
+        dbClickOper("Rteachers","teachers");
     });
     $("#addteacher").on("click",function(){
         addOrRemoveOption("teachers","Rteachers");
@@ -20,12 +18,10 @@ $(function(){
     });
 
     $("#enrollment_required").on("dblclick",function () {
-        var result = dbClickOper("enrollment_required");
-        addOption(result.text,'Renrollment_required',result.value)
+        dbClickOper("enrollment_required","Renrollment_required");
     });
     $("#Renrollment_required").on("dblclick",function () {
-        var result = dbClickOper("Renrollment_required");
-        addOption(result.text,'enrollment_required',result.value);
+        dbClickOper("Renrollment_required","enrollment_required");
     });
     $("#add").on("click",function(){
         addOrRemoveOption("enrollment_required","Renrollment_required");
@@ -35,20 +31,19 @@ $(function(){
     })
 });
 
-//添加选项
+//添加选项(弃用)
 function addOption(content,id,contentValue) {
     $("#"+id).append('<option value="'+contentValue+'">'+content+'</option>');
 }
 
-//双击获取数据
-function dbClickOper(id){
-    var $me = $("#" + id);
+//双击操作
+function dbClickOper(sourceId,targetId){
+    var $me = $("#" + sourceId);
     var value = $me.val(),
         text = $me.find("option:selected").text();
-    $($me).find("option:selected").remove();
-    return{
-        value: value,
-        text: text
+    $me.find("option:selected").remove();
+    if(null != value && null != text){
+        $("#" + targetId).append('<option value="'+value+'">'+text+'</option>');
     }
 }
 
@@ -56,13 +51,13 @@ function dbClickOper(id){
 function addOrRemoveOption(sourceId,targetId){
     var $source = $("#" + sourceId).find("option:selected"),
         $target = $("#" + targetId).find("option:selected");
-    if(null !== $source && null !== $target){
+    if(null != $source && null != $target){
         var html = '';
         $source.each(function(){
             var me = this;
             var value = $(me).val(),
                 text = $(me).text();
-            if(null !== value || null !== text){
+            if(null != value && null != text){
                 html += '<option value="'+value+'">'+text+'</option>'
             }
         });
