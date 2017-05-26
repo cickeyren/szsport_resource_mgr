@@ -14,36 +14,8 @@ $(function () {
         window.history.back();
         // window.location.href = "/MerchantController/merchant.html?mainstadium_id=" + $('#mainstadium_id').val();
     });
-    $("#teachers").on("dblclick",function () {
-        var contentValue = $(this).val();
-        var content = $(this).find("option:selected").text();
-        $(this).find("option:selected").remove();
-        addOption(content,'Rteachers',contentValue)
-    })
-    $("#Rteachers").on("dblclick",function () {
-        var contentValue = $("#Rteachers").val();
-        var content = $("#Rteachers").find("option:selected").text();
-        $("#Rteachers").find("option:selected").remove();
-        addOption(content,'teachers',contentValue)
-    })
+});
 
-    $("#enrollment_required").on("dblclick",function () {
-        var contentValue = $(this).val();
-        var content = $(this).find("option:selected").text();
-        $(this).find("option:selected").remove();
-        addOption(content,'Renrollment_required',contentValue)
-    })
-    $("#Renrollment_required").on("dblclick",function () {
-        var contentValue = $(this).val();
-        var content = $(this).find("option:selected").text();
-        $(this).find("option:selected").remove();
-        addOption(content,'enrollment_required',contentValue)
-    })
-})
-
-function addOption(content,id,contentValue) {
-    $("#"+id).append('<option value="'+contentValue+'">'+content+'</option>');
-}
 //新增页面添加数据
 function doAdd() {
     var RteachersOption = $("#Rteachers").find("option");
