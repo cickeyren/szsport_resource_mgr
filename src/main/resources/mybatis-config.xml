@@ -19,6 +19,8 @@
         <setting name="useGeneratedKeys" value="true"/>
         <!-- 给予被嵌套的resultMap以字段-属性的映射支持 -->
         <setting name="autoMappingBehavior" value="FULL"/>
+        <!--当字段的值为null的时候，返回结果集中显示该字段名称-->
+        <setting name="callSettersOnNulls" value="true" />
     </settings>
 
     <typeAliases>
