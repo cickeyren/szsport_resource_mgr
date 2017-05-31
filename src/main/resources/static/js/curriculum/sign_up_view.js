@@ -59,7 +59,7 @@ function query(curr) {
                     }
                     $("#tbody").append(temp);
                 } else {
-                    $("#tbody").append('<tr>没有数据</tr>');
+                    $("#tbody").append('<tr><td colspan="10">暂无相关数据</td></tr>');
                 }
                 laypage({
                     cont: 'page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
@@ -82,7 +82,7 @@ function query(curr) {
         },
         error: function (result) {
             console.log(result);
-            layer.msg("添加失败！");
+            layer.msg("查询发生了错误！");
         }
     });
 }
