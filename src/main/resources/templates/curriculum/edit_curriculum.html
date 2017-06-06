@@ -114,8 +114,8 @@
                     <td class="alignright" width="10%">培训机构</td>
                     <td class="alignleft">
                         <select id="training_institutions_id" name="training_institutions_id">
-                            <option th:each="obj,eStat:${trainingInstitutions}" th:value="${obj.value}"
-                                    th:text="${obj.text}" th:selected="${#strings.contains(curriculum.training_institutions_id,obj.value)}"></option>
+                            <option th:each="obj,eStat:${trainingInstitutions}" th:value="${obj.id}"
+                                    th:text="${obj.org_name}" th:selected="${#strings.contains(curriculum.training_institutions_id,obj.org_name)}"></option>
                         </select>  
                     </td>
                 </tr>

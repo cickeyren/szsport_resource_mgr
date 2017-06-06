@@ -21,6 +21,7 @@
         <result column="recommend_time" property="recommend_time" jdbcType="TIMESTAMP"/>
         <result column="recommend_level" property="recommend_level" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="org_name" property="org_name" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List">
         <!--
@@ -48,14 +49,16 @@
         c.recommend_time,
         c.recommend,
         c.recommend_level,
-        c.`status`
+        c.`status`,
+        ti.org_name
         FROM
         curriculum c,
-        curriculum_type ct
+        curriculum_type ct,
+        training_institution ti
         WHERE
-        c.train_type = ct.`code`
-        <if test="training_institutions_id != null and training_institutions_id != ''">
-            AND c.training_institutions_id = #{training_institutions_id}
+        c.train_type = ct.`code` AND ti.id = c.training_institutions_id
+        <if test="training_institutions_name != null and training_institutions_name != ''">
+            AND ti.org_name like concat('%',#{training_institutions_name},'%')
         </if>
         <if test="name != null and name != ''">
             AND c.name like concat('%',#{name},'%')
@@ -63,6 +66,7 @@
         <if test="train_type != null and train_type != ''">
             AND ct.code = #{train_type}
         </if>
+        ORDER BY c.create_date DESC
         <if test="pNum != null and pSize != null">
             limit #{pNum},#{pSize}
         </if>

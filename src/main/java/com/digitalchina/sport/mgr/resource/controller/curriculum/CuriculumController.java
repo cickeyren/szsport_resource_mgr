@@ -7,6 +7,7 @@ import com.digitalchina.sport.mgr.resource.model.CurriculumClass;
 import com.digitalchina.sport.mgr.resource.model.CurriculumClassTimes;
 import com.digitalchina.sport.mgr.resource.model.CurriculumType;
 import com.digitalchina.sport.mgr.resource.service.CuriculumService;
+import com.digitalchina.sport.mgr.resource.service.TrainInstitutionService;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ import java.util.*;
  * @date 2017/2/27 14:06
  * @see
  */
+//用于课程及班次的控制层
 @Controller
 @RequestMapping(value = "/curriculumController")
 public class CuriculumController {
@@ -31,6 +33,8 @@ public class CuriculumController {
 
     @Autowired
     private CuriculumService curiculumService;
+    @Autowired
+    private TrainInstitutionService trainInstitutionService;
 
     /**
      * 课程列表界面
@@ -142,15 +146,20 @@ public class CuriculumController {
      */
     @RequestMapping(value = "/addCurriculum.html")
     public String addCurriculum(ModelMap map) {
-        List<Map<String, Object>> list = new ArrayList<>();
-        Map<String, Object> m1 = new HashMap<>();
+        List<Map<String, Object>> list = null;
+        try {
+            list = trainInstitutionService.listTrainInstitution();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /*Map<String, Object> m1 = new HashMap<>();
         m1.put("value", "jg1");
         m1.put("text", "机构1");
         Map<String, Object> m2 = new HashMap<>();
         m2.put("value", "jg2");
         m2.put("text", "机构2");
         list.add(m1);
-        list.add(m2);
+        list.add(m2);*/
         List<CurriculumType> types = curiculumService.getCurriculumType();
         map.put("trainingInstitutions", list);
         map.put("curiculumTypes", types);
@@ -199,14 +208,19 @@ public class CuriculumController {
         Curriculum curriculum = curiculumService.getCurriculumByKey(curriculumId);
 
         List<Map<String, Object>> list = new ArrayList<>();
-        Map<String, Object> m1 = new HashMap<>();
+        /*Map<String, Object> m1 = new HashMap<>();
         m1.put("value", "jg1");
         m1.put("text", "机构1");
         Map<String, Object> m2 = new HashMap<>();
         m2.put("value", "jg2");
         m2.put("text", "机构2");
         list.add(m1);
-        list.add(m2);
+        list.add(m2);*/
+        try {
+            list = trainInstitutionService.listTrainInstitution();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String teachers = curriculum.getTeachers();
         Gson gson = new Gson();
         Map<String, Object> teachersMap = gson.fromJson(teachers, Map.class);

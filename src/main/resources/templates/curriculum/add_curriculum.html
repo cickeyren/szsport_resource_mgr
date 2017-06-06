@@ -83,7 +83,7 @@
 <section>
     <div class="container-fluid" style="margin-top: 20px;height:120px;">
         <div class="pb10 border">
-            当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a> < <a href="javascript:;">新增</a>
+            当前位置：<a href="javascript:;">培训课程</a> < <a href="javascript:;">新增</a>
         </div>
         <!--<form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" method="post">-->
             <input type="hidden" name="mainstadium_id" id="mainstadium_id">
@@ -115,8 +115,8 @@
                     <td class="alignright" width="10%"><span class="red">*</span>培训机构</td>
                     <td class="alignleft">
                         <select id="training_institutions_id" name="training_institutions_id" required="required">
-                            <option th:each="obj,eStat:${trainingInstitutions}" th:value="${obj.value}"
-                                    th:text="${obj.text}"></option>
+                            <option th:each="obj,eStat:${trainingInstitutions}" th:value="${obj.id}"
+                                    th:text="${obj.org_name}"></option>
                         </select>  
                     </td>
                 </tr>
@@ -160,7 +160,7 @@
                 <tr class="controls">
                     <td class="alignright">课程介绍</td>
                     <td class="alignleft">
-                        <textarea id="m_content" name="content" style="width:500px;height:200px;"></textarea>
+                        <textarea id="m_content" name="content" style="width:700px;height:300px;"></textarea>
                     </td>
                 </tr>
                 <tr style="background-color: #ededed" class="controls"><td class="alignright" width="10%">报名设置</td><td></td></tr>
@@ -198,7 +198,7 @@
                     <td class="alignright">报名须知</td>
                     <td class="alignleft">
                         <textarea id="enrollment_read" name="enrollment_read"
-                                  style="width:500px;height:200px;"></textarea>
+                                  style="width:700px;height:300px;"></textarea>
                     </td>
                 </tr>
                 <tr>
@@ -217,16 +217,10 @@
 </body>
 <script type="text/javascript">
     $(function () {
-        var valConfig = {
-            rules: {
-                title: {
-                    required: true,
-                    minlength: 2
-                }
-            },
-        };
-//        $('#addForm').validate(valConfig);
-        //场馆状态只能单选
+        /*KindEditor.ready(function (k) {
+            window.editor = k.create('#m_content');
+            window.editor = k.create('#enrollment_read');
+        })*/
     });
 </script>
 </html>

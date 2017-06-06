@@ -69,6 +69,7 @@ public class Curriculum {
     private Integer recommend_level;
     private Integer status;
     private Integer recommend;
+    private String org_name;
 
     /**
      * @return id
@@ -337,5 +338,13 @@ public class Curriculum {
 
     public void setRecommend(Integer recommend) {
         this.recommend = recommend;
+    }
+
+    public String getOrg_name() {
+        return org_name;
+    }
+
+    public void setOrg_name(String org_name) {
+        this.org_name = org_name;
     }
 }

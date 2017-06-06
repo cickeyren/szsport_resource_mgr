@@ -87,6 +87,9 @@
         .class_time_table_body tr td{
 
         }
+        input.Wdate{
+            width: 206px !important;
+        }
     </style>
 </head>
 <body>
@@ -108,7 +111,7 @@
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>课时</td>
-                    <td class="alignleft"><input type="text" id="class_long" name="class_long"/></td>
+                    <td class="alignleft"><input type="text" id="class_long" name="class_long"/>小时/次</td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>上课次数</td>
@@ -122,7 +125,7 @@
                     <td class="alignright"><span class="red">*</span>上课日期</td>
                     <td class="alignleft">
                         <span><input class="check" value="1" type="radio" name="leantime_type">固定</span>
-                        <input type="text" id="lean_time" name="lean_time"/>
+                        <input type="text" id="lean_time" name="lean_time" onclick="WdatePicker()" class="Wdate"/>
                         <span><input class="check" value="2" type="radio" name="leantime_type">常年</span>
                         <span><input class="check" value="3" type="radio" name="leantime_type">需预约</span>
                     </td>
@@ -151,11 +154,11 @@
                 </tr>
                 <tr class="controls">
                     <td class="alignright">报名开始时间</td>
-                    <td class="alignleft"><input type="text" id="bm_time" name="bm_time"/></td>
+                    <td class="alignleft"><input type="text" id="bm_time" name="bm_time" onclick="WdatePicker()" class="Wdate"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">报名截止时间</td>
-                    <td class="alignleft"><input type="text" id="bm_end" name="bm_end"/></td>
+                    <td class="alignleft"><input type="text" id="bm_end" name="bm_end" onclick="WdatePicker()" class="Wdate"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">招生对象</td>

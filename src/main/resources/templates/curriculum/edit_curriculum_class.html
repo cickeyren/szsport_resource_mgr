@@ -87,13 +87,16 @@
         .class_time_table_body tr td{
 
         }
+        input.Wdate{
+            width: 206px !important;
+        }
     </style>
 </head>
 <body>
 <section>
     <div class="container-fluid" style="margin-top: 20px;height:120px;">
         <div class="pb10 border">
-            当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a> < <a href="javascript:;">新增</a>
+            当前位置：<a href="javascript:;">培训课程</a> < <a href="javascript:;">修改班次</a>
         </div>
         <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" method="post">
             <input type="hidden" name="id" id="id" th:value="${curriculumClass.id}">
@@ -132,7 +135,7 @@
                     <td class="alignright">上课日期</td>
                     <td class="alignleft">
                         <span><input class="check" value="1" type="radio" name="leantime_type">固定</span>
-                        <input type="text" id="lean_time" name="lean_time" th:value="${curriculumClass.lean_time}"/>
+                        <input type="text" id="lean_time" name="lean_time" th:value="${curriculumClass.lean_time}" onclick="WdatePicker()" class="Wdate"/>
                         <span><input class="check" value="2" type="radio" name="leantime_type">常年</span>
                         <span><input class="check" value="3" type="radio" name="leantime_type">需预约</span>
                     </td>
@@ -167,12 +170,12 @@
                 <tr class="controls">
                     <td class="alignright">报名开始时间</td>
                     <td class="alignleft"><input type="text" id="bm_time" name="bm_time"
-                                                 th:value="${curriculumClass.bm_time}"/></td>
+                                                 th:value="${curriculumClass.bm_time}" onclick="WdatePicker()" class="Wdate"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">报名截止时间</td>
                     <td class="alignleft"><input type="text" id="bm_end" name="bm_end"
-                                                 th:value="${curriculumClass.bm_end}"/></td>
+                                                 th:value="${curriculumClass.bm_end}" onclick="WdatePicker()" class="Wdate"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">招生对象</td>

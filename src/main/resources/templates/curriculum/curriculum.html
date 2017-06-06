@@ -73,7 +73,7 @@
 <body>
 <div class="container-fluid">
     <div class="pb10 border mt20">
-        当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a>
+        当前位置：<a href="javascript:;">培训课程</a> < <a href="javascript:;">课程列表</a>
     </div>
     <form class="form-horizontal" action="/curriculumController/curriculum.html" id="searchForm" method="POST">
         <input type="hidden" id="myPage" name="pageNum" th:value="${pageNum}">
@@ -128,7 +128,8 @@
             <tr th:each="obj, objStat: ${curriculums}">
                 <input type="hidden" th:value="${obj.id}"/>
                 <td th:text="${obj.name}"></td>
-                <td th:text="${obj.training_institutions_id}"></td>
+                <!--<td th:text="${obj.training_institutions_id}"></td>-->
+                <td th:text="${obj.org_name}"></td>
                 <td th:text="${obj.cooperative_merchant_id}"></td>
                 <td th:text="${obj.train_type}"></td>
                 <td th:if="${obj.status==1}">下线</td>

@@ -42,7 +42,6 @@ function doAdd() {
         layer.confirm('课程图片不能为空',{icon: 2,skin: 'layer-ext-moon'});
         return;
     }
-    var enrollment_required = $("#enrollment_required").val();
     if (!enrollment_required){
         layer.confirm('报名必填不能为空',{icon: 2,skin: 'layer-ext-moon'});
         return;
@@ -73,8 +72,6 @@ function doAdd() {
     addJson.address = $("#address").val();
     addJson.phone = $("#phone").val();
     addJson.enrollment_read = $("#enrollment_read").val();
-    // window.introductionEditor.sync();
-    // addJson.remark = window.introductionEditor.html();
     $.ajax({
         url: '/curriculumController/doAddCurriculum.do',
         type: 'POST', //GET
