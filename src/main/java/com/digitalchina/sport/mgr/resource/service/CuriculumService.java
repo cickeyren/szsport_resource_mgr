@@ -107,7 +107,8 @@ public class CuriculumService {
         return curriculumMapper.getCurriculumByIdsNot(args);
     }
     public Curriculum getCurriculumByKey(Integer key){
-        return curriculumMapper.selectByPrimaryKey(key);
+        //return curriculumMapper.selectByPrimaryKey(key);
+        return curriculumMapper.selectById(key);
     }
     public CurriculumClass getCurriculumClassByKey(String id){
         return curriculumClassMapper.selectByPrimaryKey(id);

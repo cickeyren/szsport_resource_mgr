@@ -17,4 +17,5 @@ public interface CurriculumMapper extends Mapper<Curriculum> {
      List<Curriculum> getCurriculumByIdsNot(Map<String,Object> args);
      List<Map<String,Object>> getCurriculumOrderHasPay(Map<String,Object> args);
      int getCurriculumOrderHasPayCount(Map<String,Object> args);
+     Curriculum selectById(Integer id);
 }

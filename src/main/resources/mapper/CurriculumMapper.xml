@@ -274,4 +274,32 @@
             AND  co.student_name=#{student_name}
         </if>
     </select>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+         SELECT
+        c.id,
+        c.training_institutions_id,
+        c.cooperative_merchant_id,
+        c.img_url,
+        c.`name`,
+        c.teachers,
+        ct.`name` AS train_type,
+        c.content,
+        c.address,
+        c.enrollment_required,
+        c.phone,
+        c.enrollment_read,
+        c.create_date,
+        c.recommend_time,
+        c.recommend,
+        c.recommend_level,
+        c.`status`,
+        ti.org_name
+        FROM
+        curriculum c,
+        curriculum_type ct,
+        training_institution ti
+        WHERE
+        c.train_type = ct.`code` AND ti.id = c.training_institutions_id AND c.id = #{id}
+    </select>
 </mapper>
