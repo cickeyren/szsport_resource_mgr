@@ -103,6 +103,7 @@ function doAdd() {
         addJson.mainStadiumId = $("#mainStadium_id").val();
         addJson.discountChannel = $("#discountChannel").val();
         addJson.payType = $("#payType").val();
+        addJson.discountName = $("#discountName").val();
         addJson.discountLimit = $("#discountLimit").val();
         addJson.startTime = $("#startTime").val();
         addJson.endTime = $("#endTime").val();
@@ -148,6 +149,7 @@ function doUpdate() {
         addJson.mainStadiumId = $("#mainStadium_id").val();
         addJson.discountChannel = $("#discountChannel").val();
         addJson.payType = $("#payType").val();
+        addJson.discountName = $("#discountName").val();
         addJson.discountLimit = $("#discountLimit").val();
         addJson.startTime = $("#startTime").val();
         addJson.endTime = $("#endTime").val();

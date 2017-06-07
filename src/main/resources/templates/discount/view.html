@@ -72,6 +72,10 @@
             <input type="hidden" id="id" name="id" th:value="${discount.id}"/>
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>优惠名称</td>
+                    <td class="alignleft" colspan="3" th:text="${discount.discountName}"></td>
+                </tr>
+                <tr class="controls">
                     <td class="alignright"><span class="red">*</span>优惠类型</td>
                     <td class="alignleft" colspan="3" th:text="${discount.discountType}"></td>
                 </tr>

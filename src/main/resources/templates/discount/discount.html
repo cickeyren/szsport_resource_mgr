@@ -121,6 +121,7 @@
                             <table id="dataTable" class="table table-bordered" th:unless="${#lists.isEmpty(list)}">
                                 <thead>
                                 <tr>
+                                    <th>优惠名称</th>
                                     <th>优惠类型</th>
                                     <th>场馆名称</th>
                                     <th>子场馆</th>
@@ -134,6 +135,7 @@
                                 <tbody th:remove="all-but-first">
                                 <tr th:each="obj, objStat: ${list}">
                                     <input type="hidden" th:value="${obj.id}"/>
+                                    <td th:text="${obj.discountName}"></td>
                                     <td th:text="${obj.discountType}"></td>
                                     <td th:text="${obj.mainStadium}"></td>
                                     <td th:text="${obj.subStadium}"></td>

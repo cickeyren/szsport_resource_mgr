@@ -8,6 +8,7 @@ import java.sql.Timestamp;
  */
 public class DiscountConfigure {
     private String id;
+    private String discountName;
     private String discountType;
     private String mainStadiumId;
     private String subStadiumId;
@@ -114,5 +115,13 @@ public class DiscountConfigure {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getDiscountName() {
+        return discountName;
+    }
+
+    public void setDiscountName(String discountName) {
+        this.discountName = discountName;
     }
 }

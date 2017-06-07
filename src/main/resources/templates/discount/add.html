@@ -71,6 +71,10 @@
         <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" name="addForm" method="post">
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
+                    <td width="10%" class="alignright">优惠名称</td>
+                    <td class="alignleft"><input type="text" id="discountName" name="discountName"/></td>
+                </tr>
+                <tr class="controls">
                     <td class="alignright"><span class="red">*</span>优惠类型</td>
                     <td class="alignleft">
                         <select id="discountType" name="discountType">
@@ -150,6 +154,9 @@
     $(function () {
         var valConfig = {
             rules: {
+                discountName: {
+                    required: true,
+                },
                 discountLimit: {
                     required: true,
                 },
@@ -164,6 +171,9 @@
                 }
             },
             messages: {
+                discountName: {
+                    required: "折扣名称不能为空！"
+                },
                 discountLimit: {
                     required: "折扣额度不能为空！"
                 },

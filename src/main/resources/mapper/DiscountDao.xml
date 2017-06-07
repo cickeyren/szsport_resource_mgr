@@ -4,6 +4,7 @@
     <select id="getListByMap" parameterType="java.util.Map" resultType="java.util.HashMap">
         SELECT
         d.id AS id,
+        d.discount_name AS discountName,
         dt.`name` AS discountType,
         m.`name` AS mainStadium,
         CONCAT(DATE(d.start_time),'—',DATE(d.end_time)) AS timeToTime,
@@ -115,6 +116,7 @@
     <insert id="insert" parameterType="DiscountConfigure" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO `szsport_order_mgr`.`discount_configure` (
             `id`,
+            `discount_name`,
             `discount_type`,
             `main_stadium_id`,
             `sub_stadium_id`,
@@ -130,6 +132,7 @@
         VALUES
             (
                 #{id},
+                #{discountName},
                 #{discountType},
                 #{mainStadiumId},
                 #{subStadiumId},
@@ -157,6 +160,7 @@
     <update id="update" parameterType="DiscountConfigure">
         UPDATE `szsport_order_mgr`.`discount_configure`
         SET `discount_type` = #{discountType},
+         `discount_name` = #{discountName},
          `main_stadium_id` = #{mainStadiumId},
          `sub_stadium_id` = #{subStadiumId},
          `discount_channel` = #{discountChannel},
@@ -174,6 +178,7 @@
     <select id="getDiscountById" parameterType="String" resultType="DiscountConfigure">
         SELECT
             id,
+            discount_name AS discountName,
             discount_type AS discountType,
             main_stadium_id AS mainStadiumId,
             sub_stadium_id AS subStadiumId,
@@ -232,6 +237,7 @@
     <select id="getDetailById" parameterType="String" resultType="DiscountConfigure">
         SELECT
             d.id AS id,
+            d.discount_name AS discountName,
             dt.`name` AS discountType,
             d.main_stadium_id AS mainStadiumId,
             d.sub_stadium_id AS subStadiumId,
