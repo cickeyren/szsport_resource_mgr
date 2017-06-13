@@ -55,6 +55,7 @@ public class CuriculumController {
         args.put("train_type", train_type);
         args.put("pNum", (pageNum - 1) * pageSize);
         args.put("pSize", pageSize);
+
         try {
             List<Curriculum> list = curiculumService.getCurriculum(args);
             map.put("curriculums", list);

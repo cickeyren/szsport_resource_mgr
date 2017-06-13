@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>培训机构信息</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
+          th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js"
+            th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
+            th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/trainInstitution/trainInstitution.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+        .mt10{
+            margin-top: 10px;
+        }
+        .pt10{
+            padding-top: 10px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="container-fluid">
+        <div class="mt20">
+            当前位置：<a href="javascript:;">培训机构</a>
+        </div>
+        <form class="form-horizontal" action="/trainInstitutionController/list.html" id="searchForm" method="POST">
+            <input type="hidden" id="myPage" name="page" th:value="${page}">
+            <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+            <table class="table">
+                <tr class="controls">
+                    <td class="pt20">机构名称：<input type="text" id="name" name="name" th:value="${name}"/>
+                        <button type="submit" class="btn btn-success" id="searchBtn">查询</button>
+                        <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div>
+            <button type="button" class="btn btn-success mb20 ml10" id="addBtn">新增</button>
+        </div>
+        <div>
+            <table id="dataTable" class="table table-bordered" >
+
+                <thead>
+                <tr>
+                    <th>机构名称</th>
+                    <th>区域</th>
+                    <th>地址</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+
+                <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(list)}">
+                <tr th:each="obj, objStat: ${list}">
+                    <input type="hidden" th:value="${obj.id}"/>
+                    <td th:text="${obj.org_name}"></td>
+                    <td th:text="${obj.provincial_name}+${obj.city_name}+${obj.district_name}"></td>
+                    <td th:text="${obj.address}"></td>
+                    <td th:if='${obj.status=="0"}'>下线</td>
+                    <td th:if='${obj.status=="1"}'>正常</td>
+                    <td th:if='${obj.status=="2"}'>闭馆</td>
+                    <td>
+                        <a th:data="${obj.id}"
+                           th:href="@{/trainInstitutionController/edit.html(id=${obj.id})}">编辑</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a>合作商户</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a th:data="${obj.id}"
+                           th:href="@{/trainInstitutionController/windowPayment.html(id=${obj.id})}">窗口支付</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a th:data="${obj.id}"
+                           th:href="@{/trainInstitutionController/discount.html(id=${obj.id})}">培训折扣</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a th:data="${obj.id}"
+                           th:href="@{/trainInstitutionController/pic.html(id=${obj.id})}">机构图片</a>
+                    </td>
+                </tr>
+                </tbody>
+
+                <tbody th:if="${#lists.isEmpty(list)}">
+                <tr>
+                    <td colspan="12">没有符合查询条件的记录！</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="page" class="page" align="right" style="margin-right: 10px;">
+        </div>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+</body>
+<script th:inline="javascript">
+    $(function () {
+        laypage({
+            cont: 'page',
+            pages: [[${pageModel.totalPage}]], //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+            curr: function () { //通过url获取当前页，也可以同上（pages）方式获取
+                var page = [[${pageModel.currentPage}]];
+                return page;
+            }(),
+            jump: function (e, first) { //触发分页后的回调
+                if (!first) { //一定要加此判断，否则初始时会无限刷新
+                    $("#myPage").val(e.curr);
+                    $("#searchForm").submit();
+                }
+            }
+        });
+    });
+</script>
+</html>

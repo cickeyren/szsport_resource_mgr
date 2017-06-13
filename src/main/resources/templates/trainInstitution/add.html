@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增培训机构</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/jquery.form.js" th:src="@{/lib/js/jquery.form.js}"></script>
+    <script src="../../static/js/upload/ajaxfileupload.js" th:src="@{/js/upload/ajaxfileupload.js}"></script>
+
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+    <script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/trainInstitution/trainInstitution.js}"></script>
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <!--    <script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>-->
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+        .border{
+            border-bottom: 1px solid #ddd;
+        }
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
+        .big-photo img {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <div class="container-fluid" style="margin-top: 20px;height:120px;">
+        <div class="pb10 border">
+            当前位置：<a href="javascript:;">培训机构</a> < <a href="javascript:;">新增</a>
+        </div>
+        <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" name="addForm" method="post">
+            <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                <tr class="controls">
+                    <td class="alignright"><span class="red">*</span>名称</td>
+                    <td class="alignleft"><input type="text" id="name" name="name"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>区域</td>
+                    <td class="alignleft">
+                        <select id="provincial_level" name="provincial_level">
+                            <option th:each="obj,eStat:${provinceList}" th:value="${obj.provinceID}" th:text="${obj.province}"></option>
+                        </select>  
+
+                        <select id="city_level" name="city_level">
+                            <option th:each="obj,eStat:${cityList}" th:value="${obj.cityID}"
+                                    th:text="${obj.city}"></option>
+                        </select>  
+
+                        <select id="district_level" name="district_level">
+                            <option th:each="obj,eStat:${areaList}" th:value="${obj.areaID}"
+                                    th:text="${obj.area}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright" width="10%"><span class="red">*</span>地址</td>
+                    <td class="alignleft"><input type="text" id="address" name="address"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">电话</td>
+                    <td class="alignleft"><input type="text" id="telephone" name="telephone"/></td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">机构logo</td>
+                    <td class="alignleft">
+                        <div class="big-photo">
+                            <div id="preview">
+                                <img id="logoImg" name="logoImg" border="0"  src="/img/add.png" width="90" height="90" onclick="$('#previewImg').click();">
+                                <input type="file" id="previewImg" name="previewImg" style="display:none;">
+                                <input type="hidden" id="logo_url" name="logo_url" >
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">机构简介</td>
+                    <td class="alignleft">
+                        <textarea id="introduction" name="introduction" style="width:500px;height:100px;"></textarea>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">地理位置</td>
+                    <td class="alignleft">
+                        经度:<input type="text" id="lng" name="lng"/>
+                        纬度:<input type="text" id="lat" name="lat"/>
+                        <!--<button type="submit" class="btn btn-success" id="ditudingwei">地图定位</button>-->
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="alignright">状态</td>
+                    <td class="alignleft">
+                        <input type="radio" class="check"  name="status" value="1">正常
+                        <input type="radio" class="check"  name="status" value="0">闭馆
+                        <input type="radio" class="check"  name="status" value="2" checked>下线
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="2">
+                        <button type="submit" class="btn btn-success" id="saveBtn">保存</button>
+                        <button type="button" class="btn btn-success" id="cancelBtn">取消</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</section>
+<div id="addDialogs">
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        var valConfig = {
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 50
+                }
+                ,
+                address: {
+                    required: true,
+                    maxlength: 255
+                }
+                ,
+                provincial_level: {
+                    required: true,
+                }
+                ,
+                city_level: {
+                    required: true,
+                }
+                ,
+                district_level: {
+                    required: true,
+                }
+                ,
+                telephone: {
+                    maxlength: 20
+                }
+                ,
+                introduction: {
+                    maxlength: 100
+                }
+                ,
+                lng: {
+                    maxlength: 50
+                }
+                ,
+                lat: {
+                    maxlength: 50
+                }
+            },
+            messages: {
+                name: {
+                    required: "请填写培训机构名称"
+                },
+                provincial_level: {
+                    required: "请选择省份"
+                },
+                city_level: {
+                    required: "请选择市",
+                },
+                district_level: {
+                    required: "请选择县",
+                },
+                address: {
+                    required: "请填写培训机构地址"
+                }
+            },
+            submitHandler: function () {
+                doAdd();
+            }
+        };
+        $('#addForm').validate(valConfig);
+
+    });
+</script>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>机构图片</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/js/upload/ajaxfileupload.js" th:src="@{/js/upload/ajaxfileupload.js}"></script>
+    <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script src="../../static/lib/js/jquery.form.js" th:src="@{/lib/js/jquery.form.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .inputw100 {
+            width: 100px;
+        }
+
+        #contentTable td.alignleft {
+            text-align: left;
+        }
+
+        #contentTable td.alignright {
+            text-align: right;
+        }
+
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+    </style>
+</head>
+<style>
+    .upload-container {
+        margin-top: 25px;
+        font-size: 14px;
+    }
+
+    .img-container {
+        margin-top: 20px;
+        padding-left: 90px;
+    }
+
+    .img-list {
+        position: relative;
+        width: 160px;
+        height: 110px;
+        float: left;
+        margin-left: 35px;
+    }
+
+    .img-list input[type=file] {
+        position: absolute;
+        width: 160px;
+        height: 110px;
+        top: 0;
+        opacity: 0;
+    }
+
+    .img-list img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .cg-img .cg-img-title i {
+        color: red;
+        padding: 5px;
+    }
+
+    .cg-img .upload {
+        position: relative;
+    }
+
+    .cg-img button {
+        border: 0;
+        background: #169bd5;
+        border-radius: 5px;
+        color: #fff;
+        height: 30px;
+        width: 100px;
+    }
+
+    .cg-img .upload input[type=file] {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        height: 30px;
+        width: 100px;
+    }
+
+    .cg-img span {
+        display: inline-block;
+        width: 120px;
+        text-align: left;
+    }
+
+    .cg-img .img-shuom {
+        width: 300px;
+        text-align: left;
+        color: #a6a3a3;
+    }
+
+    .img-list input[type=radio] {
+        width: 18px;
+        height: 18px;
+        vertical-align: bottom;
+        margin: 0;
+    }
+
+    .operate {
+        margin-top: 8px;
+    }
+
+    .operate span {
+        float: left;
+    }
+
+    .operate a {
+        float: right;
+    }
+
+    .border {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .pb10 {
+        padding-bottom: 10px;
+    }
+
+    .mt15 {
+        margin-top: 15px;
+    }
+
+    .mb20 {
+        margin-bottom: 20px;
+    }
+
+    .mr10 {
+        margin-right: 10px;
+    }
+</style>
+<body>
+
+<div class="upload-container">
+    <div class="pb10 border mt20 mr10 ml10">
+        当前位置：<a href="javascript:;">培训机构</a> < <a href="javascript:;">机构图片</a>
+    </div>
+    <div style="margin-top: 15px;padding-left: 20px;">
+        <button type="button" class="btn btn-success" id="cancelBtn">返回</button>
+    </div>
+    <div class="cg-img">
+        <span class="cg-img-title"><i></i>机构图片：</span>
+        <span class="upload">
+            <input type="file" id="previewImg" name="previewImg" style="display:none;">
+            <button onclick="$('#previewImg').click();">选择图片</button>
+        </span>
+        <span class="img-shuom">单张图片大小限制为100k</span>
+        <input type="hidden" id="id" name="id" th:value="${id}">
+    </div>
+    <div class="img-container" th:unless="${#lists.isEmpty(picList)}">
+        <div class="img-list" th:each="pic:${picList}">
+            <img th:src="${pic.pic_url}" alt="">
+            <div class="operate">
+                  <span>
+                      <input type="radio" name="setFirst" th:checked="${pic.is_first eq '1'}"
+                             th:onclick="'javascript:setPicIsFirst(\'' + ${pic.id} + '\',\'' + ${id} + '\');'">设为首图
+                  </span>
+                <a href="javascript:;" class="delete" th:onclick="'javascript:delInstitutionPic(\'' + ${pic.id} + '\');'">删除</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var id = [[${id}]];
+    /*]]>*/
+</script>
+
+<script>
+    var layerOpts = {shift: -1, time: 500};
+
+    uploadImgInit();
+
+    function uploadImgInit(){
+        $("#previewImg").on('change', function () {
+            uploadImg();
+        });
+    }
+
+    /**
+     * 保存机构图片
+     * @param id
+     */
+    function savePic(pic_url) {
+        if(!id){
+            window.location.reload();
+            return false;
+        }
+        $.ajax({
+            url:'/trainInstitutionController/addInstitutionPic.json',
+            type:'POST',
+            data:{
+                "pic_url":pic_url,
+                "institution_id":id
+            },
+            dataType:'json',
+            success:function(data){
+                if('OK' == data.status){
+                    layer.msg("保存成功", layerOpts, function(){
+                        //刷新当前页面
+                        window.location.reload();
+                    });
+                }else{
+                    layer.msg(data.message);
+                }
+            },
+            error:function(data){
+                layer.msg("保存失败");
+            }
+        });
+    }
+
+    /**
+     * 设置培训机构图片首图
+     * @param id
+     */
+    function setPicIsFirst(picId) {
+        $.ajax({
+            url:'/trainInstitutionController/setPicIsFirst.json',
+            type:'POST',
+            data:{
+                "id":picId,
+                "institution_id":id
+            },
+            dataType:'json',
+            success:function(data){
+                if('OK' == data.status){
+                    layer.msg("设置首图成功", layerOpts, function(){
+                        //刷新当前页面
+                        window.location.reload();
+                    });
+                }else{
+                    layer.msg(data.message||"");
+                }
+            },
+            error:function(result){
+                layer.msg("设置首图失败");
+            }
+        });
+    }
+
+    /**
+     * 删除机构图片
+     * @param id
+     */
+    function delInstitutionPic(picId, id) {
+        /**
+         * 提示是否删除场馆图片
+         */
+        layer.confirm('您确认是否删除此机构图片？', {
+            btn: ['删除','取消'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            $.ajax({
+                url:'/trainInstitutionController/delInstitutionPic.json',
+                type:'POST',
+                data:{
+                    "id":picId
+                },
+                dataType:'json',
+                success:function(data){
+                    if('OK' == data.status){
+                        layer.msg("删除成功",layerOpts , function(){
+                            //刷新当前页面
+                            window.location.reload();
+                        });
+                    }else{
+                        layer.msg(data.message);
+                    }
+                },
+                error:function(result){
+                    layer.msg("删除失败");
+                }
+            })
+        });
+    }
+
+    // 上传图片
+    function uploadImg(){
+        if(!validUploadImgType()){
+            return false;
+        }
+        $.ajaxFileUpload({
+            url: '/uploadImg/uploadImg.json',
+            secureuri: false, //是否需要安全协议，一般设置为false
+            fileElementId: 'previewImg',
+            dataType: 'json',
+            success: function (data, status)
+            {
+                uploadImgInit();
+                if('OK' == data.status){
+                    savePic(data.message);
+                } else {
+                    layer.msg("上传失败："+data.message);
+                }
+            },
+            error: function (data, status, e)
+            {
+                uploadImgInit();
+                layer.msg("error：" + e);
+            }
+        });
+    }
+
+    // 验证类型和大小
+    function validUploadImgType(){
+        var flag = true;
+        var filepath=$('#previewImg').val();
+        var extStart=filepath.lastIndexOf('.');
+        var ext=filepath.substring(extStart,filepath.length).toUpperCase();
+        if(ext!='.PNG' && ext!='.JPG'){
+            layer.msg('图片限于jpg,png格式');
+            flag = false;
+            return false;
+        }
+        var fileSize = 0;
+        var target = document.getElementById("previewImg");
+        var isIE = /msie/i.test(navigator.userAgent) && !window.opera;
+        var filemaxsize = 1024;//1M
+        if (isIE && !target.files) {
+            var fileSystem = new ActiveXObject('Scripting.FileSystemObject');
+            if(!fileSystem.FileExists(filepath)){
+                layer.msg("图片不存在，请重新输入！");
+                return false;
+            }
+            var file = fileSystem.GetFile (filepath);
+            fileSize = file.Size;
+        } else {
+            fileSize = target.files[0].size;
+        }
+        var size = fileSize / 1024;
+        if(size>filemaxsize){
+            layer.msg("附件大小不能大于"+filemaxsize/1024+"M！");
+            target.value ="";
+            flag = false;
+        }
+        if(size<=0){
+            layer.msg("附件大小不能为0M！");
+            target.value ="";
+            flag = false;
+        }
+        return flag;
+    }
+
+    $("#cancelBtn").click(function (){
+        window.location.href = "/trainInstitutionController/list.html";
+    });
+</script>
+</body>
+</html>
+

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.TrainingInstitutionPicMapper">
+  <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionPic">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-12 20:43:39.
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="pic_url" jdbcType="VARCHAR" property="pic_url" />
+    <result column="is_first" jdbcType="VARCHAR" property="is_first" />
+    <result column="institution_id" jdbcType="VARCHAR" property="institution_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-12 20:43:39.
+    -->
+    id, pic_url, is_first, institution_id, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-12 20:43:39.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from training_institution_pic
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-12 20:43:39.
+    -->
+    delete from training_institution_pic
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionPic">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-12 20:43:39.
+    -->
+    insert into training_institution_pic (id, pic_url, is_first, 
+      institution_id, create_time, update_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{pic_url,jdbcType=VARCHAR}, #{is_first,jdbcType=VARCHAR}, 
+      #{institution_id,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP}, #{update_time,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionPic">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-12 20:43:39.
+    -->
+    insert into training_institution_pic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="pic_url != null">
+        pic_url,
+      </if>
+      <if test="is_first != null">
+        is_first,
+      </if>
+      <if test="institution_id != null">
+        institution_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="update_time != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="pic_url != null">
+        #{pic_url,jdbcType=VARCHAR},
+      </if>
+      <if test="is_first != null">
+        #{is_first,jdbcType=VARCHAR},
+      </if>
+      <if test="institution_id != null">
+        #{institution_id,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionPic">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-12 20:43:39.
+    -->
+    update training_institution_pic
+    <set>
+      <if test="pic_url != null">
+        pic_url = #{pic_url,jdbcType=VARCHAR},
+      </if>
+      <if test="is_first != null">
+        is_first = #{is_first,jdbcType=VARCHAR},
+      </if>
+      <if test="institution_id != null">
+        institution_id = #{institution_id,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionPic">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-12 20:43:39.
+    -->
+    update training_institution_pic
+    set pic_url = #{pic_url,jdbcType=VARCHAR},
+      is_first = #{is_first,jdbcType=VARCHAR},
+      institution_id = #{institution_id,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByInstitutionId" parameterType="java.lang.String" resultType="java.util.Map">
+  <!--
+    WARNING - @mbggenerated
+    Generated on 2017-06-12 20:43:39.
+  -->
+    select
+    <include refid="Base_Column_List" />
+    from training_institution_pic
+    where institution_id = #{id,jdbcType=VARCHAR}
+    order by is_first desc, create_time asc
+  </select>
+
+  <update id="updateDefaultStatus" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitution">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-09 13:15:57.
+    -->
+    update training_institution_pic
+    <set>
+      is_first = #{is_first,jdbcType=VARCHAR},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+    </set>
+    where is_first = '1'
+  </update>
+</mapper>

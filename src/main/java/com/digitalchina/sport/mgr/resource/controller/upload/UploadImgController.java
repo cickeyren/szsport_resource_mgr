@@ -51,7 +51,7 @@ public class UploadImgController {
                 + prefix;
         // 相对路径
         String returnPath = project_context_path + secondePath + datePath;
-        String returnUrl = returnPath + uniquefileName;
+        String returnUrl = returnPath + "/" + uniquefileName;
         File filePath = new File(path);
         if (!filePath.exists()) {
             filePath.mkdirs();
@@ -72,7 +72,7 @@ public class UploadImgController {
      */
     public String getDatePath() {
         Date date = new Date();
-        DateFormat format = new SimpleDateFormat("yyyy/MM/dd/");
+        DateFormat format = new SimpleDateFormat("yyyyMMdd");
         String time = format.format(date);
         return time;
     }

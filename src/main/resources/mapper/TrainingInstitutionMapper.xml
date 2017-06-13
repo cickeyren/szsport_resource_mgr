@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.TrainingInstitutionMapper">
+  <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.TrainingInstitution">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-09 13:15:57.
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="org_name" jdbcType="VARCHAR" property="org_name" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="provincial_level" jdbcType="VARCHAR" property="provincial_level" />
+    <result column="city_level" jdbcType="VARCHAR" property="city_level" />
+    <result column="district_level" jdbcType="VARCHAR" property="district_level" />
+    <result column="trading_area" jdbcType="VARCHAR" property="trading_area" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="logo_url" jdbcType="VARCHAR" property="logo_url" />
+    <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+    <result column="img" jdbcType="VARCHAR" property="img" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="lng" jdbcType="VARCHAR" property="lng" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-09 13:15:57.
+    -->
+    id, org_name, area, provincial_level, city_level, district_level, trading_area, address,
+    telephone, logo_url, introduction, img, status, create_time, update_time, lng, lat
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-09 13:15:57.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from training_institution
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-09 13:15:57.
+    -->
+    delete from training_institution
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitution">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-09 13:15:57.
+    -->
+    insert into training_institution (id, org_name, area, 
+      provincial_level, city_level, district_level, 
+      trading_area, address, telephone,
+      logo_url, introduction, img, 
+      status, create_time, update_time, 
+      lng, lat)
+    values (#{id,jdbcType=VARCHAR}, #{org_name,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
+      #{provincial_level,jdbcType=VARCHAR}, #{city_level,jdbcType=VARCHAR}, #{district_level,jdbcType=VARCHAR}, 
+      #{trading_area,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR},
+      #{logo_url,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP}, #{update_time,jdbcType=TIMESTAMP}, 
+      #{lng,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitution">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-09 13:15:57.
+    -->
+    insert into training_institution
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="org_name != null">
+        org_name,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="provincial_level != null">
+        provincial_level,
+      </if>
+      <if test="city_level != null">
+        city_level,
+      </if>
+      <if test="district_level != null">
+        district_level,
+      </if>
+      <if test="trading_area != null">
+        trading_area,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="logo_url != null">
+        logo_url,
+      </if>
+      <if test="introduction != null">
+        introduction,
+      </if>
+      <if test="img != null">
+        img,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="update_time != null">
+        update_time,
+      </if>
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="org_name != null">
+        #{org_name,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="provincial_level != null">
+        #{provincial_level,jdbcType=VARCHAR},
+      </if>
+      <if test="city_level != null">
+        #{city_level,jdbcType=VARCHAR},
+      </if>
+      <if test="district_level != null">
+        #{district_level,jdbcType=VARCHAR},
+      </if>
+      <if test="trading_area != null">
+        #{trading_area,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="logo_url != null">
+        #{logo_url,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null">
+        #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lng != null">
+        #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitution">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-09 13:15:57.
+    -->
+    update training_institution
+    <set>
+      <if test="org_name != null">
+        org_name = #{org_name,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="provincial_level != null">
+        provincial_level = #{provincial_level,jdbcType=VARCHAR},
+      </if>
+      <if test="city_level != null">
+        city_level = #{city_level,jdbcType=VARCHAR},
+      </if>
+      <if test="district_level != null">
+        district_level = #{district_level,jdbcType=VARCHAR},
+      </if>
+      <if test="trading_area != null">
+        trading_area = #{trading_area,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="logo_url != null">
+        logo_url = #{logo_url,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null">
+        introduction = #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lng != null">
+        lng = #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitution">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-09 13:15:57.
+    -->
+    update training_institution
+    set org_name = #{org_name,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      provincial_level = #{provincial_level,jdbcType=VARCHAR},
+      city_level = #{city_level,jdbcType=VARCHAR},
+      district_level = #{district_level,jdbcType=VARCHAR},
+      trading_area = #{trading_area,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      logo_url = #{logo_url,jdbcType=VARCHAR},
+      introduction = #{introduction,jdbcType=VARCHAR},
+      img = #{img,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+      lng = #{lng,jdbcType=VARCHAR},
+      lat = #{lat,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <!--获取培训机构的id和名称 用于添加课程时选择机构的列表（后面可扩展）-->
+  <select id="listTrainInstitution" resultType="java.util.HashMap">
+    SELECT id, org_name FROM training_institution WHERE status = '1'
+  </select>
+
+  <select id="queryList" resultType="java.util.Map" parameterType="HashMap">
+    select
+    t.id,t.org_name,t.provincial_level,t.city_level,t.district_level,t.trading_area,t.address,
+    t.telephone,t.logo_url,t.introduction,t.img,t.status,t.create_time,t.update_time,t.lng,t.lat
+    ,p.province provincial_name, c.city city_name, a.area district_name
+    FROM
+    training_institution t
+    LEFT JOIN province p ON  p.provinceID = t.provincial_level
+    LEFT JOIN city c ON c.cityID = t.city_level
+    LEFT JOIN area a ON a.areaID = t.district_level
+    WHERE 1=1
+    <if test="name != null and name !=''">
+      AND t.org_name like concat('%',#{name},'%')
+    </if>
+    order by t.create_time desc
+    LIMIT #{startIndex},#{endIndex}
+  </select>
+
+  <select id="queryListCount" resultType="Integer" parameterType="HashMap">
+    SELECT count(1)
+    FROM
+    training_institution t
+    WHERE 1=1
+    <if test="name != null and name !=''">
+      AND t.org_name like concat('%',#{name},'%')
+    </if>
+  </select>
+</mapper>
