@@ -34,4 +34,10 @@ public interface MerchantMapper extends Mapper<Merchant> {
      * @return
      */
     List<Map<String,Object>> getMerchantListByParam(Map<String, Object> map);
+
+    /**
+     * 查询商户列表（select控件）
+     * @return
+     */
+    List<Map<String,String>> getAllMerchantList();
 }

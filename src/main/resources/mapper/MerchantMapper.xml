@@ -104,4 +104,9 @@
             AND m.mainstadium_id=#{stadiumId}
         </if>
     </select>
+
+    <select id="getAllMerchantList" resultType="java.util.HashMap">
+        SELECT m.id, m.merchant_name FROM merchant m
+        WHERE 1=1
+    </select>
 </mapper>

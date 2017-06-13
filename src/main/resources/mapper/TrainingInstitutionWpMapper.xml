@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.TrainingInstitutionWpMapper">
+  <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionWp">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="institution_id" jdbcType="VARCHAR" property="institution_id" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchant_id" />
+    <result column="payment_id" jdbcType="VARCHAR" property="payment_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionWp">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    id, institution_id, merchant_id, payment_id, create_time, update_time
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from training_institution_wp
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    delete from training_institution_wp
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionWp">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    insert into training_institution_wp (id, institution_id, merchant_id, 
+      payment_id, create_time, update_time, 
+      remark)
+    values (#{id,jdbcType=VARCHAR}, #{institution_id,jdbcType=VARCHAR}, #{merchant_id,jdbcType=VARCHAR}, 
+      #{payment_id,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP}, #{update_time,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionWp">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    insert into training_institution_wp
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="institution_id != null">
+        institution_id,
+      </if>
+      <if test="merchant_id != null">
+        merchant_id,
+      </if>
+      <if test="payment_id != null">
+        payment_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="update_time != null">
+        update_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="institution_id != null">
+        #{institution_id,jdbcType=VARCHAR},
+      </if>
+      <if test="merchant_id != null">
+        #{merchant_id,jdbcType=VARCHAR},
+      </if>
+      <if test="payment_id != null">
+        #{payment_id,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionWp">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    update training_institution_wp
+    <set>
+      <if test="institution_id != null">
+        institution_id = #{institution_id,jdbcType=VARCHAR},
+      </if>
+      <if test="merchant_id != null">
+        merchant_id = #{merchant_id,jdbcType=VARCHAR},
+      </if>
+      <if test="payment_id != null">
+        payment_id = #{payment_id,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionWp">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    update training_institution_wp
+    set institution_id = #{institution_id,jdbcType=VARCHAR},
+      merchant_id = #{merchant_id,jdbcType=VARCHAR},
+      payment_id = #{payment_id,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionWp">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    update training_institution_wp
+    set institution_id = #{institution_id,jdbcType=VARCHAR},
+      merchant_id = #{merchant_id,jdbcType=VARCHAR},
+      payment_id = #{payment_id,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="queryList" resultType="java.util.Map" parameterType="HashMap">
+    select
+    t.id, t.merchant_id, t1.merchant_name merchant, t.payment_id, t2.payment, t.create_time, t.update_time
+    FROM
+    training_institution_wp t
+    left join merchant t1 on t.merchant_id = t1.id
+    left join payment t2 on t.payment_id = t2.id
+    WHERE 1=1
+    and institution_id = #{id}
+    order by create_time
+    LIMIT #{startIndex},#{endIndex}
+  </select>
+
+  <select id="queryListCount" resultType="Integer" parameterType="HashMap">
+    SELECT count(1)
+    FROM
+    training_institution_wp t
+    WHERE 1=1
+    and institution_id = #{id}
+  </select>
+
+
+  <select id="selectById" resultType="java.util.Map" parameterType="HashMap">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    select
+    t.id, t.merchant_id, t1.merchant_name merchant, t.payment_id, t2.payment, t.create_time, t.update_time
+    from training_institution_wp t
+    left join merchant t1 on t.merchant_id = t1.id
+    left join payment t2 on t.payment_id = t2.id
+    where 1=1
+    AND t.institution_id = #{institution_id,jdbcType=VARCHAR}
+    AND t.merchant_id = #{merchant_id,jdbcType=VARCHAR}
+    AND t.payment_id = #{payment_id,jdbcType=VARCHAR}
+  </select>
+</mapper>

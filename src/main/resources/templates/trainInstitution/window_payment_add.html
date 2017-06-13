@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增窗口支付页面</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
+        .border{border-bottom: 1px solid #ddd;}
+        .pb10{padding-bottom: 10px;}
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container-fluid">
+            <div class="pb10 border mt20">
+                当前位置：<a href="javascript:;">培训机构</a> < <a href="javascript:;">窗口支付</a> < <a href="javascript:;">新增</a>
+            </div>
+            <p class="title mt20">支付方式</p>
+            <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" name="addForm" method="post">
+                <input type="hidden" id="id" name="id" th:value="${id}"/>
+                <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                    <tr class="controls">
+                        <td width="10%" class="alignright"><span class="red">*</span>合作商户</td>
+                        <td class="alignleft">
+                            <select id="merchant" name="merchant">
+                                <option th:each="merchant,eStat:${merchantList}" th:value="${merchant.id}" th:text="${merchant.merchant_name}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright" width="10%"><span class="red">*</span>支付方式</td>
+                        <td class="alignleft">
+                            <select id="payment" name="payment">
+                                <option th:each="payment,eStat:${paymentList}" th:value="${payment.id}" th:text="${payment.payment}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright">备注</td>
+                        <td class="alignleft">
+                            <textarea id="remark" name="remark" style="width:500px;height:200px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-success" id="addWindowPayment">保存</button>
+                            <button type="button" class="btn btn-success" id="cancelBtn">返回</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </section>
+</body>
+<script th:inline="javascript">
+
+    var layerOpts = {shift: -1, time: 500};
+
+    var institutionId = [[${id}]];
+    $(function () {
+        var valConfig = {
+            rules: {
+                merchant: {
+                    required: true,
+                    maxlength: 50
+                }
+                ,
+                payment: {
+                    required: true,
+                    maxlength: 255
+                }
+                ,
+                remark: {
+                    maxlength: 255
+                }
+            },
+            messages: {
+                merchant: {
+                    required: "请选择合作商户"
+                },
+                payment: {
+                    required: "请选择支付方式"
+                }
+            },
+            submitHandler: function () {
+                doAdd();
+            }
+        };
+        $('#addForm').validate(valConfig);
+
+        /**
+         * 返回列表页面
+         */
+        $("#cancelBtn").on('click', function () {
+            backPaymentListPage();
+        })
+
+        //初始化富文本编辑器---请放在点击事件之后，预防在html页面渲染失败，导致html页面无法加载
+        KindEditor.options.filterMode = false;
+        var fieldDescriptionEditor;
+        KindEditor.ready(function (K) {
+            fieldDescriptionEditor = K.create('textarea[name="remark"]', {
+                resizeType: 1,
+                allowPreviewEmoticons: false,
+                filterMode: false
+            });
+
+            window.remarkEditor = fieldDescriptionEditor;
+        });
+    });
+    function doAdd(){
+        var id = institutionId;
+        var merchant = $("#merchant").val();
+        var payment = $("#payment").val();
+
+        window.remarkEditor.sync();
+        var remark = window.remarkEditor.html();
+
+        var reqData = {
+            institution_id:id,
+            merchant_id:merchant,
+            payment_id:payment,
+            remark:remark
+        };
+        $.ajax({
+            url:'/trainInstitutionController/addWindowPayment.do',
+            type:'POST',
+            data:reqData,
+            dataType:'json',
+            success:function(result){
+                if("000000" == result.code) {
+                    layer.msg("添加成功！",layerOpts, function(){
+                        backPaymentListPage();
+                    });
+                } else {
+                    layer.msg(result.message);
+                }
+            },
+            error:function(result){
+                layer.msg("添加窗口支付失败~");
+            }
+        });
+    }
+    function backPaymentListPage(){
+        window.location.href = "/trainInstitutionController/window_payment_list.html?id="+ institutionId;
+    }
+</script>
+</html>

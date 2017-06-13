@@ -81,4 +81,12 @@ public class MerchantService {
     public List<Map<String,Object>> getMerchantListByParam(Map<String, Object> map){
         return merchantMapper.getMerchantListByParam(map);
     }
+
+    /**
+     * 查询所有商户列表
+     * @return
+     */
+    public List<Map<String,String>> getAllMerchantList() {
+        return merchantMapper.getAllMerchantList();
+    }
 }

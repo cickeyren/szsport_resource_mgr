@@ -5,10 +5,8 @@ import com.digitalchina.common.utils.StringUtils;
 import com.digitalchina.common.utils.UUIDUtil;
 import com.digitalchina.sport.mgr.resource.dao.TrainingInstitutionMapper;
 import com.digitalchina.sport.mgr.resource.dao.TrainingInstitutionPicMapper;
-import com.digitalchina.sport.mgr.resource.model.TrainingInstitution;
-import com.digitalchina.sport.mgr.resource.model.TrainingInstitutionModel;
-import com.digitalchina.sport.mgr.resource.model.TrainingInstitutionPic;
-import com.digitalchina.sport.mgr.resource.model.TrainingInstitutionPicModel;
+import com.digitalchina.sport.mgr.resource.dao.TrainingInstitutionWpMapper;
+import com.digitalchina.sport.mgr.resource.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +23,8 @@ public class TrainInstitutionService {
     TrainingInstitutionMapper trainingInstitutionMapper;
     @Autowired
     TrainingInstitutionPicMapper trainingInstitutionPicMapper;
+    @Autowired
+    TrainingInstitutionWpMapper trainingInstitutionWpMapper;
 
     /*
     此方法保留，之前开龙开发
@@ -220,4 +220,148 @@ public class TrainInstitutionService {
         rtnMap.put(Constants.RTN_MSG, "");
         return rtnMap;
     }
+
+    public List<Map<String,Object>> getWindowPaymentList(Map<String, Object> params) {
+        List<Map<String,Object>> list = trainingInstitutionWpMapper.queryList(params);
+        return list;
+    }
+
+    public int getWindowPaymentListCount(Map<String, Object> params) {
+        int count = trainingInstitutionWpMapper.queryListCount(params);
+        return count;
+    }
+
+    public TrainingInstitutionWp selectWindowPaymentById(Map<String, Object> param) {
+        String wpId = (String) param.get("wpId");
+        if(StringUtils.isBlank(wpId)){
+            return null;
+        }
+        TrainingInstitutionWp entity = this.trainingInstitutionWpMapper.selectByPrimaryKey(wpId);
+        return entity;
+    }
+
+    public Map<String,Object> addWindowPayment(TrainingInstitutionWpModel model) {
+        Map<String,Object> rtnMap = new HashMap<String,Object>();
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+
+        String id = model.getInstitution_id();
+        if(StringUtils.isBlank(id)){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "培训机构id为空");
+            return rtnMap;
+        }
+        if(StringUtils.isBlank(model.getMerchant_id())){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "合作商户id为空");
+            return rtnMap;
+        }
+        if(StringUtils.isBlank(model.getPayment_id())){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "支付方式id为空");
+            return rtnMap;
+        }
+        TrainingInstitution entity = trainingInstitutionMapper.selectByPrimaryKey(id);
+        if(entity==null) {
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "培训机构不存在");
+            return rtnMap;
+        }
+
+        Map<String,Object> existWp = trainingInstitutionWpMapper.selectById(model.getInstitution_id(), model.getMerchant_id(), model.getPayment_id());
+        if(existWp!=null){
+            String wpId = (String) existWp.get("id");
+            if(!StringUtils.isBlank(wpId)){
+                String wpName = (String) existWp.get("payment");
+                String rtnMsg = StringUtils.isBlank(wpName) ? "支付方式已添加" : "支付方式["+wpName+"]已添加";
+                rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+                rtnMap.put(Constants.RTN_MSG, rtnMsg);
+                return rtnMap;
+            }
+        }
+
+        TrainingInstitutionWp entityWp = new TrainingInstitutionWp();
+        entityWp.setId(UUIDUtil.generateUUID());
+        entityWp.setMerchant_id(model.getMerchant_id());
+        entityWp.setPayment_id(model.getPayment_id());
+        entityWp.setInstitution_id(model.getInstitution_id());
+        entityWp.setRemark(model.getRemark());
+        entityWp.setCreate_time(new Date());
+        trainingInstitutionWpMapper.insert(entityWp);
+
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_SUCCESS);
+        rtnMap.put(Constants.RTN_MSG, "");
+        return rtnMap;
+    }
+
+    public Map<String,Object> updateWindowPayment(TrainingInstitutionWpModel model) {
+        Map<String,Object> rtnMap = new HashMap<String,Object>();
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+
+        String id = model.getId();
+        if(StringUtils.isBlank(id)){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "窗口支付id为空");
+            return rtnMap;
+        }
+
+        String institutionId = model.getInstitution_id();
+        if(StringUtils.isBlank(institutionId)){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "培训机构id为空");
+            return rtnMap;
+        }
+        if(StringUtils.isBlank(model.getMerchant_id())){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "合作商户id为空");
+            return rtnMap;
+        }
+        if(StringUtils.isBlank(model.getPayment_id())){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "支付方式id为空");
+            return rtnMap;
+        }
+        TrainingInstitution entity = trainingInstitutionMapper.selectByPrimaryKey(institutionId);
+        if(entity==null) {
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "培训机构不存在");
+            return rtnMap;
+        }
+
+        Map<String,Object> existWp = trainingInstitutionWpMapper.selectById(model.getInstitution_id(), model.getMerchant_id(), model.getPayment_id());
+        if(existWp!=null){
+            String wpId = (String) existWp.get("id");
+            if(!StringUtils.isBlank(wpId) && !wpId.equals(id)){
+                String wpName = (String) existWp.get("payment");
+                String rtnMsg = StringUtils.isBlank(wpName) ? "支付方式已添加" : "支付方式["+wpName+"]已添加";
+                rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+                rtnMap.put(Constants.RTN_MSG, rtnMsg);
+                return rtnMap;
+            }
+        }
+
+        TrainingInstitutionWp entityWp = new TrainingInstitutionWp();
+        entityWp.setId(id);
+        entityWp.setMerchant_id(model.getMerchant_id());
+        entityWp.setPayment_id(model.getPayment_id());
+        entityWp.setRemark(model.getRemark());
+        entityWp.setUpdate_time(new Date());
+        trainingInstitutionWpMapper.updateByPrimaryKeySelective(entityWp);
+
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_SUCCESS);
+        rtnMap.put(Constants.RTN_MSG, "");
+        return rtnMap;
+    }
+
+    public Map<String,Object> delWindowPayment(TrainingInstitutionWpModel model) {
+        Map<String,Object> rtnMap = new HashMap<String,Object>();
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+
+        String wpId = model.getId();
+        trainingInstitutionWpMapper.deleteByPrimaryKey(wpId);
+
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_SUCCESS);
+        rtnMap.put(Constants.RTN_MSG, "");
+        return rtnMap;
+    }
+    
 }

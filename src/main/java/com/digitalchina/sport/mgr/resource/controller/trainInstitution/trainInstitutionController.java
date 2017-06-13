@@ -4,11 +4,10 @@ import com.digitalchina.common.data.Constants;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
-import com.digitalchina.sport.mgr.resource.model.MainStadiumModel;
-import com.digitalchina.sport.mgr.resource.model.TrainingInstitution;
-import com.digitalchina.sport.mgr.resource.model.TrainingInstitutionModel;
-import com.digitalchina.sport.mgr.resource.model.TrainingInstitutionPicModel;
+import com.digitalchina.sport.mgr.resource.model.*;
 import com.digitalchina.sport.mgr.resource.service.CommonService;
+import com.digitalchina.sport.mgr.resource.service.MerchantService;
+import com.digitalchina.sport.mgr.resource.service.PaymentService;
 import com.digitalchina.sport.mgr.resource.service.TrainInstitutionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +42,12 @@ public class TrainInstitutionController {
     @Autowired
     private CommonService commonService;
 
+    @Autowired
+    private MerchantService merchantService;
+
+    @Autowired
+    private PaymentService paymentService;
+
 
     /**
      * 列表页面
@@ -52,7 +57,7 @@ public class TrainInstitutionController {
      * @return
      */
     @RequestMapping(value = "/list.html")
-    public String getAllStadiumList(@RequestParam(required = false, defaultValue = "10") long pageSize,
+    public String list(@RequestParam(required = false, defaultValue = "10") long pageSize,
                                     @RequestParam(required = false, defaultValue = "1") long page, ModelMap map, HttpServletRequest request) {
         Map<String, Object> params = new HashMap<String, Object>();
         String name = request.getParameter("name");
@@ -304,5 +309,182 @@ public class TrainInstitutionController {
             LOGGER.error("========删除机构图片失败=========", e);
         }
         return RtnData.fail("删除机构图片失败");
+    }
+
+    /**
+     * 进入窗口支付
+     *
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/window_payment_list.html")
+    public String window_payment_list(@RequestParam(required = false, defaultValue = "10") long pageSize,
+                                      @RequestParam(required = false, defaultValue = "1") long page, ModelMap map, HttpServletRequest request) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        String id = request.getParameter("id");
+        params.put("id", id);
+        try {
+            int totalSize = service.getWindowPaymentListCount(params);
+            Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
+            pagination.setUrl(request.getRequestURI());
+
+            map.put("pageModel", pagination);
+            map.put("pageSize", String.valueOf(pageSize));
+            map.put("page", String.valueOf(page));
+
+            params.put("startIndex", pagination.getStartIndex());
+            params.put("endIndex", pageSize);
+            List<Map<String, Object>> list = service.getWindowPaymentList(params);
+            map.put("list", list);
+            map.put("id", id);
+            return "trainInstitution/window_payment_list";
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========查询培训机构窗口支付列表失败=========", e);
+            map.put("url", request.getRequestURL());
+            map.put("exception", e);
+            return "error";
+        }
+    }
+
+    /**
+     * 进入新增窗口支付页面
+     *
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/window_payment_add.html")
+    public String window_payment_add(ModelMap map, HttpServletRequest request) {
+        String id = request.getParameter("id");
+        map.put("id", id);
+
+        List<Map<String,String>> merchantList = merchantService.getAllMerchantList();
+        List<Map<String,String>> paymentList = paymentService.getAllPaymentList();
+
+        map.put("merchantList", merchantList);
+        map.put("paymentList", paymentList);
+
+        return "trainInstitution/window_payment_add";
+    }
+
+
+    /**
+     * 新增窗口支付页面
+     *
+     * @param
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/addWindowPayment.do", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData addWindowPayment(TrainingInstitutionWpModel model, ModelMap map) {
+        try {
+
+            Map<String,Object> resMap = service.addWindowPayment(model);
+
+            if(Constants.RTN_CODE_SUCCESS.equals(resMap.get(Constants.RTN_CODE))){
+                return RtnData.ok("新增窗口支付成功");
+            }else{
+                return RtnData.fail("999999", (String) resMap.get(Constants.RTN_MSG));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========新增窗口支付失败=========", e);
+        }
+        return RtnData.fail("新增窗口支付失败");
+    }
+
+
+    /**
+     * 进入编辑窗口支付页面
+     *
+     * @param
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/window_payment_edit.html", method = RequestMethod.GET)
+    public String window_payment_edit(@RequestParam String id, @RequestParam String wpId, ModelMap map) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", id);
+        param.put("wpId", wpId);
+        try {
+            TrainingInstitutionWp windowPayment = service.selectWindowPaymentById(param);
+
+            if(windowPayment!=null){
+                map.put("windowPayment", windowPayment);
+
+                List<Map<String,String>> merchantList = merchantService.getAllMerchantList();
+                List<Map<String,String>> paymentList = paymentService.getAllPaymentList();
+                map.put("merchantList", merchantList);
+                map.put("paymentList", paymentList);
+            }
+
+            map.put("id", id);
+            map.put("wpId", wpId);
+            return "trainInstitution/window_payment_edit";
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========进入编辑页面失败=========", e);
+            return "error";
+        }
+
+    }
+
+    /**
+     * 更新
+     *
+     * @param
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/updateWindowPayment.do", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData updateWindowPayment(TrainingInstitutionWpModel model, ModelMap map) {
+        try {
+
+            Map<String,Object> resMap = service.updateWindowPayment(model);
+
+            if(Constants.RTN_CODE_SUCCESS.equals(resMap.get(Constants.RTN_CODE))){
+                return RtnData.ok("修改窗口支付成功");
+            }else{
+                return RtnData.fail("999999", (String) resMap.get(Constants.RTN_MSG));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========修改窗口支付失败=========", e);
+        }
+        return RtnData.fail("修改窗口支付失败");
+    }
+
+    /**
+     * 删除窗口支付
+     *
+     * @param
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/delWindowPayment.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData delWindowPayment(TrainingInstitutionWpModel model, ModelMap map) {
+        try {
+
+            Map<String,Object> resMap = service.delWindowPayment(model);
+
+            if(Constants.RTN_CODE_SUCCESS.equals(resMap.get(Constants.RTN_CODE))){
+                return RtnData.ok("删除窗口支付成功");
+            }else{
+                return RtnData.fail("999999", (String) resMap.get(Constants.RTN_MSG));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========删除窗口支付失败=========", e);
+        }
+        return RtnData.fail("删除窗口支付失败");
     }
 }
