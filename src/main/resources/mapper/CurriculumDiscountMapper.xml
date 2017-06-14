@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.CurriculumDiscountMapper">
+  <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.CurriculumDiscount">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:30:59.
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="curriculum_id" jdbcType="INTEGER" property="curriculum_id" />
+    <result column="discount_value_id" jdbcType="VARCHAR" property="discount_value_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:30:59.
+    -->
+    id, curriculum_id, discount_value_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:30:59.
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from curriculum_discount
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:30:59.
+    -->
+    delete from curriculum_discount
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.digitalchina.sport.mgr.resource.model.CurriculumDiscount">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:30:59.
+    -->
+    insert into curriculum_discount (id, curriculum_id, discount_value_id
+    )
+    values (#{id,jdbcType=VARCHAR}, #{curriculum_id,jdbcType=INTEGER}, #{discount_value_id,jdbcType=VARCHAR}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.digitalchina.sport.mgr.resource.model.CurriculumDiscount">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:30:59.
+    -->
+    insert into curriculum_discount
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="curriculum_id != null">
+        curriculum_id,
+      </if>
+      <if test="discount_value_id != null">
+        discount_value_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="curriculum_id != null">
+        #{curriculum_id,jdbcType=INTEGER},
+      </if>
+      <if test="discount_value_id != null">
+        #{discount_value_id,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.digitalchina.sport.mgr.resource.model.CurriculumDiscount">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:30:59.
+    -->
+    update curriculum_discount
+    <set>
+      <if test="curriculum_id != null">
+        curriculum_id = #{curriculum_id,jdbcType=INTEGER},
+      </if>
+      <if test="discount_value_id != null">
+        discount_value_id = #{discount_value_id,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.digitalchina.sport.mgr.resource.model.CurriculumDiscount">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:30:59.
+    -->
+    update curriculum_discount
+    set curriculum_id = #{curriculum_id,jdbcType=INTEGER},
+    discount_value_id = #{discount_value_id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="queryList" resultType="java.util.Map" parameterType="HashMap">
+    select  (@i:=@i+1) as row_no, c.* from (
+      select a.id curriculum_id, a.name curriculum_name, a.discount_status, b.discount_desc from curriculum a
+      inner join (
+      select t.curriculum_id, group_concat(t1.name ORDER BY t1.sort separator '、') discount_desc
+      from curriculum_discount t
+      left join training_institution_discount_value t1 on t.discount_value_id = t1.id
+      group by t.curriculum_id
+      ) b on a.id = b.curriculum_id
+      where 1=1
+      and a.training_institutions_id = #{id}
+      <if test="name != null and name !=''">
+        AND a.name like concat('%',#{name},'%')
+      </if>
+    ) c,(select   @i:= #{startIndex}) as it
+    LIMIT #{startIndex},#{endIndex}
+  </select>
+
+  <select id="queryListCount" resultType="Integer" parameterType="HashMap">
+      select count(1) from curriculum a
+      inner join (
+        select t.curriculum_id, group_concat(t1.name ORDER BY t1.sort separator '、') discount_desc
+        from curriculum_discount t
+        left join training_institution_discount_value t1 on t.discount_value_id = t1.id
+        group by t.curriculum_id
+      ) b on a.id = b.curriculum_id
+      where 1=1
+      and a.training_institutions_id = #{id}
+      <if test="name != null and name !=''">
+        AND a.name like concat('%',#{name},'%')
+      </if>
+  </select>
+
+  <select id="selectById" resultType="java.util.Map">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:30:59.
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from curriculum_discount
+    where curriculum_id = #{curriculum_id}
+  </select>
+
+
+  <delete id="deleteById">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:30:59.
+    -->
+    delete from curriculum_discount
+    where curriculum_id = #{curriculum_id}
+  </delete>
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.TrainingInstitutionDiscountValueMapper">
+  <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionDiscountValue">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:04:41.
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:04:41.
+    -->
+    id, value, name, sort
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:04:41.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from training_institution_discount_value
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:04:41.
+    -->
+    delete from training_institution_discount_value
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionDiscountValue">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:04:41.
+    -->
+    insert into training_institution_discount_value (id, value, name, 
+      sort)
+    values (#{id,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{sort,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionDiscountValue">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:04:41.
+    -->
+    insert into training_institution_discount_value
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="value != null">
+        value,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionDiscountValue">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:04:41.
+    -->
+    update training_institution_discount_value
+    <set>
+      <if test="value != null">
+        value = #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.digitalchina.sport.mgr.resource.model.TrainingInstitutionDiscountValue">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:04:41.
+    -->
+    update training_institution_discount_value
+    set value = #{value,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="getAllDiscountValueList" resultType="java.util.Map">
+    select a.id, a.value, a.name from training_institution_discount_value a
+    where 1=1
+    order by a.sort
+  </select>
+
+
+
+  <select id="getAllDiscountValueListWithChecked" resultType="java.util.Map">
+    select t.*, if(t1.discount_value_id is null, '0', '1') checked from training_institution_discount_value t
+    left join curriculum_discount t1
+    on t.id = t1.discount_value_id and t1.curriculum_id = #{curriculum_id}
+    where 1=1
+    order by t.sort
+  </select>
+</mapper>

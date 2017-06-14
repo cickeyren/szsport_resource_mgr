@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>窗口培训折扣新增页面</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css" th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
+    <script src="../../static/lib/kindeditor-4.1.7/kindeditor-all-min.js" th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
+    <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js" th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
+
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
+        .border{border-bottom: 1px solid #ddd;}
+        .pb10{padding-bottom: 10px;}
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container-fluid">
+            <div class="pb10 border mt20">
+                当前位置：<a href="javascript:;">培训机构</a> < <a href="javascript:;">窗口培训折扣</a> < <a href="javascript:;">新增</a>
+            </div>
+            <p class="title mt20">新增折扣</p>
+            <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" name="addForm" method="post">
+                <input type="hidden" id="id" name="id" th:value="${id}"/>
+                <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                    <tr class="controls">
+                        <td width="10%" class="alignright"><span class="red">*</span>选择课程</td>
+                        <td class="alignleft">
+                            <select id="curriculum_id" name="curriculum_id">
+                                <option th:each="curriculum,eStat:${curriculumList}" th:value="${curriculum.curriculum_id}" th:text="${curriculum.curriculum_name}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td class="alignright"><span class="red">*</span>选择折扣</td>
+                        <td class="alignleft">
+                            <div>
+                                <input style="margin-left: 10px;" type="checkbox" name="checkAll" id="checkAll" onclick="check_all(this,'discount_value_id');">全选/全不选
+                            </div>
+                            <div id="div_discount">
+                                <input style="margin-left: 10px;" type="checkbox" id="discount_value_id" name="discount_value_id" th:each="discountValue, objStat: ${discountValueList}" th:value="${discountValue.id}" th:text="${discountValue.name}">
+                            </div>
+                            <label id="discount_value_id-error" class="error" for="discount_value_id"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-success" id="addBtn">保存</button>
+                            <button type="button" class="btn btn-success" id="cancelBtn">返回</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </section>
+</body>
+<script th:inline="javascript">
+
+    var layerOpts = {shift: -1, time: 500};
+
+    var institutionId = [[${id}]];
+    $(function () {
+        var valConfig = {
+            rules: {
+                curriculum_id: {
+                    required: true
+                }
+                ,
+                discount_value_id: {
+                    required: true
+                }
+            },
+            messages: {
+                curriculum_id: {
+                    required: "请选择课程"
+                },
+                discount_value_id: {
+                    required: "请选择折扣"
+                }
+            },
+            submitHandler: function () {
+                doAdd();
+            }
+        };
+        $('#addForm').validate(valConfig);
+
+        /**
+         * 返回列表页面
+         */
+        $("#cancelBtn").on('click', function () {
+            backListPage();
+        })
+    });
+    function doAdd(){
+        var id = institutionId;
+        var curriculum_id = $("#curriculum_id").val();
+        var discount_value_id = "";
+        $("input[name='discount_value_id']").each(function(){
+            if($(this).is(':checked')){
+                discount_value_id += $(this).val() + ",";
+            }
+        });
+        discount_value_id = discount_value_id.replace(/,$/g,"");
+
+        var reqData = {
+            institution_id:id,
+            curriculum_id:curriculum_id,
+            discount_value_id:discount_value_id
+        };
+        $.ajax({
+            url:'/trainInstitutionController/addWindowDiscount.do',
+            type:'POST',
+            data:reqData,
+            dataType:'json',
+            success:function(result){
+                if("000000" == result.code) {
+                    layer.msg("添加成功！",layerOpts, function(){
+                        backListPage();
+                    });
+                } else {
+                    layer.msg(result.message);
+                }
+            },
+            error:function(result){
+                layer.msg("添加失败~");
+            }
+        });
+    }
+    function backListPage(){
+        window.location.href = "/trainInstitutionController/window_discount_list.html?id="+ institutionId;
+    }
+
+    function check_all(obj, checkboxName) {
+        var checkboxs = document.getElementsByName(checkboxName);
+        for ( var i = 0; i < checkboxs.length; i+=1) {
+            checkboxs[i].checked = obj.checked;
+        }
+    }
+</script>
+</html>

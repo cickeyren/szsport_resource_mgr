@@ -3,15 +3,16 @@ package com.digitalchina.sport.mgr.resource.service;
 import com.digitalchina.common.data.Constants;
 import com.digitalchina.common.utils.StringUtils;
 import com.digitalchina.common.utils.UUIDUtil;
-import com.digitalchina.sport.mgr.resource.dao.TrainingInstitutionMapper;
-import com.digitalchina.sport.mgr.resource.dao.TrainingInstitutionPicMapper;
-import com.digitalchina.sport.mgr.resource.dao.TrainingInstitutionWpMapper;
+import com.digitalchina.sport.mgr.resource.dao.*;
 import com.digitalchina.sport.mgr.resource.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xujin on 2017/6/9.
@@ -25,6 +26,10 @@ public class TrainInstitutionService {
     TrainingInstitutionPicMapper trainingInstitutionPicMapper;
     @Autowired
     TrainingInstitutionWpMapper trainingInstitutionWpMapper;
+    @Autowired
+    CurriculumDiscountMapper curriculumDiscountMapper;
+    @Autowired
+    CurriculumMapper curriculumMapper;
 
     /*
     此方法保留，之前开龙开发
@@ -363,5 +368,155 @@ public class TrainInstitutionService {
         rtnMap.put(Constants.RTN_MSG, "");
         return rtnMap;
     }
-    
+
+    public List<Map<String,Object>> getWindowDiscountList(Map<String, Object> params) {
+        List<Map<String,Object>> list = curriculumDiscountMapper.queryList(params);
+        return list;
+    }
+
+    public int getWindowDiscountListCount(Map<String, Object> params) {
+        int count = curriculumDiscountMapper.queryListCount(params);
+        return count;
+    }
+
+    public CurriculumDiscount selectWindowDiscountByCurriculumId(Map<String, Object> param) {
+        String curriculum_id = (String) param.get("curriculum_id");
+        CurriculumDiscount entity = curriculumDiscountMapper.selectByPrimaryKey(curriculum_id);
+        return entity;
+    }
+
+    @Transactional
+    public Map< String, Object> addWindowDiscount(CurriculumDiscountModel model) {
+        Map<String,Object> rtnMap = new HashMap<String,Object>();
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+
+        Integer curriculumId = model.getCurriculum_id();
+        if(curriculumId == null){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "课程id为空");
+            return rtnMap;
+        }
+        String discountValueIdStr = model.getDiscount_value_id();
+        if(StringUtils.isBlank(discountValueIdStr)){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "折扣id为空");
+            return rtnMap;
+        }
+        String[] discountValueIds = discountValueIdStr.split(",");
+
+        CurriculumNew curriculumNew = curriculumMapper.selectNewByPrimaryKey(curriculumId);
+        if(curriculumNew==null) {
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "课程id不存在");
+            return rtnMap;
+        }
+
+        List<CurriculumDiscount> cdexist = curriculumDiscountMapper.selectById(curriculumId);
+        if(cdexist==null || cdexist.size()>0){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "该课程窗口折扣已添加");
+            return rtnMap;
+        }
+
+        for(int i=0; i<discountValueIds.length;i++){
+            String discountValueId = discountValueIds[i];
+            CurriculumDiscount entityCd = new CurriculumDiscount();
+            entityCd.setId(UUIDUtil.generateUUID());
+            entityCd.setCurriculum_id(model.getCurriculum_id());
+            entityCd.setDiscount_value_id(discountValueId);
+            curriculumDiscountMapper.insert(entityCd);
+        }
+
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_SUCCESS);
+        rtnMap.put(Constants.RTN_MSG, "");
+        return rtnMap;
+    }
+
+    @Transactional
+    public Map<String, Object> updateWindowDiscount(CurriculumDiscountModel model) {
+        Map<String,Object> rtnMap = new HashMap<String,Object>();
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+
+        Integer curriculumId = model.getCurriculum_id();
+        Integer curriculumIdNew = model.getCurriculum_id_new();
+        if(curriculumId == null || curriculumIdNew == null){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "课程id为空");
+            return rtnMap;
+        }
+        String discountValueIdStr = model.getDiscount_value_id();
+        if(StringUtils.isBlank(discountValueIdStr)){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "折扣id为空");
+            return rtnMap;
+        }
+        String[] discountValueIds = discountValueIdStr.split(",");
+
+        curriculumDiscountMapper.deleteById(curriculumId);
+
+        CurriculumNew curriculumNew = curriculumMapper.selectNewByPrimaryKey(curriculumIdNew);
+        if(curriculumNew==null) {
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "课程id不存在");
+            return rtnMap;
+        }
+
+        List<CurriculumDiscount> cdexist = curriculumDiscountMapper.selectById(curriculumIdNew);
+        if(cdexist==null || cdexist.size()>0){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "该课程窗口折扣已添加");
+            return rtnMap;
+        }
+
+        for(int i=0; i<discountValueIds.length;i++){
+            String discountValueId = discountValueIds[i];
+            CurriculumDiscount entityCd = new CurriculumDiscount();
+            entityCd.setId(UUIDUtil.generateUUID());
+            entityCd.setCurriculum_id(model.getCurriculum_id_new());
+            entityCd.setDiscount_value_id(discountValueId);
+            curriculumDiscountMapper.insert(entityCd);
+        }
+
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_SUCCESS);
+        rtnMap.put(Constants.RTN_MSG, "");
+        return rtnMap;
+    }
+
+    public Map<String,Object> updateDiscountStatus(CurriculumModel model) {
+        Map<String,Object> rtnMap = new HashMap<String,Object>();
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+
+        Integer curriculumId = model.getId();
+        if(curriculumId == null){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "课程id为空");
+            return rtnMap;
+        }
+        String status = model.getDiscount_status();
+        if(StringUtils.isBlank(status)){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "操作未知");
+            return rtnMap;
+        }
+        if(!"0".equals(status) && !"1".equals(status)){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "操作未知");
+            return rtnMap;
+        }
+        CurriculumNew curriculumNew = curriculumMapper.selectNewByPrimaryKey(curriculumId);
+        if(curriculumNew==null) {
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "课程id不存在");
+            return rtnMap;
+        }
+
+        CurriculumNew entity = new CurriculumNew();
+        entity.setId(curriculumId);
+        entity.setDiscount_status(status);
+        curriculumMapper.updateNewByPrimaryKeySelective(entity);
+
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_SUCCESS);
+        rtnMap.put(Constants.RTN_MSG, "");
+        return rtnMap;
+    }
 }

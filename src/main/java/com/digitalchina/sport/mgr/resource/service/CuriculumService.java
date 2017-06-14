@@ -155,4 +155,9 @@ public class CuriculumService {
     public int getCurriculumOrderHasPayCount(Map<String,Object> args){
         return curriculumMapper.getCurriculumOrderHasPayCount(args);
     }
+
+    public List<Map<String,Object>> getAvailCurriculumListByInstitutionId(String institutionId, Integer curriculumId){
+        return curriculumMapper.getAvailCurriculumListByInstitutionId(institutionId, curriculumId);
+    }
+
 }

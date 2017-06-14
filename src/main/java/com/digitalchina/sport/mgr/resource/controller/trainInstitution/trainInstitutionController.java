@@ -4,11 +4,9 @@ import com.digitalchina.common.data.Constants;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
+import com.digitalchina.common.utils.StringUtils;
 import com.digitalchina.sport.mgr.resource.model.*;
-import com.digitalchina.sport.mgr.resource.service.CommonService;
-import com.digitalchina.sport.mgr.resource.service.MerchantService;
-import com.digitalchina.sport.mgr.resource.service.PaymentService;
-import com.digitalchina.sport.mgr.resource.service.TrainInstitutionService;
+import com.digitalchina.sport.mgr.resource.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +45,12 @@ public class TrainInstitutionController {
 
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private CuriculumService curriculumService;
+
+    @Autowired
+    private TrainInstitutionDiscountValueService discountValueService;
 
 
     /**
@@ -487,4 +491,177 @@ public class TrainInstitutionController {
         }
         return RtnData.fail("删除窗口支付失败");
     }
+
+    /**
+     * 进入窗口培训折扣
+     *
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/window_discount_list.html")
+    public String window_discount_list(@RequestParam(required = false, defaultValue = "10") long pageSize,
+                                      @RequestParam(required = false, defaultValue = "1") long page, ModelMap map, HttpServletRequest request) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        String id = request.getParameter("id");
+        String name = request.getParameter("name");
+        params.put("id", id);
+        params.put("name", name);
+        try {
+            int totalSize = service.getWindowDiscountListCount(params);
+            Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
+            pagination.setUrl(request.getRequestURI());
+
+            map.put("pageModel", pagination);
+            map.put("pageSize", String.valueOf(pageSize));
+            map.put("page", String.valueOf(page));
+
+            params.put("startIndex", pagination.getStartIndex());
+            params.put("endIndex", pageSize);
+            List<Map<String, Object>> list = service.getWindowDiscountList(params);
+            map.put("list", list);
+
+            map.put("id", id);
+            map.put("name", name);
+            return "trainInstitution/window_discount_list";
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========查询窗口培训折扣列表失败=========", e);
+            map.put("url", request.getRequestURL());
+            map.put("exception", e);
+            return "error";
+        }
+    }
+
+    /**
+     * 进入新增窗口培训页面
+     *
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/window_discount_add.html")
+    public String window_discount_add(ModelMap map, HttpServletRequest request) {
+        String id = request.getParameter("id");
+        List<Map<String,Object>> curriculumList = curriculumService.getAvailCurriculumListByInstitutionId(id, null);
+        List<Map<String,Object>> discountValueList = discountValueService.getAllDiscountValueList();
+        map.put("curriculumList", curriculumList);
+        map.put("discountValueList", discountValueList);
+        map.put("id", id);
+        return "trainInstitution/window_discount_add";
+    }
+
+
+    /**
+     * 新增窗口折扣
+     *
+     * @param
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/addWindowDiscount.do", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData addWindowDiscount(CurriculumDiscountModel model, ModelMap map) {
+        try {
+
+            Map<String,Object> resMap = service.addWindowDiscount(model);
+
+            if(Constants.RTN_CODE_SUCCESS.equals(resMap.get(Constants.RTN_CODE))){
+                return RtnData.ok("新增窗口折扣成功");
+            }else{
+                return RtnData.fail("999999", (String) resMap.get(Constants.RTN_MSG));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========新增窗口折扣失败=========", e);
+        }
+        return RtnData.fail("新增窗口折扣失败");
+    }
+
+
+
+    /**
+     * 进入编辑窗口支付页面
+     *
+     * @param
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/window_discount_edit.html", method = RequestMethod.GET)
+    public String window_discount_edit(@RequestParam String id, @RequestParam Integer curriculum_id, ModelMap map) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", id);
+        param.put("curriculum_id", curriculum_id);
+        try {
+            List<Map<String,Object>> curriculumList = curriculumService.getAvailCurriculumListByInstitutionId(id, curriculum_id);
+            List<Map<String,Object>> discountValueList = discountValueService.getAllDiscountValueListWithChecked(curriculum_id);
+            map.put("curriculumList", curriculumList);
+            map.put("discountValueList", discountValueList);
+
+            map.put("id", id);
+            map.put("curriculum_id", curriculum_id);
+            return "trainInstitution/window_discount_edit";
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========进入编辑页面失败=========", e);
+            return "error";
+        }
+    }
+
+    /**
+     * 更新窗口折扣
+     *
+     * @param
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/updateWindowDiscount.do", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData updateWindowDiscount(CurriculumDiscountModel model, ModelMap map) {
+        try {
+
+            Map<String,Object> resMap = service.updateWindowDiscount(model);
+
+            if(Constants.RTN_CODE_SUCCESS.equals(resMap.get(Constants.RTN_CODE))){
+                return RtnData.ok("更新窗口折扣成功");
+            }else{
+                return RtnData.fail("999999", (String) resMap.get(Constants.RTN_MSG));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========更新窗口折扣失败=========", e);
+        }
+        return RtnData.fail("更新窗口折扣失败");
+    }
+
+    /**
+     * 更新窗口折扣状态
+     *
+     * @param
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/updateDiscountStatus.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData updateDiscountStatus(CurriculumModel model, ModelMap map) {
+        try {
+
+            Map<String,Object> resMap = service.updateDiscountStatus(model);
+
+            if(Constants.RTN_CODE_SUCCESS.equals(resMap.get(Constants.RTN_CODE))){
+                return RtnData.ok("更新窗口折扣状态成功");
+            }else{
+                return RtnData.fail("999999", (String) resMap.get(Constants.RTN_MSG));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========更新窗口折扣状态失败=========", e);
+        }
+        return RtnData.fail("更新窗口折扣状态失败");
+    }
+
 }

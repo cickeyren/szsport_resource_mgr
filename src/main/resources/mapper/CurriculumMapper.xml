@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.digitalchina.sport.mgr.resource.dao.CurriculumMapper">
+
     <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.Curriculum">
         <!--
           WARNING - @mbggenerated
@@ -23,6 +24,7 @@
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="org_name" property="org_name" jdbcType="VARCHAR" />
     </resultMap>
+
     <sql id="Base_Column_List">
         <!--
           WARNING - @mbggenerated
@@ -31,6 +33,41 @@
         content, address, enrollment_required, phone, enrollment_read, create_date, recommend_time,
         recommend_level
     </sql>
+
+    <resultMap id="BaseResultMapNew" type="com.digitalchina.sport.mgr.resource.model.CurriculumNew">
+        <!--
+          WARNING - @mbggenerated
+          Generated on 2017-06-14 19:46:53.
+        -->
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="training_institutions_id" jdbcType="VARCHAR" property="training_institutions_id" />
+        <result column="cooperative_merchant_id" jdbcType="VARCHAR" property="cooperative_merchant_id" />
+        <result column="img_url" jdbcType="VARCHAR" property="img_url" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="teachers" jdbcType="VARCHAR" property="teachers" />
+        <result column="train_type" jdbcType="VARCHAR" property="train_type" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="enrollment_required" jdbcType="VARCHAR" property="enrollment_required" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="enrollment_read" jdbcType="VARCHAR" property="enrollment_read" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="create_date" />
+        <result column="recommend_time" jdbcType="TIMESTAMP" property="recommend_time" />
+        <result column="recommend" jdbcType="INTEGER" property="recommend" />
+        <result column="recommend_level" jdbcType="INTEGER" property="recommend_level" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="discount_status" jdbcType="VARCHAR" property="discount_status" />
+    </resultMap>
+    <sql id="Base_Column_ListNew">
+        <!--
+          WARNING - @mbggenerated
+          Generated on 2017-06-14 19:46:53.
+        -->
+        id, training_institutions_id, cooperative_merchant_id, img_url, name, teachers, train_type,
+        content, address, enrollment_required, phone, enrollment_read, create_date, recommend_time,
+        recommend, recommend_level, status, discount_status
+    </sql>
+
     <select id="getCurriculum" resultMap="BaseResultMap" parameterType="java.util.Map">
         SELECT
         c.id,
@@ -302,4 +339,92 @@
         WHERE
         c.train_type = ct.`code` AND ti.id = c.training_institutions_id AND c.id = #{id}
     </select>
+
+    <select id="getAvailCurriculumListByInstitutionId" resultType="java.util.Map">
+        select distinct a.id curriculum_id, a.name curriculum_name
+        from curriculum a
+        left join curriculum_discount b on a.id = b.curriculum_id
+        where 1=1
+        and a.training_institutions_id = #{institutionId}
+        and (
+        b.curriculum_id is null
+        <if test="curriculumId != null">
+          or a.id = #{curriculumId}
+        </if>
+        )
+    </select>
+
+    <select id="selectNewByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMapNew">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 19:46:53.
+    -->
+        select
+        <include refid="Base_Column_ListNew" />
+        from curriculum
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+    <update id="updateNewByPrimaryKeySelective" parameterType="com.digitalchina.sport.mgr.resource.model.CurriculumNew">
+        <!--
+          WARNING - @mbggenerated
+          Generated on 2017-06-14 19:46:53.
+        -->
+        update curriculum
+        <set>
+            <if test="training_institutions_id != null">
+                training_institutions_id = #{training_institutions_id,jdbcType=VARCHAR},
+            </if>
+            <if test="cooperative_merchant_id != null">
+                cooperative_merchant_id = #{cooperative_merchant_id,jdbcType=VARCHAR},
+            </if>
+            <if test="img_url != null">
+                img_url = #{img_url,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="teachers != null">
+                teachers = #{teachers,jdbcType=VARCHAR},
+            </if>
+            <if test="train_type != null">
+                train_type = #{train_type,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="enrollment_required != null">
+                enrollment_required = #{enrollment_required,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="enrollment_read != null">
+                enrollment_read = #{enrollment_read,jdbcType=VARCHAR},
+            </if>
+            <if test="create_date != null">
+                create_date = #{create_date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="recommend_time != null">
+                recommend_time = #{recommend_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="recommend != null">
+                recommend = #{recommend,jdbcType=INTEGER},
+            </if>
+            <if test="recommend_level != null">
+                recommend_level = #{recommend_level,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="discount_status != null">
+                discount_status = #{discount_status,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>
