@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>合作商户信息</title>
+    <title>合作商户配置页面</title>
     <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
@@ -92,7 +92,6 @@
                     <th>日结日期</th>
                     <th>联系人</th>
                     <th>联系电话</th>
-                    <th>状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -105,19 +104,9 @@
                     <td th:text="${obj.checkDate}"></td>
                     <td th:text="${obj.contacts}"></td>
                     <td th:text="${obj.telephone}"></td>
-                    <td th:text="${obj.status}"></td>
                     <td>
                         <a id="edit" th:data="${obj.id}"
-                           th:href="@{/MerchantController/edit.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">编辑</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a id="edit" th:data="${obj.id}"
-                           th:href="@{/MerchantPayController/merchant_pay.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">支付方式</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a id="edit" th:data="${obj.id}"
-                           th:href="@{/merchantAccount/merchantAccountList.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">账户</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <span id="edit" th:data="${obj.id}"
-                           th:href="@{/MerchantController/edit.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">合同</span>
+                           th:href="@{/mainStadiumMerchant/delMerchant.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">删除</a>
                 </tr>
                 </tbody>
 
