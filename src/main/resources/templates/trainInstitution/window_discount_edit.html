@@ -93,6 +93,9 @@
                 discount_value_id: {
                     required: "请选择折扣"
                 }
+            },
+            submitHandler: function () {
+                doUpdate();
             }
         };
         $('#updateForm').validate(valConfig);
@@ -103,13 +106,6 @@
         $("#cancelBtn").on('click', function () {
             backListPage();
         })
-
-        /**
-         * 数据更新
-         */
-        $("#saveBtn").on("click", function () {
-            doUpdate();
-        });
 
     });
     function backListPage(){

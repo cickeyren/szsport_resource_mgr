@@ -71,7 +71,7 @@
         <div class="pb10 border">
             当前位置：<a href="javascript:;">培训机构</a> < <a href="javascript:;">编辑</a>
         </div>
-        <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="updateForm" method="post">
+        <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="updateForm" name="updateForm" method="post">
             <input type="hidden" id="id" name="id" th:value="${trainInstitution.id}"/>
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
@@ -193,6 +193,9 @@
                 address: {
                     required: "请填写培训机构地址"
                 }
+            },
+            submitHandler: function () {
+                doUpdate();
             }
         };
         $('#updateForm').validate(valConfig);
