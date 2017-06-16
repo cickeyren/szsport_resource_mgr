@@ -427,4 +427,274 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <!-- 订单列表 -->
+    <select id="getOrderListByMap" resultType="java.util.HashMap" parameterType="java.util.Map">
+        SELECT
+        co.id AS id,
+        co.order_number AS orderNumber,
+        ct.`name` AS trainType,
+        tr.org_name AS orgName,
+        c.`name` AS curriculumName,
+        cc.`name` AS curriculumClassName,
+        co.create_time AS createTime,
+        co.fee,
+        (
+        CASE
+        WHEN co.pay_fee IS NULL THEN
+        ''
+        ELSE
+        co.pay_fee
+        END
+        ) AS payFee,
+        co.come,
+        co.phone,
+        (
+        CASE co.`status`
+        WHEN '0' THEN
+        '未支付'
+        WHEN '1' THEN
+        '支付成功'
+        WHEN '2' THEN
+        '支付失败'
+        WHEN '3' THEN
+        '已退款'
+        WHEN '4' THEN
+        '失效订单'
+        WHEN '5' THEN
+        '异常订单'
+        ELSE
+        ''
+        END
+        ) AS `status`,
+        (
+        CASE co.`re_status`
+        WHEN '0' THEN
+        '未确认'
+        WHEN '1' THEN
+        '已确认'
+        ELSE
+        ''
+        END
+        ) AS restatus
+        FROM
+        curriculum_order co
+        LEFT JOIN curriculum c ON c.id = co.curriculum_id
+        LEFT JOIN curriculum_class cc ON cc.id = co.curriculum_class_id
+        LEFT JOIN curriculum_class_times cct ON cct.id = co.curriculum_class_time_id
+        LEFT JOIN training_institution tr ON tr.id = c.training_institutions_id
+        LEFT JOIN curriculum_type ct ON ct.`code` = c.train_type
+        WHERE 1=1
+        <if test="phone != null and phone != ''">
+            AND co.phone = #{phone}
+        </if>
+        <if test="curriculumName != null and curriculumName != ''">
+            AND c.`name` like CONCAT('%',#{curriculumName},'%')
+        </if>
+        <if test="trainType != null and trainType != ''">
+            AND c.train_type = #{trainType}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[AND
+            co.create_time >=#{startDate}
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[AND
+            co.create_time <= #{endDate}]]>
+        </if>
+        <if test="come != null and come != ''">
+            AND UPPER(co.come) = UPPER(#{come})
+        </if>
+        <if test="status != null and status != ''">
+            AND co.status IN (#{status})
+        </if>
+        ORDER BY
+        co.create_time DESC
+        LIMIT #{startIndex},#{pageSize}
+    </select>
+    <select id="getCountByMap" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        COUNT(0)
+        FROM
+        curriculum_order co
+        LEFT JOIN curriculum c ON c.id = co.curriculum_id
+        LEFT JOIN curriculum_class cc ON cc.id = co.curriculum_class_id
+        LEFT JOIN curriculum_class_times cct ON cct.id = co.curriculum_class_time_id
+        LEFT JOIN training_institution tr ON tr.id = c.training_institutions_id
+        LEFT JOIN curriculum_type ct ON ct.`code` = c.train_type
+        WHERE 1=1
+        <if test="phone != null and phone != ''">
+            AND co.phone = #{phone}
+        </if>
+        <if test="curriculumName != null and curriculumName != ''">
+            AND c.`name` like CONCAT('%',#{curriculumName},'%')
+        </if>
+        <if test="trainType != null and trainType != ''">
+            AND c.train_type = #{trainType}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[AND
+            co.create_time >=#{startDate}
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[AND
+            co.create_time <= #{endDate}]]>
+        </if>
+        <if test="come != null and come != ''">
+            AND UPPER(co.come) = UPPER(#{come})
+        </if>
+        <if test="status != null and status != ''">
+            AND co.status IN (#{status})
+        </if>
+    </select>
+    <select id="getCurriculumTypes" resultType="java.util.Map">
+        SELECT
+        ct.`code` AS code,
+        ct.`name` AS name
+        FROM
+        curriculum_type ct
+    </select>
+    <!-- 订单详情 -->
+    <select id="getOrderDetailsByOrderId" resultType="java.util.HashMap" parameterType="java.util.Map">
+        SELECT
+            co.id AS orderId,
+            tr.org_name AS orgName,
+            ct.`name` AS trainType,
+            co.curriculum_id AS curriculumId,
+            c.`name` AS curriculumName,
+            cc.`name` AS className,
+            cct.time AS classTime,
+            co.create_time AS createTime,
+            co.come AS come,
+            (
+                CASE
+                WHEN co.pay_time IS NULL THEN
+                    ''
+                ELSE
+                    co.pay_time
+                END
+            ) AS payTime,
+            (
+                CASE co.`status`
+                WHEN '0' THEN
+                    '未支付'
+                WHEN '1' THEN
+                    '支付成功'
+                WHEN '2' THEN
+                    '支付失败'
+                WHEN '3' THEN
+                    '已退款'
+                WHEN '4' THEN
+                    '失效订单'
+                WHEN '5' THEN
+                    '异常订单'
+                ELSE
+                    ''
+                END
+            ) AS `status`,
+            (
+                CASE co.`refund_status`
+                WHEN '0' THEN
+                    '未退款'
+                WHEN '1' THEN
+                    '已退款'
+                ELSE
+                    ''
+                END
+            ) AS refundStatus,
+            co.fee AS fee,
+            co.pay_fee AS payFee,
+            co.fee_msg AS feeMsg,
+            (
+                CASE
+                WHEN co.discount_configure_id IS NULL THEN
+                    ''
+                ELSE
+                    co.discount_configure_id
+                END
+            ) AS discountConfigureId,
+            (
+                CASE
+                WHEN co.user_id IS NULL THEN
+                    ''
+                ELSE
+                    co.user_id
+                END
+            ) AS userId,
+            co.student_name AS studentName,
+            co.phone AS phone,
+            co.id_card AS idCard,
+            co.birthday AS birthday,
+            (
+                CASE co.gender
+                WHEN '0' THEN
+                    '男'
+                WHEN '1' THEN
+                    '女'
+                ELSE
+                    ''
+                END
+            ) AS gender,
+            co.school AS school,
+            co.pay_type AS payType,
+            (
+                CASE
+                WHEN p.payment IS NULL THEN
+                    ''
+                ELSE
+                    p.payment
+                END
+            ) AS payment,
+            (
+                CASE
+                WHEN co.pay_acount IS NULL THEN
+                    ''
+                ELSE
+                    co.pay_acount
+                END
+            ) AS payAcount,
+            co.order_number AS orderNumber,
+            (
+                CASE co.`re_status`
+                WHEN '0' THEN
+                    '未确认'
+                WHEN '1' THEN
+                    '已确认'
+                ELSE
+                    ''
+                END
+            ) AS restatus
+        FROM
+            curriculum_order co
+        LEFT JOIN curriculum c ON c.id = co.curriculum_id
+        LEFT JOIN curriculum_class cc ON cc.id = co.curriculum_class_id
+        LEFT JOIN curriculum_class_times cct ON cct.id = co.curriculum_class_time_id
+        LEFT JOIN training_institution tr ON tr.id = c.training_institutions_id
+        LEFT JOIN curriculum_type ct ON ct.`code` = c.train_type
+        LEFT JOIN payment p ON p.id = co.pay_type
+        WHERE
+            co.id = #{orderId}
+    </select>
+    <select id="getCurriculumRefund" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        cr.id AS id,
+        cr.order_id AS orderId,
+        cr.refund_fee AS refundFee,
+        cr.refund_msg AS refundMsg,
+        cr.refund_time AS refundTime
+        FROM
+        curriculum_refund cr
+        WHERE
+        cr.order_id = #{orderId}
+    </select>
+    <!--更新订单状态，时间超过10分钟状态变为失效订单 -->
+    <update id="updateOrderByOrderTime" parameterType="java.util.Map" >
+        UPDATE curriculum_order
+        SET `status`=#{status},remarks=#{remarks},update_time=NOW()
+        WHERE
+        <![CDATA[
+			invalid_time < NOW() AND `status`='0'
+  		]]>
+    </update>
 </mapper>

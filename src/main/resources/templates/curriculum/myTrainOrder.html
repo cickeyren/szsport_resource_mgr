@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>培训订单列表</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .inputw100 {
+            width: 100px;
+        }
+        .table_style{width: 100%;height: auto;}
+        .table_style tr td{text-align: center;height: 30px;line-height: 30px;}
+        .table_style td.alignleft {
+            text-align: left;
+        }
+        .table_style td.alignright {
+            text-align: right;
+        }
+        .table_style td.aligncenter {
+            text-align: center;
+        }
+        .form-horizontal .control-group .controls input {
+            float: none;
+        }
+        .form-horizontal .control-group .controls label {
+            float: none;
+        }
+        .table_style tr td.with150 {
+            width: 65px;
+        }
+        .border{
+            border-bottom: 1px solid #ddd;
+        }
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
+        }
+        .mb20{
+            margin-bottom: 20px;
+        }
+        .mt5{
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 内容区域 -->
+<div>
+    <div class="container-fluid pt20">
+        <div class="pb10 border">
+            当前位置：<a href="javascript:;">培训订单</a>
+        </div>
+        <form class="mt20" action="/curriculumController/orderList.html" id="getForm" method="get">
+            <input type="hidden" id="myPage" name="page" th:value="${page}">
+            <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
+            <table class="table_style">
+                <tr class="controls">
+                    <td class="with150">预定手机:</td>
+                    <td class="alignleft">
+                        <input type="text" class="mt5" id="phone" name="phone" th:value="${phone}"/>
+                    </td>
+                    <td class="with150">产品名称:</td>
+                    <td class="alignleft">
+                        <input type="text" class="mt5" id="ticketName" name="ticketName" th:value="${ticketName}"/>
+                    </td>
+                    <td class="with150">产品类型:</td>
+                    <td class="alignleft">
+                        <select id="trainType" name="trainType">
+                            <option value="">全部</option>
+                            <option th:each="obj,eStat:${trainTypeList}" th:value="${obj.code}"
+                                    th:selected="${trainType eq obj.code}"
+                                    th:text="${obj.name}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="with150">下单时间:</td>
+                    <td class="alignleft">
+                        <input type='text' style="float:none" id="startDate" name="startDate" class="inputw100 form-control mt5" readonly="readonly" th:value="${startDate}"
+                               onClick="WdatePicker({maxDate:'#F{$dp.$D(\'endDate\')||\'%y-%M-%d\'}'})"/>至
+                        <input type='text' style="float:none" id="endDate" name="endDate" class="inputw100 form-control mt5" readonly="readonly" th:value="${endDate}"
+                               onClick="WdatePicker({minDate:'#F{$dp.$D(\'startDate\')}',maxDate:'%y-%M-%d'})"/>
+                    </td>
+                    <td class="with150">订单来源:</td>
+                    <td class="alignleft">
+                        <input type="hidden" class="mt5" id="come" name="come" th:value="${come}"/>
+                        <select id="order_come" style="width:150px;" from="getForm" onchange="change(this)">
+                            <option value="">请选择</option>
+                            <option value="APP" th:selected="${come eq 'APP'}">APP</option>
+                            <option value="window" th:selected="${come eq 'window'}">window</option>
+                            <option value="1" th:selected="${come eq '1'}">售票机</option>
+                            <option value="2" th:selected="${come eq '2'}">微信</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="controls">
+                    <td class="with150">订单状态:</td>
+                    <td colspan="9" class="alignleft">
+                        <div id="status">
+                            <input type="checkbox" name="checkAll" th:checked="${checkAll}" onclick="check_all(this,'status');"/>
+                            <font class="mt25 mr20">全选</font>
+                            <input value="0" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'0'):null}">
+                            <font class="mt25 mr20">未支付</font>
+                            <input value="1" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'1'):null}">
+                            <font class="mt25 mr20">支付成功</font>
+                            <input value="2" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'2'):null}">
+                            <font class="mt25 mr20">支付失败</font>
+                            <input value="3" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'3'):null}">
+                            <font class="mt25 mr20">已退款</font>
+                            <input value="4" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'4'):null}">
+                            <font class="mt25 mr20">失效订单</font>
+                            <input value="5" type="checkbox" name="status" class="checkbox" form="getForm" th:checked="${status!= null?#strings.contains(status,'5'):null}">
+                            <font class="mt25 mr10">异常订单</font>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" id="search">查询</button>
+                        <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-content no-padding" id="c">
+                    </div>
+                    <div id="div2">
+                        <div id="dataTable_wrapper" class="dataTables_wrapper no-footer">
+                            <table id="dataTable" class="table table-bordered" th:unless="${#lists.isEmpty(orderList)}">
+                                <thead>
+                                <tr>
+                                    <th>订单流水号</th>
+                                    <th>分类</th>
+                                    <th>机构</th>
+                                    <th>课程名称</th>
+                                    <th>班次</th>
+                                    <th>下单时间</th>
+                                    <th>订单金额</th>
+                                    <th>支付金额</th>
+                                    <th>订单来源</th>
+                                    <th>手机</th>
+                                    <th>订单状态</th>
+                                    <th>确认状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody th:remove="all-but-first">
+                                <tr th:each="obj, objStat: ${orderList}">
+                                    <input type="hidden" th:value="${obj.id}"/>
+                                    <td th:text="${obj.orderNumber}"></td>
+                                    <td th:text="${obj.trainType}"></td>
+                                    <td th:text="${obj.orgName}"></td>
+                                    <td th:text="${obj.curriculumName}"></td>
+                                    <td th:text="${obj.curriculumClassName}"></td>
+                                    <td th:text="${#calendars.format(obj.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                    <td th:text="${obj.fee}"></td>
+                                    <td th:text="${obj.payFee}"></td>
+                                    <td th:text="${obj.come}"></td>
+                                    <td th:text="${obj.phone}"></td>
+                                    <td th:text="${obj.status}"></td>
+                                    <td th:text="${obj.restatus}"></td>
+                                    <td><a th:href="'/curriculumController/orderDetails.html?orderId='+${obj.id}">查看</a></td>
+                                </tr>
+                                </tbody>
+                                <!--<input id="pageAllCount" type="hidden" th:value="${pageModel.totalSize}"/>-->
+                            </table>
+                            <div th:if="${#lists.isEmpty(orderList)}">
+                                <p class="ml20">没有符合查询条件的记录！</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="page" class="page" align="right" style="margin-right: 10px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    //好像很实用的样子，后端的同学再也不用写分页逻辑了。
+    $(function(){
+        laypage({
+            cont: 'page',
+            pages: [[${pageModel.totalPage}]], //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+            curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
+                var page = location.search.match(/page=(\d+)/);
+                return page ? page[1] : 1;
+            }(),
+            jump: function(e, first){ //触发分页后的回调
+                if(!first){ //一定要加此判断，否则初始时会无限刷新
+                    //console.log(location.href);
+                    $("#myPage").val(e.curr);
+                    $("#getForm").submit();
+                }
+            }
+        });
+        $("#search").click(function(){
+            $("#myPage").val("0");
+            $("#getForm").submit();
+        });
+    })
+    initForm();
+    function initForm() {
+        $("#come option[value='" + [[${come}]] + "']").attr("selected", "selected");
+    }
+    function change() {
+        $("#come").val($('#order_come option:selected').val());
+    }
+    /*全选*/
+    function check_all(obj, cName) {
+        var checkboxs = document.getElementsByName(cName);
+        for ( var i = 0; i < checkboxs.length; i+=1) {
+            checkboxs[i].checked = obj.checked;
+        }
+    }
+</script>
+</body>
+</html>

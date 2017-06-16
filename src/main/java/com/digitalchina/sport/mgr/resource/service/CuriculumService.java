@@ -1,5 +1,6 @@
 package com.digitalchina.sport.mgr.resource.service;
 
+import com.digitalchina.common.utils.StringUtil;
 import com.digitalchina.sport.mgr.resource.dao.CurriculumClassMapper;
 import com.digitalchina.sport.mgr.resource.dao.CurriculumMapper;
 import com.digitalchina.sport.mgr.resource.dao.CurriculumTypeMapper;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -159,5 +161,69 @@ public class CuriculumService {
     public List<Map<String,Object>> getAvailCurriculumListByInstitutionId(String institutionId, Integer curriculumId){
         return curriculumMapper.getAvailCurriculumListByInstitutionId(institutionId, curriculumId);
     }
+    /**
+     * 根据条件查询所有订单
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String,Object>> getOrderListByMap(Map<String,Object> param) throws Exception {
+        return curriculumMapper.getOrderListByMap(param);
+    }
 
+    /**
+     * 根据条件查询所有订单
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    public int getCountByMap(Map<String,Object> param) throws Exception {
+        return curriculumMapper.getCountByMap(param);
+    }
+    public List<Map<String, String>> getCurriculumTypes() {
+        return curriculumMapper.getCurriculumTypes();
+    }
+    /**
+     * 订单详情
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    public Map<String,Object> getOrderDetailsByMap(Map<String,Object> param) throws Exception{
+        Map<String,Object> retmap = curriculumMapper.getOrderDetailsByOrderId(param);
+        String fee = "";
+        String payFee="";
+        String discountFee = "";
+        if (!StringUtil.isEmpty(retmap.get("fee"))){
+            fee=retmap.get("fee").toString();
+        }
+        if (!StringUtil.isEmpty(retmap.get("payFee"))){
+            payFee = retmap.get("payFee").toString();
+        }
+        if (!StringUtil.isEmpty(fee) && !StringUtil.isEmpty(payFee)){
+            double f = Double.parseDouble(fee);
+            double p = Double.parseDouble(payFee);
+            double d = f-p;
+            discountFee = d+"";
+        }
+        retmap.put("discountFee",discountFee);
+        return retmap;
+    }
+    public Map<String, Object> getCurriculumRefund(String orderId) throws Exception{
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("orderId",orderId);
+        Map<String, Object> orderDetail = curriculumMapper.getOrderDetailsByOrderId(params);
+        if (!StringUtil.isEmpty(orderDetail.get("refundStatus"))){
+            return curriculumMapper.getCurriculumRefund(params);
+        }else {
+            return null;
+        }
+    }
+    //（未支付超时订单根据失效时间逻辑判断）
+    public int updateOrderByOrderTime() throws Exception{
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("status","4");
+        params.put("remarks","未支付超时订单");
+        return curriculumMapper.updateOrderByOrderTime(params);
+    }
 }

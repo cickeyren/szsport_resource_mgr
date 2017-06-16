@@ -26,4 +26,29 @@ public interface CurriculumMapper extends Mapper<Curriculum> {
      CurriculumNew selectNewByPrimaryKey(Integer id);
 
      int updateNewByPrimaryKeySelective(CurriculumNew record);
+     /**
+      * 根据条件查询所有订单
+      * @param param
+      * @return
+      * @throws Exception
+      */
+     List<Map<String,Object>> getOrderListByMap(Map<String,Object> param) throws Exception;
+
+     /**
+      * 根据条件查询所有订单
+      * @param param
+      * @return
+      * @throws Exception
+      */
+     int getCountByMap(Map<String,Object> param) throws Exception;
+     List<Map<String, String>> getCurriculumTypes();
+     /**
+      * 根据orderId查询详情
+      * @param param
+      * @return
+      * @throws Exception
+      */
+     Map<String,Object> getOrderDetailsByOrderId(Map<String,Object> param) throws Exception;
+     Map<String, Object> getCurriculumRefund(Map<String, Object> args);
+     int updateOrderByOrderTime(Map<String, Object> args);
 }

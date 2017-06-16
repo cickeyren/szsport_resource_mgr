@@ -1,6 +1,9 @@
 package com.digitalchina.sport.mgr.resource.controller.curriculum;
 
 import com.digitalchina.common.data.RtnData;
+import com.digitalchina.common.pagination.Page;
+import com.digitalchina.common.pagination.PaginationUtils;
+import com.digitalchina.common.utils.StringUtil;
 import com.digitalchina.common.utils.UUIDUtil;
 import com.digitalchina.sport.mgr.resource.model.Curriculum;
 import com.digitalchina.sport.mgr.resource.model.CurriculumClass;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -501,5 +505,107 @@ public class CuriculumController {
         List<CurriculumType> types = curiculumService.getCurriculumType();
         map.put("curriculumTypes", types);
         return "curriculum/sign_up_view";
+    }
+
+    /**
+     * 进入培训订单主页面
+     * @param map
+     * @return
+     */
+    @RequestMapping(value = "/myTrainOrder.html")
+    public String myTrainOrder(ModelMap map) {
+        return "curriculum/myTrainOrder";
+    }
+
+    /**
+     * 订单列表
+     * @param pageSize
+     * @param page
+     * @param map
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/orderList.html")
+    public String orderList(@RequestParam(required = false, defaultValue = "10") long pageSize,
+                            @RequestParam(required = false, defaultValue = "1") long page,
+                            @RequestParam(required = false) String status,
+                            ModelMap map,HttpServletRequest request){
+        Map<String, Object> params = new HashMap<String, Object>();
+        String checkAll = request.getParameter("checkAll");
+        System.out.print(status);
+        params.put("phone", request.getParameter("phone"));
+        params.put("come", request.getParameter("come"));
+        params.put("trainType", request.getParameter("trainType"));
+        params.put("curriculumName", request.getParameter("curriculumName"));
+        if (!StringUtil.isEmpty(request.getParameter("startDate")) && !StringUtil.isEmpty(request.getParameter("endDate"))){
+            String startDate = request.getParameter("startDate");
+            String endDate = request.getParameter("endDate");
+            startDate = startDate+" 00:00:00";
+            endDate = endDate+" 23:59:59";
+            params.put("startDate", startDate);
+            params.put("endDate", endDate);
+        }
+        if(StringUtil.isEmpty(checkAll)){
+            params.put("status", status);
+        }else{
+            params.put("checkAll", request.getParameter("checkAll"));
+        }
+        try {
+            int totalSize = curiculumService.getCountByMap(params);
+            Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
+            params.put("startIndex", pagination.getStartIndex());
+            params.put("pageSize", pageSize);
+            List<Map<String,Object>> orderList = curiculumService.getOrderListByMap(params);
+            pagination.setUrl(request.getRequestURI());
+            map.put("pageModel", pagination);
+            map.put("pageSize",String.valueOf(pageSize));
+            map.put("page",String.valueOf(page));
+            map.put("phone", request.getParameter("phone"));
+            map.put("come", request.getParameter("come"));
+            map.put("trainType", request.getParameter("trainType"));
+            map.put("curriculumName", request.getParameter("curriculumName"));
+            map.put("status", status);
+            map.put("checkAll", request.getParameter("checkAll"));
+            map.put("startDate", request.getParameter("startDate"));
+            map.put("endDate", request.getParameter("endDate"));//回到页面,保留搜索关键字
+            //培训类型
+            List<Map<String,String>> trainTypeList = curiculumService.getCurriculumTypes();
+            map.put("orderList",orderList);
+            map.put("trainTypeList",trainTypeList);
+            //（未支付超时订单根据失效时间逻辑判断）
+            curiculumService.updateOrderByOrderTime();
+            return "curriculum/myTrainOrder";
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("获取培训订单失败");
+            map.put("url",request.getRequestURI());
+            map.put("exception",e);
+            return "error";
+        }
+    }
+    /**
+     * 订单详情
+     * @param orderId
+     * @param map
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/orderDetails.html")
+    public String orderDetails(@RequestParam(required = true) String orderId,
+                               ModelMap map,HttpServletRequest request){
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("orderId", orderId);
+        try {
+            map.put("orderDetails", curiculumService.getOrderDetailsByMap(params));
+            //退款详情
+            map.put("curriculumRefund",curiculumService.getCurriculumRefund(orderId));
+            return "curriculum/trainOrderDetails";
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("获取培训订单详情失败");
+            map.put("url",request.getRequestURI());
+            map.put("exception",e);
+            return "error";
+        }
     }
 }
