@@ -664,7 +664,15 @@
                 ELSE
                     ''
                 END
-            ) AS restatus
+            ) AS restatus,
+            (
+            CASE
+            WHEN trdis.`name` IS NULL THEN
+                ''
+            ELSE
+                trdis.`name`
+            END
+            ) AS discountName
         FROM
             curriculum_order co
         LEFT JOIN curriculum c ON c.id = co.curriculum_id
@@ -673,6 +681,7 @@
         LEFT JOIN training_institution tr ON tr.id = c.training_institutions_id
         LEFT JOIN curriculum_type ct ON ct.`code` = c.train_type
         LEFT JOIN payment p ON p.id = co.pay_type
+        LEFT JOIN training_institution_discount_value trdis ON trdis.id = co.discount_configure_id
         WHERE
             co.id = #{orderId}
     </select>
