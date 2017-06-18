@@ -35,7 +35,7 @@
     </sql>
     <!--分页查询合作商家对应的支付方式-->
     <select id="getmerchant_payList" resultType="java.util.Map" parameterType="HashMap">
-        SELECT mp.id, mp.merchant_id,(CASE mp.pay_way WHEN '1' THEN '支付宝' WHEN '2' THEN '微信' END) AS pay_way ,
+        SELECT mp.id, mp.merchant_id,(CASE mp.pay_way WHEN '1' THEN '支付宝' WHEN '2' THEN '微信' WHEN '12' THEN '微信公众号' END) AS pay_way ,
         mp.seller_id,mp.partner_id,mp.app_id,mp.pay_key,mp.sign_type
         FROM merchant_pay_account mp
         <where>

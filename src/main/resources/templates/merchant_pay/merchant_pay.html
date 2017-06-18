@@ -89,10 +89,10 @@
                 <tr>
                     <th>支付方式</th>
                     <th>账号</th>
-                    <th>合作身份ID</th>
-                    <th>应用ID</th>
+                    <!-- <th>合作身份ID</th>
+                    <th>应用ID</th> -->
 <!--                    <th>支付KEY</th>-->
-                    <th>签名方式</th>
+                    <!-- <th>签名方式</th> -->
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -102,10 +102,10 @@
                     <input type="hidden" th:value="${obj.id}"/>
                     <td th:text="${obj.pay_way}"></td>
                     <td th:text="${obj.seller_id}"></td>
-                    <td th:text="${obj.partner_id}"></td>
-                    <td th:text="${obj.app_id}"></td>
+                    <!-- <td th:text="${obj.partner_id}"></td>
+                    <td th:text="${obj.app_id}"></td> -->
 <!--                    <td th:text="${obj.pay_key}"></td>-->
-                    <td th:text="${obj.sign_type}"></td>
+                    <!-- <td th:text="${obj.sign_type}"></td> -->
                     <td>
                         <a id="edit" th:data="${obj.id}"
                            th:href="@{/MerchantPayController/edit.html(id=${obj.id},mainstadium_id=${mainstadium_id},merchantId=${merchant_id})}">编辑</a>

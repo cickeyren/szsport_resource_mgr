@@ -112,20 +112,20 @@ public class MerchantPayController {
         params.put("payWay",merchantPayAccount.getPayWay());
         Integer count  = merchantPayAccountService.selectByParams(params);
         if (count>0){
-            return RtnData.ok("该合作方式中已存在支付宝账号");
+            return RtnData.ok("该合作方式中已存在此支付方式");
         }else {
             try {
                 merchantPayAccount.setId(UUID.randomUUID().toString());
                 merchantPayAccount.setCreateTime(new Date());
                 if (merchantPayAccountService.insert(merchantPayAccount)>0){
-                    return RtnData.ok("新增支付宝账户成功");
+                    return RtnData.ok("新增支付方式成功");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                LOGGER.error("========新增支付宝账户失败=========", e);
+                LOGGER.error("========新增支付方式失败=========", e);
             }
         }
-        return RtnData.fail("新增支付宝账户失败");
+        return RtnData.fail("新增支付方式失败");
     }
 
 

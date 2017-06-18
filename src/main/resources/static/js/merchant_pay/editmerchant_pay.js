@@ -67,10 +67,36 @@ function doUpdate() {
         setTimeout(function () {
             window.location.href = "/MerchantPayController/merchant_pay.html?mainstadium_id=" + $('#mainstadium_id').val()+"&merchantId="+$('#merchantId').val();
         }, 3000);
-    }else {//银行卡
+    }else if (addJson.payWay=="4"){//银行卡
         layer.alert("该功能正在开发中");
         setTimeout(function () {
             window.location.href = "/MerchantPayController/merchant_pay.html?mainstadium_id=" + $('#mainstadium_id').val()+"&merchantId="+$('#merchantId').val();
         }, 3000);
+    } else if (addJson.payWay=="12"){//微信公众号
+        addJson.id = $('input[id="id"]').val();
+        addJson.sellerId = $("#second_merchant").val();
+        addJson.mainstadium_id = $("#mainstadium_id").val();
+        addJson.merchantId = $("#merchantId").val();
+
+        $.ajax({
+            url: '/MerchantPayController/updateByzhifubao.do',
+            type: 'POST', //GET
+            data: addJson,
+            // contentType:'application/json',
+            dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+            success: function (result) {
+                if ("000000" == result.code) {
+                    layer.msg(result.result);
+                    setTimeout(function () {
+                        window.location.href = "/MerchantPayController/merchant_pay.html?mainstadium_id=" + $('#mainstadium_id').val()+"&merchantId="+$('#merchantId').val();
+                    }, 3000);
+                }else {
+                    layer.alert(result.result);
+                }
+            },
+            error: function (result) {
+                layer.msg(result.result);
+            }
+        });
     }
 }
