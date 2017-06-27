@@ -21,7 +21,7 @@
 
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
-    <script src="../../static/js/merchant/merchant.js" th:src="@{/js/merchant/merchant.js}"></script>
+    <script src="../../static/js/mainstadiummerchant/merchant.js" th:src="@{/js/mainstadiummerchant/merchant.js}"></script>
 
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
@@ -75,7 +75,7 @@
         <form class="form-horizontal" action="/MerchantController/merchant.html" id="searchForm" method="POST">
             <input type="hidden" id="myPage" name="page" th:value="${page}">
             <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
-            <input type="hidden" name="mainstadium_id" id="mainstadium_id" th:value="${mainstadium_id}">
+            <input type="hidden" name="mainStadiumId" id="mainStadiumId" th:value="${mainStadiumId}">
         </form>
         <div>
             <button type="button" class="btn btn-success fl mb20" id="addMerchant">新增</button>
@@ -105,8 +105,7 @@
                     <td th:text="${obj.contacts}"></td>
                     <td th:text="${obj.telephone}"></td>
                     <td>
-                        <a id="edit" th:data="${obj.id}"
-                           th:href="@{/mainStadiumMerchant/delMerchant.html(merchantId=${obj.id},mainstadium_id=${mainstadium_id})}">删除</a>
+                        <a id="edit" th:data="${obj.id}" th:onclick="'javascript:delMerchant(\'' + ${obj.id} + '\');'">删除</a>
                 </tr>
                 </tbody>
 
@@ -142,5 +141,28 @@
             }
         });
     });
+    //删除绑定的合作商户
+    function delMerchant(id){
+        $.ajax({
+            url: '/mainStadiumMerchant/delMerchant.json',
+            type: 'POST', //GET
+            data: {id:id},
+            // contentType:'application/json',
+            dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+            success: function (result) {
+                if ("000000" == result.code) {
+                    layer.msg("删除合作商户信息成功！");
+                    setTimeout(function () {
+                        window.location.href = "/mainStadiumMerchant/merchantList.html?mainstadium_id=" + $('#mainStadiumId').val();
+                    }, 1000);
+                }else {
+                    layer.msg(result.message);
+                }
+            },
+            error: function (result) {
+                layer.msg("添加失败！");
+            }
+        });
+    }
 </script>
 </html>

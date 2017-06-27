@@ -29,36 +29,20 @@ public interface MainStadiumMerchantDao {
     public List<Map<String, Object>> getMerchantList(Map<String, Object> map) throws Exception;
 
     /**
-     * 查询使用账户的合作商户
+     * 查询机构绑定的合作商户
      * @param map
      * @return
      * @throws Exception
      */
-    public List<Map<String, Object>> getMerchantByAccount(Map<String, Object> map) throws Exception;
+    public List<Map<String, Object>> getMerchantByParam(Map<String, Object> map) throws Exception;
 
     /**
-     * 添加合作商家账户信息
+     * 添加合作商家信息
      * @param map
      * @return
      * @throws Exception
      */
-    public int addMerchantAccount(Map<String, Object> map) throws Exception;
-
-    /**
-     * 查询合作商家账户信息
-     * @param map
-     * @return
-     * @throws Exception
-     */
-    public Map<String, Object> getMerchantAccountById(Map<String, Object> map) throws Exception;
-
-    /**
-     * 编辑合作商户账户信息
-     * @param map
-     * @return
-     * @throws Exception
-     */
-    public int editMerchantAccount(Map<String, Object> map) throws Exception;
+    public int addMerchants(Map<String, Object> map) throws Exception;
 
     /**
      * 删除合作商户账户信息
@@ -66,5 +50,5 @@ public interface MainStadiumMerchantDao {
      * @return
      * @throws Exception
      */
-    public int delMerchantAccount(Map<String, Object> map) throws Exception;
+    public int delMerchant(Map<String, Object> map) throws Exception;
 }

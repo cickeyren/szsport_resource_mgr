@@ -20,13 +20,12 @@
     <select id="getMerchantAccountList" resultType="HashMap" parameterType="HashMap">
         SELECT
             a.id,
+            a.login_id AS loginId,
             a.account,
             a.name,
             a.role,
             DATE_FORMAT(a.create_time, '%Y-%m-%d %T') AS createTime,
-            a.main_stadium_id AS mainStadiumId,
-            m.name AS mainStadium,
-            a.sub_stadium_id AS subStadiumId
+            m.name AS mainStadium
         FROM
             merchant_account_info a
         LEFT JOIN main_stadium m ON a.main_stadium_id = m.id

@@ -3,7 +3,6 @@ package com.digitalchina.sport.mgr.resource.controller.mainstadiummerchant;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
-import com.digitalchina.sport.mgr.resource.service.EquipmentService;
 import com.digitalchina.sport.mgr.resource.service.MainStadiumMerchantService;
 import com.digitalchina.sport.mgr.resource.service.MerchantService;
 import org.slf4j.Logger;
@@ -34,7 +33,7 @@ public class MainStadiumMerchantController {
     @Autowired
     private MainStadiumMerchantService mainStadiumMerchantService;
     @Autowired
-    private EquipmentService equipmentService;
+    private MerchantService merchantService;
 
     /**
      * 进入合作商户列表页面
@@ -75,64 +74,58 @@ public class MainStadiumMerchantController {
     @RequestMapping(value = "/addMerchant.html")
     public String addMerchant(ModelMap map, HttpServletRequest request){
         String mainStadiumId = request.getParameter("mainStadiumId");
-        map.put("merchantId", request.getParameter("merchantId"));
         map.put("mainStadiumId", mainStadiumId);
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        //子场馆信息
-        paramMap.put("parent_id", mainStadiumId);
-        List<Map<String, Object>> subStadiumList = equipmentService.getSubStadiumByParentId(paramMap);
-        map.put("subStadiumList", subStadiumList);
         try{
-            //账户信息
-            map.put("accountList", mainStadiumMerchantService.getAllValidUser());
+            //合作商户信息
+            map.put("merchantList", merchantService.getAllMerchantList());
         }catch (Exception e){
             e.printStackTrace();
-            logger.error("========进入合作商户账户新增页面=========",e);
+            logger.error("========进入场馆合作商户添加页面失败=========",e);
         }
-        return "merchantaccount/add_merchant_account";
+        return "mainstadiummerchant/add_main_stadium_merchant";
     }
 
     /**
-     * 添加合作商家账户信息
+     * 添加合作商家信息
      * @return
      */
     @RequestMapping(value = "/addMerchant.json", method = RequestMethod.POST)
     @ResponseBody
-    public RtnData addMerchant(String mainStadiumId,String merchantId, String loginId, String subStadiumId, HttpServletRequest request){
+    public RtnData addMerchant(String mainStadiumId,String merchants, HttpServletRequest request){
         try {
-            boolean isExist = mainStadiumMerchantService.verifyMerchantAccount(mainStadiumId, merchantId, loginId);
+            boolean isExist = mainStadiumMerchantService.verifyMerchants(mainStadiumId, merchants);
             if(isExist){
-                return RtnData.ok("账户已被添加");
+                return RtnData.fail("商户在此场馆已被添加");
             }else{
-                int isSuccess = mainStadiumMerchantService.addMerchantAccount(mainStadiumId, merchantId, loginId, subStadiumId);
+                int isSuccess = mainStadiumMerchantService.addMerchant(mainStadiumId, merchants);
                 if (isSuccess > 0){
-                    return RtnData.ok("添加合作商家账户信息成功");
+                    return RtnData.ok("添加合作商家成功");
                 }
             }
         } catch (Exception e){
             e.printStackTrace();
-            logger.error("========添加合作商家账户信息失败=========",e);
+            logger.error("========添加合作商家信息失败=========",e);
         }
-        return RtnData.fail("添加合作商家账户信息失败");
+        return RtnData.fail("添加合作商家信息失败");
     }
 
     /**
-     * 删除合作商户账户信息
+     * 删除合作商户信息
      * @param id
      * @return
      */
-    @RequestMapping(value = "/delMerchantAccount.json", method=RequestMethod.POST)
+    @RequestMapping(value = "/delMerchant.json", method=RequestMethod.POST)
     @ResponseBody
-    public RtnData delMerchantAccount(String id){
+    public RtnData delMerchant(String id){
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("id", id);
         try {
-            mainStadiumMerchantService.delMerchantAccount(paramMap);
-            return RtnData.ok("删除合作商户账户信息成功");
+            mainStadiumMerchantService.delMerchant(paramMap);
+            return RtnData.ok("删除合作商户信息成功");
         }catch (Exception e){
             e.printStackTrace();
-            logger.error("========删除合作商户账户信息失败=========",e);
+            logger.error("========删除合作商户信息失败=========",e);
         }
-        return RtnData.fail("删除合作商户账户信息失败");
+        return RtnData.fail("删除合作商户信息失败");
     }
 }

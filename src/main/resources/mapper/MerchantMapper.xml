@@ -45,14 +45,9 @@
     <select id="findTotalCount" resultType="java.lang.Integer" parameterType="HashMap">
     SELECT count(*) from merchant
         <where>
-            <choose>
-                <when test="mainstadium_id !=null and mainstadium_id !='' ">
-                    mainstadium_id=#{mainstadium_id}
-                </when>
-                <otherwise>
-                    1&lt;&gt;1
-                </otherwise>
-            </choose>
+            <if test="mainstadium_id !=null and mainstadium_id !='' ">
+                mainstadium_id=#{mainstadium_id}
+            </if>
         </where>
   </select>
     <!--分页查询合作商户-->
@@ -62,14 +57,9 @@
     mt.telephone,(CASE mt.status WHEN '1' THEN '正常' WHEN '0' THEN '停止合作' END ) AS status
     FROM merchant mt
         <where>
-            <choose>
-                <when test="mainstadium_id !=null and mainstadium_id !='' ">
-                    mt.mainstadium_id=#{mainstadium_id}
-                </when>
-                <otherwise>
-                    1&lt;&gt;1
-                </otherwise>
-            </choose>
+            <if test="mainstadium_id !=null and mainstadium_id !='' ">
+                mt.mainstadium_id=#{mainstadium_id}
+            </if>
         </where>
     limit #{startIndex},#{endIndex}
   </select>

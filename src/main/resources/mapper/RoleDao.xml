@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.RoleDao" >
+    <!-- 获取合作商户绑定的主场馆信息 -->
+    <select id="getMainStadiumListByMerchant" parameterType="HashMap" resultType="HashMap">
+        SELECT
+        m.id as id, m.name as name
+        FROM
+        organ_relevant_merchant o
+        LEFT JOIN merchant_account_info a ON o.merchant_id = a.merchant_id
+        LEFT JOIN main_stadium m ON o.organ_id = m.id
+        <where>
+            <if test="account != null and account != ''">
+                a.account =  #{account}
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取合作商户账户权限信息列表 -->
+    <select id="getRoleInfoByAccount" resultType="HashMap" parameterType="HashMap">
+        SELECT
+            u.id,
+            u.login_id AS loginId,
+            u.account,
+            u.merchant_id AS merchantId,
+            u.organ_id AS organId,
+            u.sub_stadium_id AS subStadiumId
+        FROM
+            user_role_info u
+        <where>
+            <if test="account != null and account != ''">
+                AND u.account = #{account}
+            </if>
+            <if test="type != null and type != ''">
+                AND u.type = #{type}
+            </if>
+            <if test="merchantId != null and merchantId != ''">
+                AND u.merchant_id = #{merchantId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 添加合作商家账户权限信息 -->
+    <insert id="addRoleInfo" parameterType="HashMap">
+        INSERT INTO user_role_info (
+            id,
+            login_id,
+            account,
+            merchant_id,
+            type,
+            organ_id,
+            sub_stadium_id
+        )
+        VALUES
+        <foreach collection="list" index="index" item="item" open="" separator="," close="">
+        (
+            #{item.id},
+            #{item.loginId},
+            #{item.account},
+            #{item.merchantId},
+            #{item.type},
+            #{item.organId},
+            #{item.subStadiumId}
+        )
+        </foreach>
+    </insert>
+
+    <!-- 删除合作商户账户权限信息 -->
+    <delete id="delRoleByAccount" parameterType="HashMap">
+        DELETE from user_role_info
+        <where>
+            <if test="account != null and account != ''">
+                account = #{account}
+            </if>
+        </where>
+    </delete>
+</mapper>

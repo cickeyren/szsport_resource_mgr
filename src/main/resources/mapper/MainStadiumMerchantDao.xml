@@ -1,100 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.digitalchina.sport.mgr.resource.dao.MainStadiumMerchantDao" >
-    <!-- 获取合作商户账户信息总数量 -->
+    <!-- 获取主场地下合作商户账户信息总数量 -->
     <select id="getMerchantTotalCount" parameterType="HashMap" resultType="Int">
         SELECT
         count(a.id)
         FROM
-        main_stadium_relevant_merchant a
+        organ_relevant_merchant a
         LEFT JOIN merchant m ON a.merchant_id = m.id
-        <where>
-            <if test="mainStadiumId != null and mainStadiumId != ''">
-                a.main_stadium_id = #{mainStadiumId}
-            </if>
-        </where>
+        WHERE a.type = '1'
+        <if test="mainStadiumId != null and mainStadiumId != ''">
+            AND a.organ_id = #{mainStadiumId}
+        </if>
     </select>
 
-    <!-- 获取合作商户账户信息列表 -->
+    <!-- 获取主场地下合作商户账户信息列表 -->
     <select id="getMerchantList" resultType="HashMap" parameterType="HashMap">
         SELECT
-        m.id,m.merchant_name,m.contacts,m.checkDate,
+        a.id, m.id AS merchantId,m.merchant_name,m.contacts,m.checkDate,
         (CASE m.cooperation_way WHEN '1' THEN '支付第三方' WHEN '2' THEN '支付入统一账户' END ) AS cooperation_way ,
         m.telephone,(CASE m.status WHEN '1' THEN '正常' WHEN '0' THEN '停止合作' END ) AS status
         FROM
-        main_stadium_relevant_merchant a
+        organ_relevant_merchant a
         LEFT JOIN merchant m ON a.merchant_id = m.id
-        <where>
-            <if test="mainStadiumId != null and mainStadiumId != ''">
-                a.main_stadium_id = #{mainStadiumId}
-            </if>
-        </where>
+        WHERE a.type = '1'
+        <if test="mainStadiumId != null and mainStadiumId != ''">
+            AND a.organ_id = #{mainStadiumId}
+        </if>
         LIMIT #{pageIndex},#{pageSize}
     </select>
 
-    <!-- 查询使用账户的合作商户 -->
-    <select id="getMerchantByAccount" parameterType="HashMap" resultType="HashMap">
+    <!-- 查询机构绑定的合作商户 -->
+    <select id="getMerchantByParam" parameterType="HashMap" resultType="HashMap">
         SELECT
-            m.main_stadium_id AS mainStadiumId,
-            m.merchant_id AS merchantId,
-            m.login_id AS loginId
-        FROM merchant_account_info m
+            o.type AS type,
+            o.organ_id AS mainStadiumId,
+            o.merchant_id AS merchantId
+        FROM organ_relevant_merchant o
         <where>
-            <if test="loginId != null and loginId != ''">
-                m.login_id = #{loginId}
+            <if test="mainStadiumId != null and mainStadiumId != ''">
+                AND o.organ_id = #{mainStadiumId}
+            </if>
+            <if test="type != null and type != ''">
+                AND o.type = #{type}
             </if>
         </where>
     </select>
 
-    <!-- 添加合作商家账户信息 -->
-    <insert id="addMerchantAccount" parameterType="HashMap">
-        INSERT INTO merchant_account_info (
+    <!-- 添加合作商家信息 -->
+    <insert id="addMerchants" parameterType="HashMap">
+        INSERT INTO organ_relevant_merchant (
             id,
-            main_stadium_id,
-            merchant_id,
-            login_id,
-            account,
-            name,
-            role,
-            sub_stadium_id
+            type,
+            organ_id,
+            merchant_id
         )
         VALUES
         <foreach collection="list" index="index" item="item" open="" separator="," close="">
         (
             #{item.id},
-            #{item.mainStadiumId},
-            #{item.merchantId},
-            #{item.loginId},
-            #{item.account},
-            #{item.name},
-            #{item.role},
-            #{item.subStadiumId}
+            #{item.type},
+            #{item.organId},
+            #{item.merchantId}
         )
         </foreach>
     </insert>
 
-    <!-- 查询合作商家账户信息 -->
-    <select id="getMerchantAccountById" parameterType="HashMap" resultType="HashMap">
-        SELECT
-            m.id,
-            m.main_stadium_id AS mainStadiumId,
-            m.merchant_id AS merchantId,
-            m.account,
-            m.name,
-            m.role,
-            m.sub_stadium_id AS subStadiumId,
-            m.create_time AS createTime
-            FROM merchant_account_info m
-        <where>
-            <if test="id != null and id != ''">
-                m.id = #{id}
-            </if>
-        </where>
-    </select>
-
     <!-- 删除合作商户账户信息 -->
     <delete id="delMerchant" parameterType="HashMap">
-        DELETE from main_stadium_relevant_merchant
+        DELETE from organ_relevant_merchant
         <where>
             <if test="id != null and id != ''">
                 id = #{id}

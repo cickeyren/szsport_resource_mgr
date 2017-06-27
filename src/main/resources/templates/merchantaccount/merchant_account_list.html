@@ -28,7 +28,7 @@
     <section>
         <div class="container-fluid">
             <div class="pb10 border mt20">
-                当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a> < <a href="javascript:;">账户</a>
+                当前位置：<a href="javascript:;">合作商家</a> < <a href="javascript:;">账户</a>
             </div>
             <div class="mt20">
                 <button type="submit" class="btn btn-success" id="addMerchantAccountBtn">新增</button>
@@ -47,8 +47,6 @@
                         <th>姓名</th>
                         <th>角色</th>
                         <th>添加时间</th>
-                        <th>所属场馆</th>
-                        <th>所属子馆</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -58,10 +56,8 @@
                         <td  th:text="${merchantAccount.name}"></td>
                         <td  th:text="${merchantAccount.role}"></td>
                         <td  th:text="${merchantAccount.createTime}"></td>
-                        <td  th:text="${merchantAccount.mainStadium}"></td>
-                        <td  th:text="${merchantAccount.subStadium}"></td>
                         <td>
-                            <a href="editMerchantAccount.html" th:href="@{/merchantAccount/editMerchantAccount.html(id=${merchantAccount.id})}">编辑</a>
+                            <a href="editMerchantAccount.html" th:href="@{/role/role.html(id=${merchantAccount.id},mainStadiumId=${mainStadiumId},merchantId=${merchantId},loginId=${merchantAccount.loginId},account=${merchantAccount.account})}">权限</a>
                             <a href="#" th:onclick="'javascript:delMerchantAccount(\'' + ${merchantAccount.id} + '\');'">删除</a>
                         </td>
                     </tr>

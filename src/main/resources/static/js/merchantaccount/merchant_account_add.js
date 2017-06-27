@@ -22,7 +22,7 @@ $(function () {
                 }
             });
             var loginId = loginIdArray.toString();//选择用户
-
+            /*
             var subStadiumArray = [];//选择子场馆
             $('input[name="subStadiumCheck"]:checkbox').each(function(){
                 if ($(this).prop("checked")) {
@@ -30,18 +30,19 @@ $(function () {
                 }
             });
             var subStadiumId = subStadiumArray.toString();//选择子场馆
+            */
 
             var reqParam = {
                 mainStadiumId:mainStadiumId,
                 merchantId:merchantId,
                 loginId:loginId,
-                subStadiumId:subStadiumId
+                subStadiumId:null
             };
             if(loginId == ""){
                 layer.msg("请选择用户");
-            }else if(subStadiumId == ""){
+            }/*else if(subStadiumId == ""){
                 layer.msg("请选择子场馆")
-            } else {
+            }*/ else {
                 $.ajax({
                     url:'/merchantAccount/addMerchantAccount.json',
                     type:'POST', //GET

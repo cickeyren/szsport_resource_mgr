@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>账户权限编辑页面</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
+    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="../../static/lib/zTree/css/zTreeStyle/zTreeStyle.css" th:href="@{/lib/zTree/css/zTreeStyle/zTreeStyle.css}"/>
+    <script src="../../static/lib/zTree/js/jquery.ztree.core.js" th:src="@{/lib/zTree/js/jquery.ztree.core.js}"></script>
+    <script src="../../static/lib/zTree/js/jquery.ztree.excheck.js" th:src="@{/lib/zTree/js/jquery.ztree.excheck.js}"></script>
+    <!--<script src="../../static/js/siteticket/site_ticket_edit.js" th:src="@{/js/siteticket/site_ticket_edit.js}"></script>-->
+
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
+        #strategyTable th{text-align: center;}
+        .border{border-bottom: 1px solid #ddd;}
+        .pb10{padding-bottom: 10px;}
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container-fluid">
+            <div class="pb10 border mt20">
+                当前位置：<a href="javascript:;">合作商户</a> < <a href="javascript:;">账户</a> < <a href="javascript:;">权限</a>
+            </div>
+            <p class="title mt20">账户权限</p>
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#stadium" data-toggle="tab">场馆</a></li>
+                <li ><a href="#organ" data-toggle="tab">培训机构</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div id="stadium" class="tab-pane fadeb in active">
+                    <div>
+                        <ul id="stadiumTree" class="ztree"></ul>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-success" id="addStadiumRoleBtn">保存</button>
+                        <a th:href="@{/merchantAccount/merchantAccountList.html(mainstadium_id=${mainStadiumId},merchantId=${merchantId})}">
+                            <button type="button" class="btn btn-success" id="cancelBtn">返回</button>
+                        </a>
+                    </div>
+                </div>
+                <div id="organ" class="tab-pane fade">
+                    <table id="strategyTable" class="table table-bordered table-hover definewidth m10 control-group">
+                        <tr class="controls">
+                            <th>机构</th>
+                        </tr>
+                    </table>
+                    <div>
+                        <button type="submit" class="btn btn-success" id="addOrgRoleBtn">保存</button>
+                        <a th:href="@{/merchantAccount/merchantAccountList.html(mainstadium_id=${mainStadiumId},merchantId=${merchantId})}">
+                            <button type="button" class="btn btn-success">返回</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script th:inline="javascript">
+        var setting = {
+            check: {
+                enable: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            }
+        };
+        var zNodes = [[${stadiumList}]];
+
+        var code;
+
+        function setCheck() {
+            var zTree = $.fn.zTree.getZTreeObj("stadiumTree"),
+                    py = $("#py").attr("checked")? "p":"",
+                    sy = $("#sy").attr("checked")? "s":"",
+                    pn = $("#pn").attr("checked")? "p":"",
+                    sn = $("#sn").attr("checked")? "s":"",
+                    type = { "Y":py + sy, "N":pn + sn};
+            zTree.setting.check.chkboxType = type;
+            showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
+        }
+
+        function showCode(str) {
+            if (!code) code = $("#code");
+            code.empty();
+            code.append("<li>"+str+"</li>");
+        }
+
+        $(document).ready(function(){
+            $.fn.zTree.init($("#stadiumTree"), setting, zNodes);
+            setCheck();
+            $("#py").bind("change", setCheck);
+            $("#sy").bind("change", setCheck);
+            $("#pn").bind("change", setCheck);
+            $("#sn").bind("change", setCheck);
+        });
+
+        //配置场馆权限
+        $("#addStadiumRoleBtn").on('click', function(){
+            //获取分配权限时选中的场馆信息
+            var zTree = $.fn.zTree.getZTreeObj("stadiumTree");
+            var childNodes = zTree.getCheckedNodes(true);
+            var subStadiumList = [];
+            for(var i = 0; i < childNodes.length; i++){
+                var subStadium = {};
+                subStadium.subStadiumId = childNodes[i].id;
+                subStadium.mainStadiumId = childNodes[i].pId;
+                subStadiumList.push(subStadium);
+            }
+            //获取配置权限的用户信息
+            var loginId = [[${loginId}]];
+            var account = [[${account}]];
+            var merchantId = [[${merchantId}]];
+
+            $.ajax({
+                url:'/role/addStadiumRoleInfo.json',
+                type:'POST', //GET
+                data:{
+                    loginId : loginId,
+                    account : account,
+                    merchantId : merchantId,
+                    subStadiumList : JSON.stringify(subStadiumList)
+                },
+                dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success:function(result){
+                    if("000000" == result.code) {
+                        layer.msg(result.result);
+                    } else {
+                        layer.msg(result.message);
+                    }
+                },
+                error:function(result){
+                    layer.msg("添加合作商家账户权限信息失败~");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

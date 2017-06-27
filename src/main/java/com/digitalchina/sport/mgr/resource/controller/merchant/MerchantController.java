@@ -53,7 +53,10 @@ public class MerchantController {
                                     @RequestParam(required = false, defaultValue = "1") long page,
                                     ModelMap map, HttpServletRequest request) {
         Map<String, Object> params = new HashMap<String, Object>();
-        String mainstadium_id = request.getParameter("mainstadium_id");//主场馆ID
+        String mainstadium_id = null;
+        if(request.getParameter("mainstadium_id") != null){
+            request.getParameter("mainstadium_id");//主场馆ID
+        }
 //        mainstadium_id = "1001";
         try {
             params.put("mainstadium_id",mainstadium_id);

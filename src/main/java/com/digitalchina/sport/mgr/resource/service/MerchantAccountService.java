@@ -54,25 +54,7 @@ public class MerchantAccountService {
      */
     @Transactional
     public List<Map<String, Object>> getMerchantAccountList(Map<String, Object> map) throws Exception{
-        List<Map<String, Object>> rtnList = new ArrayList<Map<String, Object>>();
-        List<Map<String, Object>> itemList = merchantAccountDao.getMerchantAccountList(map);
-        for (int i = 0; i < itemList.size(); i++){
-            Map<String, Object> itemMap = itemList.get(i);
-            String[] subStadiumArr = itemMap.get("subStadiumId").toString().split(",");
-            Map<String, Object> paramMap = new HashMap<String, Object>();
-            paramMap.put("idList", subStadiumArr);
-            List<Map<String, Object>> subStadiumList = subStadiumDao.getSubStadiumByIds(paramMap);
-            StringBuffer subStadium = new StringBuffer();
-            for (int j = 0; j < subStadiumList.size(); j++){
-                if(j == subStadiumList.size() - 1){
-                    subStadium.append(subStadiumList.get(j).get("name"));
-                } else {
-                    subStadium.append(subStadiumList.get(j).get("name")).append("、");
-                }
-            }
-            itemMap.put("subStadium", subStadium.toString());
-            rtnList.add(itemMap);
-        }
+        List<Map<String, Object>> rtnList = merchantAccountDao.getMerchantAccountList(map);
         return rtnList;
     }
 
