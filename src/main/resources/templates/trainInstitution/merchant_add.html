@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增培训机构合作商户配置页面</title>
+    <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
+    <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
+    <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
+
+    <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
+    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
+    <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
+    <script th:src="@{/lib/layPage/laypage.js}"></script>
+    <script th:src="@{/lib/js/jquery.validate.js}"></script>
+    <style>
+        p.title{font-size:18px;font-weight: bold;}
+        .inputw100{width:100px;}
+        #contentTable td.alignleft{text-align: left;}
+        #contentTable td.alignright{text-align: right;}
+        .form-horizontal .control-group .controls input {float:none;}
+        .form-horizontal .control-group .controls label {float: none;}
+        .border{border-bottom: 1px solid #ddd;}
+        .pb10{padding-bottom: 10px;}
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container-fluid">
+            <div class="pb10 border mt20">
+                当前位置：<a href="javascript:;">培训机构</a> < <a href="javascript:;">合作商家</a> < <a href="javascript:;">新增</a>
+            </div>
+            <p class="title mt20">添加商户</p>
+            <form onsubmit="return false;" class="form-horizontal" action="#" id="addMerchantAccountForm">
+                <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
+                    <tr class="controls" hidden>
+                        <td width="10%" class="alignright"><span class="red">*</span>主场馆</td>
+                        <td class="alignleft">
+                            <input type="text" id="id" th:value="${id}">
+                        </td>
+                    </tr>
+                    <tr class="controls">
+                        <td width="10%" class="alignright"><span class="red">*</span>合作商户</td>
+                        <td class="alignleft">
+                            <select multiple="multiple" size="5" id="merchants" name="merchants">
+                                <option th:each="merchant,eStat:${merchantList}" th:value="${merchant.id}" th:text="${merchant.merchant_name}"></option>
+                            </select>
+                            <div style="width: 60px ;display: inline-block;">
+                                <button style="height: 30px" class="btn" id="addMerchant">添加</button>
+                                <button style="height: 30px; margin-top: 10px" class="btn" id="delMerchant">删除</button>
+                            </div>
+                            <select multiple="multiple" size="5" id="Rmerchants">
+
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-success" id="addMerchantBtn">保存</button>
+                            <button type="button" class="btn btn-success" id="backBtn">返回</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </section>
+
+    <script th:inline="javascript">
+
+        var layerOpts = {shift: -1, time: 500};
+
+        var institutionId = [[${id}]];
+
+        $(function(){
+            //返回按钮响应事件
+            $("#backBtn").click(function (){
+                backListPage();
+            });
+
+            //新增界面保存按钮点击事件 ---  执行保存
+            $("#addMerchantBtn").on("click", function () {
+                doAdd();
+            });
+
+            $("#merchants").on("dblclick",function () {
+                dbClickOper("merchants","Rmerchants");
+            });
+            $("#Rmerchants").on("dblclick",function () {
+                dbClickOper("Rmerchants","merchants");
+            });
+
+            $("#addMerchant").on("click",function(){
+                addOrRemoveOption("merchants","Rmerchants");
+            });
+            $("#delMerchant").on("click",function () {
+                addOrRemoveOption("Rmerchants","merchants");
+            });
+        });
+
+
+        //双击操作
+        function dbClickOper(sourceId,targetId){
+            var $me = $("#" + sourceId);
+            var value = $me.val(),
+                    text = $me.find("option:selected").text();
+            $me.find("option:selected").remove();
+            if(null != value && null != text){
+                $("#" + targetId).append('<option value="'+value+'">'+text+'</option>');
+            }
+        }
+
+        //多选操作
+        function addOrRemoveOption(sourceId,targetId){
+            var $source = $("#" + sourceId).find("option:selected"),
+                    $target = $("#" + targetId).find("option:selected");
+            if(null != $source && null != $target){
+                var html = '';
+                $source.each(function(){
+                    var me = this;
+                    var value = $(me).val(),
+                            text = $(me).text();
+                    if(null != value && null != text){
+                        html += '<option value="'+value+'">'+text+'</option>'
+                    }
+                });
+                $source.remove();
+                if('' !== html){
+                    $("#" + targetId).append(html);
+                }
+            }
+        }
+
+        function backListPage(){
+            window.location.href = "/trainInstitutionController/merchant_list.html?id="+institutionId;
+        }
+
+        //新增页面添加数据
+        function doAdd() {
+            var RmerchantsOption = $("#Rmerchants").find("option");
+            var RmerchantsOptionLen = RmerchantsOption.length;
+            if(RmerchantsOptionLen <= 0){
+                layer.msg("请添加合作商户!");
+                return false;
+            }
+            var merchants=[];
+            for (var i=0;i<RmerchantsOptionLen;i++){
+                var optionValue = $(RmerchantsOption[i]).val()||"";
+                if(optionValue){
+                    merchants.push(optionValue);
+                }
+            }
+            //准备json数据
+            var reqData = {};
+            reqData.organ_id = institutionId;
+            reqData.merchant_id = merchants.join(",");
+
+            $.ajax({
+                url:'/trainInstitutionController/addInstitutionMerchant.do',
+                type:'POST',
+                data:reqData,
+                dataType:'json',
+                success:function(result){
+                    if("000000" == result.code) {
+                        layer.msg("添加成功！",layerOpts, function(){
+                            backListPage();
+                        });
+                    } else {
+                        layer.msg(result.message);
+                    }
+                },
+                error:function(result){
+                    layer.msg("添加失败~");
+                }
+            });
+        }
+    </script>
+</body>
+</html>

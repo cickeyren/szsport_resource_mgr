@@ -89,4 +89,12 @@ public class MerchantService {
     public List<Map<String,String>> getAllMerchantList() {
         return merchantMapper.getAllMerchantList();
     }
+
+    /**
+     * 根据培训机构查询商户列表
+     * @return
+     */
+    public List<Map<String,String>> getMerchantListByInstitutionId(String institution_id) {
+        return merchantMapper.getMerchantListByInstitutionId(institution_id);
+    }
 }

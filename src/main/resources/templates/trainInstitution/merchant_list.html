@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>培训机构信息</title>
+    <title>合作商户配置页面</title>
     <link rel="stylesheet" href="../../static/lib/css/bootstrap.min.css" th:href="@{/lib/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
@@ -18,7 +18,6 @@
             th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
-    <script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/trainInstitution/trainInstitution.js}"></script>
 
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
@@ -49,11 +48,14 @@
         .form-horizontal .control-group .controls label {
             float: none;
         }
-        .mt10{
-            margin-top: 10px;
+        .border{
+            border-bottom: 1px solid #ddd;
         }
-        .pt10{
-            padding-top: 10px;
+        .pb10{
+            padding-bottom: 10px;
+        }
+        .mt15{
+            margin-top: 15px;
         }
         .mb20{
             margin-bottom: 20px;
@@ -63,64 +65,45 @@
 <body>
 <section>
     <div class="container-fluid">
-        <div class="mt20">
-            当前位置：<a href="javascript:;">培训机构</a>
+        <div class="pb10 border mt20">
+            当前位置：<a href="javascript:;">培训机构</a> < <a href="javascript:;">合作商家</a>
         </div>
-        <form class="form-horizontal" action="/trainInstitutionController/list.html" id="searchForm" method="POST">
+        <form class="form-horizontal" action="/MerchantController/merchant.html" id="searchForm" method="POST">
             <input type="hidden" id="myPage" name="page" th:value="${page}">
             <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
-            <table class="table">
-                <tr class="controls">
-                    <td class="pt20">机构名称：<input type="text" id="name" name="name" th:value="${name}"/>
-                        <button type="submit" class="btn btn-success" id="searchBtn">查询</button>
-                        <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
-                    </td>
-                </tr>
-            </table>
+            <input type="hidden" id="id" name="id" th:value="${id}"/>
         </form>
         <div>
-            <button type="button" class="btn btn-success mb20 ml10" id="addBtn">新增</button>
+            <button type="button" class="btn btn-success fl mb20" id="addMerchantBtn">新增</button>
+            <button type="button" class="btn btn-success fr mb20" id="backBtn">返回</button>
         </div>
         <div>
             <table id="dataTable" class="table table-bordered" >
-
                 <thead>
                 <tr>
-                    <th>机构名称</th>
-                    <th>区域</th>
-                    <th>地址</th>
-                    <th>状态</th>
+                    <th>商家名称</th>
+                    <th>合作方式</th>
+                    <th>日结日期</th>
+                    <th>联系人</th>
+                    <th>联系电话</th>
                     <th>操作</th>
                 </tr>
                 </thead>
-
                 <tbody th:remove="all-but-first" th:unless="${#lists.isEmpty(list)}">
                 <tr th:each="obj, objStat: ${list}">
                     <input type="hidden" th:value="${obj.id}"/>
-                    <td th:text="${obj.org_name}"></td>
-                    <td th:text="${obj.provincial_name}+${obj.city_name}+${obj.district_name}"></td>
-                    <td th:text="${obj.address}"></td>
-                    <td th:if='${obj.status=="0"}'>下线</td>
-                    <td th:if='${obj.status=="1"}'>正常</td>
-                    <td th:if='${obj.status=="2"}'>闭馆</td>
+                    <td th:text="${obj.merchant_name}"></td>
+                    <td th:if='${obj.cooperation_way=="1"}'>支付第三方</td>
+                    <td th:if='${obj.cooperation_way=="2"}'>支付入统一账户</td>
+                    <td th:text="${obj.settlement_time}"></td>
+                    <td th:text="${obj.contacts}"></td>
+                    <td th:text="${obj.telephone}"></td>
                     <td>
-                        <a th:data="${obj.id}"
-                           th:href="@{/trainInstitutionController/edit.html(id=${obj.id})}">编辑</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a th:data="${obj.id}"
-                           th:href="@{/trainInstitutionController/merchant_list.html(id=${obj.id})}">合作商户</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a th:data="${obj.id}"
-                           th:href="@{/trainInstitutionController/window_payment_list.html(id=${obj.id})}">窗口支付</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a th:data="${obj.id}"
-                           th:href="@{/trainInstitutionController/window_discount_list.html(id=${obj.id})}">窗口培训折扣</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a th:data="${obj.id}"
-                           th:href="@{/trainInstitutionController/pic.html(id=${obj.id})}">机构图片</a>
+                        <a id="edit" th:data="${obj.id}" th:onclick="'javascript:delMerchant(\'' + ${obj.id} + '\');'">删除</a>
                     </td>
                 </tr>
                 </tbody>
+
 
                 <tbody th:if="${#lists.isEmpty(list)}">
                 <tr>
@@ -137,6 +120,10 @@
 </div>
 </body>
 <script th:inline="javascript">
+
+    var layerOpts = {shift: -1, time: 500};
+    var institutionId = [[${id}]];
+
     $(function () {
         laypage({
             cont: 'page',
@@ -152,6 +139,47 @@
                 }
             }
         });
+
+        $("#backBtn").on('click', function () {
+            window.location.href = "/trainInstitutionController/list.html";
+        });
+
+        $("#addMerchantBtn").bind('click', function () {
+            window.location.href = "/trainInstitutionController/merchant_add.html?id=" + institutionId;
+        });
     });
+
+    //删除绑定的合作商户
+    function delMerchant(id){
+        /**
+         * 提示是否删除合作商户信息
+         */
+        layer.confirm('您确认是否删除此合作商户信息？', {
+            btn: ['删除','取消'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            $.ajax({
+                url:'/trainInstitutionController/delInstitutionMerchant.json',
+                type:'POST',
+                data:{
+                    "id":id
+                },
+                dataType:'json',
+                success:function(data){
+                    if('OK' == data.status){
+                        layer.msg("删除成功",layerOpts , function(){
+                            //刷新当前页面
+                            window.location.reload();
+                        });
+                    }else{
+                        layer.msg(data.message);
+                    }
+                },
+                error:function(result){
+                    layer.msg("删除合作商户失败~");
+                }
+            })
+        });
+    }
 </script>
 </html>

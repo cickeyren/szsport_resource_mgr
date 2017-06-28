@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digitalchina.sport.mgr.resource.dao.OrganRelevantMerchantMapper">
+  <resultMap id="BaseResultMap" type="com.digitalchina.sport.mgr.resource.model.OrganRelevantMerchant">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-28 13:43:37.
+    -->
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="organ_id" jdbcType="VARCHAR" property="organ_id" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchant_id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+  </resultMap>
+  <insert id="insert" parameterType="com.digitalchina.sport.mgr.resource.model.OrganRelevantMerchant">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-28 13:43:37.
+    -->
+    insert into organ_relevant_merchant (id, type, organ_id, 
+      merchant_id, create_time, update_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{organ_id,jdbcType=VARCHAR}, 
+      #{merchant_id,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP}, #{update_time,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.digitalchina.sport.mgr.resource.model.OrganRelevantMerchant">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-28 13:43:37.
+    -->
+    insert into organ_relevant_merchant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="organ_id != null">
+        organ_id,
+      </if>
+      <if test="merchant_id != null">
+        merchant_id,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="update_time != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="organ_id != null">
+        #{organ_id,jdbcType=VARCHAR},
+      </if>
+      <if test="merchant_id != null">
+        #{merchant_id,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null">
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="queryList" resultType="java.util.Map" >
+    select t1.id, t2.id merchant_id, t2.merchant_name, t2.telephone, t2.settlement_time, t2.cooperation_way,t2.contacts
+    from training_institution t
+    inner join organ_relevant_merchant t1 on t.id = t1.organ_id and t1.type='2'
+    left join merchant t2 on t1.merchant_id = t2.id
+    where 1=1
+    and t.id=#{id}
+    LIMIT #{startIndex},#{endIndex}
+  </select>
+
+  <select id="queryListCount" resultType="Integer" >
+    select count(1)
+    from training_institution t
+    inner join organ_relevant_merchant t1 on t.id = t1.organ_id and t1.type='2'
+    left join merchant t2 on t1.merchant_id = t2.id
+    where 1=1
+    and t.id=#{id}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-14 16:30:59.
+    -->
+    delete from organ_relevant_merchant
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+
+  <select id="selectById" resultType="java.util.Map" >
+    <!--
+      WARNING - @mbggenerated
+      Generated on 2017-06-13 13:41:22.
+    -->
+    select
+    t.merchant_id, t1.merchant_name
+    from organ_relevant_merchant t
+    left join merchant t1 on t.merchant_id = t1.id
+    where 1=1
+    AND t.type = '2'
+    AND t.organ_id = #{organ_id}
+    AND t.merchant_id = #{merchant_id}
+  </select>
+
+
+</mapper>

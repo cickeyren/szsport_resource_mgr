@@ -99,4 +99,12 @@
         SELECT m.id, m.merchant_name FROM merchant m
         WHERE 1=1
     </select>
+
+    <select id="getMerchantListByInstitutionId" resultType="java.util.HashMap">
+        SELECT m.id, m.merchant_name FROM merchant m
+        inner join organ_relevant_merchant t on m.id = t.merchant_id and t.type='2'
+        WHERE 1=1
+        and t.organ_id = #{organ_id}
+        and t.type = '2'
+    </select>
 </mapper>

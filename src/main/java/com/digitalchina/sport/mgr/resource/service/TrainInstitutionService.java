@@ -30,6 +30,8 @@ public class TrainInstitutionService {
     CurriculumDiscountMapper curriculumDiscountMapper;
     @Autowired
     CurriculumMapper curriculumMapper;
+    @Autowired
+    OrganRelevantMerchantMapper organRelevantMerchantMapper;
 
     /*
     此方法保留，之前开龙开发
@@ -514,6 +516,82 @@ public class TrainInstitutionService {
         entity.setId(curriculumId);
         entity.setDiscount_status(status);
         curriculumMapper.updateNewByPrimaryKeySelective(entity);
+
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_SUCCESS);
+        rtnMap.put(Constants.RTN_MSG, "");
+        return rtnMap;
+    }
+
+    public int getMerchantListCount(Map<String, Object> params) {
+        int count = organRelevantMerchantMapper.queryListCount(params);
+        return count;
+    }
+
+    public List<Map<String,Object>> getMerchantList(Map<String, Object> params) {
+        List<Map<String,Object>> list = organRelevantMerchantMapper.queryList(params);
+        return list;
+    }
+
+    public Map<String,Object> delInstitutionMerchant(OrganRelevantMerchantModel model) {
+        Map<String,Object> rtnMap = new HashMap<String,Object>();
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+
+        String id = model.getId();
+        organRelevantMerchantMapper.deleteByPrimaryKey(id);
+
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_SUCCESS);
+        rtnMap.put(Constants.RTN_MSG, "");
+        return rtnMap;
+    }
+
+    @Transactional
+    public Map<String,Object> addInstitutionMerchant(OrganRelevantMerchantModel model) {
+        Map<String,Object> rtnMap = new HashMap<String,Object>();
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+
+        String organ_id = model.getOrgan_id();
+        if(StringUtils.isBlank(organ_id)){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "培训机构id为空");
+            return rtnMap;
+        }
+        if(StringUtils.isBlank(model.getMerchant_id())){
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "合作商户id为空");
+            return rtnMap;
+        }
+        String merchant_id_str = model.getMerchant_id();
+        String[] merchant_ids = merchant_id_str.split(",");
+
+        TrainingInstitution entity = trainingInstitutionMapper.selectByPrimaryKey(organ_id);
+        if(entity==null) {
+            rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+            rtnMap.put(Constants.RTN_MSG, "培训机构不存在");
+            return rtnMap;
+        }
+
+        for(String merchant_id : merchant_ids){
+
+            Map<String,Object> existIM = organRelevantMerchantMapper.selectById(organ_id, merchant_id);
+            if(existIM!=null){
+                String imId = (String) existIM.get("merchant_id");
+                if(!StringUtils.isBlank(imId)){
+                    String merchantName = (String) existIM.get("merchant_name");
+                    String rtnMsg = StringUtils.isBlank(merchantName) ? "合作商户已添加" : "合作商户["+merchantName+"]已添加";
+                    rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+                    rtnMap.put(Constants.RTN_MSG, rtnMsg);
+                    return rtnMap;
+                }
+            }
+
+            OrganRelevantMerchant entityIM = new OrganRelevantMerchant();
+            entityIM.setId(UUIDUtil.generateUUID());
+            entityIM.setOrgan_id(organ_id);
+            entityIM.setMerchant_id(merchant_id);
+            entityIM.setType("2");
+            entityIM.setCreate_time(new Date());
+            organRelevantMerchantMapper.insert(entityIM);
+        }
 
         rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_SUCCESS);
         rtnMap.put(Constants.RTN_MSG, "");

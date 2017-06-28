@@ -364,7 +364,7 @@ public class TrainInstitutionController {
         String id = request.getParameter("id");
         map.put("id", id);
 
-        List<Map<String,String>> merchantList = merchantService.getAllMerchantList();
+        List<Map<String,String>> merchantList = merchantService.getMerchantListByInstitutionId(id);
         List<Map<String,String>> paymentList = paymentService.getAllPaymentList();
 
         map.put("merchantList", merchantList);
@@ -421,7 +421,7 @@ public class TrainInstitutionController {
             if(windowPayment!=null){
                 map.put("windowPayment", windowPayment);
 
-                List<Map<String,String>> merchantList = merchantService.getAllMerchantList();
+                List<Map<String,String>> merchantList = merchantService.getMerchantListByInstitutionId(id);
                 List<Map<String,String>> paymentList = paymentService.getAllPaymentList();
                 map.put("merchantList", merchantList);
                 map.put("paymentList", paymentList);
@@ -662,6 +662,120 @@ public class TrainInstitutionController {
             LOGGER.error("========更新窗口折扣状态失败=========", e);
         }
         return RtnData.fail("更新窗口折扣状态失败");
+    }
+
+
+    /**
+     * 进入合作商户列表页面
+     *
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/merchant_list.html")
+    public String merchant_list(@RequestParam(required = false, defaultValue = "10") long pageSize,
+                                @RequestParam(required = false, defaultValue = "1") long page,
+                                ModelMap map, HttpServletRequest request) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        String id = request.getParameter("id");
+        params.put("id", id);
+        try {
+            int totalSize = service.getMerchantListCount(params);
+            Page pagination = PaginationUtils.getPageParam(totalSize, pageSize, page); //计算出分页查询时需要使用的索引
+            pagination.setUrl(request.getRequestURI());
+
+            map.put("pageModel", pagination);
+            map.put("pageSize", String.valueOf(pageSize));
+            map.put("page", String.valueOf(page));
+
+            params.put("startIndex", pagination.getStartIndex());
+            params.put("endIndex", pageSize);
+            List<Map<String, Object>> list = service.getMerchantList(params);
+            map.put("list", list);
+
+            map.put("id", id);
+            return "trainInstitution/merchant_list";
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========进入合作商户账户列表页面失败=========",e);
+            map.put("url", request.getRequestURL());
+            map.put("exception", e);
+            return "error";
+        }
+    }
+
+    /**
+     * 删除培训机构-合作商户绑定
+     *
+     * @param
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/delInstitutionMerchant.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData delInstitutionMerchant(OrganRelevantMerchantModel model, ModelMap map) {
+        try {
+
+            Map<String,Object> resMap = service.delInstitutionMerchant(model);
+
+            if(Constants.RTN_CODE_SUCCESS.equals(resMap.get(Constants.RTN_CODE))){
+                return RtnData.ok("删除合作商户成功");
+            }else{
+                return RtnData.fail("999999", (String) resMap.get(Constants.RTN_MSG));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========删除删除培训机构-合作商户绑定失败=========", e);
+        }
+        return RtnData.fail("删除合作商户失败");
+    }
+
+    /**
+     * 进入新增合作商户页面
+     *
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/merchant_add.html")
+    public String merchant_add(ModelMap map, HttpServletRequest request) {
+        String id = request.getParameter("id");
+        map.put("id", id);
+
+        List<Map<String,String>> merchantList = merchantService.getAllMerchantList();
+
+        map.put("merchantList", merchantList);
+
+        return "trainInstitution/merchant_add";
+    }
+
+
+    /**
+     * 新增培训机构合作商户绑定
+     *
+     * @param
+     * @param map
+     *
+     * @return
+     */
+    @RequestMapping(value = "/addInstitutionMerchant.do", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData addInstitutionMerchant(OrganRelevantMerchantModel model, ModelMap map) {
+        try {
+
+            Map<String,Object> resMap = service.addInstitutionMerchant(model);
+
+            if(Constants.RTN_CODE_SUCCESS.equals(resMap.get(Constants.RTN_CODE))){
+                return RtnData.ok("新增合作商户成功");
+            }else{
+                return RtnData.fail("999999", (String) resMap.get(Constants.RTN_MSG));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========新增合作商户失败=========", e);
+        }
+        return RtnData.fail("新增合作商户失败");
     }
 
 }

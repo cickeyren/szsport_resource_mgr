@@ -1,6 +1,7 @@
 package com.digitalchina.sport.mgr.resource.dao;
 
 import com.digitalchina.sport.mgr.resource.model.Merchant;
+import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
@@ -40,4 +41,10 @@ public interface MerchantMapper extends Mapper<Merchant> {
      * @return
      */
     List<Map<String,String>> getAllMerchantList();
+
+    /**
+     * 根据培训机构查询商户列表（select控件）
+     * @return
+     */
+    List<Map<String,String>> getMerchantListByInstitutionId(@Param("organ_id") String organ_id);
 }
