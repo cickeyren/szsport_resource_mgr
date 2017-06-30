@@ -9,11 +9,9 @@
         organ_relevant_merchant o
         LEFT JOIN merchant_account_info a ON o.merchant_id = a.merchant_id
         LEFT JOIN main_stadium m ON o.organ_id = m.id
-        <where>
-            <if test="account != null and account != ''">
-                a.account =  #{account}
-            </if>
-        </where>
+        where 1=1
+        and a.account =  #{account}
+        and o.type = '1'
     </select>
 
     <!-- 获取合作商户账户权限信息列表 -->
