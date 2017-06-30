@@ -71,6 +71,16 @@ public class Curriculum {
     private Integer recommend;
     private String org_name;
 
+    public String getMerchant_name() {
+        return merchant_name;
+    }
+
+    public void setMerchant_name(String merchant_name) {
+        this.merchant_name = merchant_name;
+    }
+
+    private String merchant_name;
+
     /**
      * @return id
      */

@@ -73,6 +73,7 @@
         c.id,
         c.training_institutions_id,
         c.cooperative_merchant_id,
+        m.merchant_name,
         c.img_url,
         c.`name`,
         c.teachers,
@@ -91,9 +92,13 @@
         FROM
         curriculum c,
         curriculum_type ct,
-        training_institution ti
+        training_institution ti,
+        merchant m
         WHERE
-        c.train_type = ct.`code` AND ti.id = c.training_institutions_id
+        1=1
+        and c.train_type = ct.`code`
+        AND ti.id = c.training_institutions_id
+        and c.cooperative_merchant_id = m.id
         <if test="training_institutions_name != null and training_institutions_name != ''">
             AND ti.org_name like concat('%',#{training_institutions_name},'%')
         </if>
@@ -246,7 +251,7 @@
         co.phone,
         co.pay_time,
         cct.time,
-        co.pay_fee
+        ifnull(co.pay_fee, '') pay_fee
         FROM
         curriculum_order co,
         curriculum c,
@@ -258,6 +263,7 @@
         AND co.curriculum_class_id = cc.id
         AND co.curriculum_class_time_id = cct.id
         AND c.train_type = ct.`code`
+        and co.status = '1'
         <if test="name != null and name != ''">
             AND  c.name=#{name}
         </if>

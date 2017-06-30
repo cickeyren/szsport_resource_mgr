@@ -310,7 +310,7 @@
             {
                 uploadImgInit();
                 if('OK' == data.status){
-                    savePic(data.message);
+                    savePic(data.result);
                 } else {
                     layer.msg("上传失败："+data.message);
                 }

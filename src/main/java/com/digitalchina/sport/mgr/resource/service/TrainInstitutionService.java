@@ -36,7 +36,7 @@ public class TrainInstitutionService {
     /*
     此方法保留，之前开龙开发
      */
-    public List<Map<String,Object>> listTrainInstitution() throws Exception{
+    public List<Map<String,Object>> listTrainInstitution() {
         return trainingInstitutionMapper.listTrainInstitution();
     }
 

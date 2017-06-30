@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
     <script src="../../static/lib/js/jquery.form.js" th:src="@{/lib/js/jquery.form.js}"></script>
+    <script src="../../static/js/upload/ajaxfileupload.js" th:src="@{/js/upload/ajaxfileupload.js}"></script>
     <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
@@ -19,7 +20,6 @@
 
     <script src="../../static/js/curriculum/curriculumCommon.js" th:src="@{/js/curriculum/curriculumCommon.js}"></script>
     <script src="../../static/js/curriculum/addcurriculum.js" th:src="@{/js/curriculum/addcurriculum.js}"></script>
-    <script src="../../static/js/curriculum/photo.js" th:src="@{/js/curriculum/photo.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
     <!--<script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>-->
@@ -27,9 +27,6 @@
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
     <script th:src="@{/lib/js/jquery.validate.js}"></script>
-    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
-            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
-    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <style>
         p.title {
             font-size: 18px;
@@ -82,7 +79,7 @@
         <div class="pb10 border">
             当前位置：<a href="javascript:;">培训课程</a> < <a href="javascript:;">新增</a>
         </div>
-        <!--<form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" method="post">-->
+        <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" method="post">
             <input type="hidden" name="mainstadium_id" id="mainstadium_id">
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls" style="background-color: #ededed"><td class="alignright" width="10%">基本信息</td><td></td></tr>
@@ -95,16 +92,10 @@
                     <td class="alignleft">
                         <div class="big-photo">
                             <div id="preview">
-                                <img id="imghead" border="0"  src="/img/add.png" width="90" height="90"
-                                     onclick="$('#previewImg').click();">
+                                <img id="imgImg" name="imgImg" border="0"  src="/img/add.png" width="90" height="90" onclick="$('#previewImg').click();">
+                                <input type="file" id="previewImg" name="previewImg" style="display:none;">
+                                <input type="hidden" id="img_url" name="img_url" value="">
                             </div>
-                            <form id="addImg" method="post" enctype="multipart/form-data">
-                                <input type="file" onchange="previewImage(this,'preview','previewImg','imghead')"
-                                       style="display: none;" id="previewImg" name="previewImg">
-                                <!--<input type="text" id="ddd" name="ddd" value="123">-->
-                                <!--<input type="submit">-->
-                            </form>
-                            <input id="img_url" name="img_url" type="hidden" required="required">
                         </div>
                     </td>
                 </tr>
@@ -119,32 +110,14 @@
                 </tr>
 
                 <tr>
-                    <td class="alignright" width="10%"><span class="red">*</span>合作商家</td>
+                    <td class="alignright" width="10%"><span class="red">*</span>合作商户</td>
                     <td class="alignleft">
                         <select id="cooperative_merchant_id" name="cooperative_merchant_id">
-                            <option></option>
+                            <option th:each="obj,eStat:${merchantList}" th:value="${obj.id}" th:text="${obj.merchant_name}"></option>
                         </select>  
                     </td>
                 </tr>
                 <tr class="controls" style="background-color: #ededed"> <td class="alignright" width="10%">课程详情</td><td></td></tr>
-                <tr class="controls">
-                    <td class="alignright" width="10%">教师</td>
-                    <td class="alignleft">
-                        <select multiple="multiple" size="5" id="teachers" name="teachers">
-                            <option value="volvo">Volvo</option>
-                            <option value="saab">Saab</option>
-                            <option value="opel">Opel</option>
-                            <option value="audi">Audi</option>
-                        </select>
-                        <div style="width: 60px ;display: inline-block;">
-                            <button style="height: 30px" class="btn" id="addteacher">添加</button>
-                            <button style="height: 30px; margin-top: 10px" class="btn" id="delteacher">删除</button>
-                        </div>
-                        <select multiple="multiple" size="5" id="Rteachers">
-
-                        </select>
-                    </td>
-                </tr>
                 <tr class="controls">
                     <td class="alignright" width="10%"><span class="red">*</span>培训分类</td>
                     <td class="alignleft">
@@ -162,30 +135,12 @@
                 </tr>
                 <tr style="background-color: #ededed" class="controls"><td class="alignright" width="10%">报名设置</td><td></td></tr>
                 <tr class="controls">
-                    <td class="alignright" width="10%"><span class="red">*</span>课程地点</td>
+                    <td class="alignright" width="10%">课程地点</td>
                     <td class="alignleft"><input type="text" id="address" name="address" required="required"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright" width="10%"><span class="red">*</span>咨询电话</td>
+                    <td class="alignright" width="10%">咨询电话</td>
                     <td class="alignleft"><input type="text" id="phone" name="phone" required="required"/></td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright" width="10%"><span class="red">*</span>报名必填</td>
-                    <td class="alignleft">
-                        <select multiple="multiple" size="5" id="enrollment_required" name="enrollment_required">
-                            <option value="volvo">Volvo</option>
-                            <option value="saab">Saab</option>
-                            <option value="opel">Opel</option>
-                            <option value="audi">Audi</option>
-                        </select>
-                        <div style="width: 60px ;display: inline-block;">
-                            <button style="height: 30px" class="btn" id="add">添加</button>
-                            <button style="height: 30px; margin-top: 10px" class="btn" id="del">删除</button>
-                        </div>
-                        <select multiple="multiple" size="5" id="Renrollment_required">
-
-                        </select>
-                    </td>
                 </tr>
                 <tr class="controls" style="background-color: #ededed">
                     <td class="alignright" width="10%">报名须知</td>
@@ -201,12 +156,11 @@
                 <tr>
                     <td class="text-right" colspan="2">
                         <button type="submit" class="btn btn-success" id="saveMerchant">保存</button>
-                        <button type="submit" class="btn btn-success" id="cancelMerchant">取消</button>
-
+                        <button type="button" class="btn btn-success" id="cancelMerchant">取消</button>
                     </td>
                 </tr>
             </table>
-        <!--</form>-->
+        </form>
     </div>
 </section>
 <div id="addDialogs">
@@ -214,10 +168,75 @@
 </body>
 <script type="text/javascript">
     $(function () {
-        /*KindEditor.ready(function (k) {
-            window.editor = k.create('#m_content');
-            window.editor = k.create('#enrollment_read');
-        })*/
+        var valConfig = {
+            excluded: [":disabled"],
+            ignore: "",
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 50
+                }
+                ,
+                img_url: {
+                    required: true
+                }
+                ,
+                training_institutions_id: {
+                    required: true
+                }
+                ,
+                cooperative_merchant_id: {
+                    required: true
+                }
+                ,
+                train_type: {
+                    required: true
+                }
+                ,
+                address: {
+                    required: false,
+                    maxlength: 100
+                }
+                ,
+                phone: {
+                    required: false,
+                    maxlength: 16
+                }
+            },
+            messages: {
+                name: {
+                    required: "请填写课程名称"
+                }
+                ,
+                img_url: {
+                    required: "请上传课程图片"
+                }
+                ,
+                training_institutions_id: {
+                    required: "请选择培训机构"
+                }
+                ,
+                cooperative_merchant_id: {
+                    required: "请选择合作商户"
+                }
+                ,
+                train_type: {
+                    required: "请选择课程分类"
+                }
+                ,
+                address: {
+                    required: "请填写课程地点"
+                }
+                ,
+                phone: {
+                    required: "请填写咨询电话"
+                }
+            },
+            submitHandler: function () {
+                doAdd();
+            }
+        };
+        $('#addForm').validate(valConfig);
     });
 </script>
 </html>

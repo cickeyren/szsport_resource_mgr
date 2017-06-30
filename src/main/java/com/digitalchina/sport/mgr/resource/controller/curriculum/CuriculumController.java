@@ -4,12 +4,14 @@ import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
 import com.digitalchina.common.utils.StringUtil;
+import com.digitalchina.common.utils.StringUtils;
 import com.digitalchina.common.utils.UUIDUtil;
 import com.digitalchina.sport.mgr.resource.model.Curriculum;
 import com.digitalchina.sport.mgr.resource.model.CurriculumClass;
 import com.digitalchina.sport.mgr.resource.model.CurriculumClassTimes;
 import com.digitalchina.sport.mgr.resource.model.CurriculumType;
 import com.digitalchina.sport.mgr.resource.service.CuriculumService;
+import com.digitalchina.sport.mgr.resource.service.MerchantService;
 import com.digitalchina.sport.mgr.resource.service.TrainInstitutionService;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -39,6 +41,8 @@ public class CuriculumController {
     private CuriculumService curiculumService;
     @Autowired
     private TrainInstitutionService trainInstitutionService;
+    @Autowired
+    private MerchantService merchantService;
 
     /**
      * 课程列表界面
@@ -151,22 +155,16 @@ public class CuriculumController {
      */
     @RequestMapping(value = "/addCurriculum.html")
     public String addCurriculum(ModelMap map) {
-        List<Map<String, Object>> list = null;
-        try {
-            list = trainInstitutionService.listTrainInstitution();
-        } catch (Exception e) {
-            e.printStackTrace();
+        List<Map<String, Object>> institutionlist = trainInstitutionService.listTrainInstitution();
+        if(institutionlist!=null && institutionlist.size()>0){
+            String institutionId = (String) institutionlist.get(0).get("id");
+            if(!StringUtils.isBlank(institutionId)){
+                List<Map<String,String>> merchantList = merchantService.getMerchantListByInstitutionId(institutionId);
+                map.put("merchantList", merchantList);
+            }
         }
-        /*Map<String, Object> m1 = new HashMap<>();
-        m1.put("value", "jg1");
-        m1.put("text", "机构1");
-        Map<String, Object> m2 = new HashMap<>();
-        m2.put("value", "jg2");
-        m2.put("text", "机构2");
-        list.add(m1);
-        list.add(m2);*/
         List<CurriculumType> types = curiculumService.getCurriculumType();
-        map.put("trainingInstitutions", list);
+        map.put("trainingInstitutions", institutionlist);
         map.put("curiculumTypes", types);
         return "curriculum/add_curriculum";
     }
@@ -212,20 +210,15 @@ public class CuriculumController {
     public String editCurriculum(ModelMap map, Integer curriculumId) {
         Curriculum curriculum = curiculumService.getCurriculumByKey(curriculumId);
 
-        List<Map<String, Object>> list = new ArrayList<>();
-        /*Map<String, Object> m1 = new HashMap<>();
-        m1.put("value", "jg1");
-        m1.put("text", "机构1");
-        Map<String, Object> m2 = new HashMap<>();
-        m2.put("value", "jg2");
-        m2.put("text", "机构2");
-        list.add(m1);
-        list.add(m2);*/
-        try {
-            list = trainInstitutionService.listTrainInstitution();
-        } catch (Exception e) {
-            e.printStackTrace();
+        List<Map<String, Object>> institutionlist = trainInstitutionService.listTrainInstitution();
+        if(institutionlist!=null && institutionlist.size()>0){
+            String institutionId = curriculum.getTraining_institutions_id();
+            if(!StringUtils.isBlank(institutionId)){
+                List<Map<String,String>> merchantList = merchantService.getMerchantListByInstitutionId(institutionId);
+                map.put("merchantList", merchantList);
+            }
         }
+
         String teachers = curriculum.getTeachers();
         Gson gson = new Gson();
         Map<String, Object> teachersMap = gson.fromJson(teachers, Map.class);
@@ -252,7 +245,7 @@ public class CuriculumController {
         }
         List<CurriculumType> types = curiculumService.getCurriculumType();
         map.put("curriculumTypes", types);
-        map.put("trainingInstitutions", list);
+        map.put("trainingInstitutions", institutionlist);
         map.put("curriculum", curriculum);
         map.put("teacherList", teacherList);
         map.put("allTeacherList", allTeacherList);

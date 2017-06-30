@@ -208,6 +208,28 @@ public class MerchantController {
     }
 
 
+    /**
+     * 根据培训机构获取合作商户列表
+     * @param map
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getMerchantByInstitutionId.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData getMerchantByInstitutionId(ModelMap map, HttpServletRequest request) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            String institution_id = request.getParameter("institution_id");
+            List<Map<String, String>> merchantList = merchantService.getMerchantListByInstitutionId(institution_id);
+            return RtnData.ok(merchantList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========查询合作商户列表失败=========", e);
+        }
+        return RtnData.fail("查询合作商户列表失败");
+    }
+
+
 
 
 
