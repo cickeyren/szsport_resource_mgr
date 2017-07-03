@@ -66,23 +66,24 @@
 
     <!--根据条件查询所有合作商户列表 -->
     <select id="getMerchantListByParam" parameterType="HashMap" resultType="java.util.HashMap">
+
         SELECT
-        id,
-        merchant_name,
-        address,
-        contacts,
-        telephone,
-        cooperation_way,
-        settlement_way,
-        status,
-        remark
-        FROM
-        merchant
-        <where>
-            <if test="mainStadiumId != null and mainStadiumId != ''">
-                mainstadium_id = #{mainStadiumId}
-            </if>
-        </where>
+        t.id,
+        t.merchant_name,
+        t.address,
+        t.contacts,
+        t.telephone,
+        t.cooperation_way,
+        t.settlement_way,
+        t.status,
+        t.remark
+        FROM merchant t
+        inner join organ_relevant_merchant t1 on t.id=t1.merchant_id and t1.type='1'
+        where 1=1
+        and t1.type='1'
+        <if test="mainStadiumId != null and mainStadiumId != ''">
+            and t1.organ_id = #{mainStadiumId}
+        </if>
     </select>
 
     <select id="getMerchants" parameterType="HashMap" resultType="java.util.HashMap">
