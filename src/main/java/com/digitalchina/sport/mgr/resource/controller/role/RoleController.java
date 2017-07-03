@@ -1,5 +1,6 @@
 package com.digitalchina.sport.mgr.resource.controller.role;
 
+import com.digitalchina.common.data.Constants;
 import com.digitalchina.common.data.RtnData;
 import com.digitalchina.common.pagination.Page;
 import com.digitalchina.common.pagination.PaginationUtils;
@@ -50,15 +51,22 @@ public class RoleController {
     public String role(ModelMap map, HttpServletRequest request){
         Map<String, Object> paramMap = new HashMap<String, Object>();
         String account = request.getParameter("account");//合作商户ID
+        String loginId = request.getParameter("loginId");//账户ID
         paramMap.put("account", account);
+        paramMap.put("loginId", loginId);
         try {
             List<Map<String, Object>> stadiumList = roleService.getMainStadiumListByMerchant(paramMap);
             map.put("stadiumList", stadiumList);
+
+            List<Map<String, Object>> institutionList = roleService.getInstitutionListByMerchant(paramMap);
+            map.put("institutionList", institutionList);
+
             String mainStadiumId = request.getParameter("mainStadiumId");//主场馆ID
             map.put("mainStadiumId", mainStadiumId);
+
             String merchantId = request.getParameter("merchantId");//合作商户ID
             map.put("merchantId", merchantId);
-            String loginId = request.getParameter("loginId");//账户ID
+
             map.put("loginId", loginId);
             map.put("account", account);//账户
         }catch (Exception e){
@@ -85,5 +93,33 @@ public class RoleController {
             logger.error("========添加合作商家账户权限信息失败=========",e);
         }
         return RtnData.fail("添加合作商家账户权限信息失败");
+    }
+
+
+
+    /**
+     * 添加账户机构权限信息
+     * @return
+     */
+    @RequestMapping(value = "/addInstitutionRoleInfo.json", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData addInstitutionRoleInfo(HttpServletRequest request){
+        Map<String,Object> params = new HashMap<String,Object>();
+        String login_id = request.getParameter("login_id");
+        String institution_id = request.getParameter("institution_id");
+        params.put("login_id", login_id);
+        params.put("institution_id", institution_id);
+        try {
+            Map<String,Object> resMap = roleService.addInstitutionRoleInfo(params);
+            if(Constants.RTN_CODE_SUCCESS.equals(resMap.get(Constants.RTN_CODE))){
+                return RtnData.ok("添加账户培训机构权限信息成功");
+            }else{
+                return RtnData.fail("999999", (String) resMap.get(Constants.RTN_MSG));
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            logger.error("========添加账户培训机构权限信息失败=========",e);
+        }
+        return RtnData.fail("添加账户培训机构权限信息失败");
     }
 }

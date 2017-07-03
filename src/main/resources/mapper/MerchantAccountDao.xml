@@ -42,7 +42,8 @@
         SELECT
             m.main_stadium_id AS mainStadiumId,
             m.merchant_id AS merchantId,
-            m.login_id AS loginId
+            m.login_id AS loginId,
+            m.account
         FROM merchant_account_info m
         <where>
             <if test="loginId != null and loginId != ''">

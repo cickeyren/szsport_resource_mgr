@@ -8,7 +8,7 @@
         FROM
         organ_relevant_merchant o
         LEFT JOIN merchant_account_info a ON o.merchant_id = a.merchant_id
-        LEFT JOIN main_stadium m ON o.organ_id = m.id
+        INNER JOIN main_stadium m ON o.organ_id = m.id
         where 1=1
         and a.account =  #{account}
         and o.type = '1'
@@ -66,10 +66,29 @@
     <!-- 删除合作商户账户权限信息 -->
     <delete id="delRoleByAccount" parameterType="HashMap">
         DELETE from user_role_info
-        <where>
-            <if test="account != null and account != ''">
-                account = #{account}
-            </if>
-        </where>
+        where 1=1
+        and account = #{account}
+        and type = '1'
+    </delete>
+
+
+    <select id="getInstitutionListByAccount" parameterType="HashMap" resultType="HashMap">
+        SELECT
+        t.id, t.org_name, if(r.organ_id is null, 0, 1) checked
+        FROM
+        organ_relevant_merchant o
+        LEFT JOIN merchant_account_info a ON o.merchant_id = a.merchant_id
+        LEFT JOIN user_role_info r on o.type='2' and o.organ_id = r.organ_id and r.login_id=#{login_id}
+        INNER JOIN training_institution t ON o.type = '2' and o.organ_id = t.id
+        where 1=1
+        and a.login_id =  #{login_id}
+        and o.type = '2'
+    </select>
+
+    <delete id="delInstitutionRoleByAccount" >
+        DELETE from user_role_info
+        where 1=1
+        and type='2'
+        and login_id = #{login_id}
     </delete>
 </mapper>

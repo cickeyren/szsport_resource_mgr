@@ -1,6 +1,7 @@
 package com.digitalchina.sport.mgr.resource.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -43,4 +44,8 @@ public interface RoleDao {
      * @throws Exception
      */
     public int delRoleByAccount(Map<String, Object> map) throws Exception;
+
+    public List<Map<String, Object>>  getInstitutionListByAccount(@Param("login_id") String login_id) throws Exception;
+
+    void delInstitutionRoleByAccount(@Param("login_id") String login_id);
 }

@@ -54,7 +54,19 @@
                 <div id="organ" class="tab-pane fade">
                     <table id="strategyTable" class="table table-bordered table-hover definewidth m10 control-group">
                         <tr class="controls">
-                            <th>机构</th>
+                            <td class="alignleft" style="text-align:left;">
+                                <div><strong>机构：</strong></div>
+                                <div>
+                                    <input style="margin-left: 5px;" type="checkbox" name="checkAll" id="checkAll" onclick="check_all(this,'institution_id');">全选/全不选
+                                </div>
+                                <div id="div_institution" style="text-align:left;">
+                                    <input style="margin-left: 5px;" type="checkbox" id="institution_id" name="institution_id"
+                                           th:each="institution, objStat: ${institutionList}"
+                                           th:value="${institution.id}"
+                                           th:text="${institution.org_name}"
+                                           th:checked='${institution.checked eq 1}' />
+                                </div>
+                            </td>
                         </tr>
                     </table>
                     <div>
@@ -68,6 +80,11 @@
         </div>
     </section>
     <script th:inline="javascript">
+
+        var zNodes = [[${stadiumList}]];
+
+        var layerOpts = {shift: -1, time: 500};
+
         var setting = {
             check: {
                 enable: true,
@@ -80,19 +97,8 @@
             }
         };
 
-        var zNodes = [[${stadiumList}]];
         var role_flag = "0";
         $(document).ready(function(){
-            $('#roleTab a').click(function (e) {
-                e.preventDefault();
-                $(this).tab('show');
-                var tab_id = $(this)[0].id||"";
-                if(tab_id == 'stadium_tab'){
-                    role_flag = "0";
-                }else if(tab_id == 'org_tab'){
-                    role_flag = "1";
-                }
-            });
             $.fn.zTree.init($("#stadiumTree"), setting, zNodes);
         });
 
@@ -135,6 +141,53 @@
                 }
             });
         });
+
+
+        //配置场馆权限
+        $("#addOrgRoleBtn").on('click', function() {
+
+            var institution_id = "";
+            $("input[name='institution_id']").each(function () {
+                if ($(this).is(':checked')) {
+                    institution_id += $(this).val() + ",";
+                }
+            });
+            institution_id = institution_id.replace(/,$/g, "");
+
+            //获取配置权限的用户信息
+            var loginId = [[${loginId}]];
+            var account = [[${account}]];
+            var merchantId = [[${merchantId}]];
+
+            $.ajax({
+                url: '/role/addInstitutionRoleInfo.json',
+                type: 'POST',
+                data: {
+                    login_id: loginId,
+                    account: account,
+                    merchant_id: merchantId,
+                    institution_id: institution_id
+                },
+                dataType: 'json',
+                success: function (result) {
+                    if ("000000" == result.code) {
+                        layer.msg("添加成功！");
+                    } else {
+                        layer.msg(result.message);
+                    }
+                },
+                error: function (result) {
+                    layer.msg("添加失败~");
+                }
+            });
+        });
+
+        function check_all(obj, checkboxName) {
+            var checkboxs = document.getElementsByName(checkboxName);
+            for ( var i = 0; i < checkboxs.length; i+=1) {
+                checkboxs[i].checked = obj.checked;
+            }
+        }
     </script>
 </body>
 </html>

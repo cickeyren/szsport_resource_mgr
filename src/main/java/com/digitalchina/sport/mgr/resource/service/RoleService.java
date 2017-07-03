@@ -1,9 +1,9 @@
 package com.digitalchina.sport.mgr.resource.service;
 
-import com.alibaba.fastjson.JSONArray;
-import com.digitalchina.common.utils.HttpClientUtil;
+import com.digitalchina.common.data.Constants;
+import com.digitalchina.common.utils.StringUtils;
 import com.digitalchina.common.utils.UUIDUtil;
-import com.digitalchina.config.PropertyConfig;
+import com.digitalchina.sport.mgr.resource.dao.MerchantAccountDao;
 import com.digitalchina.sport.mgr.resource.dao.RoleDao;
 import com.digitalchina.sport.mgr.resource.dao.SubStadiumMapper;
 import com.google.gson.Gson;
@@ -32,6 +32,8 @@ public class RoleService {
     private RoleDao roleDao;
     @Autowired
     private SubStadiumMapper subStadiumDao;
+    @Autowired
+    private MerchantAccountDao merchantAccountDao;
 
     public final static long MAIN_STADIUM = 1;//机构类型是场馆
     public final static long CURRICULUM = 2;//机构类型是培训机构
@@ -122,5 +124,62 @@ public class RoleService {
         }
         paramMap.put("list",list);
         return roleDao.addRoleInfo(paramMap);
+    }
+
+    public List<Map<String, Object>> getInstitutionListByMerchant(Map<String, Object> map) throws Exception{
+        String login_id = (String) map.get("loginId");
+        List<Map<String,Object>> list = roleDao.getInstitutionListByAccount(login_id);
+        return list;
+    }
+
+    @Transactional
+    public Map<String,Object> addInstitutionRoleInfo(Map<String, Object> params) throws Exception {
+        Map<String,Object> rtnMap = new HashMap<String,Object>();
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_FAIL);
+
+        String login_id = (String) params.get("login_id");
+        String institution_id_str = (String) params.get("institution_id");
+        if(StringUtils.isBlank(login_id)){
+            rtnMap.put(Constants.RTN_MSG, "账户login_id不能为空");
+            return rtnMap;
+        }
+        institution_id_str = institution_id_str == null ? "" : institution_id_str;
+
+        Map<String,Object> merchantParams = new HashMap<String,Object>();
+        merchantParams.put("loginId", login_id);
+        List<Map<String,Object>> merchantAccountList = merchantAccountDao.getMerchantByAccount(merchantParams);
+        if(merchantAccountList==null){
+            rtnMap.put(Constants.RTN_MSG, "账户信息为空");
+            return rtnMap;
+        }
+        if(merchantAccountList.size() > 1){
+            rtnMap.put(Constants.RTN_MSG, "账户信息异常");
+            return rtnMap;
+        }
+        Map<String,Object> merchantAccount = merchantAccountList.get(0);
+        roleDao.delInstitutionRoleByAccount(login_id);
+
+        String[] institution_ids = institution_id_str.split(",");
+        if(institution_ids.length>0){
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+            for(String institution_id : institution_ids){
+                Map<String, Object> mapInsert = new HashMap<String, Object>();
+                String id = UUIDUtil.generateUUID();
+                mapInsert.put("id", id);
+                mapInsert.put("loginId", login_id);
+                mapInsert.put("account", merchantAccount.get("account"));
+                mapInsert.put("merchantId", merchantAccount.get("merchantId"));
+                mapInsert.put("type", CURRICULUM);
+                mapInsert.put("organId",institution_id);
+                list.add(mapInsert);
+            }
+            paramMap.put("list",list);
+            roleDao.addRoleInfo(paramMap);
+        }
+
+        rtnMap.put(Constants.RTN_CODE, Constants.RTN_CODE_SUCCESS);
+        rtnMap.put(Constants.RTN_MSG, "");
+        return rtnMap;
     }
 }
