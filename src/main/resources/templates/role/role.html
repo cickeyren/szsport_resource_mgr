@@ -7,13 +7,10 @@
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
-    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
-    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" href="../../static/lib/zTree/css/zTreeStyle/zTreeStyle.css" th:href="@{/lib/zTree/css/zTreeStyle/zTreeStyle.css}"/>
     <script src="../../static/lib/zTree/js/jquery.ztree.core.js" th:src="@{/lib/zTree/js/jquery.ztree.core.js}"></script>
     <script src="../../static/lib/zTree/js/jquery.ztree.excheck.js" th:src="@{/lib/zTree/js/jquery.ztree.excheck.js}"></script>
-    <!--<script src="../../static/js/siteticket/site_ticket_edit.js" th:src="@{/js/siteticket/site_ticket_edit.js}"></script>-->
 
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
@@ -38,9 +35,9 @@
                 当前位置：<a href="javascript:;">合作商户</a> < <a href="javascript:;">账户</a> < <a href="javascript:;">权限</a>
             </div>
             <p class="title mt20">账户权限</p>
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#stadium" data-toggle="tab">场馆</a></li>
-                <li ><a href="#organ" data-toggle="tab">培训机构</a></li>
+            <ul id="roleTab" class="nav nav-tabs">
+                <li class="active"><a href="#stadium" data-toggle="tab" id="stadium_tab">场馆</a></li>
+                <li ><a href="#organ" data-toggle="tab" id="org_tab">培训机构</a></li>
             </ul>
             <div id="myTabContent" class="tab-content">
                 <div id="stadium" class="tab-pane fadeb in active">
@@ -48,7 +45,7 @@
                         <ul id="stadiumTree" class="ztree"></ul>
                     </div>
                     <div>
-                        <button type="submit" class="btn btn-success" id="addStadiumRoleBtn">保存</button>
+                        <button type="button" class="btn btn-success" id="addStadiumRoleBtn">保存</button>
                         <a th:href="@{/merchantAccount/merchantAccountList.html(mainstadium_id=${mainStadiumId},merchantId=${merchantId})}">
                             <button type="button" class="btn btn-success" id="cancelBtn">返回</button>
                         </a>
@@ -61,7 +58,7 @@
                         </tr>
                     </table>
                     <div>
-                        <button type="submit" class="btn btn-success" id="addOrgRoleBtn">保存</button>
+                        <button type="button" class="btn btn-success" id="addOrgRoleBtn">保存</button>
                         <a th:href="@{/merchantAccount/merchantAccountList.html(mainstadium_id=${mainStadiumId},merchantId=${merchantId})}">
                             <button type="button" class="btn btn-success">返回</button>
                         </a>
@@ -73,7 +70,8 @@
     <script th:inline="javascript">
         var setting = {
             check: {
-                enable: true
+                enable: true,
+                chkboxType: { "Y": "ps", "N": "ps" }
             },
             data: {
                 simpleData: {
@@ -81,34 +79,21 @@
                 }
             }
         };
+
         var zNodes = [[${stadiumList}]];
-
-        var code;
-
-        function setCheck() {
-            var zTree = $.fn.zTree.getZTreeObj("stadiumTree"),
-                    py = $("#py").attr("checked")? "p":"",
-                    sy = $("#sy").attr("checked")? "s":"",
-                    pn = $("#pn").attr("checked")? "p":"",
-                    sn = $("#sn").attr("checked")? "s":"",
-                    type = { "Y":py + sy, "N":pn + sn};
-            zTree.setting.check.chkboxType = type;
-            showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
-        }
-
-        function showCode(str) {
-            if (!code) code = $("#code");
-            code.empty();
-            code.append("<li>"+str+"</li>");
-        }
-
+        var role_flag = "0";
         $(document).ready(function(){
+            $('#roleTab a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+                var tab_id = $(this)[0].id||"";
+                if(tab_id == 'stadium_tab'){
+                    role_flag = "0";
+                }else if(tab_id == 'org_tab'){
+                    role_flag = "1";
+                }
+            });
             $.fn.zTree.init($("#stadiumTree"), setting, zNodes);
-            setCheck();
-            $("#py").bind("change", setCheck);
-            $("#sy").bind("change", setCheck);
-            $("#pn").bind("change", setCheck);
-            $("#sn").bind("change", setCheck);
         });
 
         //配置场馆权限

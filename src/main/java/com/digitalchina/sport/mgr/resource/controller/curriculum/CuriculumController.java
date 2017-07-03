@@ -219,36 +219,36 @@ public class CuriculumController {
             }
         }
 
-        String teachers = curriculum.getTeachers();
-        Gson gson = new Gson();
-        Map<String, Object> teachersMap = gson.fromJson(teachers, Map.class);
-        Map<String, Object> allTeacher = Maps.newHashMap();
-        allTeacher.put("volvo", "Volvo");
-        allTeacher.put("saab", "Saab");
-        allTeacher.put("opel", "Opel");
-        allTeacher.put("audi", "Audi");
-        System.out.println(teachersMap);
-        List<Map<String, Object>> teacherList = new ArrayList();
-        for (String key : teachersMap.keySet()) {
-            Map<String, Object> temp = Maps.newHashMap();
-            temp.put("id", key);
-            temp.put("value", teachersMap.get(key));
-            teacherList.add(temp);
-            allTeacher.remove(key);
-        }
-        List<Map<String, Object>> allTeacherList = new ArrayList();
-        for (String key : allTeacher.keySet()) {
-            Map<String, Object> temp = Maps.newHashMap();
-            temp.put("id", key);
-            temp.put("value", allTeacher.get(key));
-            allTeacherList.add(temp);
-        }
+//        String teachers = curriculum.getTeachers();
+//        Gson gson = new Gson();
+//        Map<String, Object> teachersMap = gson.fromJson(teachers, Map.class);
+//        Map<String, Object> allTeacher = Maps.newHashMap();
+//        allTeacher.put("volvo", "Volvo");
+//        allTeacher.put("saab", "Saab");
+//        allTeacher.put("opel", "Opel");
+//        allTeacher.put("audi", "Audi");
+//        System.out.println(teachersMap);
+//        List<Map<String, Object>> teacherList = new ArrayList();
+//        for (String key : teachersMap.keySet()) {
+//            Map<String, Object> temp = Maps.newHashMap();
+//            temp.put("id", key);
+//            temp.put("value", teachersMap.get(key));
+//            teacherList.add(temp);
+//            allTeacher.remove(key);
+//        }
+//        List<Map<String, Object>> allTeacherList = new ArrayList();
+//        for (String key : allTeacher.keySet()) {
+//            Map<String, Object> temp = Maps.newHashMap();
+//            temp.put("id", key);
+//            temp.put("value", allTeacher.get(key));
+//            allTeacherList.add(temp);
+//        }
         List<CurriculumType> types = curiculumService.getCurriculumType();
         map.put("curriculumTypes", types);
         map.put("trainingInstitutions", institutionlist);
         map.put("curriculum", curriculum);
-        map.put("teacherList", teacherList);
-        map.put("allTeacherList", allTeacherList);
+//        map.put("teacherList", teacherList);
+//        map.put("allTeacherList", allTeacherList);
         return "curriculum/edit_curriculum";
     }
 
