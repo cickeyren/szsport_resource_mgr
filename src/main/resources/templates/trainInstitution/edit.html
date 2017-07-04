@@ -19,7 +19,7 @@
     <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
             th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
 
-    <script src="../../static/js/mainstadium/mainstadium.js" th:src="@{/js/trainInstitution/trainInstitution.js}"></script>
+    <script src="../../static/js/trainInstitution/trainInstitution.js" th:src="@{/js/trainInstitution/trainInstitution.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
     <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
@@ -106,7 +106,7 @@
                     <td class="alignleft"><input type="text" id="telephone" name="telephone" th:value="${trainInstitution.telephone}"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright"><span class="red">*</span>机构logo</td>
+                    <td class="alignright">机构logo</td>
                     <td class="alignleft">
                         <div class="big-photo">
                             <div id="preview">
@@ -136,9 +136,9 @@
                     <td class="alignleft">
                         <input  value="1" class="check" type="radio"  name="status"
                                th:checked="${trainInstitution.status eq '1'}">正常
-                        <input  value="0" class="check" type="radio"   name="status"
-                               th:checked="${trainInstitution.status eq '2'}">闭馆
                         <input  value="2" class="check" type="radio"   name="status"
+                               th:checked="${trainInstitution.status eq '2'}">闭馆
+                        <input  value="0" class="check" type="radio"   name="status"
                                th:checked="${trainInstitution.status eq '0'}">下线
                     </td>
                 </tr>
@@ -154,15 +154,19 @@
 </section>
 </body>
 <script type="text/javascript" th:inline="javascript">
+    var institutionId = [[${trainInstitution.logo_url}]];
     $(function () {
         var valConfig = {
+            ignore: "",
             rules: {
                 name: {
                     required: true,
+                    maxlength: 50
                 }
                 ,
                 address: {
                     required: true,
+                    maxlength: 255
                 }
                 ,
                 provincial_level: {
@@ -175,6 +179,22 @@
                 ,
                 district_level: {
                     required: true,
+                }
+                ,
+                telephone: {
+                    maxlength: 20
+                }
+                ,
+                introduction: {
+                    maxlength: 100
+                }
+                ,
+                lng: {
+                    maxlength: 50
+                }
+                ,
+                lat: {
+                    maxlength: 50
                 }
             },
             messages: {

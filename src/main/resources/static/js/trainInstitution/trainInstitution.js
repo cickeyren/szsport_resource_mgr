@@ -1,5 +1,22 @@
 $(function () {
 
+    //初始化富文本编辑器---请放在点击事件之后，预防在html页面渲染失败，导致html页面无法加载
+    KindEditor.options.filterMode = false;
+    var fieldDescriptionEditor;
+    KindEditor.ready(function (K) {
+        fieldDescriptionEditor = K.create('textarea[name="introduction"]', {
+            resizeType: 1,
+            allowPreviewEmoticons: false,
+            filterMode: false,
+            afterBlur : function(){
+                this.sync();
+                $("#introduction").valid();
+            }
+        });
+
+        window.introductionEditor = fieldDescriptionEditor;
+    });
+
     $("#searchBtn").click(function () {
         $("#myPage").val("0");
         $("#searchForm").submit();
@@ -10,28 +27,28 @@ $(function () {
     $("#resetBtn").on('click', function () {
         $("#name").val("")
         window.location.href = "/trainInstitutionController/list.html";
-    })
+    });
 
     /**
      * 进入新增页面
      */
     $("#addBtn").on('click', function () {
         window.location.href = "/trainInstitutionController/add.html";
-    })
+    });
 
     /**
      * 省区发生改变之后
      */
     $("#provincial_level").change(function () {
         updateprovinceList($("#provincial_level").val());
-    })
+    });
 
     /**
      * 市区发生改变之后
      */
     $("#city_level").change(function () {
         updatecityList($("#city_level").val());
-    })
+    });
 
     uploadImgInit();
 
@@ -40,20 +57,6 @@ $(function () {
      */
     $("#cancelBtn").on('click', function () {
         window.location.href = "/trainInstitutionController/list.html";
-    })
-
-
-    //初始化富文本编辑器---请放在点击事件之后，预防在html页面渲染失败，导致html页面无法加载
-    KindEditor.options.filterMode = false;
-    var fieldDescriptionEditor;
-    KindEditor.ready(function (K) {
-        fieldDescriptionEditor = K.create('textarea[name="introduction"]', {
-            resizeType: 1,
-            allowPreviewEmoticons: false,
-            filterMode: false
-        });
-
-        window.introductionEditor = fieldDescriptionEditor;
     });
 });
 function uploadImgInit(){
@@ -158,12 +161,11 @@ function doAdd() {
                 layer.msg("添加成功！");
                 setTimeout(function () {
                     window.location.href = "/trainInstitutionController/list.html";
-                },3000)
+                },500)
 
             }else {
-                layer.alert(result.result);
+                layer.msg(result.message);
             }
-            //console.log(result);
         },
         error: function (result) {
             layer.msg("添加失败！");
@@ -182,7 +184,7 @@ function doUpdate() {
     addJson.address = $("#address").val();
     addJson.telephone = $("#telephone").val();
 
-    addJson.img_url = $("#img_url").val();
+    addJson.logo_url = $("#logo_url").val();
 
     addJson.lng = $("#lng").val();
     addJson.lat = $("#lat").val();
@@ -200,11 +202,10 @@ function doUpdate() {
                 layer.msg("编辑数据成功！");
                 setTimeout(function () {
                     window.location.href = "/trainInstitutionController/list.html";
-                },3000)
+                },500)
             }else {
-                layer.alert(result.result);
+                layer.msg(result.message);
             }
-            //console.log(result);
         },
         error: function (result) {
             layer.msg("编辑数据失败！");
@@ -229,7 +230,7 @@ function updateprovinceList(provinceID) {
                 var cityID = $("#city_level").val();
                 updatecityList(cityID);
             }else {
-                layer.alert(result.result);
+                layer.msg(result.message);
             }
         },
     })
@@ -249,7 +250,7 @@ function updatecityList(cityID) {
                     $("#district_level").append("<option value=\"" + n.areaID + "\">"+n.area+"</option>");
                 });
             }else {
-                layer.alert(result.result);
+                layer.msg(result.message);
             }
         },
     })

@@ -58,6 +58,7 @@
         height: 110px;
         float: left;
         margin-left: 35px;
+        padding-top: 40px;
     }
 
     .img-list input[type=file] {
@@ -337,7 +338,7 @@
         var fileSize = 0;
         var target = document.getElementById("previewImg");
         var isIE = /msie/i.test(navigator.userAgent) && !window.opera;
-        var filemaxsize = 1024;//1M
+        var filemaxsize = 100;//100K
         if (isIE && !target.files) {
             var fileSystem = new ActiveXObject('Scripting.FileSystemObject');
             if(!fileSystem.FileExists(filepath)){
@@ -351,12 +352,12 @@
         }
         var size = fileSize / 1024;
         if(size>filemaxsize){
-            layer.msg("附件大小不能大于"+filemaxsize/1024+"M！");
+            layer.msg("附件大小不能大于"+filemaxsize+"K！");
             target.value ="";
             flag = false;
         }
         if(size<=0){
-            layer.msg("附件大小不能为0M！");
+            layer.msg("附件大小不能为0K！");
             target.value ="";
             flag = false;
         }

@@ -134,8 +134,8 @@
                     <td class="alignright">状态</td>
                     <td class="alignleft">
                         <input type="radio" class="check"  name="status" value="1">正常
-                        <input type="radio" class="check"  name="status" value="0">闭馆
-                        <input type="radio" class="check"  name="status" value="2" checked>下线
+                        <input type="radio" class="check"  name="status" value="2">闭馆
+                        <input type="radio" class="check"  name="status" value="0" checked>下线
                     </td>
                 </tr>
                 <tr>
@@ -154,6 +154,7 @@
 <script type="text/javascript">
     $(function () {
         var valConfig = {
+            ignore: "",
             rules: {
                 name: {
                     required: true,
