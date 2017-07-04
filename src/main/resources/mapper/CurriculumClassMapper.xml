@@ -34,7 +34,27 @@
         bm_time, bm_end, target, content, fee_code, fee, fee_mark
     </sql>
     <select id="getCurriculumClasses" parameterType="String" resultMap="curriculumClassTimes">
-      SELECT cc.*,
+      SELECT cc.curriculum_id,
+            cc.id,
+            cc.name,
+            cc.class_long,
+            cc.class_times,
+            cc.student_num,
+            cc.max_num,
+            cc.lean_time,
+            cc.bm_time,
+            cc.bm_end,
+            cc.target,
+            cc.content,
+            cc.fee_code,
+            cc.discount_fee,
+            cc.fee,
+            cc.fee_mark,
+            ifnull(cc.leantime_type,'') leantime_type,
+            cc.status,
+            cc.continue_curriculum_id,
+            cc.xubanfee,
+            cc.xuban_curriculum,
             cct.class_id,
             GROUP_CONCAT(cct.time SEPARATOR '&lt;br>') as time
       FROM curriculum_class cc,

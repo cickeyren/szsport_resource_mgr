@@ -156,10 +156,10 @@ function doUpdate() {
         dataType: 'json',
         success: function (result) {
             if ("000000" == result.code) {
-                layer.msg("添加成功！");
+                layer.msg("编辑成功！");
                 setTimeout(function () {
                     backListPage();
-                }, 1000);
+                }, 500);
             }else {
                 layer.msg(result.result);
             }

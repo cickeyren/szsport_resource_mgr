@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
     <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
-    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
-            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
-    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
           th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
@@ -75,7 +72,7 @@
     <div class="pb10 border mt20">
         当前位置：<a href="javascript:;">培训课程</a> < <a href="javascript:;">班次</a>
     </div>
-    <form class="form-horizontal" action="/MerchantController/merchant.html" id="searchForm" method="POST">
+    <form class="form-horizontal" action="/curriculumController/curriculumClass.html" id="searchForm" method="POST">
         <input type="hidden" id="myPage" name="page" th:value="${page}">
         <input type="hidden" name="pageSize" id="pageSize" th:value="${pageSize}">
         <input type="hidden" name="curriculumId" id="curriculumId" th:value="${curriculumId}">
@@ -97,7 +94,10 @@
                 <th>
                     上课时段
                 </th>
-                <th>费用类型</th>
+                <th>
+                    报名时间
+                </th>
+                <th>价格</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
@@ -107,9 +107,13 @@
             <tr th:each="obj, objStat: ${list}">
                 <input type="hidden" th:value="${obj.id}"/>
                 <td th:text="${obj.name}"></td>
-                <td th:text="${obj.lean_time}"></td>
+                <td th:if="${obj.leantime_type=='1'}" th:text="${obj.lean_time}"></td>
+                <td th:if="${obj.leantime_type=='2'}" >常年</td>
+                <td th:if="${obj.leantime_type=='3'}" >预约</td>
+                <td th:if="${obj.leantime_type==''}" ></td>
                 <td th:utext ="${obj.time}"></td>
-                <td th:text="${obj.fee_code}"></td>
+                <td th:text="${obj.bm_time}"></td>
+                <td th:text="${obj.fee}"></td>
                 <td th:if="${obj.status==1}">停用</td>
                 <td th:if="${obj.status==2}">启用</td>
                 <td>

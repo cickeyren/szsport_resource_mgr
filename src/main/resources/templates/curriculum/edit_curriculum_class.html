@@ -127,17 +127,14 @@
                                                  th:value="${curriculumClass.student_num}"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright">限报人数</td>
-                    <td class="alignleft"><input type="text" id="max_num" name="max_num"
-                                                 th:value="${curriculumClass.max_num}"/></td>
-                </tr>
-                <tr class="controls">
-                    <td class="alignright">上课日期</td>
+                    <td class="alignright"><span class="red">*</span>上课日期</td>
                     <td class="alignleft">
-                        <span><input class="check" value="1" type="radio" name="leantime_type">固定</span>
-                        <input type="text" id="lean_time" name="lean_time" th:value="${curriculumClass.lean_time}" onclick="WdatePicker()" class="Wdate"/>
-                        <span><input class="check" value="2" type="radio" name="leantime_type">常年</span>
-                        <span><input class="check" value="3" type="radio" name="leantime_type">需预约</span>
+                        <input class="check" value="1" type="radio" name="leantime_type" th:checked="${curriculumClass.leantime_type eq '1'}">固定
+                        <input type="text" id="lean_time" name="lean_time" th:if="${curriculumClass.leantime_type eq '1'}" th:value="${curriculumClass.lean_time}" class="Wdate" onclick="WdatePicker()" />
+                        <input type="text" id="lean_time" name="lean_time" th:if="${curriculumClass.leantime_type ne '1'}" class="Wdate" onclick="WdatePicker()" />
+                        <input class="check" value="2" type="radio" name="leantime_type" th:checked="${curriculumClass.leantime_type eq '2'}">常年
+                        <input class="check" value="3" type="radio" name="leantime_type" th:checked="${curriculumClass.leantime_type eq '3'}">预约
+                        <span class="error_container"></span>
                     </td>
                 </tr>
                 <tr class="controls">
@@ -184,7 +181,7 @@
                 </tr>
                 <tr class="controls">
                     <td class="alignright">授课内容</td>
-                    <td class="alignleft"><input type="text" id="m_content" name="content"
+                    <td class="alignleft"><input type="text" id="m_content" name="m_content"
                                                  th:value="${curriculumClass.content}"/></td>
                 </tr>
                 <tr class="controls">
@@ -193,7 +190,7 @@
                                                  th:value="${curriculumClass.fee_code}"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright">费用金额</td>
+                    <td class="alignright"><span class="red">*</span>费用金额</td>
                     <td class="alignleft"><input type="text" id="fee" name="fee" th:value="${curriculumClass.fee}"/>
                     </td>
                 </tr>
@@ -202,13 +199,10 @@
                     <td class="alignleft"><input type="text" id="fee_mark" name="fee_mark"
                                                  th:value="${curriculumClass.fee_mark}"/></td>
                 </tr>
-
-
                 <tr>
                     <td class="text-right" colspan="2">
-                        <button type="submit" class="btn btn-success" id="saveMerchant">保存</button>
-                        <button type="submit" class="btn btn-success" id="cancelMerchant">取消</button>
-
+                        <button type="submit" class="btn btn-success" id="saveBtn">保存</button>
+                        <button type="button" class="btn btn-success" id="cancelBtn">取消</button>
                     </td>
                 </tr>
             </table>
@@ -232,9 +226,17 @@
     </table>
 </div>
 </body>
-<script type="text/javascript">
+<script th:inline="javascript">
     $(function () {
-
+        var tmp_leantime_type = [[${curriculumClass.leantime_type}]];
+        if(tmp_leantime_type=="1"){
+            $('#lean_time').rules('add',{
+                required: true,
+                messages:{
+                    required: '请选择上课日期'
+                }
+            });
+        }
     });
 </script>
 </html>

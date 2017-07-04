@@ -7,7 +7,7 @@ $(function () {
         onsubmit:true,// 是否在提交是验证
         onfocusout:true,// 是否在获取焦点时验证
         rules: {
-            name: {　　//要对应相对应的input中的name属性
+            name: {
                 required: true
             },
             class_long: {
@@ -47,12 +47,21 @@ $(function () {
                 number:"请输入合法数字"
             },
             leantime_type: {
-                required: "请选择上课时间"
+                required: "请选择上课日期"
             },
             fee: {
                 required: "请输入费用",
                 number:"请输入合法数字"
             }
+        },
+        errorPlacement: function(error, element) {
+            var error_container = element.nextAll(".error_container");
+            if(error_container.length>0){
+                error_container.append(error);
+            }else{
+                error.insertAfter(element);
+            }
+
         },
         submitHandler: function(form){
             doUpdate(); //修改界面保存按钮点击事件 ---  执行保存
@@ -60,15 +69,28 @@ $(function () {
     };
     $('#addForm').validate(valConfig);
 
-    //新增界面保存按钮点击事件 ---  执行保存
-    // $("#saveMerchant").on("click", function () {
-    //     doUpdate();
-    // });
+    $("input[name='leantime_type']").on("click", function () {
+        var leantime_type = $(this).val()||"";
+        if(leantime_type=="1"){
+            $('#lean_time').rules('add',{
+                required: true,
+                messages:{
+                    required: '请选择上课日期'
+                }
+            });
+        }else{
+            $('#lean_time').val("");
+            $('#lean_time').rules('remove');
+            $('#lean_time').valid();
+        }
+    });
 
     //新增界面保存按钮点击事件 ---  返回主界面
-    $("#cancelMerchant").on("click", function () {
-        window.history.back();
+    $("#cancelBtn").on("click", function () {
+        var curriculum_id = $("#curriculumId").val()||"";
+        window.location.href = "/curriculumController/curriculumClass.html?curriculumId=" + curriculum_id;
     });
+
     $("#addtime").on("click", function () {
         layer.open({
             type: 1,
@@ -209,7 +231,7 @@ function doUpdate() {
     addJson.bm_time = $("#bm_time").val();
     addJson.bm_end = $("#bm_end").val();
     addJson.target = $("#target").val();
-    addJson.content = $("#content").val();
+    addJson.content = $("#m_content").val();
     addJson.fee_code = $("#fee_code").val();
     addJson.fee = $("#fee").val();
     addJson.fee_mark = $("#fee_mark").val();
@@ -224,7 +246,7 @@ function doUpdate() {
         dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
         success: function (result) {
             if ("000000" == result.code) {
-                layer.msg("添加成功！");
+                layer.msg("编辑成功！");
                 setTimeout(function () {
                     window.location.href = "/curriculumController/curriculumClass.html?curriculumId=" + $('#curriculumId').val();;
                 }, 1000);
@@ -278,5 +300,4 @@ function updatecityList(cityID) {
             }
         },
     })
-
 }

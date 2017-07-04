@@ -47,12 +47,21 @@ $(function () {
                 number:"请输入合法数字"
             },
             leantime_type: {
-                required: "请选择上课时间"
+                required: "请选择上课日期"
             },
             fee: {
                 required: "请输入费用",
                 number:"请输入合法数字"
             }
+        },
+        errorPlacement: function(error, element) {
+            var error_container = element.nextAll(".error_container");
+            if(error_container.length>0){
+                error_container.append(error);
+            }else{
+                error.insertAfter(element);
+            }
+
         },
         submitHandler: function(form){
             doAdd();
@@ -60,16 +69,28 @@ $(function () {
     };
     $('#addForm').validate(valConfig);
 
-    //新增界面保存按钮点击事件 ---  执行保存
-    // $("#saveMerchant").on("click", function () {
-    //     doAdd();
-    // });
+    $("input[name='leantime_type']").on("click", function () {
+        var leantime_type = $(this).val()||"";
+        if(leantime_type=="1"){
+            $('#lean_time').rules('add',{
+                required: true,
+                messages:{
+                    required: '请选择上课日期'
+                }
+            });
+        }else{
+            $('#lean_time').val("");
+            $('#lean_time').rules('remove');
+            $('#lean_time').valid();
+        }
+    });
 
     //新增界面保存按钮点击事件 ---  返回主界面
-    $("#cancelMerchant").on("click", function () {
-        // window.history.back();
-        window.location.href = "/curriculumController/curriculumClass.html?curriculumId=" + $('#curriculumId').val();
+    $("#cancelBtn").on("click", function () {
+        var curriculum_id = $("#curriculumId").val()||"";
+        window.location.href = "/curriculumController/curriculumClass.html?curriculumId=" + curriculum_id;
     });
+
     $("#addtime").on("click", function () {
         layer.open({
             type: 1,
@@ -128,6 +149,8 @@ function delTime(a) {
 }
 //新增页面添加数据
 function doAdd() {
+    $("#saveBtn").attr("disabled", true);
+
     var timessOp = $("#class_time_table_body").find("tr");
     var timess = [];//上课时段
     for (var i = 0; i < timessOp.length; i++) {
@@ -150,7 +173,7 @@ function doAdd() {
     addJson.bm_time = $("#bm_time").val();
     addJson.bm_end = $("#bm_end").val();
     addJson.target = $("#target").val();
-    addJson.content = $("#content").val();
+    addJson.content = $("#m_content").val();
     addJson.fee_code = $("#fee_code").val();
     addJson.fee = $("#fee").val();
     addJson.fee_mark = $("#fee_mark").val();
@@ -165,10 +188,12 @@ function doAdd() {
             if ("000000" == result.code) {
                 layer.msg("添加成功！");
                 setTimeout(function () {
-                    window.location.href = "/curriculumController/curriculumClass.html?curriculumId=" + $('#curriculumId').val();
-                }, 1000);
+                    var curriculum_id = $("#curriculumId").val()||"";
+                    window.location.href = "/curriculumController/curriculumClass.html?curriculumId=" + curriculum_id;
+                }, 500);
             } else {
-                layer.alert(result.result);
+                layer.msg(result.message);
+                $("#saveBtn").removeAttr("disabled");
             }
         },
         error: function (result) {
@@ -217,5 +242,4 @@ function updatecityList(cityID) {
             }
         },
     })
-
 }

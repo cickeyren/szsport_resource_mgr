@@ -111,7 +111,11 @@
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>课时</td>
-                    <td class="alignleft"><input type="text" id="class_long" name="class_long"/>小时/次</td>
+                    <td class="alignleft">
+                        <input type="text" id="class_long" name="class_long"/>
+                        <span>小时/次</span>
+                        <span class="error_container"></span>
+                    </td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>上课次数</td>
@@ -124,10 +128,11 @@
                 <tr class="controls">
                     <td class="alignright"><span class="red">*</span>上课日期</td>
                     <td class="alignleft">
-                        <span><input class="check" value="1" type="radio" name="leantime_type">固定</span>
+                        <input class="check" value="1" type="radio" name="leantime_type">固定
                         <input type="text" id="lean_time" name="lean_time" onclick="WdatePicker()" class="Wdate"/>
-                        <span><input class="check" value="2" type="radio" name="leantime_type">常年</span>
-                        <span><input class="check" value="3" type="radio" name="leantime_type">需预约</span>
+                        <input class="check" value="2" type="radio" name="leantime_type">常年
+                        <input class="check" value="3" type="radio" name="leantime_type" >需预约
+                        <span class="error_container"></span>
                     </td>
                 </tr>
                 <tr class="controls">
@@ -166,7 +171,7 @@
                 </tr>
                 <tr class="controls">
                     <td class="alignright">授课内容</td>
-                    <td class="alignleft"><input type="text" id="m_content" name="content"/></td>
+                    <td class="alignleft"><input type="text" id="m_content" name="m_content"/></td>
                 </tr>
                 <tr class="controls">
                     <td class="alignright">费用项</td>
@@ -184,8 +189,8 @@
 
                 <tr>
                     <td class="text-right" colspan="2">
-                        <button type="submit" class="btn btn-success" id="saveMerchant">保存</button>
-                        <button type="button" class="btn btn-success" id="cancelMerchant">取消</button>
+                        <button type="submit" class="btn btn-success" id="saveBtn">保存</button>
+                        <button type="button" class="btn btn-success" id="cancelBtn">取消</button>
                     </td>
                 </tr>
             </table>
@@ -199,7 +204,7 @@
             <td width="70%"><input type="text" id="time"></td>
         </tr>
         <tr class="controls" style="background-color: #ededed">
-            <td class="alignright" width="30%">人数</td>
+            <td class="alignright" width="30%">限报人数</td>
             <td width="70%"><input type="text" id="max_people"></td>
         </tr>
         <tr class="controls" style="background-color: #ededed">
@@ -209,10 +214,4 @@
     </table>
 </div>
 </body>
-<script type="text/javascript">
-    $(function () {
-
-        //场馆状态只能单选
-    });
-</script>
 </html>
