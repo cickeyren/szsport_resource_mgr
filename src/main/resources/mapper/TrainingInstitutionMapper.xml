@@ -266,7 +266,10 @@
 
   <!--获取培训机构的id和名称 用于添加课程时选择机构的列表（后面可扩展）-->
   <select id="listTrainInstitution" resultType="java.util.HashMap">
-    SELECT id, org_name FROM training_institution WHERE status = '1'
+    SELECT id, org_name FROM training_institution
+    WHERE 1=1
+    and status = '1'
+    order by create_time
   </select>
 
   <select id="queryList" resultType="java.util.Map" parameterType="HashMap">

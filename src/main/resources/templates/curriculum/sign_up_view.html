@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
     <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
-    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
-            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
-    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
           th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
@@ -17,7 +14,6 @@
             th:src="@{/lib/kindeditor-4.1.7/kindeditor-all-min.js}"></script>
     <script src="../../static/lib/kindeditor-4.1.7/lang/zh_CN.js"
             th:src="@{/lib/kindeditor-4.1.7/lang/zh_CN.js}"></script>
-
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
     <script src="../../static/js/curriculum/sign_up_view.js" th:src="@{/js/curriculum/sign_up_view.js}"></script>
@@ -76,53 +72,49 @@
     <div class="pb10 border mt20">
         当前位置：<a href="javascript:;">培训课程</a> < <a href="javascript:;">查看报名</a>
     </div>
-        <table class="table">
+        <table class="">
             <tr class="controls">
-                <td class="pt20">课程名称
-                    <input type="text" id="name" name="name"/>
+                <td >培训类型：<select id="train_type" name="train_type">
+                    <option value="">全部</option>
+                    <option th:each="obj,eStat:${curriculumTypes}" th:value="${obj.code}"
+                            th:text="${obj.name}"></option>
+                </select>
                 </td>
-                <td class="pt20">培训机构
-                    <select id="training_institutions_id" name="training_institutions_id">
-                        <option value="">全部</option>
-                        <option value="jg1">jg1</option>
-                        <option value="jg2">jg2</option>
-
-                        <!--<option th:each="obj,eStat:${curiculumTypes}" th:value="${obj.code}"-->
-                        <!--th:text="${obj.name}"></option>-->
-                    </select>
+            </tr>
+            <tr>
+                <td >培训机构：<select id="training_institutions_id" name="training_institutions_id">
+                    <option value="">全部</option>
+                    <option th:each="obj,eStat:${institutionList}" th:value="${obj.id}"
+                            th:text="${obj.org_name}"></option>
+                </select>
                 </td>
-                <td class="pt20">班次名称:
-                    <select id="class_name" name="class_name">
-                        <option value="">全部</option>
-                    </select>
+                <td >课程名称：<select id="name" name="name">
+                    <option value="">全部</option>
+                    <option th:each="obj,eStat:${curriculumList}" th:value="${obj.id}"
+                            th:text="${obj.name}"
+                            th:selected="${#strings.contains(curriculum_id,obj.id)}"></option>
+                </select>
                 </td>
-                <td class="pt20">培训类型:
-                    <select id="train_type" name="train_type">
-                        <option value="">全部</option>
-                        <option th:each="obj,eStat:${curriculumTypes}" th:value="${obj.code}"
-                                th:text="${obj.name}"></option>
+                <td >班次名称：<select id="class_name" name="class_name">
+                    <option value="">全部</option>
+                    <option th:each="obj,eStat:${curriculumClassList}" th:value="${obj.id}"
+                            th:text="${obj.name}"></option>
                     </select>
                 </td>
             </tr>
             <tr>
-                <td class="pt20">手机号
-                    <input type="text" id="phone" name="phone"/>
+                <td >手机号：<input type="text" id="phone" name="phone"/>
                 </td>
-                <td class="pt20">姓名
-                    <input type="text" id="student_name" name="student_name"/>
+                <td >姓名：<input type="text" id="student_name" name="student_name"/>
                 </td>
-                <td class="pt20">
-                    <button class="btn btn-success" id="query">查询</button>
-                    <button type="reset" id="resetBtn" class="btn btn-success">重置</button>
+                <td >
+                    <button type="button" id="query" class="btn btn-success" >查询</button>
+                    <button type="button" id="back" class="btn btn-success" >返回</button>
                 </td>
             </tr>
         </table>
     <div>
-        <button type="button" class="btn btn-success fr mb20" id="back">返回</button>
-    </div>
-    <div>
         <table id="dataTable" class="table table-bordered">
-
             <thead>
             <tr>
                 <th>
@@ -130,9 +122,7 @@
                 </th>
                 <th>培训机构</th>
                 <th>培训类型</th>
-                <th>
-                    班次
-                </th>
+                <th>班次</th>
                 <th>开课日期</th>
                 <th>上课时间</th>
                 <th>学员</th>
@@ -142,7 +132,6 @@
             </tr>
             </thead>
             <tbody id="tbody">
-
             </tbody>
         </table>
     </div>
@@ -150,4 +139,6 @@
     </div>
 </div>
 </body>
+<script th:inline="javascript">
+</script>
 </html>

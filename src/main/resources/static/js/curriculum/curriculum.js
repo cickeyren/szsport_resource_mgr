@@ -3,6 +3,8 @@
  */
 $(function () {
 
+    var layerOpts = {shift: -1, time: 1000};
+
     /**
      * 进入合作商户新增页面
      */
@@ -10,7 +12,7 @@ $(function () {
         window.location.href = "/curriculumController/addCurriculum.html";
     });
     $("#back").on('click', function () {
-        window.history.back();
+        backListPage();
     })
     $(".online").on('click',function () {
         var id = $(this).attr("data");
@@ -25,10 +27,11 @@ $(function () {
             dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
             success: function (result) {
                 if ("000000" == result.code) {
-                    layer.msg("操作成功！");
-                    window.location.reload();
+                    layer.msg("操作成功", layerOpts, function(){
+                        backListPage();
+                    });
                 }else {
-                    layer.alert(result.result);
+                    layer.msg(result.message);
                 }
             },
             error: function (result) {
@@ -49,10 +52,11 @@ $(function () {
             dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
             success: function (result) {
                 if ("000000" == result.code) {
-                    layer.msg("操作成功！");
-                    window.location.reload();
+                    layer.msg("操作成功", layerOpts, function(){
+                        backListPage();
+                    });
                 }else {
-                    layer.alert(result.result);
+                    layer.msg(result.message);
                 }
             },
             error: function (result) {
@@ -61,3 +65,7 @@ $(function () {
         });
     })
 });
+
+function backListPage(){
+    window.location.href = "/curriculumController/curriculum.html";
+}

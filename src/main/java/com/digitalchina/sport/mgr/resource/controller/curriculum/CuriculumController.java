@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -494,10 +495,66 @@ public class CuriculumController {
      * @return
      */
     @RequestMapping(value = "/signUpView.html")
-    public String signUpView(ModelMap map) {
+    public String signUpView(ModelMap map, HttpServletRequest request) {
         List<CurriculumType> types = curiculumService.getCurriculumType();
+        List<Map<String,Object>> institutionList = trainInstitutionService.listTrainInstitution();
+
+        Map<String,Object> params = new HashMap<String,Object>();
+        List<Map<String,Object>> curriculumList = curiculumService.getSlCurriculumList(params);
+        List<Map<String,Object>> curriculumClassList = curiculumService.getSlCurriculumClassList(params);
+
         map.put("curriculumTypes", types);
+        map.put("institutionList", institutionList);
+        map.put("curriculumList", curriculumList);
+        map.put("curriculumClassList", curriculumClassList);
+        String curriculum_id = request.getParameter("curriculumId");
+        map.put("curriculum_id", curriculum_id);
         return "curriculum/sign_up_view";
+    }
+
+
+    /**
+     * 获取课程列表
+     * @param map
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getSlCurriculumList.do", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData getSlCurriculumList(ModelMap map, HttpServletRequest request) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("institution_id", request.getParameter("institution_id"));
+            List<Map<String, Object>> curriculumList = curiculumService.getSlCurriculumList(params);
+            map.put("curriculumList", curriculumList);
+            return RtnData.ok(curriculumList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========查询课程列表失败=========", e);
+        }
+        return RtnData.fail("查询课程列表失败");
+    }
+
+    /**
+     * 获取课程班次列表
+     * @param map
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getSlCurriculumClassList.do", method = RequestMethod.POST)
+    @ResponseBody
+    public RtnData getSlCurriculumClassList(ModelMap map, HttpServletRequest request) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("curriculum_id", request.getParameter("curriculum_id"));
+            List<Map<String, Object>> curriculumClassList = curiculumService.getSlCurriculumClassList(params);
+            map.put("curriculumClassList", curriculumClassList);
+            return RtnData.ok(curriculumClassList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("========查询课程班次列表失败=========", e);
+        }
+        return RtnData.fail("查询课程班次列表失败");
     }
 
     /**

@@ -244,9 +244,11 @@
         SELECT
         c.`name`,
         c.training_institutions_id,
+        t.org_name,
         ct.`name` AS train_name,
         cc.`name` AS class_name,
         cc.lean_time,
+        cc.leantime_type,
         co.student_name,
         co.phone,
         co.pay_time,
@@ -257,64 +259,69 @@
         curriculum c,
         curriculum_class cc,
         curriculum_class_times cct,
-        curriculum_type ct
+        curriculum_type ct,
+        training_institution t
         WHERE
         co.curriculum_id = c.id
         AND co.curriculum_class_id = cc.id
         AND co.curriculum_class_time_id = cct.id
         AND c.train_type = ct.`code`
+        and c.training_institutions_id=t.id
         and co.status = '1'
-        <if test="name != null and name != ''">
-            AND  c.name=#{name}
+        <if test="train_type != null and train_type != ''">
+            AND c.train_type=#{train_type}
         </if>
         <if test="training_institutions_id != null and training_institutions_id != ''">
-            AND  c.training_institutions_id=#{training_institutions_id}
+            AND c.training_institutions_id=#{training_institutions_id}
+        </if>
+        <if test="name != null and name != ''">
+            AND c.id=#{name}
         </if>
         <if test="class_name != null and class_name != ''">
-            AND cc.name=#{class_name}
-        </if>
-        <if test="train_type != null and train_type != ''">
-            AND  c.train_type=#{train_type}
+            AND cc.id=#{class_name}
         </if>
         <if test="phone != null and phone != ''">
-            AND co.phone=#{phone}
+            AND co.phone like concat('%',#{phone},'%')
         </if>
         <if test="student_name != null and student_name != ''">
-            AND  co.student_name=#{student_name}
+            AND co.student_name like concat('%',#{student_name},'%')
         </if>
         limit #{pNum},#{pSize}
     </select>
     <select id="getCurriculumOrderHasPayCount" resultType="int" parameterType="java.util.Map">
         SELECT
-        COUNT(1)
+        count(1)
         FROM
         curriculum_order co,
         curriculum c,
         curriculum_class cc,
         curriculum_class_times cct,
-        curriculum_type ct
+        curriculum_type ct,
+        training_institution t
         WHERE
         co.curriculum_id = c.id
         AND co.curriculum_class_id = cc.id
         AND co.curriculum_class_time_id = cct.id
         AND c.train_type = ct.`code`
-        <if test="name != null and name != ''">
-            AND  c.name=#{name}
-        </if>
-        <if test="training_institutions_id != null and training_institutions_id != ''">
-            AND   c.training_institutions_id=#{training_institutions_id}
-        </if>
-        <if test="class_name != null and class_name != ''">
-            AND  cc.name=#{class_name}
-        </if>
+        and c.training_institutions_id=t.id
+        and co.status = '1'
         <if test="train_type != null and train_type != ''">
             AND c.train_type=#{train_type}
         </if>
+        <if test="training_institutions_id != null and training_institutions_id != ''">
+            AND c.training_institutions_id=#{training_institutions_id}
+        </if>
+        <if test="name != null and name != ''">
+            AND c.id=#{name}
+        </if>
+        <if test="class_name != null and class_name != ''">
+            AND cc.id=#{class_name}
+        </if>
         <if test="phone != null and phone != ''">
-            AND co.phone=#{phone}
+            AND co.phone like concat('%',#{phone},'%')
         </if>
         <if test="student_name != null and student_name != ''">
-            AND  co.student_name=#{student_name}
+            AND co.student_name like concat('%',#{student_name},'%')
         </if>
     </select>
 
@@ -712,4 +719,29 @@
 			invalid_time < NOW() AND `status`='0'
   		]]>
     </update>
+
+
+    <select id="getSlCurriculumList" resultType="java.util.HashMap">
+        select t.id, t.name from curriculum t
+        where 1=1
+        <if test='status != null and status !="" '>
+            and t.status = #{status}
+        </if>
+        <if test='institution_id != null and institution_id !="" '>
+            and t.training_institutions_id = #{institution_id}
+        </if>
+        order by t.training_institutions_id, t.create_date
+    </select>
+
+    <select id="getSlCurriculumClassList" resultType="java.util.HashMap">
+        select t.id, t.name from curriculum_class t
+        where 1=1
+        <if test='status != null and status !="" '>
+            and t.status = #{status}
+        </if>
+        <if test='curriculum_id != null and curriculum_id !="" '>
+            and t.curriculum_id = #{curriculum_id}
+        </if>
+        order by t.curriculum_id
+    </select>
 </mapper>

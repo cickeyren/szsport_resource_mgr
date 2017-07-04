@@ -3,14 +3,16 @@
  */
 $(function () {
 
-    /**
-     * 进入合作商户新增页面
-     */
-    $("#addMerchant").bind('click', function () {
-        // window.location.href = "/curriculumController/addCurriculum.html";
-    });
     $("#back").on('click', function () {
-        window.history.back();
+        backListPage();
+    });
+    $("#training_institutions_id").on('change', function () {
+        var id = $(this).val()||"";
+        updateCurriculumList(id);
+    });
+    $("#name").on('change', function () {
+        var id = $(this).val()||"";
+        updateCurriculumClassList(id);
     });
     $("#query").on('click',function () {
         query();
@@ -19,14 +21,15 @@ $(function () {
 });
 
 function query(curr) {
-    var pageSize = 10;
     var data = {};
-    data.name = $("#name").val();
-    data.training_institutions_id = $("#training_institutions_id").val();
-    data.class_name = $("#class_name").val();
     data.train_type = $("#train_type").val();
+    data.training_institutions_id = $("#training_institutions_id").val();
+    data.name = $("#name").val();
+    data.class_name = $("#class_name").val();
     data.phone = $("#phone").val();
     data.student_name = $("#student_name").val();
+
+    var pageSize = 10;
     data.pageNum = curr || 1;
     data.pageSize = pageSize;
     $.ajax({
@@ -42,14 +45,22 @@ function query(curr) {
                 var temp = "";
                 if (order.length > 0) {
                     for (var i = 0; i < order.length; i++) {
-                        console.log(order[i]);
-                        console.log(order[i].name);
+                        var lean_time = "";
+                        var leantime_type = order[i].leantime_type||"";
+                        var lean_time = order[i].lean_time||"";
+                        if(leantime_type=="1"){
+                            lean_time = "固定："+lean_time;
+                        }else if(leantime_type=="2"){
+                            lean_time = "常年";
+                        }else if(leantime_type=="3"){
+                            lean_time = "需预约";
+                        }
                         temp += '<tr>' +
                             '<td>' + order[i].name + '</td>' +
-                            '<td>' + order[i].training_institutions_id + '</td>' +
+                            '<td>' + order[i].org_name + '</td>' +
                             '<td>' + order[i].train_name + '</td>' +
                             '<td>' + order[i].class_name + '</td>' +
-                            '<td>' + order[i].lean_time + '</td>' +
+                            '<td>' + lean_time + '</td>' +
                             '<td>' + order[i].time + '</td>' +
                             '<td>' + order[i].student_name + '</td>' +
                             '<td>' + order[i].phone + '</td>' +
@@ -77,11 +88,10 @@ function query(curr) {
                 });
 
             } else {
-                layer.alert(result.result);
+                layer.msg(result.message);
             }
         },
         error: function (result) {
-            console.log(result);
             layer.msg("查询发生了错误！");
         }
     });
@@ -94,5 +104,50 @@ function formatDate(date) {
     } else {
         return "-"
     }
+}
 
+function updateCurriculumList(institution_id) {
+    $.ajax({
+        url:'/curriculumController/getSlCurriculumList.do',
+        type:'POST', //GET
+        data:{"institution_id":institution_id},
+        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success:function(result){
+            if("000000" == result.code) {
+                var items = result.result;
+                $("#name").empty();
+                $("#name").append("<option value=''>全部</option>");
+                $.each(items,function(i,n){
+                    $("#name").append("<option value=\"" + n.id + "\">"+n.name+"</option>");
+                });
+            }else {
+                layer.msg(result.message);
+            }
+        },
+    });
+}
+
+function updateCurriculumClassList(curriculum_id) {
+    $.ajax({
+        url:'/curriculumController/getSlCurriculumClassList.do',
+        type:'POST', //GET
+        data:{"curriculum_id":curriculum_id},
+        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success:function(result){
+            if("000000" == result.code) {
+                var items = result.result;
+                $("#class_name").empty();
+                $("#class_name").append("<option value=''>全部</option>");
+                $.each(items,function(i,n){
+                    $("#class_name").append("<option value=\"" + n.id + "\">"+n.name+"</option>");
+                });
+            }else {
+                layer.msg(result.message);
+            }
+        },
+    });
+}
+
+function backListPage(){
+    window.location.href = "/curriculumController/curriculum.html";
 }

@@ -51,4 +51,8 @@ public interface CurriculumMapper extends Mapper<Curriculum> {
      Map<String,Object> getOrderDetailsByOrderId(Map<String,Object> param) throws Exception;
      Map<String, Object> getCurriculumRefund(Map<String, Object> args);
      int updateOrderByOrderTime(Map<String, Object> args);
+
+     List<Map<String,Object>> getSlCurriculumList(Map<String, Object> param);
+
+     List<Map<String,Object>> getSlCurriculumClassList(Map<String, Object> param);
 }

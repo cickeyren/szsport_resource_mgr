@@ -96,7 +96,7 @@
 <section>
     <div class="container-fluid" style="margin-top: 20px;height:120px;">
         <div class="pb10 border">
-            当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a> < <a href="javascript:;">新增</a>
+            当前位置：<a href="javascript:;">培训课程</a> < <a href="javascript:;">班次</a> < <a href="javascript:;">新增</a>
         </div>
         <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" method="post">
             <input type="hidden" name="curriculumId" id="curriculumId" th:value="${curriculumId}">
@@ -173,7 +173,7 @@
                     <td class="alignleft"><input type="text" id="fee_code" name="fee_code"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright"><span>*</span>费用金额</td>
+                    <td class="alignright"><span class="red">*</span>费用金额</td>
                     <td class="alignleft"><input type="text" id="fee" name="fee"/></td>
                 </tr>
                 <tr class="controls">

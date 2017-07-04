@@ -226,4 +226,13 @@ public class CuriculumService {
         params.put("remarks","未支付超时订单");
         return curriculumMapper.updateOrderByOrderTime(params);
     }
+
+
+    public List<Map<String,Object>> getSlCurriculumList(Map<String,Object> param) {
+        return curriculumMapper.getSlCurriculumList(param);
+    }
+
+    public List<Map<String,Object>> getSlCurriculumClassList(Map<String,Object> param) {
+        return curriculumMapper.getSlCurriculumClassList(param);
+    }
 }
