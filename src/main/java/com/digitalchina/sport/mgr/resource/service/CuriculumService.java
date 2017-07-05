@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -239,9 +240,16 @@ public class CuriculumService {
             double f = Double.parseDouble(fee);
             double p = Double.parseDouble(payFee);
             double d = f-p;
-            discountFee = d+"";
+            DecimalFormat df = new DecimalFormat("######0.00");//保留两位小数
+            discountFee = df.format(d)+"";
         }
+
         retmap.put("discountFee",discountFee);
+        if (!StringUtil.isEmpty(retmap.get("come"))){
+            if ("app".toUpperCase().equals(retmap.get("come").toString().toUpperCase())){
+                retmap.put("userId","");
+            }
+        }
         return retmap;
     }
     public Map<String, Object> getCurriculumRefund(String orderId) throws Exception{

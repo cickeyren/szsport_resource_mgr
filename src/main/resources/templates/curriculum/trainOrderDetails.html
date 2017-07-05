@@ -78,7 +78,7 @@
     <p class="title ml10 mt20">订单基本信息</p>
     <div th:unless="${orderDetails==null}">
         <div class="ml20">订单流水号：</div><div class="ml20" th:text="${orderDetails.orderNumber}"></div>
-        <div align="right"><button type="button" class="btn btn-success fr" id="back">返回</button></div>
+        <div align="right"><button type="button" class="btn btn-success" id="back" style="margin-right: 50px;margin-top: -50px;">返回</button></div>
     </div>
 </div>
 <hr />
@@ -145,7 +145,7 @@
                 <td th:text="*{studentName}"></td>
                 <td th:text="*{phone}"></td>
                 <td th:text="*{idCard}"></td>
-                <td th:text="*{#calendars.format(birthday,'yyyy-MM-dd')}"></td>
+                <td th:text="*{birthday}"></td>
                 <td th:text="*{gender}"></td>
                 <td th:text="*{school}"></td>
                 <td th:text="*{payment}"></td>

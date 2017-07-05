@@ -675,7 +675,7 @@
                 WHEN '1' THEN
                     '已确认'
                 ELSE
-                    ''
+                    '未确认'
                 END
             ) AS restatus,
             (
