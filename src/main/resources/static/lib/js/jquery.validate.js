@@ -1373,6 +1373,11 @@
                 return this.optional( element ) || /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test( value );
             },
 
+            // xujin add
+            valid_number: function( value, element ) {
+                return this.optional( element ) || /^[1-9]{1}\d{0,10}$/.test( value );
+            },
+
             // http://jqueryvalidation.org/digits-method/
             digits: function( value, element ) {
                 return this.optional( element ) || /^\d+$/.test( value );

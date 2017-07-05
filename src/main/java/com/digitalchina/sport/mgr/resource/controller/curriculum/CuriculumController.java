@@ -263,6 +263,11 @@ public class CuriculumController {
     public String editCurriculumClass(ModelMap map, String id) {
         CurriculumClass curriculumClass = curiculumService.getCurriculumClassByKey(id);
         List<Map<String, Object>> classTimes = curiculumService.getClassTimes(id);
+        if(classTimes!=null){
+            for(int i = 0; i < classTimes.size(); i++){
+                classTimes.get(i).put("td_no", UUIDUtil.generateUUID());
+            }
+        }
         map.put("classTimes", classTimes);
         map.put("curriculumClass", curriculumClass);
         return "curriculum/edit_curriculum_class";
@@ -389,11 +394,11 @@ public class CuriculumController {
      */
     @RequestMapping(value = "/doUpdataCurriculumClass")
     @ResponseBody
-    public RtnData doUpdataCurriculumClass(CurriculumClass curriculumClass, String timess) {
+    public RtnData doUpdataCurriculumClass(CurriculumClass curriculumClass, String timess, String class_times_id_del) {
         System.out.println(curriculumClass);
         Gson gson = new Gson();
         List<Object> classTimes = gson.fromJson(timess, List.class);
-        curiculumService.doUpdataCurriculumClass(curriculumClass, classTimes);
+        curiculumService.doUpdataCurriculumClass(curriculumClass, classTimes, class_times_id_del);
         return RtnData.ok("");
     }
 

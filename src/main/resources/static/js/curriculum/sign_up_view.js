@@ -49,7 +49,7 @@ function query(curr) {
                         var leantime_type = order[i].leantime_type||"";
                         var lean_time = order[i].lean_time||"";
                         if(leantime_type=="1"){
-                            lean_time = "固定："+lean_time;
+                            lean_time = lean_time;
                         }else if(leantime_type=="2"){
                             lean_time = "常年";
                         }else if(leantime_type=="3"){

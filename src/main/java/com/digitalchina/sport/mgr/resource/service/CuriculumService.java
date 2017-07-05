@@ -69,6 +69,41 @@ public class CuriculumService {
         return ret;
     }
 
+
+    /**
+     * 更新班次信息
+     * @param currriculumClass
+     * @param classTimes
+     * @param class_times_id_del
+     * @return
+     */
+    @Transactional
+    public void doUpdataCurriculumClass(CurriculumClass currriculumClass, List<Object> classTimes, String class_times_id_del){
+
+        curriculumClassMapper.updateByPrimaryKeySelective(currriculumClass);
+        String id = currriculumClass.getId();
+
+        for (int i=0;i<classTimes.size();i++){//新增时间段
+            Map<String,Object> temp = (Map<String,Object>)classTimes.get(i);
+            if (StringUtils.isEmpty(temp.get("id"))){
+                //新增加的上课时段
+                temp.put("class_id",id);
+                curriculumClassMapper.addCurriculumClassesTimes(temp);
+            }else{
+                //更新的上课时段
+                curriculumClassMapper.updateCurriculumClassesTimes(temp);
+            }
+        }
+        //删除上课时段
+        class_times_id_del = class_times_id_del == null ? "" : class_times_id_del;
+        if(!StringUtil.isEmpty(class_times_id_del)){
+            String[] class_times_id_dels = class_times_id_del.split(",");
+            for(String id_del : class_times_id_dels){
+                curriculumClassMapper.delTimess(id_del);
+            }
+        }
+    }
+
     /**
      * 更新班次信息
      * @param currriculumClass

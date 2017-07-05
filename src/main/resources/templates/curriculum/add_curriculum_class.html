@@ -7,10 +7,9 @@
     <link rel="stylesheet" href="../../static/lib/css/common.css" th:href="@{/lib/css/common.css}"/>
     <link rel="stylesheet" href="../../static/lib/css/validate.css" th:href="@{/lib/css/validate.css}"/>
     <script src="../../static/lib/js/jquery.1.11.1.min.js" th:src="@{/lib/js/jquery.1.11.1.min.js}"></script>
+    <script th:src="@{/lib/js/json2.js}"></script>
     <script src="../../static/lib/js/utils.js" th:src="@{/lib/js/utils.js}"></script>
-    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
-            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
-    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
+    <script src="../../static/lib/My97DatePicker/WdatePicker.js" th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
     <script src="../../static/lib/js/bootstrap.min.js" th:src="@{/lib/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" href="../../static/lib/kindeditor-4.1.7/themes/default/default.css"
           th:href="@{/lib/kindeditor-4.1.7/themes/default/default.css}"/>
@@ -23,14 +22,9 @@
             th:src="@{/js/curriculum/addcurriculumclass.js}"></script>
 
     <script src="../../static/lib/js/common.js" th:src="@{/lib/js/common.js}"></script>
-    <!--<script src="../../static/lib/js/area.js" th:src="@{/lib/js/area.js}"></script>-->
-    <!--<script src="http://upms.eastdc.cn:82/scripts/common.js"></script>-->
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
     <script th:src="@{/lib/js/jquery.validate.js}"></script>
-    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
-            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
-    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <style>
         p.title {
             font-size: 18px;
@@ -136,13 +130,14 @@
                     </td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright">上课时段</td>
+                    <td class="alignright"><span class="red">*</span>上课时段</td>
                     <td class="alignleft">
                         <button type="button" class="btn" id="addtime">添加</button>
+                        <input type="hidden" id="class_times_json" name="class_times_json" value=""/>
                     </td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright"></td>
+                    <td class="alignright" style="border-top: none"></td>
                     <td class="alignleft" style="border-top: none">
                         <table class="class_time_table">
                             <thead class="class_time_table_head">
@@ -152,7 +147,6 @@
                             <td width="80px">操作</td>
                             </thead>
                             <tbody class="class_time_table_body" id="class_time_table_body">
-
                             </tbody>
                         </table>
                     </td>
@@ -185,8 +179,6 @@
                     <td class="alignright">费用备注</td>
                     <td class="alignleft"><input type="text" id="fee_mark" name="fee_mark"/></td>
                 </tr>
-
-
                 <tr>
                     <td class="text-right" colspan="2">
                         <button type="submit" class="btn btn-success" id="saveBtn">保存</button>
@@ -197,21 +189,24 @@
         </form>
     </div>
 </section>
+
 <div id="addTimeDialogs" style="display: none">
+    <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="classTimeForm" method="post">
     <table  class="table table-bordered table-hover definewidth m10 control-group">
         <tr class="controls" style="background-color: #ededed">
             <td class="alignright" width="30%">时间段</td>
-            <td width="70%"><input type="text" id="time"></td>
+            <td width="70%" style="text-align: left;"><input type="text" id="time" name="time" /></td>
         </tr>
         <tr class="controls" style="background-color: #ededed">
             <td class="alignright" width="30%">限报人数</td>
-            <td width="70%"><input type="text" id="max_people"></td>
+            <td width="70%" style="text-align: left;"><input type="text" id="max_people" name="max_people" /></td>
         </tr>
         <tr class="controls" style="background-color: #ededed">
             <td class="alignright" width="10%">预留名额</td>
-            <td width="70%"><input type="text" id="reserve_people"></td>
+            <td width="70%" style="text-align: left;"><input type="text" id="reserve_people" name="reserve_people" /></td>
         </tr>
     </table>
+    </form>
 </div>
 </body>
 </html>

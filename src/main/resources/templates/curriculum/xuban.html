@@ -27,9 +27,6 @@
     <script src="../../static/lib/layer/layer.js" th:src="@{/lib/layer/layer.js}"></script>
     <script th:src="@{/lib/layPage/laypage.js}"></script>
     <script th:src="@{/lib/js/jquery.validate.js}"></script>
-    <script src="../../static/lib/My97DatePicker/WdatePicker.js"
-            th:src="@{/lib/My97DatePicker/WdatePicker.js}"></script>
-    <script src="../../static/lib/My97DatePicker/calendar.js" th:src="@{/lib/My97DatePicker/calendar.js}"></script>
     <style>
         p.title {
             font-size: 18px;
@@ -77,18 +74,18 @@
 <section>
     <div class="container-fluid" style="margin-top: 20px;height:120px;">
         <div class="pb10 border">
-            当前位置：<a href="javascript:;">场馆</a> < <a href="javascript:;">合作商家</a> < <a href="javascript:;">新增</a>
+            当前位置：<a href="javascript:;">培训课程</a> < <a href="javascript:;">班次</a> < <a href="javascript:;">续班</a>
         </div>
         <form onsubmit="return false;" class="form-horizontal mt15" action="#" id="addForm" method="post">
             <input type="hidden" name="class_id" id="class_id" th:value="${class_id}">
             <input type="hidden" name="curriculumId" id="curriculumId" th:value="${curriculumId}">
             <table id="contentTable" class="table table-bordered table-hover definewidth m10 control-group">
                 <tr class="controls">
-                    <td class="alignright">续班价格</td>
+                    <td class="alignright"><span class="red">*</span>续班价格</td>
                     <td class="alignleft"><input type="text" id="discount_fee" name="discount_fee" th:value="${discount_fee}"/></td>
                 </tr>
                 <tr class="controls">
-                    <td class="alignright">选择课程 </td>
+                    <td class="alignright"><span class="red">*</span>选择课程 </td>
                     <td class="alignleft"><input type="text" id="classname" name="name"/><button  class="btn" id="queryClass">查询</button></td>
                 </tr>
                 <tr class="controls">

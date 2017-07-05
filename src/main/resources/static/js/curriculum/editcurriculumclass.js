@@ -4,6 +4,7 @@
 
 $(function () {
     var valConfig = {
+        ignore: "",
         onsubmit:true,// 是否在提交是验证
         onfocusout:true,// 是否在获取焦点时验证
         rules: {
@@ -29,6 +30,10 @@ $(function () {
                 required: true,
                 number:true
             }
+            ,
+            class_times_json : {
+                required: true
+            }
         },
         messages:{　　　　//验证错误信息
             name: {
@@ -53,6 +58,10 @@ $(function () {
                 required: "请输入费用",
                 number:"请输入合法数字"
             }
+            ,
+            class_times_json: {
+                required: "请添加上课时段"
+            }
         },
         errorPlacement: function(error, element) {
             var error_container = element.nextAll(".error_container");
@@ -68,6 +77,55 @@ $(function () {
         }
     };
     $('#addForm').validate(valConfig);
+
+    var classTime_valConfig = {
+        ignore: "",
+        onsubmit:true,// 是否在提交是验证
+        onfocusout:true,// 是否在获取焦点时验证
+        rules: {
+            time : {
+                required: true,
+                maxlength: 100
+            }
+            ,
+            max_people : {
+                required: true,
+                valid_number : true
+            }
+            ,
+            reserve_people : {
+                required: true,
+                valid_number : true
+            }
+        },
+        messages:{
+            time : {
+                required: "请输入时间段"
+            }
+            ,
+            max_people : {
+                required: "请输入限报人数",
+                valid_number:"请输入有效的限报人数"
+            }
+            ,
+            reserve_people : {
+                required: "请输入预留名额",
+                valid_number:"请输入有效的预留名额"
+            }
+        },
+        errorPlacement: function(error, element) {
+            var error_container = element.nextAll(".error_container");
+            if(error_container.length>0){
+                error_container.append(error);
+            }else{
+                error.insertAfter(element);
+            }
+
+        },
+        submitHandler: function(form){
+        }
+    };
+    $('#classTimeForm').validate(classTime_valConfig);
 
     $("input[name='leantime_type']").on("click", function () {
         var leantime_type = $(this).val()||"";
@@ -91,6 +149,7 @@ $(function () {
         window.location.href = "/curriculumController/curriculumClass.html?curriculumId=" + curriculum_id;
     });
 
+
     $("#addtime").on("click", function () {
         layer.open({
             type: 1,
@@ -99,30 +158,80 @@ $(function () {
             title: '上课时间段',
             shade: false,
             closeBtn: 0,
-            area: ['400px', '290px'], //宽高
+            area: ['560px', '360px'], //宽高
             content: $('#addTimeDialogs'),
             btn: ['确定', '取消'],
             btn1: function () {
-                var temp = "";
-                temp += '<tr>' +
-                    '<td>' + $("#time").val() + '</td>' +
-                    '<td>' + $("#max_people").val() + '</td>' +
-                    '<td>' + $("#reserve_people").val() + '</td>' +
-                    '<td width="80px"><a onclick="editTime(this)">编辑</a>&nbsp;<a onclick="delTime(this)">删除</a></td>' +
-                    '</tr>'
-                $("#class_time_table_body").append(temp);
+                try {
+                    if(!$("#classTimeForm").valid()) {
+                        return false;
+                    }
+
+                    var class_time_json = $("#class_times_json").val()||"[]";
+                    var class_time_array = JSON.parse(class_time_json);
+                    var class_time_array_size = class_time_array.length;
+                    var td_no = new Date().getTime() + "";
+
+                    var time = $("#time").val()||"";
+                    var max_people = $("#max_people").val()||"";
+                    var reserve_people = $("#reserve_people").val()||"";
+                    var classObj = {};
+                    classObj.td_no = td_no;
+                    classObj.time = time;
+                    classObj.max_people = max_people;
+                    classObj.reserve_people = reserve_people;
+
+                    class_time_array.push(classObj);
+
+                    var temp = "";
+                    temp += '<tr>' +
+                        '<td>' + time + '</td>' +
+                        '<td>' + max_people + '</td>' +
+                        '<td>' + reserve_people + '</td>' +
+                        '<td width="80px"><a onclick="editTime(this, \''+td_no+'\')">编辑</a>&nbsp;<a onclick="delTime(this, \''+td_no+'\')">删除</a></td>' +
+                        '</tr>'
+                    $("#class_time_table_body").append(temp);
+
+                    $("#class_times_json").val(JSON.stringify(class_time_array));
+                    $("#class_times_json").valid();
+                    layer.closeAll();
+                }catch(err){
+
+                }
+            },
+            btn2: function () {
+                clearClassTimeForm();
                 layer.closeAll();
             }
         });
     })
 })
 
-function editTime(a) {
+function clearClassTimeForm(){
+    // $("#time").val("");
+    // $("#max_people").val("");
+    // $("#reserve_people").val("");
+    $("#classTimeForm").data('validator').resetForm();
+}
+
+function editTime(a, td_no) {
     var tds = $(a).parent().prevAll();
-    $("#time").val($(tds[2]).text())
-    $("#max_people").val($(tds[1]).text())
-    $("#reserve_people").val($(tds[0]).text())
-    var id = $(a).parent().parent("tr").attr("value");
+
+    var class_time_json = $("#class_times_json").val()||"[]";
+    var class_time_array = JSON.parse(class_time_json);
+
+    var classTimeObj = {};
+    for(var i=0; i<class_time_array.length; i++){
+        classTimeObj = class_time_array[i];
+        if(classTimeObj.td_no == td_no){
+            break;
+        }
+    }
+
+    $("#time").val(classTimeObj.time);
+    $("#max_people").val(classTimeObj.max_people);
+    $("#reserve_people").val(classTimeObj.reserve_people);
+
     layer.open({
         type: 1,
         skin: 'layui-layer-demo', //样式类名
@@ -130,174 +239,137 @@ function editTime(a) {
         title: '上课时间段',
         shade: false,
         closeBtn: 0,
-        area: ['400px', '290px'], //宽高
+        area: ['560px', '360px'], //宽高
         content: $('#addTimeDialogs'),
         btn: ['确定', '取消'],
         btn1: function () {
-            var re_time = $("#time").val();
-            var re_max_people = $("#max_people").val();
-            var re_reserve_people = $("#reserve_people").val();
-            $(tds[2]).text(re_time);
-            $(tds[1]).text(re_max_people);
-            $(tds[0]).text(re_reserve_people);
-            $.ajax({
-                url: '/curriculumController/doUpdataCurriculumClassTime.do',
-                type: 'POST', //GET
-                data: {
-                    id:id,
-                    time:$("#time").val(),
-                    max_people: $("#max_people").val(),
-                    reserve_people:$("#reserve_people").val()
-                },
-                dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-                success: function (result) {
-                    layer.closeAll();
-                    if ("000000" == result.code) {
-                        layer.msg("修改成功！");
-                    } else {
-                        layer.alert(result.result);
-                    }
-                },
-                error: function (result) {
-                    layer.msg("添加失败！");
+            if(!$("#classTimeForm").valid()) {
+                return false;
+            }
+            var time = $("#time").val()||"";
+            var max_people = $("#max_people").val()||"";
+            var reserve_people = $("#reserve_people").val()||"";
+
+            var class_time_json = $("#class_times_json").val()||"[]";
+            var class_time_array = JSON.parse(class_time_json);
+
+            var classTimeObj = {};
+            for(var i=0; i<class_time_array.length; i++){
+                classTimeObj = class_time_array[i];
+                if(classTimeObj.td_no == td_no){
+                    break;
                 }
-            });
+            }
+
+            classTimeObj.time = time;
+            classTimeObj.max_people = max_people;
+            classTimeObj.reserve_people = reserve_people;
+            $("#class_times_json").val(JSON.stringify(class_time_array));
+
+            $(tds[2]).text(time);
+            $(tds[1]).text(max_people);
+            $(tds[0]).text(reserve_people);
+
+            layer.closeAll();
+        },
+        btn2: function () {
+            $("#classTimeForm").data('validator').resetForm();
+            layer.closeAll();
         }
     });
+
 }
-function delTime(a) {
-    var id =$(a).parent().parent("tr").attr("value")
-    if (!id) {
-        $(a).parent().parent("tr").remove()
-    } else {
-        delTimess(id,a)
+function delTime(a, td_no) {
+    var class_time_json = $("#class_times_json").val()||"[]";
+    var class_time_array = JSON.parse(class_time_json);
+
+    var classTimeNo = 'N';
+    var classTimeObj = {};
+    for(var i=0; i<class_time_array.length; i++){
+        classTimeObj = class_time_array[i];
+        if(classTimeObj.td_no == td_no){
+            classTimeNo = i;
+            break;
+        }
+    }
+    if(classTimeNo!='N'){
+        if(classTimeObj.id && classTimeObj.class_id){
+            var class_times_id_del = $("#class_times_id_del").val()||"";
+            class_times_id_del = class_times_id_del == "" ? "" : class_times_id_del + ",";
+            class_times_id_del = class_times_id_del + classTimeObj.id;
+            $("#class_times_id_del").val(class_times_id_del);
+        }
+
+        class_time_array.splice(classTimeNo,1);
+        var class_time_json_new = JSON.stringify(class_time_array);
+        class_time_json_new = class_time_json_new == "[]" ? "" : class_time_json_new;
+        $("#class_times_json").val(class_time_json_new);
+
+        $(a).parent().parent("tr").remove();
     }
 }
-function delTimess(id,a) {
-    $.ajax({
-        url: '/curriculumController/delTimess.do',
-        type: 'POST', //GET
-        data: {id: id},
-        dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-        success: function (result) {
-            console.log(result);
-            if ("000000" == result.code) {
-                if(result.result){
-                    layer.msg("删除成功！");
-                    $(a).parent().parent("tr").remove();
-                }else {
-                    layer.msg("删除失败！");
-                }
-            } else {
-                layer.alert(result.result);
-            }
-        },
-        error: function (result) {
-            layer.msg("操作失败！");
-        }
-    })
-}
+
+
+var oprFlag = 0;
 //新增页面添加数据
 function doUpdate() {
-    // var timessOp = $("#timess").find("option");
-    // var timess = [];
-    // for (var i = 0; i < timessOp.length; i++) {
-    //     if (!$(timessOp[i]).attr("value")) {
-    //         timess.push($(timessOp[i]).text());
-    //     }
-    // }
-    var timessOp = $("#class_time_table_body").find("tr");
-    var timess = [];//上课时段
-    for (var i = 0; i < timessOp.length; i++) {
-        var times = {};
-        var tds = $(timessOp[i]).find("td");
-        times.id = $(timessOp[i]).attr("value");
-        times.time=$(tds[0]).text();//上课时段
-        times.max_people=$(tds[1]).text();//时段最大人数
-        times.reserve_people=$(tds[2]).text();//时段预留人数
-        timess.push(times);
-    }
-    console.log(timess);
-    //准备json数据
-    var addJson = {};
-    addJson.id = $("#id").val();
-    addJson.name = $("#name").val();
-    addJson.class_long = $("#class_long").val();
-    addJson.class_times = $("#class_times").val();
-    addJson.student_num = $("#student_num").val();
-    addJson.max_num = $("#max_num").val();
-    addJson.lean_time = $("#lean_time").val();
-    addJson.leantime_type = $('input[name="leantime_type"]:checked').val();
-    addJson.bm_time = $("#bm_time").val();
-    addJson.bm_end = $("#bm_end").val();
-    addJson.target = $("#target").val();
-    addJson.content = $("#m_content").val();
-    addJson.fee_code = $("#fee_code").val();
-    addJson.fee = $("#fee").val();
-    addJson.fee_mark = $("#fee_mark").val();
-    addJson.curriculum_id = $("#curriculumId").val();
-    addJson.timess = JSON.stringify(timess);
-    // window.introductionEditor.sync();
-    // addJson.remark = window.introductionEditor.html();
-    $.ajax({
-        url: '/curriculumController/doUpdataCurriculumClass.do',
-        type: 'POST', //GET
-        data: addJson,
-        dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-        success: function (result) {
-            if ("000000" == result.code) {
-                layer.msg("编辑成功！");
-                setTimeout(function () {
-                    window.location.href = "/curriculumController/curriculumClass.html?curriculumId=" + $('#curriculumId').val();;
-                }, 1000);
-            } else {
-                layer.alert(result.result);
-            }
-        },
-        error: function (result) {
-            layer.msg("添加失败！");
+    try {
+        if (oprFlag == 1) {
+            return false;
+        } else {
+            oprFlag = 1;
         }
-    });
-}
+        //准备json数据
+        var addJson = {};
+        addJson.id = $("#id").val();
+        addJson.name = $("#name").val();
+        addJson.class_long = $("#class_long").val();
+        addJson.class_times = $("#class_times").val();
+        addJson.student_num = $("#student_num").val();
+        addJson.max_num = $("#max_num").val();
+        addJson.leantime_type = $('input[name="leantime_type"]:checked').val();
+        if(addJson.leantime_type=="1"){
+            addJson.lean_time = $("#lean_time").val();
+        }
+        addJson.bm_time = $("#bm_time").val();
+        addJson.bm_end = $("#bm_end").val();
+        addJson.target = $("#target").val();
+        addJson.content = $("#m_content").val();
+        addJson.fee_code = $("#fee_code").val();
+        addJson.fee = $("#fee").val();
+        addJson.fee_mark = $("#fee_mark").val();
+        addJson.curriculum_id = $("#curriculumId").val();
 
-function updateprovinceList(provinceID) {
-    $.ajax({
-        url: '/mainStadiumController/getCityByID.do',
-        type: 'POST', //GET
-        data: {"provinceID": provinceID},
-        dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-        success: function (result) {
-            if ("000000" == result.code) {
-                var items = result.result;
-                $("#city_level").empty();
-                $.each(items, function (i, n) {
-                    $("#city_level").append("<option value=\"" + n.cityID + "\">" + n.city + "</option>");
-                });
-                var cityID = $("#city_level").val();
-                updatecityList(cityID);
-            } else {
-                layer.alert(result.result);
-            }
-        },
-    })
-}
+        var class_time_json = $("#class_times_json").val()||"[]";
+        addJson.timess = class_time_json;
 
-function updatecityList(cityID) {
-    $.ajax({
-        url: '/mainStadiumController/getAreaByID.do',
-        type: 'POST', //GET
-        data: {"cityID": cityID},
-        dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-        success: function (result) {
-            if ("000000" == result.code) {
-                var items = result.result;
-                $("#district_level").empty();
-                $.each(items, function (i, n) {
-                    $("#district_level").append("<option value=\"" + n.areaID + "\">" + n.area + "</option>");
-                });
-            } else {
-                layer.alert(result.result);
+        var class_times_id_del = $("#class_times_id_del").val()||"";
+        addJson.class_times_id_del = class_times_id_del;
+
+        $.ajax({
+            url: '/curriculumController/doUpdataCurriculumClass.do',
+            type: 'POST', //GET
+            data: addJson,
+            dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+            success: function (result) {
+                if ("000000" == result.code) {
+                    layer.msg("编辑成功！");
+                    setTimeout(function () {
+                        var curriculum_id = $("#curriculumId").val()||"";
+                        window.location.href = "/curriculumController/curriculumClass.html?curriculumId=" + curriculum_id;
+                    }, 500);
+                } else {
+                    layer.msg(result.message);
+                    oprFlag = 0;
+                }
+            },
+            error: function (result) {
+                layer.msg("编辑失败！");
+                oprFlag = 0;
             }
-        },
-    })
+        });
+
+    }catch(err){
+        oprFlag = 0;
+    }
 }
